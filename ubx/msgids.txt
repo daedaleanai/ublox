@@ -1,0 +1,522 @@
+                                                                           u-blox 8 / u-blox M8 Receiver description - Manual
+
+
+
+               32.5.2 Polling Mechanism
+               All messages that are output by the receiver in a periodic manner (i.e. messages in classes MON,
+               NAV and RXM) and Get/Set type messages, such as the messages in the CFG class, can also be
+               polled.
+               The UBX protocol is designed so that messages can be polled by sending the message required to
+               the receiver but without a payload (or with just a single parameter that identifies the poll request).
+               The receiver then responds with the same message with the payload populated.
+
+               32.6 UBX Class IDs
+               A class is a grouping of messages which are related to each other. The following table lists all the
+               current message classes.
+               Name    Class    Description
+               NAV     0x01     Navigation Results Messages: Position, Speed, Time, Acceleration, Heading, DOP,
+                                SVs used
+               RXM      0x02    Receiver Manager Messages: Satellite Status, RTC Status
+               INF      0x04    Information     Messages:     Printf-Style    Messages,     with  IDs   such   as  Error,  Warning,
+                                Notice
+               ACK      0x05    Ack/Nak Messages: Acknowledge or Reject messages to UBX-CFG input messages
+               CFG      0x06    Configuration Input Messages: Configure the receiver.
+               UPD      0x09    Firmware       Update      Messages:        Memory/Flash         erase/write,      Reboot,     Flash
+                                identification, etc.
+               MON      0x0A    Monitoring     Messages:      Communication        Status,    CPU    Load,   Stack    Usage,    Task
+                                Status
+               AID      0x0B    AssistNow Aiding Messages: Ephemeris, Almanac, other A-GPS data input
+               TIM      0x0D    Timing Messages: Time Pulse Output, Time Mark Results
+               ESF      0x10    External    Sensor    Fusion   Messages:      External    Sensor    Measurements        and   Status
+                                Information
+               MGA      0x13    Multiple GNSS Assistance Messages: Assistance data for various GNSS
+               LOG      0x21    Logging Messages: Log creation, deletion, info and retrieval
+               SEC      0x27    Security Feature Messages
+               HNR      0x28    High Rate Navigation Results Messages: High rate time, position, speed, heading
+               All remaining class IDs are reserved.
+
+
+
+
+               UBX-13003221 - R20                           Early production information                              Page 146 of 415
+                                                                           u-blox 8 / u-blox M8 Receiver description - Manual
+
+
+
+
+               32.7 UBX Messages Overview
+               Page  Mnemonic              Cls/ID       Length         Type                 Description
+                                   UBX Class ACK                       Ack/Nak Messages
+
+               153   ACK-ACK               0x05 0x01    2              Output               Message acknowledged
+
+               153   ACK-NAK               0x05 0x00    2              Output               Message not acknowledged
+
+                                   UBX Class AID                       AssistNow Aiding Messages
+
+               154   AID-ALM               0x0B 0x30    0              Poll Request         Poll GPS aiding almanac data
+
+               154   AID-ALM               0x0B 0x30    1              Poll Request         Poll GPS aiding almanac data for a SV
+
+               155   AID-ALM               0x0B 0x30    (8) or (40)    Input/Output         GPS aiding almanac input/output...
+
+               156   AID-AOP               0x0B 0x33    0              Poll Request         Poll AssistNow Autonomous data, all...
+
+               156   AID-AOP               0x0B 0x33    1              Poll Request         Poll AssistNow Autonomous data, one...
+
+               157   AID-AOP               0x0B 0x33    68             Input/Output         AssistNow Autonomous data
+
+               158   AID-EPH               0x0B 0x31    0              Poll Request         Poll GPS aiding ephemeris data
+
+               158   AID-EPH               0x0B 0x31    1              Poll Request         Poll GPS aiding ephemeris data for a SV
+
+               159   AID-EPH               0x0B 0x31    (8) or (104)   Input/Output         GPS aiding ephemeris input/output...
+
+               160   AID-HUI               0x0B 0x02    0              Poll Request         Poll GPS health, UTC, ionosphere...
+
+               160   AID-HUI               0x0B 0x02    72             Input/Output         GPS health, UTC and ionosphere...
+
+               162   AID-INI               0x0B 0x01    0              Poll Request         Poll GPS initial aiding data
+
+               162   AID-INI               0x0B 0x01    48             Input/Output         Aiding position, time, frequency, clock...
+
+                                   UBX Class CFG                       Configuration Input Messages
+
+               165   CFG-ANT               0x06 0x13    4              Get/set              Antenna control settings
+
+               166   CFG-BATCH             0x06 0x93    8              Get/set              Get/set data batching configuration
+
+               167   CFG-CFG               0x06 0x09    (12) or (13)   Command              Clear, save and load configurations
+
+               169   CFG-DAT               0x06 0x06    44             Set                  Set user-defined datum
+
+               170   CFG-DAT               0x06 0x06    52             Get                  Get currently defined datum
+
+               171   CFG-DGNSS             0x06 0x70    4              Get/set              DGNSS configuration
+
+               171   CFG-DOSC              0x06 0x61    4 + 32*numO... Get/set              Disciplined oscillator configuration
+
+               173   CFG-ESRC              0x06 0x60    4 + 36*numS... Get/set              External synchronization source...
+
+               175   CFG-GEOFENCE          0x06 0x69    8 + 12*numF... Get/set              Geofencing configuration
+
+               176   CFG-GNSS              0x06 0x3E    4 + 8*numCo... Get/set              GNSS system configuration
+
+               178   CFG-HNR               0x06 0x5C    4              Get/set              High navigation rate settings
+
+               179   CFG-INF               0x06 0x02    1              Poll Request         Poll configuration for one protocol
+
+               179   CFG-INF               0x06 0x02    0 + 10*N       Get/set              Information message configuration
+
+               181   CFG-ITFM              0x06 0x39    8              Get/set              Jamming/interference monitor...
+
+               182   CFG-LOGFILTER         0x06 0x47    12             Get/set              Data logger configuration
+
+               183   CFG-MSG               0x06 0x01    2              Poll Request         Poll a message configuration
+
+               184   CFG-MSG               0x06 0x01    8              Get/set              Set message rate(s)
+
+               184   CFG-MSG               0x06 0x01    3              Get/set              Set message rate
+
+               185   CFG-NAV5              0x06 0x24    36             Get/set              Navigation engine settings
+
+
+
+               UBX-13003221 - R20                           Early production information                               Page 147 of 415
+                                                                           u-blox 8 / u-blox M8 Receiver description - Manual
+
+
+               UBX Messages Overview continued
+               Page  Mnemonic              Cls/ID       Length         Type                 Description
+               187   CFG-NAVX5             0x06 0x23    40             Get/set              Navigation engine expert settings
+
+               189   CFG-NAVX5             0x06 0x23    40             Get/set              Navigation engine expert settings
+
+               192   CFG-NAVX5             0x06 0x23    44             Get/set              Navigation engine expert settings
+
+               195   CFG-NMEA              0x06 0x17    4              Get/set              NMEA protocol configuration...
+
+               196   CFG-NMEA              0x06 0x17    12             Get/set              NMEA protocol configuration V0...
+
+               199   CFG-NMEA              0x06 0x17    20             Get/set              Extended NMEA protocol configuration V1
+
+               202   CFG-ODO               0x06 0x1E    20             Get/set              Odometer, low-speed COG engine...
+
+               203   CFG-PM2               0x06 0x3B    44             Get/set              Extended power management...
+
+               205   CFG-PM2               0x06 0x3B    48             Get/set              Extended power management...
+
+               207   CFG-PM2               0x06 0x3B    48             Get/set              Extended power management...
+
+               210   CFG-PMS               0x06 0x86    8              Get/set              Power mode setup
+
+               211   CFG-PRT               0x06 0x00    1              Poll Request         Polls the configuration for one I/O port
+
+               211   CFG-PRT               0x06 0x00    20             Get/set              Port configuration for UART ports
+
+               214   CFG-PRT               0x06 0x00    20             Get/set              Port configuration for USB port
+
+               216   CFG-PRT               0x06 0x00    20             Get/set              Port configuration for SPI port
+
+               219   CFG-PRT               0x06 0x00    20             Get/set              Port configuration for I2C (DDC) port
+
+               221   CFG-PWR               0x06 0x57    8              Set                  Put receiver in a defined power state
+
+               222   CFG-RATE              0x06 0x08    6              Get/set              Navigation/measurement rate settings
+
+               223   CFG-RINV              0x06 0x34    1 + 1*N        Get/set              Contents of remote inventory
+
+               224   CFG-RST               0x06 0x04    4              Command              Reset receiver / Clear backup data...
+
+               226   CFG-RXM               0x06 0x11    2              Get/set              RXM configuration
+
+               226   CFG-RXM               0x06 0x11    2              Get/set              RXM configuration
+
+               227   CFG-SBAS              0x06 0x16    8              Get/set              SBAS configuration
+
+               229   CFG-SLAS              0x06 0x8D    4              Get/set              SLAS configuration
+
+               230   CFG-SMGR              0x06 0x62    20             Get/set              Synchronization manager configuration
+
+               233   CFG-TMODE2            0x06 0x3D    28             Get/set              Time mode settings 2
+
+               234   CFG-TMODE3            0x06 0x71    40             Get/set              Time mode settings 3
+
+               236   CFG-TP5               0x06 0x31    0              Poll Request         Poll time pulse parameters for time...
+
+               236   CFG-TP5               0x06 0x31    1              Poll Request         Poll time pulse parameters
+
+               237   CFG-TP5               0x06 0x31    32             Get/set              Time pulse parameters
+
+               238   CFG-TP5               0x06 0x31    32             Get/set              Time pulse parameters
+
+               240   CFG-TXSLOT            0x06 0x53    16             Set                  TX buffer time slots configuration
+
+               241   CFG-USB               0x06 0x1B    108            Get/set              USB configuration
+
+                                   UBX Class ESF                       External Sensor Fusion Messages
+
+               243   ESF-INS               0x10 0x15    36             Periodic/Polled      Vehicle dynamics information
+
+               244   ESF-MEAS              0x10 0x02    (8 + 4*numM... Input/Output         External sensor fusion measurements
+
+               246   ESF-RAW               0x10 0x03    4 + 8*N        Output               Raw sensor measurements
+
+               247   ESF-STATUS            0x10 0x10    16 + 4*numS... Periodic/Polled      External sensor fusion status
+
+
+
+               UBX-13003221 - R20                           Early production information                              Page 148 of 415
+                                                                           u-blox 8 / u-blox M8 Receiver description - Manual
+
+
+               UBX Messages Overview continued
+               Page  Mnemonic              Cls/ID       Length         Type                 Description
+                                   UBX Class HNR                       High Rate Navigation Results Messages
+
+               250   HNR-INS               0x28 0x02    36             Periodic/Polled      Vehicle dynamics information
+
+               251   HNR-PVT               0x28 0x00    72             Periodic/Polled      High rate output of PVT solution
+
+                                   UBX Class INF                       Information Messages
+
+               254   INF-DEBUG             0x04 0x04    0 + 1*N        Output               ASCII output with debug contents
+
+               254   INF-ERROR             0x04 0x00    0 + 1*N        Output               ASCII output with error contents
+
+               255   INF-NOTICE            0x04 0x02    0 + 1*N        Output               ASCII output with informational contents
+
+               255   INF-TEST              0x04 0x03    0 + 1*N        Output               ASCII output with test contents
+
+               256   INF-WARNING           0x04 0x01    0 + 1*N        Output               ASCII output with warning contents
+
+                                   UBX Class LOG                       Logging Messages
+
+               257   LOG-BATCH             0x21 0x11    100            Polled               Batched data
+
+               260   LOG-CREATE            0x21 0x07    8              Command              Create log file
+
+               261   LOG-ERASE             0x21 0x03    0              Command              Erase logged data
+
+               261   LOG-FINDTIME          0x21 0x0E    12             Input                Find index of a log entry based on a...
+
+               262   LOG-FINDTIME          0x21 0x0E    8              Output               Response to FINDTIME request
+
+               263   LOG-INFO              0x21 0x08    0              Poll Request         Poll for log information
+
+               263   LOG-INFO              0x21 0x08    48             Output               Log information
+
+               265   LOG-RETRIEVEBA...    0x21 0x10     4              Command              Request batch data
+
+               266   LOG-RETRIEVEPO...    0x21 0x0f     32             Output               Odometer log entry
+
+               266   LOG-RETRIEVEPOS      0x21 0x0b     40             Output               Position fix log entry
+
+               267   LOG-RETRIEVEST...    0x21 0x0d     16 + 1*byteCo... Output             Byte string log entry
+
+               268   LOG-RETRIEVE          0x21 0x09    12             Command              Request log data
+
+               269   LOG-STRING            0x21 0x04    0 + 1*N        Command              Store arbitrary string in on-board flash
+
+                                  UBX Class MGA                        Multiple GNSS Assistance Messages
+
+               270   MGA-ACK-DATA0         0x13 0x60    8              Output               Multiple GNSS acknowledge message
+
+               271   MGA-ANO               0x13 0x20    76             Input                Multiple GNSS AssistNow Offline...
+
+               272   MGA-BDS-EPH           0x13 0x03    88             Input                BeiDou ephemeris assistance
+
+               273   MGA-BDS-ALM           0x13 0x03    40             Input                BeiDou almanac assistance
+
+               274   MGA-BDS-HEALTH       0x13 0x03     68             Input                BeiDou health assistance
+
+               275   MGA-BDS-UTC           0x13 0x03    20             Input                BeiDou UTC assistance
+
+               275   MGA-BDS-IONO          0x13 0x03    16             Input                BeiDou ionosphere assistance
+
+               276   MGA-DBD               0x13 0x80    0              Poll Request         Poll the navigation database
+
+               276   MGA-DBD               0x13 0x80    12 + 1*N       Input/Output         Navigation database dump entry
+
+               277   MGA-FLASH-DATA       0x13 0x21     6 + 1*size     Input                Transfer MGA-ANO data block to flash
+
+               278   MGA-FLASH-STOP       0x13 0x21     2              Input                Finish flashing MGA-ANO data
+
+               278   MGA-FLASH-ACK         0x13 0x21    6              Output               Acknowledge last FLASH-DATA or -STOP
+
+               279   MGA-GAL-EPH           0x13 0x02    76             Input                Galileo ephemeris assistance
+
+               281   MGA-GAL-ALM           0x13 0x02    32             Input                Galileo almanac assistance
+
+
+
+               UBX-13003221 - R20                           Early production information                              Page 149 of 415
+                                                                           u-blox 8 / u-blox M8 Receiver description - Manual
+
+
+               UBX Messages Overview continued
+               Page  Mnemonic              Cls/ID       Length         Type                 Description
+               282   MGA-GAL-TIMEO...      0x13 0x02    12             Input                Galileo GPS time offset assistance
+
+               282   MGA-GAL-UTC           0x13 0x02    20             Input                Galileo UTC assistance
+
+               283   MGA-GLO-EPH           0x13 0x06    48             Input                GLONASS ephemeris assistance
+
+               284   MGA-GLO-ALM           0x13 0x06    36             Input                GLONASS almanac assistance
+
+               285   MGA-GLO-TIMEO...     0x13 0x06     20             Input                GLONASS auxiliary time offset assistance
+
+               286   MGA-GPS-EPH           0x13 0x00    68             Input                GPS ephemeris assistance
+
+               288   MGA-GPS-ALM           0x13 0x00    36             Input                GPS almanac assistance
+
+               289   MGA-GPS-HEALTH       0x13 0x00     40             Input                GPS health assistance
+
+               289   MGA-GPS-UTC           0x13 0x00    20             Input                GPS UTC assistance
+
+               290   MGA-GPS-IONO          0x13 0x00    16             Input                GPS ionosphere assistance
+
+               291   MGA-INI-POS_XYZ       0x13 0x40    20             Input                Initial position assistance
+
+               292   MGA-INI-POS_LLH       0x13 0x40    20             Input                Initial position assistance
+
+               292   MGA-INI-TIME_UTC     0x13 0x40     24             Input                Initial time assistance
+
+               294   MGA-INI-TIME_GN...   0x13 0x40     24             Input                Initial time assistance
+
+               295   MGA-INI-CLKD          0x13 0x40    12             Input                Initial clock drift assistance
+
+               296   MGA-INI-FREQ          0x13 0x40    12             Input                Initial frequency assistance
+
+               297   MGA-INI-EOP           0x13 0x40    72             Input                Earth orientation parameters assistance
+
+               297   MGA-QZSS-EPH          0x13 0x05    68             Input                QZSS ephemeris assistance
+
+               299   MGA-QZSS-ALM          0x13 0x05    36             Input                QZSS almanac assistance
+
+               300   MGA-QZSS-HEAL...     0x13 0x05     12             Input                QZSS health assistance
+
+                                  UBX Class MON                        Monitoring Messages
+
+               301   MON-BATCH             0x0A 0x32    12             Polled               Data batching buffer status
+
+               302   MON-GNSS              0x0A 0x28    8              Polled               Information message major GNSS...
+
+               304   MON-HW2               0x0A 0x0B    28             Periodic/Polled      Extended hardware status
+
+               305   MON-HW                0x0A 0x09    60             Periodic/polled      Hardware status
+
+               306   MON-IO                0x0A 0x02    0 + 20*N       Periodic/Polled      I/O system status
+
+               307   MON-MSGPP             0x0A 0x06    120            Periodic/Polled      Message parse and process status
+
+               307   MON-PATCH             0x0A 0x27    0              Poll Request         Poll request for installed patches
+
+               308   MON-PATCH             0x0A 0x27    4 + 16*nEntries Polled              Installed patches
+
+               309   MON-RXBUF             0x0A 0x07    24             Periodic/Polled      Receiver buffer status
+
+               309   MON-RXR               0x0A 0x21    1              Output               Receiver status information
+
+               310   MON-SMGR              0x0A 0x2E    16             Periodic/Polled      Synchronization manager status
+
+               313   MON-TXBUF             0x0A 0x08    28             Periodic/Polled      Transmitter buffer status
+
+               314   MON-VER               0x0A 0x04    0              Poll Request         Poll receiver and software version
+
+               314   MON-VER               0x0A 0x04    40 + 30*N      Polled               Receiver and software version
+
+                                   UBX Class NAV                       Navigation Results Messages
+
+               316   NAV-AOPSTATUS         0x01 0x60    16             Periodic/Polled      AssistNow Autonomous status
+
+               317   NAV-ATT               0x01 0x05    32             Periodic/Polled      Attitude solution
+
+
+
+               UBX-13003221 - R20                           Early production information                              Page 150 of 415
+                                                                           u-blox 8 / u-blox M8 Receiver description - Manual
+
+
+               UBX Messages Overview continued
+               Page  Mnemonic              Cls/ID       Length         Type                 Description
+               318   NAV-CLOCK             0x01 0x22    20             Periodic/Polled      Clock solution
+
+               318   NAV-DGPS              0x01 0x31    16 + 12*numCh Periodic/Polled       DGPS data used for NAV
+
+               319   NAV-DOP               0x01 0x04    18             Periodic/Polled      Dilution of precision
+
+               320   NAV-EOE               0x01 0x61    4              Periodic             End of epoch
+
+               320   NAV-GEOFENCE          0x01 0x39    8 + 2*numFe... Periodic/Polled      Geofencing status
+
+               321   NAV-HPPOSECEF         0x01 0x13    28             Periodic/Polled      High precision position solution in ECEF
+
+               322   NAV-HPPOSLLH          0x01 0x14    36             Periodic/Polled      High precision geodetic position solution
+
+               324   NAV-NMI               0x01 0x28    16             Periodic/Polled      Navigation message cross-check...
+
+               327   NAV-ODO               0x01 0x09    20             Periodic/Polled      Odometer solution
+
+               328   NAV-ORB               0x01 0x34    8 + 6*numSv    Periodic/Polled      GNSS orbit database info
+
+               331   NAV-POSECEF           0x01 0x01    20             Periodic/Polled      Position solution in ECEF
+
+               331   NAV-POSLLH            0x01 0x02    28             Periodic/Polled      Geodetic position solution
+
+               332   NAV-PVT               0x01 0x07    92             Periodic/Polled      Navigation position velocity time solution
+
+               335   NAV-RELPOSNED         0x01 0x3C    40             Periodic/Polled      Relative positioning information in...
+
+               337   NAV-RESETODO          0x01 0x10    0              Command              Reset odometer
+
+               337   NAV-SAT               0x01 0x35    8 + 12*numSvs Periodic/Polled       Satellite information
+
+               339   NAV-SBAS              0x01 0x32    12 + 12*cnt    Periodic/Polled      SBAS status data
+
+               341   NAV-SLAS              0x01 0x42    20 + 8*cnt     Periodic/Polled      QZSS L1S SLAS status data
+
+               342   NAV-SOL               0x01 0x06    52             Periodic/Polled      Navigation solution information
+
+               344   NAV-STATUS            0x01 0x03    16             Periodic/Polled      Receiver navigation status
+
+               346   NAV-SVINFO            0x01 0x30    8 + 12*numCh   Periodic/Polled      Space vehicle information
+
+               348   NAV-SVIN              0x01 0x3B    40             Periodic/Polled      Survey-in data
+
+               349   NAV-TIMEBDS           0x01 0x24    20             Periodic/Polled      BeiDou time solution
+
+               350   NAV-TIMEGAL           0x01 0x25    20             Periodic/Polled      Galileo time solution
+
+               351   NAV-TIMEGLO           0x01 0x23    20             Periodic/Polled      GLONASS time solution
+
+               353   NAV-TIMEGPS           0x01 0x20    16             Periodic/Polled      GPS time solution
+
+               354   NAV-TIMELS            0x01 0x26    24             Periodic/Polled      Leap second event information
+
+               356   NAV-TIMEUTC           0x01 0x21    20             Periodic/Polled      UTC time solution
+
+               357   NAV-VELECEF           0x01 0x11    20             Periodic/Polled      Velocity solution in ECEF
+
+               358   NAV-VELNED            0x01 0x12    36             Periodic/Polled      Velocity solution in NED frame
+
+                                  UBX Class RXM                        Receiver Manager Messages
+
+               359   RXM-IMES              0x02 0x61    4 + 44*numTx   Periodic/Polled      Indoor Messaging System information
+
+               362   RXM-MEASX             0x02 0x14    44 + 24*num... Periodic/Polled      Satellite measurements for RRLP
+
+               363   RXM-PMREQ             0x02 0x41    8              Command              Power management request
+
+               364   RXM-PMREQ             0x02 0x41    16             Command              Power management request
+
+               365   RXM-RAWX              0x02 0x15    16 + 32*num... Periodic/Polled      Multi-GNSS raw measurement data
+
+               369   RXM-RAWX              0x02 0x15    16 + 32*num... Periodic/Polled      Multi-GNSS raw measurements
+
+               372   RXM-RLM               0x02 0x59    16             Output               Galileo SAR short-RLM report
+
+
+
+               UBX-13003221 - R20                           Early production information                               Page 151 of 415
+                                                                           u-blox 8 / u-blox M8 Receiver description - Manual
+
+
+               UBX Messages Overview continued
+               Page  Mnemonic              Cls/ID       Length         Type                 Description
+               373   RXM-RLM               0x02 0x59    28             Output               Galileo SAR long-RLM report
+
+               374   RXM-RTCM              0x02 0x32    8              Output               RTCM input status
+
+               375   RXM-SFRBX             0x02 0x13    8 + 4*numW...  Output               Broadcast navigation data subframe
+
+               376   RXM-SFRBX             0x02 0x13    8 + 4*numW...  Output               Broadcast navigation data subframe
+
+               377   RXM-SVSI              0x02 0x20    8 + 6*numSV    Periodic/Polled      SV status info
+
+                                   UBX Class SEC                       Security Feature Messages
+
+               379   SEC-UNIQID            0x27 0x03    9              Output               Unique chip ID
+
+                                   UBX Class TIM                       Timing Messages
+
+               380   TIM-DOSC              0x0D 0x11    8              Output               Disciplined oscillator control
+
+               380   TIM-FCHG              0x0D 0x16    32             Periodic/Polled      Oscillator frequency changed notification
+
+               381   TIM-HOC               0x0D 0x17    8              Input                Host oscillator control
+
+               382   TIM-SMEAS             0x0D 0x13    12 + 24*num... Input/Output         Source measurement
+
+               384   TIM-SVIN              0x0D 0x04    28             Periodic/Polled      Survey-in data
+
+               385   TIM-TM2               0x0D 0x03    28             Periodic/Polled      Time mark data
+
+               386   TIM-TOS               0x0D 0x12    56             Periodic             Time pulse time and frequency data
+
+               388   TIM-TP                0x0D 0x01    16             Periodic/Polled      Time pulse time data
+
+               390   TIM-VCOCAL            0x0D 0x15    1              Command              Stop calibration
+
+               391   TIM-VCOCAL            0x0D 0x15    12             Command              VCO calibration extended command
+
+               392   TIM-VCOCAL            0x0D 0x15    12             Periodic/Polled      Results of the calibration
+
+               393   TIM-VRFY              0x0D 0x06    20             Periodic/Polled      Sourced time verification
+
+                                   UBX Class UPD                       Firmware Update Messages
+
+               394   UPD-SOS               0x09 0x14    0              Poll Request         Poll backup restore status
+
+               394   UPD-SOS               0x09 0x14    4              Command              Create backup in flash
+
+               395   UPD-SOS               0x09 0x14    4              Command              Clear backup in flash
+
+               395   UPD-SOS               0x09 0x14    8              Output               Backup creation acknowledge
+
+               396   UPD-SOS               0x09 0x14    8              Output               System restored from backup
+
+
+
+
+               UBX-13003221 - R20                           Early production information                              Page 152 of 415
