@@ -2,9 +2,9 @@ package nmea
 
 import "time"
 
-type NMEAHeader string
+type Header string
 
-func (h NMEAHeader) TalkerID() TalkerID {
+func (h Header) TalkerID() TalkerID {
 	if len(h) > 2 && h[0] == 'G' {
 		return TalkerID(h[2])
 	}
@@ -13,12 +13,12 @@ func (h NMEAHeader) TalkerID() TalkerID {
 
 // Datum reference
 type GxDTM struct {
-	NMEAHeader
+	Header
 	Datum    string
 	SubDatum string
-	Lat_min  float64
+	Lat_deg  float64
 	North    Wind
-	Lon_min  float64
+	Lon_deg  float64
 	East     Wind
 	Alt_m    float64
 	RefDatum string
@@ -27,14 +27,14 @@ type GxDTM struct {
 // Poll a standard message (Talker ID Gx)
 // GBQ, GLQ, GNQ, GPQ
 type GxGxQ struct {
-	NMEAHeader
+	Header
 	MsgID string
 }
 
 // GNSS satellite fault detection
 type GxGBS struct {
-	NMEAHeader
-	TimeOfDay time.Duration
+	Header
+	TimeOfDay time.Duration // `nmea:"hhmmss.sssss"`
 	ErrLat_m  float64
 	ErrLon_m  float64
 	ErrAlt_m  float64
@@ -48,11 +48,11 @@ type GxGBS struct {
 
 // Global positioning system fix data
 type GxGGA struct {
-	NMEAHeader
+	Header
 	TimeOfDay   time.Duration
-	Lat_min     float64 `nmea:"ddmm.mmmmm"`
+	Lat_deg     float64 `nmea:"ddmm.mmmmm"`
 	North       Wind
-	Lon_min     float64 `nmea:"dddmm.mmmmm"`
+	Lon_deg     float64 `nmea:"dddmm.mmmmm"`
 	East        Wind
 	Quality     PosMode `nmea:"quality"`
 	NumSV       int
@@ -65,25 +65,33 @@ type GxGGA struct {
 	DiffStation int
 }
 
+func (msg *GxGGA) LatLon() (lat_deg, lon_deg float64) {
+	return msg.North.Sign(msg.Lat_deg), msg.East.Sign(msg.Lon_deg)
+}
+
 // Latitude and longitude, with time of position fix and status
 type GxGGL struct {
-	NMEAHeader
-	Lat_min   float64 `nmea:"ddmm.mmmmm"`
+	Header
+	Lat_deg   float64 `nmea:"ddmm.mmmmm"`
 	North     Wind
-	Lon_min   float64 `nmea:"dddmm.mmmmm"`
+	Lon_deg   float64 `nmea:"dddmm.mmmmm"`
 	East      Wind
 	TimeOfDay time.Duration
 	Status    Status
 	PosMode   PosMode
 }
 
+func (msg *GxGGL) LatLon() (lat_deg, lon_deg float64) {
+	return msg.North.Sign(msg.Lat_deg), msg.East.Sign(msg.Lon_deg)
+}
+
 // GNSS fix data
 type GxGNS struct {
-	NMEAHeader
+	Header
 	TimeOfDay   time.Duration
-	Lat_min     float64 `nmea:"ddmm.mmmmm"`
+	Lat_deg     float64 `nmea:"ddmm.mmmmm"`
 	North       Wind
-	Lon_min     float64 `nmea:"dddmm.mmmmm"`
+	Lon_deg     float64 `nmea:"dddmm.mmmmm"`
 	East        Wind
 	PosMode     PosMode
 	NumSV       int
@@ -95,9 +103,13 @@ type GxGNS struct {
 	NavStatus   Status // V>4.10
 }
 
+func (msg *GxGNS) LatLon() (lat_deg, lon_deg float64) {
+	return msg.North.Sign(msg.Lat_deg), msg.East.Sign(msg.Lon_deg)
+}
+
 // GNSS range residuals
 type GxGRS struct {
-	NMEAHeader
+	Header
 	TimeOfDay time.Duration
 	Mode      string      // 1 = computed after fix
 	Residual  [12]float64 // matches last GSA sequence
@@ -107,7 +119,7 @@ type GxGRS struct {
 
 // GNSS DOP and active satellites
 type GxGSA struct {
-	NMEAHeader
+	Header
 	OpMode   OpMode
 	NavMode  NavMode
 	SVID     [12]int
@@ -119,7 +131,7 @@ type GxGSA struct {
 
 // GNSS pseudorange error statistics
 type GxGST struct {
-	NMEAHeader
+	Header
 	TimeOfDay  time.Duration
 	RangeRMS_m float64
 	StdMajor_m float64
@@ -132,7 +144,7 @@ type GxGST struct {
 
 // GNSS satellites in view
 type GxGSV struct {
-	NMEAHeader
+	Header
 	MsgCnt int
 	MsgNum int
 	NumSV  int
@@ -147,12 +159,12 @@ type GxGSV struct {
 
 // Recommended minimum data
 type GxRMC struct {
-	NMEAHeader
+	Header
 	TimeOfDay time.Duration
 	Valid     Status
-	Lat_min   float64 `nmea:"ddmm.mmmmm"`
+	Lat_deg   float64 `nmea:"ddmm.mmmmm"`
 	North     Wind
-	Lon_min   float64 `nmea:"dddmm.mmmmm"`
+	Lon_deg   float64 `nmea:"dddmm.mmmmm"`
 	East      Wind
 	Speed_kts float64
 	COG_deg   float64
@@ -163,18 +175,22 @@ type GxRMC struct {
 	NavStatus Status
 }
 
+func (msg *GxRMC) LatLon() (lat_deg, lon_deg float64) {
+	return msg.North.Sign(msg.Lat_deg), msg.East.Sign(msg.Lon_deg)
+}
+
 // Text transmission
 type GxTXT struct {
-	NMEAHeader
+	Header
 	MsgCnt  int
 	MsgNum  int
-	TxtType int
+	TxtType TxtType
 	Text    string
 }
 
 // Dual ground/water distance
 type GxVLW struct {
-	NMEAHeader
+	Header
 	TWD_nmi float64
 	TWDUnit string
 	WD_nm   float64
@@ -187,7 +203,7 @@ type GxVLW struct {
 
 // Course over ground and ground speed
 type GxVTG struct {
-	NMEAHeader
+	Header
 	COGT_deg float64
 	COGTUnit string
 	COGM_deg float64
@@ -201,7 +217,7 @@ type GxVTG struct {
 
 // Time and date
 type GxZDA struct {
-	NMEAHeader
+	Header
 	Time  time.Duration
 	Day   int
 	Month int

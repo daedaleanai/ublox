@@ -2,15 +2,58 @@ package nmea
 
 import "time"
 
-// PUBX further switch content on
-type PUBXHeader struct {
-	NMEAHeader
-	PUBXType int
+// Proprietary u-Blox NMEA sentences have NMEA header 'PUBX' and then switch on the second field
+type PUBXType int
+
+const (
+	CONFIG   PUBXType = 41
+	POSITION PUBXType = 0
+	RATE     PUBXType = 40
+	SVSTATUS PUBXType = 3
+	TIME     PUBXType = 4
+)
+
+type SatStat int
+
+const (
+	NotUsed SatStat = '-'
+	Used    SatStat = 'U'
+	Known   SatStat = 'e'
+)
+
+type NavStat int
+
+const (
+	NF NavStat = iota + 1
+	DR
+	G2
+	G3
+	D2
+	D3
+	RK
+	TT
+)
+
+func NewPUBX(t PUBXType) interface{} {
+	switch t {
+	case CONFIG:
+		return &PUBXConfig{}
+	case POSITION:
+		return &PUBXPosition{}
+	case RATE:
+		return &PUBXRate{}
+	case SVSTATUS:
+		return &PUBXSvstatus{}
+	case TIME:
+		return &PUBXTime{}
+	}
+	return nil
 }
 
 // Set protocols and baud rate
 type PUBXConfig struct {
-	PUBXHeader
+	Header
+	PUBXType
 	PortID      int
 	InProto     uint32
 	OutProto    uint32
@@ -20,14 +63,15 @@ type PUBXConfig struct {
 
 // Lat/Long position data
 type PUBXPosition struct {
-	PUBXHeader
+	Header
+	PUBXType
 	TimeOfDay time.Duration
 	Lat_min   float64 `nmea:"ddmm.mmmmm"`
 	North     Wind
 	Lon_min   float64 `nmea:"dddmm.mmmmm"`
 	East      Wind
 	AltRef_m  float64
-	NavStat   string // NF, DR, G2, G3, D2, D3, RK, TT TODO make ENUM
+	NavStat   NavStat
 	HAcc_m    float64
 	VAcc_m    float64
 	SOG_km_h  float64
@@ -44,7 +88,8 @@ type PUBXPosition struct {
 
 // Set NMEA message output rate
 type PUBXRate struct {
-	PUBXHeader
+	Header
+	PUBXType
 	MsgID    string
 	Rddc     int
 	Rus1     int
@@ -56,7 +101,8 @@ type PUBXRate struct {
 
 // Satellite status
 type PUBXSVStatus struct {
-	PUBXHeader
+	Header
+	PUBXType
 	NumSV  int
 	SVInfo []struct {
 		SVID    int
@@ -69,7 +115,8 @@ type PUBXSVStatus struct {
 
 // Time of day and clock information
 type PUBXTime struct {
-	PUBXHeader
+	Header
+	PUBXType
 	TimeOfDay   time.Duration
 	Date        time.Time
 	UTCTow_s    float64

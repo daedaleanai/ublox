@@ -1,6 +1,6 @@
 package nmea
 
-//go:generate stringer -output=strings.go -type=TalkerID,Status,PosMode,OpMode,NavMode,Wind,TxtType,PUBXType,SatStat
+//go:generate stringer -output=strings.go -type=TalkerID,Status,PosMode,OpMode,NavMode,Wind,TxtType,PUBXType,SatStatm,NavStat
 
 const VERSION = 410 // NMEA Protocol version 4.10
 
@@ -81,22 +81,4 @@ const (
 	Warning TxtType = 1
 	Notice  TxtType = 2
 	User    TxtType = 7
-)
-
-type PUBXType int
-
-const (
-	CONFIG   PUBXType = 41
-	POSITION PUBXType = 0
-	RATE     PUBXType = 40
-	SVSTATUS PUBXType = 3
-	TIME     PUBXType = 4
-)
-
-type SatStat int
-
-const (
-	NotUsed SatStat = '-'
-	Used    SatStat = 'U'
-	Known   SatStat = 'e'
 )
