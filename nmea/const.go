@@ -1,6 +1,6 @@
 package nmea
 
-//go:generate stringer -output=strings.go -type=TalkerID,Status,PosMode,OpMode,NavMode,Wind,TxtType,PUBXType,SatStatm,NavStat
+//go:generate stringer -output=strings.go -type=TalkerID,Status,PosMode,OpMode,NavMode,Wind,TxtType,PUBXType,SatStat,NavStat
 
 const VERSION = 410 // NMEA Protocol version 4.10
 
