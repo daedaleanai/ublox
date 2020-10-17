@@ -148,7 +148,7 @@ type GxGSV struct {
 	MsgCnt int
 	MsgNum int
 	NumSV  int
-	SVInfo []struct {
+	SVInfo []struct { // message parser magically uses preceding int as length
 		SVID    int
 		Elv_deg float64
 		Az_deg  float64

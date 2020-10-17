@@ -43,7 +43,7 @@ func NewPUBX(t PUBXType) interface{} {
 	case RATE:
 		return &PUBXRate{}
 	case SVSTATUS:
-		return &PUBXSvstatus{}
+		return &PUBXSVStatus{}
 	case TIME:
 		return &PUBXTime{}
 	}
@@ -104,7 +104,7 @@ type PUBXSVStatus struct {
 	Header
 	PUBXType
 	NumSV  int
-	SVInfo []struct {
+	SVInfo []struct { // message parser magically uses preceding int as length
 		SVID    int
 		Az_deg  float64
 		Elv_deg float64

@@ -36,12 +36,12 @@ func Decode(frame []byte) (msg interface{}, err error) {
 		frame[end+2] -= 'a' - 'A'
 	}
 	if frame[end+1] != hexChar[x>>4] || frame[end+2] != hexChar[x&0xf] { // also lowercase?
-		return nil, errInvalidChksum
+		return nil, errInvalidChkSum
 	}
 	fields := strings.Split(string(frame[start+1:end]), ",")
-	msg := mkMsg(fields[0])
+	msg = mkMsg(fields[0])
 	if msg == nil && fields[0] == "PUBX" && len(fields) > 2 {
-		t, err := strconv.Atoi(fields[1])
+		t, err := strconv.ParseInt(fields[1], 10, 0)
 		if err == nil {
 			msg = NewPUBX(PUBXType(t))
 		}
@@ -64,88 +64,128 @@ func decodeMsg(msg interface{}, fields []string) error {
 		return fmt.Errorf("message must be a pointer to struct")
 	}
 
-	t := rmsg.Type()
-	l := rmsg.NumField()
-	if l >= len(fields) {
-		l = len(fields)
-	}
-	for i := 0; i < l; i++ {
-		if fields[i] == "" {
+	for i, f := 0, 0; i < rmsg.NumField() && f < len(fields); i, f = i+1, f+1 {
+
+		v := rmsg.Field(i)
+
+		// array of int, float
+		if v.Kind() == reflect.Array {
+			n := v.Type().Len()
+			if n >= len(fields[f:]) {
+				n = len(fields[f:])
+			}
+			switch v.Type().Elem().Kind() {
+			case reflect.Int:
+				for ii, s := range fields[f : f+n] {
+					vv, err := strconv.ParseInt(s, 10, 0)
+					if err != nil {
+						return err
+					}
+					v.Index(ii).SetInt(vv)
+				}
+			case reflect.Float64:
+				for ii, s := range fields[f : f+n] {
+					vv, err := strconv.ParseFloat(s, 64)
+					if err != nil {
+						return err
+					}
+					v.Index(ii).SetFloat(vv)
+				}
+			}
+			f += n
 			continue
 		}
 
-		v := rmsg.Field(i)
-		// array of int, float
-		if v.Kind() == reflect.Array && v.Type().Elem().Kind() == reflect.Int
+		// slice of struct, prefixed by int, GxGSV, PUBXSVStatus
+		if v.Kind() == reflect.Slice && v.Type().Elem().Kind() == reflect.Struct {
+			// preceding value must be an int which is the length
+			if i < 2 || rmsg.Field(i-1).Kind() != reflect.Int || rmsg.Field(i-1).Int() < 0 {
+				return fmt.Errorf("%s %s can't parse slice if not preceded by valid length", rmsg.Type(), rmsg.Type().Field(i))
+			}
+			n := int(rmsg.Field(i - 1).Int())
+			nf := v.Type().Elem().NumField()
+			if nf == 0 {
+				return fmt.Errorf("%s %s can't parse slice of empty structs", rmsg.Type(), rmsg.Type().Field(i))
+			}
+			if n*nf >= len(fields[f:]) {
+				n = len(fields) / nf
+			}
 
+			v.Set(reflect.MakeSlice(v.Type().Elem(), n, n))
+			for ii := 0; ii < n; ii++ {
+				if err := decodeMsg(v.Index(ii).Addr().Interface(), fields[f:f+nf]); err != nil {
+					return err
+				}
+				f += nf
+			}
 
-		// slice of struct, prefixed by int
+			continue
+		}
 
 		// scalar types
+		s := fields[f]
+		f++
+
+		if s == "" {
+			continue
+		}
+
 		switch v.Interface().(type) {
-		case Header:
-			v.SetString(fields[i])
+		case Header, string:
+			v.SetString(s)
+
 		case time.Duration:
-			hhmmss, err := strconv.ParseFloat(fields[i], 64)
+			hhmmss, err := strconv.ParseFloat(s, 64)
 			if err != nil {
-				return fmt.Errorf("can't parse %q as hhmmss.ssss: %v", fields[i], err)
+				return err
 			}
-			v.SetInt(parseHHMMSS(hhmmss))
+			v.Set(reflect.ValueOf(parseHHMMSS(hhmmss)))
+
 		case time.Time:
-			t, err := time.Parse("020106", fields[i])
+			ddmmyy, err := time.Parse("020106", s)
 			if err != nil {
-				return fmt.Errorf("can't parse %q as hhmmss.ssss: %v", fields[i], err)
+				return err
 			}
-			v.Set(reflect.ValueOf(t))
-		case Status:
-			v.SetInt(fields[i][0]) // ignore trailing characters
-		case Wind:
-			v.SetInt(fields[i][0]) // ignore trailing characters
-		case OpMode:
-			v.SetInt(fields[i][0]) // ignore trailing characters
-		case string:
-			v.SetString(fields[i])
-		case int:
-			vv, err := strconv.Atoi(fields[i])
-			if err != nil {
-				return fmt.Errorf("can't parse %q as type %s: %v", fields[i], v.Type(), err)
-			}
-			v.SetInt(vv)
+			v.Set(reflect.ValueOf(ddmmyy))
+
 		case float64:
-			vv, err := strconv.ParseFloat(fields[i], 64)
+			vv, err := strconv.ParseFloat(s, 64)
 			if err != nil {
-				return fmt.Errorf("can't parse %q as type %s: %v", fields[i], v.Type(), err)
+				return err
 			}
 			switch rmsg.Type().Field(i).Tag.Get("nmea") {
 			case "ddmm.mmmmm", "dddmm.mmmmm":
 				vv = parseDDMM(vv)
 			}
-			v.SetInt(vv)
+			v.SetFloat(vv)
+
 		case PosMode:
 			switch rmsg.Type().Field(i).Tag.Get("nmea") {
 			case "quality":
-				vv, err := strconv.Atoi(fields[i])
-				if err != nil || vv < 0 || vv >= len(quality2PosMode) {
-					return fmt.Errorf("can't parse %q as type %s: %v", fields[i], v.Type(), err)
+				vv, err := strconv.ParseInt(s, 10, 0)
+				if err != nil || vv < 0 || int(vv) >= len(quality2PosMode) {
+					return err
 				}
-				v.SetInt(int(quality2PosMode[vv]))
+				v.SetInt(int64(quality2PosMode[vv]))
 			default:
-				v.SetInt(fields[i][0]) // ignore trailing characters
+				v.SetInt(int64(s[0])) // ignore trailing characters
 			}
-		case TxtType:
-			vv, err := strconv.Atoi(fields[i])
+
+		case Status, Wind, OpMode:
+			v.SetInt(int64(s[0])) // ignore trailing characters
+
+		case int, TxtType, NavMode:
+			vv, err := strconv.ParseInt(s, 10, 0)
 			if err != nil {
-				return fmt.Errorf("can't parse %q as type %s: %v", fields[i], v.Type(), err)
+				return err
 			}
 			v.SetInt(vv)
-		case NavMode:
-			vv, err := strconv.Atoi(fields[i])
-			if err != nil {
-				return fmt.Errorf("can't parse %q as type %s: %v", fields[i], v.Type(), err)
-			}
-			v.SetInt(vv)
+
+		default:
+			return fmt.Errorf("Don't know how to parse %s field %d: %s", rmsg.Type(), i, rmsg.Type().Field(i))
 		}
 	}
+	return nil
 }
 
 // Return a new GxXYZ NMEA message struct corresponding to the given header
