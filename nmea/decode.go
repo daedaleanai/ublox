@@ -17,8 +17,6 @@ var (
 
 const hexChar = "0123456789ABCDEF"
 
-type RawMessage []string
-
 func Decode(frame []byte) (msg interface{}, err error) {
 	start, end := bytes.IndexByte(frame, '$'), bytes.LastIndexByte(frame, '*')
 	if start == -1 || end == -1 || end+2 >= len(frame) {
@@ -43,7 +41,7 @@ func Decode(frame []byte) (msg interface{}, err error) {
 	if msg == nil && fields[0] == "PUBX" && len(fields) > 2 {
 		t, err := strconv.ParseInt(fields[1], 10, 0)
 		if err == nil {
-			msg = NewPUBX(PUBXType(t))
+			msg = mkPUBX(PUBXType(t))
 		}
 	}
 	if msg != nil {
@@ -51,7 +49,7 @@ func Decode(frame []byte) (msg interface{}, err error) {
 		return msg, err
 	}
 
-	return RawMessage(fields), nil
+	return fields, nil
 }
 
 // https://play.golang.org/p/_GK6kdk1SdV
@@ -64,11 +62,11 @@ func decodeMsg(msg interface{}, fields []string) error {
 		return fmt.Errorf("message must be a pointer to struct")
 	}
 
-	for i, f := 0, 0; i < rmsg.NumField() && f < len(fields); i, f = i+1, f+1 {
+	for i, f := 0, 0; i < rmsg.NumField() && f < len(fields); i++ {
 
 		v := rmsg.Field(i)
 
-		// array of int, float
+		// array of int, float, as in GxGRS and GxGSA
 		if v.Kind() == reflect.Array {
 			n := v.Type().Len()
 			if n >= len(fields[f:]) {
@@ -77,6 +75,9 @@ func decodeMsg(msg interface{}, fields []string) error {
 			switch v.Type().Elem().Kind() {
 			case reflect.Int:
 				for ii, s := range fields[f : f+n] {
+					if s == "" {
+						continue
+					}
 					vv, err := strconv.ParseInt(s, 10, 0)
 					if err != nil {
 						return err
@@ -85,6 +86,9 @@ func decodeMsg(msg interface{}, fields []string) error {
 				}
 			case reflect.Float64:
 				for ii, s := range fields[f : f+n] {
+					if s == "" {
+						continue
+					}
 					vv, err := strconv.ParseFloat(s, 64)
 					if err != nil {
 						return err
@@ -96,16 +100,16 @@ func decodeMsg(msg interface{}, fields []string) error {
 			continue
 		}
 
-		// slice of struct, prefixed by int, GxGSV, PUBXSVStatus
+		// slice of struct, prefixed by int as in GxGSV, PUBXSVStatus
 		if v.Kind() == reflect.Slice && v.Type().Elem().Kind() == reflect.Struct {
 			// preceding value must be an int which is the length
 			if i < 2 || rmsg.Field(i-1).Kind() != reflect.Int || rmsg.Field(i-1).Int() < 0 {
-				return fmt.Errorf("%s %s can't parse slice if not preceded by valid length", rmsg.Type(), rmsg.Type().Field(i))
+				return fmt.Errorf("%v %v can't parse slice if not preceded by valid length", rmsg.Type(), rmsg.Type().Field(i))
 			}
 			n := int(rmsg.Field(i - 1).Int())
 			nf := v.Type().Elem().NumField()
 			if nf == 0 {
-				return fmt.Errorf("%s %s can't parse slice of empty structs", rmsg.Type(), rmsg.Type().Field(i))
+				return fmt.Errorf("%v %v can't parse slice of empty structs", rmsg.Type(), rmsg.Type().Field(i))
 			}
 			if n*nf >= len(fields[f:]) {
 				n = len(fields) / nf
@@ -182,7 +186,7 @@ func decodeMsg(msg interface{}, fields []string) error {
 			v.SetInt(vv)
 
 		default:
-			return fmt.Errorf("Don't know how to parse %s field %d: %s", rmsg.Type(), i, rmsg.Type().Field(i))
+			return fmt.Errorf("Don't know how to parse %v field %d: %v", rmsg.Type(), i, rmsg.Type().Field(i))
 		}
 	}
 	return nil
@@ -224,6 +228,22 @@ func mkMsg(h string) interface{} {
 		return &GxVTG{}
 	case "ZDA":
 		return &GxZDA{}
+	}
+	return nil
+}
+
+func mkPUBX(t PUBXType) interface{} {
+	switch t {
+	case CONFIG:
+		return &PUBXConfig{}
+	case POSITION:
+		return &PUBXPosition{}
+	case RATE:
+		return &PUBXRate{}
+	case SVSTATUS:
+		return &PUBXSVStatus{}
+	case TIME:
+		return &PUBXTime{}
 	}
 	return nil
 }

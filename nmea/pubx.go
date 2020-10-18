@@ -34,22 +34,6 @@ const (
 	TT
 )
 
-func NewPUBX(t PUBXType) interface{} {
-	switch t {
-	case CONFIG:
-		return &PUBXConfig{}
-	case POSITION:
-		return &PUBXPosition{}
-	case RATE:
-		return &PUBXRate{}
-	case SVSTATUS:
-		return &PUBXSVStatus{}
-	case TIME:
-		return &PUBXTime{}
-	}
-	return nil
-}
-
 // Set protocols and baud rate
 type PUBXConfig struct {
 	Header
