@@ -1,6 +1,9 @@
 package nmea
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
 
 type Header string
 
@@ -70,7 +73,7 @@ func (msg *GxGGA) LatLon() (lat_deg, lon_deg float64) {
 }
 
 // Latitude and longitude, with time of position fix and status
-type GxGGL struct {
+type GxGLL struct {
 	Header
 	Lat_deg   float64 `nmea:"ddmm.mmmmm"`
 	North     Wind
@@ -81,7 +84,7 @@ type GxGGL struct {
 	PosMode   PosMode
 }
 
-func (msg *GxGGL) LatLon() (lat_deg, lon_deg float64) {
+func (msg *GxGLL) LatLon() (lat_deg, lon_deg float64) {
 	return msg.North.Sign(msg.Lat_deg), msg.East.Sign(msg.Lon_deg)
 }
 
@@ -142,19 +145,53 @@ type GxGST struct {
 	StdAlt_m   float64
 }
 
+type SVInfo struct {
+	SVID    int
+	Elv_deg float64
+	Az_deg  float64
+	CNO_db  float64
+}
+
 // GNSS satellites in view
 type GxGSV struct {
 	Header
-	MsgCnt int
-	MsgNum int
-	NumSV  int
-	SVInfo []struct { // message parser magically uses preceding int as length
-		SVID    int
-		Elv_deg float64
-		Az_deg  float64
-		CNO_db  float64
+	MsgCnt   int
+	MsgNum   int
+	NumSV    int
+	SVInfo   []SVInfo // up to 4 per message.
+	SignalID int      // V>4.10  note: after the variable part!
+}
+
+func (msg *GxGSV) Decode(fields []string) (err error) {
+	if len(fields) > 0 {
+		msg.Header = Header(fields[0])
 	}
-	SignalID int // V>4.10  note: after the variable part!
+	if len(fields) > 1 {
+		msg.MsgCnt, err = strconv.Atoi(fields[1])
+	}
+	if err == nil && len(fields) > 2 {
+		msg.MsgNum, err = strconv.Atoi(fields[2])
+	}
+	if err == nil && len(fields) > 3 {
+		msg.NumSV, err = strconv.Atoi(fields[3])
+	}
+	n := 4
+	if err == nil && msg.MsgNum*4 > msg.NumSV {
+		n = msg.NumSV % 4
+	}
+	msg.SVInfo = make([]SVInfo, n)
+	for i := 0; i < n; i++ {
+		if len(fields) < 8+4*i {
+			break
+		}
+		if err = decodeMsg(&msg.SVInfo[i], fields[4+4*i:8+4*i]); err != nil {
+			return err
+		}
+	}
+	if err == nil && len(fields) > 8+4*n {
+		msg.SignalID, err = strconv.Atoi(fields[3])
+	}
+	return err
 }
 
 // Recommended minimum data

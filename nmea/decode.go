@@ -27,14 +27,8 @@ func Decode(frame []byte) (msg interface{}, err error) {
 		x ^= byte(v)
 	}
 	// fast uppercase
-	if frame[end+1] >= 'a' {
-		frame[end+1] -= 'a' - 'A'
-	}
-	if frame[end+2] >= 'a' {
-		frame[end+2] -= 'a' - 'A'
-	}
 	if frame[end+1] != hexChar[x>>4] || frame[end+2] != hexChar[x&0xf] { // also lowercase?
-		return nil, errInvalidChkSum
+		return nil, fmt.Errorf("Expected %02X found %s", x, frame[end+1:end+3])
 	}
 	fields := strings.Split(string(frame[start+1:end]), ",")
 	msg = mkMsg(fields[0])
@@ -54,6 +48,12 @@ func Decode(frame []byte) (msg interface{}, err error) {
 
 // https://play.golang.org/p/_GK6kdk1SdV
 func decodeMsg(msg interface{}, fields []string) error {
+
+	// override reflection based one for GxGSV and PUBXSVStatus which have variable length irregularities
+	if dmsg, ok := msg.(interface{ Decode([]string) error }); ok {
+		return dmsg.Decode(fields)
+	}
+
 	if reflect.ValueOf(msg).Kind() != reflect.Ptr {
 		return fmt.Errorf("message must be a pointer to struct")
 	}
@@ -97,32 +97,6 @@ func decodeMsg(msg interface{}, fields []string) error {
 				}
 			}
 			f += n
-			continue
-		}
-
-		// slice of struct, prefixed by int as in GxGSV, PUBXSVStatus
-		if v.Kind() == reflect.Slice && v.Type().Elem().Kind() == reflect.Struct {
-			// preceding value must be an int which is the length
-			if i < 2 || rmsg.Field(i-1).Kind() != reflect.Int || rmsg.Field(i-1).Int() < 0 {
-				return fmt.Errorf("%v %v can't parse slice if not preceded by valid length", rmsg.Type(), rmsg.Type().Field(i))
-			}
-			n := int(rmsg.Field(i - 1).Int())
-			nf := v.Type().Elem().NumField()
-			if nf == 0 {
-				return fmt.Errorf("%v %v can't parse slice of empty structs", rmsg.Type(), rmsg.Type().Field(i))
-			}
-			if n*nf >= len(fields[f:]) {
-				n = len(fields) / nf
-			}
-
-			v.Set(reflect.MakeSlice(v.Type().Elem(), n, n))
-			for ii := 0; ii < n; ii++ {
-				if err := decodeMsg(v.Index(ii).Addr().Interface(), fields[f:f+nf]); err != nil {
-					return err
-				}
-				f += nf
-			}
-
 			continue
 		}
 
@@ -206,8 +180,8 @@ func mkMsg(h string) interface{} {
 		return &GxGBS{}
 	case "GGA":
 		return &GxGGA{}
-	case "GGL":
-		return &GxGGL{}
+	case "GLL":
+		return &GxGLL{}
 	case "GNS":
 		return &GxGNS{}
 	case "GRS":
