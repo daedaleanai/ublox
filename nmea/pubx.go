@@ -34,10 +34,12 @@ const (
 	TT
 )
 
+var parseNavStat = map[string]NavStat{"NF": NF, "DR": DR, "G2": G2, "G3": G3, "D2": D2, "D3": D3, "RK": RK, "TT": TT}
+
 // Set protocols and baud rate
 type PUBXConfig struct {
 	Header
-	PUBXType
+	PUBXType    PUBXType
 	PortID      int
 	InProto     uint32
 	OutProto    uint32
@@ -48,7 +50,7 @@ type PUBXConfig struct {
 // Lat/Long position data
 type PUBXPosition struct {
 	Header
-	PUBXType
+	PUBXType  PUBXType
 	TimeOfDay time.Duration
 	Lat_min   float64 `nmea:"ddmm.mmmmm"`
 	North     Wind
@@ -73,7 +75,7 @@ type PUBXPosition struct {
 // Set NMEA message output rate
 type PUBXRate struct {
 	Header
-	PUBXType
+	PUBXType PUBXType
 	MsgID    string
 	Rddc     int
 	Rus1     int
@@ -86,9 +88,9 @@ type PUBXRate struct {
 // Satellite status
 type PUBXSVStatus struct {
 	Header
-	PUBXType
-	NumSV  int
-	SVInfo []struct { // message parser magically uses preceding int as length
+	PUBXType PUBXType
+	NumSV    int
+	SVInfo   []struct { // message parser magically uses preceding int as length
 		SVID    int
 		Az_deg  float64
 		Elv_deg float64
@@ -100,7 +102,7 @@ type PUBXSVStatus struct {
 // Time of day and clock information
 type PUBXTime struct {
 	Header
-	PUBXType
+	PUBXType    PUBXType
 	TimeOfDay   time.Duration
 	Date        time.Time
 	UTCTow_s    float64

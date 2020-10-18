@@ -149,10 +149,13 @@ func decodeMsg(msg interface{}, fields []string) error {
 				v.SetInt(int64(s[0])) // ignore trailing characters
 			}
 
+		case NavStat:
+			v.SetInt(int64(parseNavStat[s]))
+
 		case Status, Wind, OpMode:
 			v.SetInt(int64(s[0])) // ignore trailing characters
 
-		case int, TxtType, NavMode:
+		case int, TxtType, NavMode, PUBXType:
 			vv, err := strconv.ParseInt(s, 10, 0)
 			if err != nil {
 				return err
