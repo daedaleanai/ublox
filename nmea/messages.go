@@ -179,6 +179,9 @@ func (msg *GxGSV) Decode(fields []string) (err error) {
 	if err == nil && msg.MsgNum*4 > msg.NumSV {
 		n = msg.NumSV % 4
 	}
+	if err != nil {
+		return err
+	}
 	msg.SVInfo = make([]SVInfo, n)
 	for i := 0; i < n; i++ {
 		if len(fields) < 8+4*i {
