@@ -107,7 +107,7 @@ type PUBXTime struct {
 	Date        time.Time
 	UTCTow_s    float64
 	UTCWeek     int
-	Leap_s      float64 `nmea:"leap"` // parse trailing D
+	Leap_s      float64 `nmea:"leap"` // skip trailing D, todo: store it
 	ClkBias_ns  int
 	ClkDrift_e9 float64 // ns/s
 	TpGran_ns   int

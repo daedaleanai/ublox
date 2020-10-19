@@ -127,11 +127,15 @@ func decodeMsg(msg interface{}, fields []string) error {
 			v.Set(reflect.ValueOf(ddmmyy))
 
 		case float64:
+			tag := rmsg.Type().Field(i).Tag.Get("nmea")
+			if tag == "leap" && strings.HasSuffix(s, "D") {
+				s = s[:len(s)-1]
+			}
 			vv, err := strconv.ParseFloat(s, 64)
 			if err != nil {
 				return err
 			}
-			switch rmsg.Type().Field(i).Tag.Get("nmea") {
+			switch tag {
 			case "ddmm.mmmmm", "dddmm.mmmmm":
 				vv = parseDDMM(vv)
 			}
@@ -161,6 +165,13 @@ func decodeMsg(msg interface{}, fields []string) error {
 				return err
 			}
 			v.SetInt(vv)
+
+		case uint32:
+			vv, err := strconv.ParseUint(s, 16, 32)
+			if err != nil {
+				return err
+			}
+			v.SetUint(vv)
 
 		default:
 			return fmt.Errorf("Don't know how to parse %v field %d: %v", rmsg.Type(), i, rmsg.Type().Field(i))
