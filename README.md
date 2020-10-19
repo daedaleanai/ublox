@@ -1,4 +1,4 @@
-# ublox
+# ublox WIP!
 Encoding and decoding of μ-Blox UBX and NMEA messages
 
 [![GoDoc](https://godoc.org/github.com/daedaleanai/ublox?status.svg)](https://godoc.org/github.com/daedaleanai/ublox)
