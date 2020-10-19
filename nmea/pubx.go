@@ -88,19 +88,21 @@ type PUBXRate struct {
 	Reserved int
 }
 
+type PUBXSVInfo struct { // message parser magically uses preceding int as length
+	SVID    int
+	Status  SatStat
+	Az_deg  float64
+	Elv_deg float64
+	CNO_db  float64
+	Lock_s  float64
+}
+
 // Satellite status
 type PUBXSVStatus struct {
 	Header
 	PUBXType PUBXType
 	NumSV    int
-	SVInfo   []struct { // message parser magically uses preceding int as length
-		SVID    int
-		Status  StatStat
-		Az_deg  float64
-		Elv_deg float64
-		CNO_db  float64
-		Lock_s  float64
-	}
+	SVInfo   []PUBXSVInfo
 }
 
 func (msg *PUBXSVStatus) Decode(fields []string) (err error) {
@@ -108,7 +110,9 @@ func (msg *PUBXSVStatus) Decode(fields []string) (err error) {
 		msg.Header = Header(fields[0])
 	}
 	if len(fields) > 1 {
-		msg.PUBXType, err = strconv.Atoi(fields[1])
+		v := 0
+		v, err = strconv.Atoi(fields[1])
+		msg.PUBXType = PUBXType(v)
 	}
 	if err == nil && len(fields) > 2 {
 		msg.NumSV, err = strconv.Atoi(fields[2])
@@ -116,7 +120,7 @@ func (msg *PUBXSVStatus) Decode(fields []string) (err error) {
 	if err != nil {
 		return err
 	}
-	msg.SVInfo = make([]SVInfo, msg.NumSV)
+	msg.SVInfo = make([]PUBXSVInfo, msg.NumSV)
 	for i := 0; i < msg.NumSV; i++ {
 		if len(fields) < 3+6*i {
 			break

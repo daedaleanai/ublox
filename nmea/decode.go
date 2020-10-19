@@ -156,7 +156,7 @@ func decodeMsg(msg interface{}, fields []string) error {
 		case NavStat:
 			v.SetInt(int64(parseNavStat[s]))
 
-		case Status, Wind, OpMode:
+		case Status, Wind, OpMode, SatStat:
 			v.SetInt(int64(s[0])) // ignore trailing characters
 
 		case int, TxtType, NavMode, PUBXType:
