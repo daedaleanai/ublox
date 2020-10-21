@@ -17,17 +17,19 @@ var (
 
 const hexChar = "0123456789ABCDEF"
 
+// Decode parses the NMEA frame found between the first '$' and the last '*' in frame.
+// the '*' should be followed by the 2 hex checksum characters, but any further trailing bytes will be ignored.
 func Decode(frame []byte) (msg interface{}, err error) {
 	start, end := bytes.IndexByte(frame, '$'), bytes.LastIndexByte(frame, '*')
-	if start == -1 || end == -1 || end+2 >= len(frame) {
+	if start == -1 || end == -1 || end+3 > len(frame) {
 		return nil, errInvalidFrame
 	}
 	var x byte
 	for _, v := range frame[start+1 : end] {
 		x ^= byte(v)
 	}
-	// fast uppercase
-	if frame[end+1] != hexChar[x>>4] || frame[end+2] != hexChar[x&0xf] { // also lowercase?
+	chk := strings.ToUpper(string(frame[end+1 : end+3]))
+	if chk[0] != hexChar[x>>4] || chk[1] != hexChar[x&0xf] { // also lowercase?
 		return nil, fmt.Errorf("Expected %02X found %s", x, frame[end+1:end+3])
 	}
 	fields := strings.Split(string(frame[start+1:end]), ",")
@@ -44,6 +46,62 @@ func Decode(frame []byte) (msg interface{}, err error) {
 	}
 
 	return fields, nil
+}
+
+// Return a new GxXYZ NMEA message struct corresponding to the given header
+func mkMsg(h string) interface{} {
+	if len(h) < 2 {
+		return nil
+	}
+	switch h[2:] {
+	case "DTM":
+		return &GxDTM{}
+	case "GBQ", "GLQ", "GNQ", "GPQ":
+		return &GxGxQ{}
+	case "GBS":
+		return &GxGBS{}
+	case "GGA":
+		return &GxGGA{}
+	case "GLL":
+		return &GxGLL{}
+	case "GNS":
+		return &GxGNS{}
+	case "GRS":
+		return &GxGRS{}
+	case "GSA":
+		return &GxGSA{}
+	case "GST":
+		return &GxGST{}
+	case "GSV":
+		return &GxGSV{}
+	case "RMC":
+		return &GxRMC{}
+	case "TXT":
+		return &GxTXT{}
+	case "VLW":
+		return &GxVLW{}
+	case "VTG":
+		return &GxVTG{}
+	case "ZDA":
+		return &GxZDA{}
+	}
+	return nil
+}
+
+func mkPUBX(t PUBXType) interface{} {
+	switch t {
+	case CONFIG:
+		return &PUBXConfig{}
+	case POSITION:
+		return &PUBXPosition{}
+	case RATE:
+		return &PUBXRate{}
+	case SVSTATUS:
+		return &PUBXSVStatus{}
+	case TIME:
+		return &PUBXTime{}
+	}
+	return nil
 }
 
 // https://play.golang.org/p/_GK6kdk1SdV
@@ -176,62 +234,6 @@ func decodeMsg(msg interface{}, fields []string) error {
 		default:
 			return fmt.Errorf("Don't know how to parse %v field %d: %v", rmsg.Type(), i, rmsg.Type().Field(i))
 		}
-	}
-	return nil
-}
-
-// Return a new GxXYZ NMEA message struct corresponding to the given header
-func mkMsg(h string) interface{} {
-	if Header(h).TalkerID() == 0 {
-		return nil
-	}
-	switch h[2:] {
-	case "DTM":
-		return &GxDTM{}
-	case "GBQ", "GLQ", "GNQ", "GPQ":
-		return &GxGxQ{}
-	case "GBS":
-		return &GxGBS{}
-	case "GGA":
-		return &GxGGA{}
-	case "GLL":
-		return &GxGLL{}
-	case "GNS":
-		return &GxGNS{}
-	case "GRS":
-		return &GxGRS{}
-	case "GSA":
-		return &GxGSA{}
-	case "GST":
-		return &GxGST{}
-	case "GSV":
-		return &GxGSV{}
-	case "RMC":
-		return &GxRMC{}
-	case "TXT":
-		return &GxTXT{}
-	case "VLW":
-		return &GxVLW{}
-	case "VTG":
-		return &GxVTG{}
-	case "ZDA":
-		return &GxZDA{}
-	}
-	return nil
-}
-
-func mkPUBX(t PUBXType) interface{} {
-	switch t {
-	case CONFIG:
-		return &PUBXConfig{}
-	case POSITION:
-		return &PUBXPosition{}
-	case RATE:
-		return &PUBXRate{}
-	case SVSTATUS:
-		return &PUBXSVStatus{}
-	case TIME:
-		return &PUBXTime{}
 	}
 	return nil
 }

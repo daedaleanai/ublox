@@ -15,17 +15,19 @@ import (
 )
 
 // A Decoder scans an io stream into UBX (0xB5-0x62 separated) or NMEA ("$xxx,,,,*FF\r\n") frames.
+// If you have an unmixed stream of NMEA-only data you can use nmea.Decode() on bufio.Scanner.Bytes() directly.
 type Decoder struct {
 	s *bufio.Scanner
 }
 
+// NewDecoder creates a new bufio Scanner with a splitfunc that can handle both UBX and NMEA frames.
 func NewDecoder(r io.Reader) *Decoder {
 	d := bufio.NewScanner(r)
 	d.SplitFunc(splitFunc)
 	return &Decoder{s: d}
 }
 
-// assume we're either at the start of an NMEA sentence or at the start of a UBX message
+// Assume we're either at the start of an NMEA sentence or at the start of a UBX message
 // if not, skip to the first $ or UBX SOM.
 func splitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 	if len(data) == 0 {
@@ -72,6 +74,7 @@ func splitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 	return 1 + i1, nil, nil
 }
 
+// Decode reads on NMEA or UBX frame and calls nmea.Decode or ubx.Decode accordingly to parse the message.
 func (d *Decoder) Decode() (msg interface{}, err error) {
 	if !d.s.Scan() {
 		return nil, d.s.Err()
@@ -82,5 +85,5 @@ func (d *Decoder) Decode() (msg interface{}, err error) {
 	case 0xB5:
 		return ubx.Decode(d.Bytes())
 	}
-	panic("scanner returned impossible frame")
+	panic("impossible frame")
 }
