@@ -77,8 +77,12 @@ func splitFunc(data []byte, atEOF bool) (advance int, token []byte, err error) {
 // Decode reads on NMEA or UBX frame and calls nmea.Decode or ubx.Decode accordingly to parse the message.
 func (d *Decoder) Decode() (msg interface{}, err error) {
 	if !d.s.Scan() {
-		return nil, d.s.Err()
+		if err = d.s.Err(); err == nil {
+			err = io.EOF
+		}
+		return nil, err
 	}
+
 	switch d.s.Bytes()[0] {
 	case '$':
 		return nmea.Decode(d.s.Bytes())

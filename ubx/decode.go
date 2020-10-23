@@ -18,7 +18,8 @@ func Decode(frame []byte) (msg Message, err error) {
 
 	var header struct {
 		Preamble uint16
-		ClassID  uint16
+		MsgClass uint8
+		MsgID    uint8
 		Length   uint16
 	}
 
@@ -44,7 +45,7 @@ func Decode(frame []byte) (msg Message, err error) {
 		return nil, errInvalidChkSum
 	}
 
-	switch header.ClassID {
+	switch uint16(header.MsgClass)<<8 | uint16(header.MsgID) {
 	case (AckAck{}).Descriptor().ClassID():
 		msg = &AckAck{}
 	case (AckNak{}).Descriptor().ClassID():
@@ -65,9 +66,13 @@ func Decode(frame []byte) (msg Message, err error) {
 		msg = &CfgRate{}
 	case (NavPvt{}).Descriptor().ClassID():
 		msg = &NavPvt{}
+	default:
 	}
-
-	err = binary.Read(buf, binary.LittleEndian, &msg)
+	if msg != nil {
+		err = binary.Read(buf, binary.LittleEndian, msg)
+	} else {
+		msg = &RawMessage{ClassID: uint16(header.MsgClass)<<8 | uint16(header.MsgID), Data: append([]byte(nil), frame[6:len(frame)-2]...)}
+	}
 
 	return msg, err
 

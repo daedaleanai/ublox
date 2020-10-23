@@ -16,7 +16,6 @@ type Message interface {
 
 type RawMessage struct {
 	ClassID uint16
-	Length  uint16
 	Data    []byte
 }
 

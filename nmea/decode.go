@@ -30,7 +30,7 @@ func Decode(frame []byte) (msg interface{}, err error) {
 	}
 	chk := strings.ToUpper(string(frame[end+1 : end+3]))
 	if chk[0] != hexChar[x>>4] || chk[1] != hexChar[x&0xf] { // also lowercase?
-		return nil, fmt.Errorf("Expected %02X found %s", x, frame[end+1:end+3])
+		return nil, fmt.Errorf("Expected %02X found %s (message %q)", x, frame[end+1:end+3], string(frame[start:end]))
 	}
 	fields := strings.Split(string(frame[start+1:end]), ",")
 	msg = mkMsg(fields[0])
