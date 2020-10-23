@@ -234,11 +234,11 @@ func (InfNotice) Descriptor() Descriptor  { return 0x04020000 }
 func (InfTest) Descriptor() Descriptor    { return 0x04030000 }
 func (InfWarning) Descriptor() Descriptor { return 0x04010000 }
 
-func (msg InfDebug) String() string   { return string(msg) }
-func (msg InfError) String() string   { return string(msg) }
-func (msg InfNotice) String() string  { return string(msg) }
-func (msg InfTest) String() string    { return string(msg) }
-func (msg InfWarning) String() string { return string(msg) }
+func (msg InfDebug) Encode() string   { return string(msg) }
+func (msg InfError) Encode() string   { return string(msg) }
+func (msg InfNotice) Encode() string  { return string(msg) }
+func (msg InfTest) Encode() string    { return string(msg) }
+func (msg InfWarning) Encode() string { return string(msg) }
 
 // 32.17.15 UBX-NAV-PVT (0x01 0x07)
 // 32.17.15.1 Navigation position velocity time solution

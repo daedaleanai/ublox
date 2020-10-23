@@ -11,8 +11,8 @@ func Encode(w io.Writer, payload Message) error {
 	var buf bytes.Buffer
 	buf.Write([]byte{0xb5, 0x62, dsc.Class(), dsc.ID(), 0, 0})
 	var err error
-	if s, ok := payload.(interface{ String() string }); ok {
-		_, err = buf.WriteString(s.String())
+	if s, ok := payload.(interface{ Encode() string }); ok {
+		_, err = buf.WriteString(s.Encode())
 	} else {
 		// TODO this will break on variable length messages
 		err = binary.Write(&buf, binary.LittleEndian, payload)

@@ -21,6 +21,6 @@ func main() {
 				break
 			}
 		}
-		fmt.Printf("%v\n", msg)
+		fmt.Printf("%#v\n", msg)
 	}
 }
