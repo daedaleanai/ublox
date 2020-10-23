@@ -4,14 +4,23 @@ package ubx
 // Message lenght = Size() + N* VarSize(), where N is the optional variable part
 type Descriptor uint32
 
-func (d Descriptor) Class() byte   { return byte(d >> 24) }
-func (d Descriptor) ID() byte      { return byte(d >> 16) }
-func (d Descriptor) Size() byte    { return byte(d >> 8) }
-func (d Descriptor) VarSize() byte { return byte(d) }
+func (d Descriptor) Class() byte     { return byte(d >> 24) }
+func (d Descriptor) ID() byte        { return byte(d >> 16) }
+func (d Descriptor) ClassID() uint16 { return uint16(d >> 16) }
+func (d Descriptor) Size() byte      { return byte(d >> 8) }
+func (d Descriptor) VarSize() byte   { return byte(d) }
 
 type Message interface {
 	Descriptor() Descriptor
 }
+
+type RawMessage struct {
+	ClassID uint16
+	Length  uint16
+	Data    []byte
+}
+
+func (msg *RawMessage) Descriptor() Descriptor { return Descriptor(msg.ClassID) << 16 }
 
 // 32.8.1 UBX-ACK-ACK (0x05 0x01)
 
