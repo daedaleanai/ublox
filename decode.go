@@ -23,7 +23,7 @@ type Decoder struct {
 // NewDecoder creates a new bufio Scanner with a splitfunc that can handle both UBX and NMEA frames.
 func NewDecoder(r io.Reader) *Decoder {
 	d := bufio.NewScanner(r)
-	d.SplitFunc(splitFunc)
+	d.Split(splitFunc)
 	return &Decoder{s: d}
 }
 
@@ -79,11 +79,11 @@ func (d *Decoder) Decode() (msg interface{}, err error) {
 	if !d.s.Scan() {
 		return nil, d.s.Err()
 	}
-	switch d.Bytes()[0] {
+	switch d.s.Bytes()[0] {
 	case '$':
-		return nmea.Decode(d.Bytes())
+		return nmea.Decode(d.s.Bytes())
 	case 0xB5:
-		return ubx.Decode(d.Bytes())
+		return ubx.Decode(d.s.Bytes())
 	}
 	panic("impossible frame")
 }

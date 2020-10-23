@@ -6,10 +6,18 @@ import (
 	"io"
 )
 
-func Encode(w io.Writer, ci ClassID, payload interface{}) error {
+func Encode(w io.Writer, payload Message) error {
+	dsc := payload.Descriptor()
 	var buf bytes.Buffer
-	buf.Write([]byte{0xb5, 0x62, ci.Class(), ci.ID(), 0, 0})
-	if err := binary.Write(&buf, binary.LittleEndian, payload); err != nil {
+	buf.Write([]byte{0xb5, 0x62, dsc.Class(), dsc.ID(), 0, 0})
+	var err error
+	if s, ok := payload.(interface{ String() string }); ok {
+		_, err = buf.WriteString(s.String())
+	} else {
+		// TODO this will break on variable length messages
+		err = binary.Write(&buf, binary.LittleEndian, payload)
+	}
+	if err != nil {
 		return err
 	}
 	sz := buf.Len() - 6
@@ -22,6 +30,6 @@ func Encode(w io.Writer, ci ClassID, payload interface{}) error {
 		b += a
 	}
 	buf.Write([]byte{a, b})
-	_, err := w.Write(buf.Bytes())
+	_, err = w.Write(buf.Bytes())
 	return err
 }
