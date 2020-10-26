@@ -1,17 +1,7 @@
 package ubx
 
-// A Descriptor packs the Class, MessageID, Constant message size and Variable message size into a single 32 bit integer
-// Message lenght = Size() + N* VarSize(), where N is the optional variable part
-type Descriptor uint32
-
-func (d Descriptor) Class() byte     { return byte(d >> 24) }
-func (d Descriptor) ID() byte        { return byte(d >> 16) }
-func (d Descriptor) ClassID() uint16 { return uint16(d >> 16) }
-func (d Descriptor) Size() byte      { return byte(d >> 8) }
-func (d Descriptor) VarSize() byte   { return byte(d) }
-
 type Message interface {
-	Descriptor() Descriptor
+	classID() uint16
 }
 
 type RawMessage struct {
@@ -19,7 +9,7 @@ type RawMessage struct {
 	Data    []byte
 }
 
-func (msg *RawMessage) Descriptor() Descriptor { return Descriptor(msg.ClassID) << 16 }
+func (msg *RawMessage) classID() uint16 { return msg.ClassID }
 
 // 32.8.1 UBX-ACK-ACK (0x05 0x01)
 
@@ -32,7 +22,7 @@ type AckAck struct {
 	MsgID byte // Message ID of the Acknowledged Message
 }
 
-func (AckAck) Descriptor() Descriptor { return 0x05010200 }
+func (AckAck) classID() uint16 { return 0x0105 }
 
 // 32.8.2 UBX-ACK-NAK (0x05 0x00)
 
@@ -45,7 +35,7 @@ type AckNak struct {
 	MsgID byte // Message ID of the Acknowledged Message
 }
 
-func (AckNak) Descriptor() Descriptor { return 0x05000200 }
+func (AckNak) classID() uint16 { return 0x0005 }
 
 // 32.10.3 UBX-CFG-CFG (0x06 0x09)
 
@@ -65,7 +55,7 @@ type CfgCfg1 struct {
 	LoadMask  CfgCfgClearMask //       Mask with configuration sub-sections to load (i.e. load permanent configurations from non-volatile memory to currentconfigurations), see ID description of clearMask
 }
 
-func (CfgCfg1) Descriptor() Descriptor { return 0x06090C00 }
+func (CfgCfg1) classID() uint16 { return 0x0906 }
 
 type CfgCfg2 struct {
 	ClearMask  CfgCfgClearMask  //       Mask with configuration sub-sections to clear (i.e. load default configurations to permanent configurations in non-volatile memory) (see graphic below)
@@ -74,7 +64,7 @@ type CfgCfg2 struct {
 	DeviceMask CfgCfgDeviceMask //       Mask which selects the memory devices for this command. (see graphic below)
 }
 
-func (CfgCfg2) Descriptor() Descriptor { return 0x06090D00 }
+func (CfgCfg2) classID() uint16 { return 0x0906 }
 
 //go:generate stringer -output=strings_cfgcfg.go  -trimprefix CfgCfg -type=CfgCfgClearMask,CfgCfgDeviceMask
 
@@ -119,7 +109,7 @@ type CfgHnr struct {
 	Reserved1   [3]byte // -         Reserved
 }
 
-func (CfgHnr) Descriptor() Descriptor { return 0x065C0400 }
+func (CfgHnr) classID() uint16 { return 0x5C06 }
 
 // 32.10.14 UBX-CFG-MSG (0x06 0x01)
 // 32.10.14.1 Poll a message configuration
@@ -131,7 +121,7 @@ type CfgMsg1 struct {
 	MsgID    byte // Message identifier
 }
 
-func (CfgMsg1) Descriptor() Descriptor { return 0x06010200 }
+func (CfgMsg1) classID() uint16 { return 0x0106 }
 
 // 32.10.14.2 Set message rate(s)
 // Message              UBX-CFG-MSG
@@ -149,7 +139,7 @@ type CfgMsg2 struct {
 	Rate     [6]byte // Send rate on I/O port (6 ports)
 }
 
-func (CfgMsg2) Descriptor() Descriptor { return 0x06010800 }
+func (CfgMsg2) classID() uint16 { return 0x0106 }
 
 // 32.10.14.3 Set message rate
 // Message              UBX-CFG-MSG
@@ -163,7 +153,7 @@ type CfgMsg3 struct {
 	Rate     byte // Send rate on current portSend rate on I/O port (6 ports)
 }
 
-func (CfgMsg3) Descriptor() Descriptor { return 0x06010300 }
+func (CfgMsg3) classID() uint16 { return 0x0106 }
 
 // 32.10.23 UBX-CFG-RATE (0x06 0x08)
 
@@ -194,7 +184,7 @@ type CfgRate struct {
 	TimeRef  CfgRateTimeRef //     -         The time system to which measurements are aligned
 }
 
-func (CfgRate) Descriptor() Descriptor { return 0x06080C00 }
+func (CfgRate) classID() uint16 { return 0x0806 }
 
 //go:generate stringer -output=strings_cfgrate.go  -trimprefix CfgRate -type=CfgRateTimeRef
 
@@ -228,17 +218,17 @@ type InfNotice string
 type InfTest string
 type InfWarning string
 
-func (InfDebug) Descriptor() Descriptor   { return 0x04040000 }
-func (InfError) Descriptor() Descriptor   { return 0x04000000 }
-func (InfNotice) Descriptor() Descriptor  { return 0x04020000 }
-func (InfTest) Descriptor() Descriptor    { return 0x04030000 }
-func (InfWarning) Descriptor() Descriptor { return 0x04010000 }
+func (InfDebug) classID() uint16   { return 0x0404 }
+func (InfError) classID() uint16   { return 0x0004 }
+func (InfNotice) classID() uint16  { return 0x0204 }
+func (InfTest) classID() uint16    { return 0x0304 }
+func (InfWarning) classID() uint16 { return 0x0104 }
 
-func (msg InfDebug) Encode() string   { return string(msg) }
-func (msg InfError) Encode() string   { return string(msg) }
-func (msg InfNotice) Encode() string  { return string(msg) }
-func (msg InfTest) Encode() string    { return string(msg) }
-func (msg InfWarning) Encode() string { return string(msg) }
+func (msg InfDebug) encode() string   { return string(msg) }
+func (msg InfError) encode() string   { return string(msg) }
+func (msg InfNotice) encode() string  { return string(msg) }
+func (msg InfTest) encode() string    { return string(msg) }
+func (msg InfWarning) encode() string { return string(msg) }
 
 // 32.17.15 UBX-NAV-PVT (0x01 0x07)
 // 32.17.15.1 Navigation position velocity time solution
@@ -283,7 +273,7 @@ type NavPvt struct {
 	MagAcc_deg2e  uint16        //   1e-2      Magnetic declination accuracy. Only supported in ADR 4.10 and later.
 }
 
-func (NavPvt) Descriptor() Descriptor { return 0x01075C00 }
+func (NavPvt) classID() uint16 { return 0x0701 }
 
 //go:generate stringer -output=strings_navpvt.go  -trimprefix NavPVT -type=NavPVTFixType,NavPVTValid,NavPVTFlags,NavPVTFlags2,NavPVTFlags3
 
