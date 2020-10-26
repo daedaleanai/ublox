@@ -58,6 +58,7 @@ const (
 	Fix3D NavMode = 3
 )
 
+// Wind encodes the compass direction of latitudes and longitudes
 type Wind int
 
 const (
@@ -67,6 +68,7 @@ const (
 	West  Wind = 'W'
 )
 
+// Sign returns -latlon for South or West, and latlon for all other values
 func (w Wind) Sign(latlon float64) float64 {
 	if w == South || w == West {
 		return -latlon
