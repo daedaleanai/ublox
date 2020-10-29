@@ -18,8 +18,7 @@ func Decode(frame []byte) (msg Message, err error) {
 
 	var header struct {
 		Preamble uint16
-		MsgClass uint8
-		MsgID    uint8
+		ClassID  uint16
 		Length   uint16
 	}
 
@@ -45,33 +44,33 @@ func Decode(frame []byte) (msg Message, err error) {
 		return nil, errInvalidChkSum
 	}
 
-	switch uint16(header.MsgClass)<<8 | uint16(header.MsgID) {
-	case (AckAck{}).Descriptor().ClassID():
+	switch header.ClassID {
+	case (AckAck{}).classID():
 		msg = &AckAck{}
-	case (AckNak{}).Descriptor().ClassID():
+	case (AckNak{}).classID():
 		msg = &AckNak{}
-	case (CfgCfg1{}).Descriptor().ClassID():
+	case (CfgCfg1{}).classID():
 		msg = &CfgCfg1{}
-	case (CfgCfg2{}).Descriptor().ClassID():
+	case (CfgCfg2{}).classID():
 		msg = &CfgCfg2{}
-	case (CfgHnr{}).Descriptor().ClassID():
+	case (CfgHnr{}).classID():
 		msg = &CfgHnr{}
-	case (CfgMsg1{}).Descriptor().ClassID():
+	case (CfgMsg1{}).classID():
 		msg = &CfgMsg1{}
-	case (CfgMsg2{}).Descriptor().ClassID():
+	case (CfgMsg2{}).classID():
 		msg = &CfgMsg2{}
-	case (CfgMsg3{}).Descriptor().ClassID():
+	case (CfgMsg3{}).classID():
 		msg = &CfgMsg3{}
-	case (CfgRate{}).Descriptor().ClassID():
+	case (CfgRate{}).classID():
 		msg = &CfgRate{}
-	case (NavPvt{}).Descriptor().ClassID():
+	case (NavPvt{}).classID():
 		msg = &NavPvt{}
 	default:
 	}
 	if msg != nil {
 		err = binary.Read(buf, binary.LittleEndian, msg)
 	} else {
-		msg = &RawMessage{ClassID: uint16(header.MsgClass)<<8 | uint16(header.MsgID), Data: append([]byte(nil), frame[6:len(frame)-2]...)}
+		msg = &RawMessage{ClassID: header.ClassID, Data: append([]byte(nil), frame[6:len(frame)-2]...)}
 	}
 
 	return msg, err

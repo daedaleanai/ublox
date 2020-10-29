@@ -55,35 +55,35 @@ func mkMsg(h string) interface{} {
 	}
 	switch h[2:] {
 	case "DTM":
-		return &GxDTM{}
+		return &DTM{}
 	case "GBQ", "GLQ", "GNQ", "GPQ":
-		return &GxGxQ{}
+		return &GxQ{}
 	case "GBS":
-		return &GxGBS{}
+		return &GBS{}
 	case "GGA":
-		return &GxGGA{}
+		return &GGA{}
 	case "GLL":
-		return &GxGLL{}
+		return &GLL{}
 	case "GNS":
-		return &GxGNS{}
+		return &GNS{}
 	case "GRS":
-		return &GxGRS{}
+		return &GRS{}
 	case "GSA":
-		return &GxGSA{}
+		return &GSA{}
 	case "GST":
-		return &GxGST{}
+		return &GST{}
 	case "GSV":
-		return &GxGSV{}
+		return &GSV{}
 	case "RMC":
-		return &GxRMC{}
+		return &RMC{}
 	case "TXT":
-		return &GxTXT{}
+		return &TXT{}
 	case "VLW":
-		return &GxVLW{}
+		return &VLW{}
 	case "VTG":
-		return &GxVTG{}
+		return &VTG{}
 	case "ZDA":
-		return &GxZDA{}
+		return &ZDA{}
 	}
 	return nil
 }
@@ -108,8 +108,10 @@ func mkPUBX(t PUBXType) interface{} {
 func decodeMsg(msg interface{}, fields []string) error {
 
 	// override reflection based one for GxGSV and PUBXSVStatus which have variable length irregularities
-	if dmsg, ok := msg.(interface{ Decode([]string) error }); ok {
-		return dmsg.Decode(fields)
+	if dmsg, ok := msg.(interface {
+		decode([]string) error
+	}); ok {
+		return dmsg.decode(fields)
 	}
 
 	if reflect.ValueOf(msg).Kind() != reflect.Ptr {

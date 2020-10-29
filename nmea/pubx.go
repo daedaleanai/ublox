@@ -105,7 +105,8 @@ type PUBXSVStatus struct {
 	SVInfo   []PUBXSVInfo
 }
 
-func (msg *PUBXSVStatus) Decode(fields []string) (err error) {
+// var lenght messages must implement custom decode()
+func (msg *PUBXSVStatus) decode(fields []string) (err error) {
 	if len(fields) > 0 {
 		msg.Header = Header(fields[0])
 	}

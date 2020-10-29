@@ -15,7 +15,7 @@ func (h Header) TalkerID() TalkerID {
 }
 
 // Datum reference
-type GxDTM struct {
+type DTM struct {
 	Header
 	Datum    string
 	SubDatum string
@@ -29,13 +29,13 @@ type GxDTM struct {
 
 // Poll a standard message (Talker ID Gx)
 // GBQ, GLQ, GNQ, GPQ
-type GxGxQ struct {
+type GxQ struct {
 	Header
 	MsgID string
 }
 
 // GNSS satellite fault detection
-type GxGBS struct {
+type GBS struct {
 	Header
 	TimeOfDay time.Duration // `nmea:"hhmmss.sssss"`
 	ErrLat_m  float64
@@ -50,7 +50,7 @@ type GxGBS struct {
 }
 
 // Global positioning system fix data
-type GxGGA struct {
+type GGA struct {
 	Header
 	TimeOfDay   time.Duration
 	Lat_deg     float64 `nmea:"ddmm.mmmmm"`
@@ -68,12 +68,12 @@ type GxGGA struct {
 	DiffStation int
 }
 
-func (msg *GxGGA) LatLon() (lat_deg, lon_deg float64) {
+func (msg *GGA) LatLon() (lat_deg, lon_deg float64) {
 	return msg.North.Sign(msg.Lat_deg), msg.East.Sign(msg.Lon_deg)
 }
 
 // Latitude and longitude, with time of position fix and status
-type GxGLL struct {
+type GLL struct {
 	Header
 	Lat_deg   float64 `nmea:"ddmm.mmmmm"`
 	North     Wind
@@ -84,12 +84,12 @@ type GxGLL struct {
 	PosMode   PosMode
 }
 
-func (msg *GxGLL) LatLon() (lat_deg, lon_deg float64) {
+func (msg *GLL) LatLon() (lat_deg, lon_deg float64) {
 	return msg.North.Sign(msg.Lat_deg), msg.East.Sign(msg.Lon_deg)
 }
 
 // GNSS fix data
-type GxGNS struct {
+type GNS struct {
 	Header
 	TimeOfDay   time.Duration
 	Lat_deg     float64 `nmea:"ddmm.mmmmm"`
@@ -106,12 +106,12 @@ type GxGNS struct {
 	NavStatus   Status // V>4.10
 }
 
-func (msg *GxGNS) LatLon() (lat_deg, lon_deg float64) {
+func (msg *GNS) LatLon() (lat_deg, lon_deg float64) {
 	return msg.North.Sign(msg.Lat_deg), msg.East.Sign(msg.Lon_deg)
 }
 
 // GNSS range residuals
-type GxGRS struct {
+type GRS struct {
 	Header
 	TimeOfDay time.Duration
 	Mode      string      // 1 = computed after fix
@@ -121,7 +121,7 @@ type GxGRS struct {
 }
 
 // GNSS DOP and active satellites
-type GxGSA struct {
+type GSA struct {
 	Header
 	OpMode   OpMode
 	NavMode  NavMode
@@ -133,7 +133,7 @@ type GxGSA struct {
 }
 
 // GNSS pseudorange error statistics
-type GxGST struct {
+type GST struct {
 	Header
 	TimeOfDay  time.Duration
 	RangeRMS_m float64
@@ -153,7 +153,7 @@ type SVInfo struct {
 }
 
 // GNSS satellites in view
-type GxGSV struct {
+type GSV struct {
 	Header
 	MsgCnt   int
 	MsgNum   int
@@ -162,7 +162,8 @@ type GxGSV struct {
 	SignalID int      // V>4.10  note: after the variable part!
 }
 
-func (msg *GxGSV) Decode(fields []string) (err error) {
+// var lenght messages must implement custom decode()
+func (msg *GSV) decode(fields []string) (err error) {
 	if len(fields) > 0 {
 		msg.Header = Header(fields[0])
 	}
@@ -198,7 +199,7 @@ func (msg *GxGSV) Decode(fields []string) (err error) {
 }
 
 // Recommended minimum data
-type GxRMC struct {
+type RMC struct {
 	Header
 	TimeOfDay time.Duration
 	Valid     Status
@@ -215,12 +216,12 @@ type GxRMC struct {
 	NavStatus Status
 }
 
-func (msg *GxRMC) LatLon() (lat_deg, lon_deg float64) {
+func (msg *RMC) LatLon() (lat_deg, lon_deg float64) {
 	return msg.North.Sign(msg.Lat_deg), msg.East.Sign(msg.Lon_deg)
 }
 
 // Text transmission
-type GxTXT struct {
+type TXT struct {
 	Header
 	MsgCnt  int
 	MsgNum  int
@@ -229,7 +230,7 @@ type GxTXT struct {
 }
 
 // Dual ground/water distance
-type GxVLW struct {
+type VLW struct {
 	Header
 	TWD_nmi float64
 	TWDUnit string
@@ -242,7 +243,7 @@ type GxVLW struct {
 }
 
 // Course over ground and ground speed
-type GxVTG struct {
+type VTG struct {
 	Header
 	COGT_deg float64
 	COGTUnit string
@@ -256,7 +257,7 @@ type GxVTG struct {
 }
 
 // Time and date
-type GxZDA struct {
+type ZDA struct {
 	Header
 	Time  time.Duration
 	Day   int

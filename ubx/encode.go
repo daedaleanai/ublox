@@ -7,12 +7,13 @@ import (
 )
 
 func Encode(w io.Writer, payload Message) error {
-	dsc := payload.Descriptor()
 	var buf bytes.Buffer
-	buf.Write([]byte{0xb5, 0x62, dsc.Class(), dsc.ID(), 0, 0})
+	buf.Write([]byte{0xb5, 0x62, byte(payload.classID()), byte(payload.classID() >> 8), 0, 0})
 	var err error
-	if s, ok := payload.(interface{ Encode() string }); ok {
-		_, err = buf.WriteString(s.Encode())
+	if s, ok := payload.(interface {
+		encode() string
+	}); ok {
+		_, err = buf.WriteString(s.encode())
 	} else {
 		// TODO this will break on variable length messages
 		err = binary.Write(&buf, binary.LittleEndian, payload)
