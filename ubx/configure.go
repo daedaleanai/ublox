@@ -24,7 +24,7 @@ func main() {
 	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0xD}) // GNS
 	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0xF}) // VLW
 
-	Encode(os.Stdout, CfgRate{MeasRate: 62, NavRate: 1}) // 50ms (20Hz) measurement, output at 20Hz
+	Encode(os.Stdout, CfgRate{MeasRate: 62, NavRate: 1}) // 62ms (16Hz) measurement
 
 	Encode(os.Stdout, CfgMsg3{MsgClass: 0x1, MsgID: 0x7, Rate: 1}) // NAV-PVT
 
