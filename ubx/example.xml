@@ -1,0 +1,41 @@
+example xml translation for 32.17.16 UBX-NAV-RELPOSNED (0x01 0x3C)
+
+NOTE: you have to look in the PDF for the 'bit' values in the flag bitfield below. see page 336!!
+
+<definition>
+               <Message>UBX-NAV-RELPOSNED</Message>
+               <Description>Relative positioning information in NED frame</Description>
+               <Firmware>u-blox 8 / u-blox M8 protocol versions 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with High Precision GNSS products)</Firmware>
+               <Type>Periodic/Polled</Type>
+               <Comment>The NED frame is defined as the local topological system at the reference station. The relative position vector components in this message, along with their associated accuracies, are given in that local topological system. This message contains the relative position vector from the Reference Station to the Rover, including accuracy figures, in the local topological system defined at the reference station</Comment>
+ 				<Class>0x01</Class>
+ 				<ID>0x3C</ID>
+ 				<Length>40</Length>
+ 			<contents>
+               <offset>0</offset>              <type>U1</type>        <scale>-  </scale>        <name>version</name>              <units>- </units>       <comment> Message version (0x00 for this version)</comment>
+               <offset>1</offset>              <type>U1</type>        <scale>-  </scale>        <name>reserved1</name>            <units>- </units>       <comment> Reserved</comment>
+               <offset>2</offset>              <type>U2</type>        <scale>-  </scale>        <name>refStationId</name>         <units>- </units>       <comment> Reference Station ID. Must be in the range 0..4095</comment>
+               <offset>4</offset>              <type>U4</type>        <scale>-  </scale>        <name>iTOW</name>                 <units>ms</units>       <comment> GPS time of week of the navigation epoch. See the description of iTOW for details.</comment>
+               <offset>8</offset>              <type>I4</type>        <scale>-  </scale>        <name>relPosN</name>              <units>cm</units>       <comment> North component of relative position vector</comment>
+               <offset>12</offset>             <type>I4</type>        <scale>-  </scale>        <name>relPosE</name>              <units>cm</units>       <comment> East component of relative position vector</comment>
+               <offset>16</offset>             <type>I4</type>        <scale>-  </scale>        <name>relPosD</name>              <units>cm</units>       <comment> Down component of relative position vector</comment>
+               <offset>20</offset>             <type>I1</type>        <scale>0.1</scale>        <name>relPosHPN</name>            <units>mm</units>       <comment> High-precision North component of relative position vector. Must be in the range -99 to +99. The full North ... </comment>
+               <offset>21</offset>             <type>I1</type>        <scale>0.1</scale>        <name>relPosHPE</name>            <units>mm</units>       <comment> High-precision East component of relative position vector. Must be in the range -99 to +99. The ...</comment>
+               <offset>22</offset>             <type>I1</type>        <scale>0.1</scale>        <name>relPosHPD</name>            <units>mm</units>       <comment> High-precision Down component of relative position vector. Must be in the range -99 to +99. The full...</comment>
+               <offset>23</offset>             <type>U1</type>        <scale>-  </scale>        <name>reserved2</name>            <units>- </units>       <comment> Reserved</comment>
+               <offset>24</offset>             <type>U4</type>        <scale>0.1</scale>        <name>accN</name>                 <units>mm</units>       <comment> Accuracy of relative position North component</comment>
+               <offset>28</offset>             <type>U4</type>        <scale>0.1</scale>        <name>accE</name>                 <units>mm</units>       <comment> Accuracy of relative position East component</comment>
+               <offset>32</offset>             <type>U4</type>        <scale>0.1</scale>        <name>accD</name>                 <units>mm</units>       <comment> Accuracy of relative position Down component</comment>
+               <offset>36</offset>             <type>X4</type>        <scale>-  </scale>        <name>flags</name>                <units>- </units>       <comment> Flags (see graphic below)</comment>
+			</contents>
+			<bitfield>  
+				<fieldname>flags</fieldname>
+               <bit>0</bit><Name>gnssFixOK</Name> 		<Description>A valid fix (i.e within DOP & accuracy masks)</Description>
+               <bit>1</bit><Name>diffSoln </Name>		<Description>1 if differential corrections were applied</Description>
+               <bit>2</bit><Name>relPosValid</Name> 	<Description>1 if relative position components and accuracies are valid</Description>
+               <bit>3:4</bit><Name>carrSoln </Name> 		<Description>Carrier phase range solution status: 0 = no carrier phase range solution 1 = carrier phase range solution with floating ambiguities 2 = carrier phase range solution with fixed ambiguities</Description>
+               <bit>5</bit><Name>isMoving</Name> 		<Description>1 if the receiver is operating in moving baseline mode (not supported in protocol versions less than  20.3)</Description>                                  
+               <bit>6</bit><Name>refPosMiss </Name>		<Description>1 if extrapolated reference position was used to compute moving baseline solution this epoch (not  supported in protocol versions less than 20.3)</Description>                                   
+               <bit>7</bit><Name>refObsMiss </Name>		<Description>1 if extrapolated reference observations were used to compute moving baseline solution this epoch (not supported in protocol versions less than 20.3)</Description>
+           </bitfield>                 
+</definition>
