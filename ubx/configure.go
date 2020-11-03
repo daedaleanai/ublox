@@ -28,4 +28,6 @@ func main() {
 
 	Encode(os.Stdout, CfgMsg3{MsgClass: 0x1, MsgID: 0x7, Rate: 1}) // NAV-PVT
 
+	Encode(os.Stdout, CfgCfg1{SaveMask: CfgCfgMsgConf})
+
 }
