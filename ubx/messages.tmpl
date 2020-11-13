@@ -1,0 +1,19 @@
+package ubx
+
+{{range .Message}}
+// {{.Name}} {{.Type }} {{.Description | notabs}}
+// 
+// {{.Comment  | notabs   }}
+type {{.Name | msgtypename}} struct {
+{{- range .Fields}}
+{{- range .Nested}}
+	 {{.Name  |title   }} {{.Type | gotype}} // OPTIONAL or REPEATED {{.Offset}} {{.Scale}}  {{.Unit}} -- {{.Comment |notabs -}} 
+{{- else}}
+	 {{.Name  |title   }} {{.Type | gotype}} //  {{.Offset}} {{.Scale}}  {{.Unit}} -- {{.Comment |notabs -}}
+{{- end}}
+{{- end}}
+}
+
+func ({{.Name | msgtypename}}) classId() uint16 { return {{printf "0x%02x%02x" .Id .Class }} }
+
+{{end}}
