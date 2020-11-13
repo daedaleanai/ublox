@@ -1,4 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
+<!-- Derived from
+  u-blox 8 / u-blox M8 Receiver description (UBX-13003221)  R21 (dc62240) 25 September 2020
+  https://www.u-blox.com/sites/default/files/products/documents/u-blox8-M8_ReceiverDescrProtSpec_%28UBX-13003221%29.pdf
+-->
 <definitions>
   <message>
     <name>UBX-ACK-ACK</name>
