@@ -1,19 +1,52 @@
 package ubx
 
 {{range .Message}}
-// {{.Name}} {{.Type }} {{.Description | notabs}}
+// {{.Name}} {{.Type}} {{.Description | notabs}}
 // 
-// {{.Comment  | notabs   }}
+// {{.Comment | notabs}}
 type {{.Name | msgtypename}} struct {
-{{- range .Fields}}
-{{- range .Nested}}
-	 {{.Name  |title   }} {{.Type | gotype}} // OPTIONAL or REPEATED {{.Offset}} {{.Scale}}  {{.Unit}} -- {{.Comment |notabs -}} 
-{{- else}}
-	 {{.Name  |title   }} {{.Type | gotype}} //  {{.Offset}} {{.Scale}}  {{.Unit}} -- {{.Comment |notabs -}}
-{{- end}}
+{{- range .Blocks}}
+	{{- if eq .Cardinality ""}}
+		{{block "field" .}}{{.Name | title}} {{if .Bitfield}}{{.Message.Name | msgtypename}}{{.Name | title}}{{else}}{{.Type | gotype}}{{end}} // {{if ne .Unit "-"}}[{{if ne .Scale "-"}}{{.Scale}} {{end}}{{.Unit}}] {{end}}{{.Comment |notabs -}}{{end}}
+	{{- else if eq .Cardinality "optional"}}
+		// Optional
+		{{- range .Nested}}
+		{{template "field" .}}
+		{{- end}}
+	{{- else if eq .Cardinality "repeated"}}
+		Items []*struct{
+		{{- range .Nested}}
+			{{template "field" .}}
+		{{- end}}
+		} `ubx:"{{.CountField |title}}"`
+	{{- end}}
 {{- end}}
 }
 
 func ({{.Name | msgtypename}}) classId() uint16 { return {{printf "0x%02x%02x" .Id .Class }} }
+
+{{- range .Blocks}}
+	{{- if eq .Cardinality ""}}
+		{{- block "enums" .}}
+		{{- if .Bitfield}}
+			type {{.Message.Name | msgtypename}}{{.Name | title}} {{.Type | gotype}}
+			const (
+			{{- range .Bitfield}}
+				 {{if .Name}}{{.Field.Message.Name | msgtypename}}{{.Field.Name | title}}{{.Name | title}} {{.Field.Message.Name | msgtypename}}{{.Field.Name | title}} = {{.Index | mask}} // {{.Description | notabs}}{{end}}
+			{{- end}}
+			)
+		{{- end}}
+		{{- end}}
+	{{- else if eq .Cardinality "optional"}}
+		{{- range .Nested}}
+		{{- template "enums" .}}
+		{{- end}}
+	{{- else if eq .Cardinality "repeated"}}
+		{{- range .Nested}}
+		{{- template "enums" .}}
+		{{- end}}
+	{{- end}}
+{{- end}}
+
 
 {{end}}
