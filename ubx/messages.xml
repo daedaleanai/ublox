@@ -112,7 +112,7 @@ Almanac Data (Valid Range: 1 .. 32 or 51,
     <name>UBX-AID-ALM</name>
     <type>Input/Output</type>
     <description>GPS aiding almanac input/output message</description>
-    <comment>All UBX-AID messages are deprecated; use UBX-MGA messages instead  If the WEEK Value is 0, DWRD0 to DWRD7 are not sent as the Almanac is not  available for the given SV. This may happen even if NAV-SVINFO and RXM-  SVSI are indicating almanac availability as the internal data may not represent  the content of an original broadcast almanac (or only parts thereof).  DWORD0 to DWORD7 contain the 8 words following the Hand-Over Word (  HOW ) from the GPS navigation message, either pages 1 to 24 of sub-frame 5 or  pages 2 to 10 of subframe 4. See IS-GPS-200 for a full description of the  contents of the Almanac pages.  In DWORD0 to DWORD7, the parity bits have been removed, and the 24 bits of  data are located in Bits 0 to 23. Bits 24 to 31 shall be ignored.  Example: Parameter e (Eccentricity) from Almanac Subframe 4/5, Word 3, Bits  69-84 within the subframe can be found in DWRD0, Bits 15-0 whereas Bit 0 is  the LSB.</comment>
+    <comment>All UBX-AID messages are deprecated; use UBX-MGA messages instead  If the WEEK Value is 0, DWRD0 to DWRD7 are not sent as the Almanac is not  available for the given SV. This may happen even if NAV-SVINFO and RXM-  SVSI are indicating almanac availability as the internal data may not represent  the content of an original broadcast almanac (or only parts thereof).  DWORD0 to DWORD7 contain the 8 words following the Hand-Over Word (  HOW ) from the GPS navigation message, either pages 1 to 24 of sub-frame 5  or pages 2 to 10 of subframe 4. See IS-GPS-200 for a full description of the  contents of the Almanac pages.  In DWORD0 to DWORD7, the parity bits have been removed, and the 24 bits of  data are located in Bits 0 to 23. Bits 24 to 31 shall be ignored.  Example: Parameter e (Eccentricity) from Almanac Subframe 4/5, Word 3, Bits  69-84 within the subframe can be found in DWRD0, Bits 15-0 whereas Bit 0 is  the LSB.</comment>
     <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15, 15.01, 16, 17, 18, 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01</firmware>
     <structure>
       <header>0xB5 0x62</header>
@@ -285,7 +285,7 @@ Ephemeris Data (Valid Range: 1 .. 32).</comment>
     <name>UBX-AID-EPH</name>
     <type>Input/Output</type>
     <description>GPS aiding ephemeris input/output message</description>
-    <comment>All UBX-AID messages are deprecated; use UBX-MGA messages instead  SF1D0 to SF3D7 is only sent if ephemeris is available for this SV. If not, the  payload may be reduced to 8 Bytes, or all bytes are set to zero, indicating that  this SV Number does not have valid ephemeris for the moment. This may  happen even if NAV-SVINFO and RXM-SVSI are indicating ephemeris  availability as the internal data may not represent the content of an original  broadcast ephemeris (or only parts thereof).  SF1D0 to SF3D7 contain the 24 words following the Hand-Over Word ( HOW )  from the GPS navigation message, subframes 1 to 3. The Truncated TOW  Count is not valid and cannot be used. See IS-GPS-200 for a full description of  the contents of the Subframes.  In SF1D0 to SF3D7, the parity bits have been removed, and the 24 bits of data  are located in Bits 0 to 23. Bits 24 to 31 shall be ignored.  When polled, the data contained in this message does not represent the full  original ephemeris broadcast. Some fields that are irrelevant to u-blox receivers  may be missing. The week number in Subframe 1 has already been modified to  match the Time Of Ephemeris (TOE).</comment>
+    <comment>All UBX-AID messages are deprecated; use UBX-MGA messages instead  SF1D0 to SF3D7 is only sent if ephemeris is available for this SV. If not, the  payload may be reduced to 8 Bytes, or all bytes are set to zero, indicating that  this SV Number does not have valid ephemeris for the moment. This may  happen even if NAV-SVINFO and RXM-SVSI are indicating ephemeris  availability as the internal data may not represent the content of an original  broadcast ephemeris (or only parts thereof).  SF1D0 to SF3D7 contain the 24 words following the Hand-Over Word ( HOW )  from the GPS navigation message, subframes 1 to 3. The Truncated TOW  Count is not valid and cannot be used. See IS-GPS-200 for a full description of  the contents of the Subframes.  In SF1D0 to SF3D7, the parity bits have been removed, and the 24 bits of data  are located in Bits 0 to 23. Bits 24 to 31 shall be ignored.  When polled, the data contained in this message does not represent the full  original ephemeris broadcast. Some fields that are irrelevant to u-blox  receivers may be missing. The week number in Subframe 1 has already been  modified to match the Time Of Ephemeris (TOE).</comment>
     <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15, 15.01, 16, 17, 18, 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01</firmware>
     <structure>
       <header>0xB5 0x62</header>
@@ -1631,6 +1631,483 @@ of oscillator control gain/slope</comment>
     </structure>
   </message>
   <message>
+    <name>UBX-CFG-ESFALG</name>
+    <type>Get/set</type>
+    <description>Get/set IMU-mount misalignment configuration</description>
+    <comment>Get/set the IMU-mount misalignment configuration (rotation from installation- frame to the IMU-frame). A detailed description on how to compose this configuration is given in the ADR Installation section for ADR products. A detailed description on how to compose this configuration is given in the UDR Installation section for UDR products.</comment>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15.01, 16 and 17 (only with ADR products) u-blox 8 / u-blox M8 protocol versions 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with ADR or UDR products)</firmware>
+    <structure>
+      <header>0xB5 0x62</header>
+      <class>0x06</class>
+      <id>0x56</id>
+      <length>12</length>
+      <payload>
+        <block>
+          <offset>0</offset>
+          <name>bitfield</name>
+          <type>U4</type>
+          <comment>Bitfield</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+          <bitfield>
+            <type>
+              <index>0:7</index>
+              <type>unsigned value</type>
+              <name>version</name>
+              <description>Message version (0x00 for this version)</description>
+            </type>
+            <type>
+              <index>8</index>
+              <type>unsigned value</type>
+              <name>doAutoMntAlg</name>
+              <description>Only supported on certain products.
+Enable/disable automatic IMU-mount alignment (0: Disabled, 1: Enabled). This flag can only be used
+with modules containing an internal IMU.</description>
+            </type>
+            <type>
+              <index>9:31</index>
+              <type>reserved</type>
+              <name />
+              <description />
+            </type>
+          </bitfield>
+        </block>
+        <block>
+          <offset>4</offset>
+          <name>yaw</name>
+          <type>U4</type>
+          <comment>User-defined IMU-mount yaw angle [0,
+360]</comment>
+          <scale>1e-2</scale>
+          <unit>deg</unit>
+        </block>
+        <block>
+          <offset>8</offset>
+          <name>pitch</name>
+          <type>I2</type>
+          <comment>User-defined IMU-mount pitch angle [-90,
+90]</comment>
+          <scale>1e-2</scale>
+          <unit>deg</unit>
+        </block>
+        <block>
+          <offset>10</offset>
+          <name>roll</name>
+          <type>I2</type>
+          <comment>User-defined IMU-mount roll angle [-180,
+180]</comment>
+          <scale>1e-2</scale>
+          <unit>deg</unit>
+        </block>
+      </payload>
+      <checksum>CK_A CK_B</checksum>
+    </structure>
+  </message>
+  <message>
+    <name>UBX-CFG-ESFA</name>
+    <type>Get/set</type>
+    <description>Get/set the Accelerometer (A) sensor configuration</description>
+    <comment>Get/set the configuration for the accelerometer sensor required for External Sensor Fusion (ESF) based navigation. More details can be found in the Accelerometer Configuration section.</comment>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with UDR products)</firmware>
+    <structure>
+      <header>0xB5 0x62</header>
+      <class>0x06</class>
+      <id>0x4C</id>
+      <length>20</length>
+      <payload>
+        <block>
+          <offset>0</offset>
+          <name>version</name>
+          <type>U1</type>
+          <comment>Message version (0x00 for this version)</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>1</offset>
+          <name>reserved1</name>
+          <type>U1[9]</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>10</offset>
+          <name>accelRmsThdl</name>
+          <type>U1</type>
+          <comment>Accelerometer RMS threshold below
+which automatically estimated
+accelerometer noise-level (accuracy) is
+updated.</comment>
+          <scale>2^-6</scale>
+          <unit>m/s^2</unit>
+        </block>
+        <block>
+          <offset>11</offset>
+          <name>frequency</name>
+          <type>U1</type>
+          <comment>Nominal accelerometer sensor data
+sampling frequency.</comment>
+          <scale>-</scale>
+          <unit>Hz</unit>
+        </block>
+        <block>
+          <offset>12</offset>
+          <name>latency</name>
+          <type>U2</type>
+          <comment>Accelerometer sensor data latency due to
+e.g. CAN bus.</comment>
+          <scale>-</scale>
+          <unit>ms</unit>
+        </block>
+        <block>
+          <offset>14</offset>
+          <name>accuracy</name>
+          <type>U2</type>
+          <comment>Accelerometer sensor data accuracy.</comment>
+          <scale>1e-4</scale>
+          <unit>m/s^2</unit>
+        </block>
+        <block>
+          <offset>16</offset>
+          <name>reserved2</name>
+          <type>U1[4]</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+      </payload>
+      <checksum>CK_A CK_B</checksum>
+    </structure>
+  </message>
+  <message>
+    <name>UBX-CFG-ESFG</name>
+    <type>Get/set</type>
+    <description>Get/set the Gyroscope (G) sensor configuration</description>
+    <comment>Get/set the configuration for the gyroscope sensor required for External Sensor Fusion (ESF) based navigation. More details can be found in the Gyroscope Configuration section.</comment>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with UDR products)</firmware>
+    <structure>
+      <header>0xB5 0x62</header>
+      <class>0x06</class>
+      <id>0x4D</id>
+      <length>20</length>
+      <payload>
+        <block>
+          <offset>0</offset>
+          <name>version</name>
+          <type>U1</type>
+          <comment>Message version (0x00 for this version)</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>1</offset>
+          <name>reserved1</name>
+          <type>U1[7]</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>8</offset>
+          <name>tcTableSaveRate</name>
+          <type>U2</type>
+          <comment>Temperature-dependent gyroscope bias
+table saving update rate.</comment>
+          <scale>-</scale>
+          <unit>s</unit>
+        </block>
+        <block>
+          <offset>10</offset>
+          <name>gyroRmsThdl</name>
+          <type>U1</type>
+          <comment>Gyroscope sensor RMS threshold below
+which automatically estimated gyroscope
+noise-level (accuracy) is updated.</comment>
+          <scale>2^-8</scale>
+          <unit>deg/s</unit>
+        </block>
+        <block>
+          <offset>11</offset>
+          <name>frequency</name>
+          <type>U1</type>
+          <comment>Nominal gyroscope sensor data sampling
+frequency.</comment>
+          <scale>-</scale>
+          <unit>Hz</unit>
+        </block>
+        <block>
+          <offset>12</offset>
+          <name>latency</name>
+          <type>U2</type>
+          <comment>Gyroscope sensor data latency due to e.g.
+CAN bus.</comment>
+          <scale>-</scale>
+          <unit>ms</unit>
+        </block>
+        <block>
+          <offset>14</offset>
+          <name>accuracy</name>
+          <type>U2</type>
+          <comment>Gyroscope sensor data accuracy.</comment>
+          <scale>1e-3</scale>
+          <unit>deg/s</unit>
+        </block>
+        <block>
+          <offset>16</offset>
+          <name>reserved2</name>
+          <type>U1[4]</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+      </payload>
+      <checksum>CK_A CK_B</checksum>
+    </structure>
+  </message>
+  <message>
+    <name>UBX-CFG-ESFWT</name>
+    <type>Get/set</type>
+    <description>Get/set wheel-tick configuration</description>
+    <comment>Get/set the wheel-tick configuration for GWT or GAWT solution. Further information on the configuration parameters is given in the Automotive Dead Reckoning (ADR) chapter. This field can only be used with modules supporting analog wheel-tick signals and containing an internal IMU.</comment>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15.01, 16, 17, 18, 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with ADR products)</firmware>
+    <structure>
+      <header>0xB5 0x62</header>
+      <class>0x06</class>
+      <id>0x82</id>
+      <length>32</length>
+      <payload>
+        <block>
+          <offset>0</offset>
+          <name>version</name>
+          <type>U1</type>
+          <comment>Message version (0x00 for this version)</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>1</offset>
+          <name>flags1</name>
+          <type>X1</type>
+          <comment>Flags</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+          <bitfield>
+            <type>
+              <index>0</index>
+              <type>unsigned value</type>
+              <name>combineTicks</name>
+              <description>Use combined rear wheel-ticks instead of the single tick</description>
+            </type>
+            <type>
+              <index>1:3</index>
+              <type>reserved</type>
+              <name />
+              <description />
+            </type>
+            <type>
+              <index>4</index>
+              <type>unsigned value</type>
+              <name>useWtSpeed</name>
+              <description>Use speed measurements (data type 11 in ESF-MEAS) instead of single ticks (data type 10)</description>
+            </type>
+            <type>
+              <index>5</index>
+              <type>unsigned value</type>
+              <name>dirPinPol</name>
+              <description>Only supported on certain products.
+Direction pin polarity
+0: High signal level means forward direction,
+1: High signal level means backward direction.</description>
+            </type>
+            <type>
+              <index>6</index>
+              <type>unsigned value</type>
+              <name>useWtPin</name>
+              <description>Use wheel-tick pin for speed measurement.</description>
+            </type>
+            <type>
+              <index>7</index>
+              <type>reserved</type>
+              <name />
+              <description />
+            </type>
+          </bitfield>
+        </block>
+        <block>
+          <offset>2</offset>
+          <name>flags2</name>
+          <type>X1</type>
+          <comment>Flags</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+          <bitfield>
+            <type>
+              <index>0</index>
+              <type>unsigned value</type>
+              <name>autoWtCountMaxOff</name>
+              <description>Disable automatic estimation of maximum absolute wheel-tick counter value (0: enabled, 1: disabled). See wtCountMax field description for more details.
+(Not supported in protocol versions less than 19)</description>
+            </type>
+            <type>
+              <index>1</index>
+              <type>unsigned value</type>
+              <name>autoDirPinPolOff</name>
+              <description>Only supported on certain products. Disable automatic wheel-tick direction pin polarity detection (0: enabled, 1: disabled). See dirPinPol
+field description for more details.
+(Not supported in protocol versions less than 19)</description>
+            </type>
+            <type>
+              <index>2</index>
+              <type>unsigned value</type>
+              <name>autoSoftwareWtOff</name>
+              <description>Only supported on certain products. Disable automatic use of wheel-tick or speed data received over the software interface if available (0:
+enabled, 1: disabled). In this case, data coming from the hardware interface (wheel-tick pins) will
+automatically be ignored if wheel-tick/speed data are available from the software interface. See
+useWtPin field description for more details.
+(Not supported in protocol versions less than 19)</description>
+            </type>
+            <type>
+              <index>3</index>
+              <type>unsigned value</type>
+              <name>autoUseWtSpeedOff</name>
+              <description>Disable automatic receiver reconfiguration for processing speed data instead of wheel-tick data if no wheel-tick data are available but speed data were detected (0: enabled, 1: disabled). See useWtSpeed
+field description for more details.
+(Not supported in protocol versions less than 19)</description>
+            </type>
+            <type>
+              <index>4:7</index>
+              <type>reserved</type>
+              <name />
+              <description />
+            </type>
+          </bitfield>
+        </block>
+        <block>
+          <offset>3</offset>
+          <name>reserved1</name>
+          <type>U1[1]</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>4</offset>
+          <name>wtFactor</name>
+          <type>U4</type>
+          <comment>Wheel-tick scale factor to obtain distance
+[m] from wheel-ticks (0 = not set)</comment>
+          <scale>1e-6</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>8</offset>
+          <name>wtQuantError</name>
+          <type>U4</type>
+          <comment>Wheel-tick quantization. If useWtSpeed is
+set then this is interpreted as the speed
+measurement error RMS.</comment>
+          <scale>1e-6</scale>
+          <unit>m (orm/s)</unit>
+        </block>
+        <block>
+          <offset>12</offset>
+          <name>wtCountMax</name>
+          <type>U4</type>
+          <comment>Wheel-tick counter maximum value
+(rollover - 1). If null, relative wheel-tick
+counts are assumed (and therefore no
+rollover). If not null, absolute wheel-tick
+counts are assumed and the value
+corresponds to the highest tick count
+value before rollover happens. If
+useWtSpeed is set then this value is
+ignored.
+If value is set to 1, absolute wheel-tick
+counts are assumed and the value will be
+automatic calculated if possible. It is only
+possible for automatic calibration to
+calculate wtCntMax if it can be
+represented as a number of set bits (i.e.
+2^N). If it cannot be represented in this
+way it must be set to the correct absolute
+tick value manually.</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>16</offset>
+          <name>wtLatency</name>
+          <type>U2</type>
+          <comment>Wheel-tick data latency due to e.g. CAN
+bus</comment>
+          <scale>-</scale>
+          <unit>ms</unit>
+        </block>
+        <block>
+          <offset>18</offset>
+          <name>wtFrequency</name>
+          <type>U1</type>
+          <comment>Nominal wheel-tick data frequency (0 =
+not set)</comment>
+          <scale>-</scale>
+          <unit>Hz</unit>
+        </block>
+        <block>
+          <offset>19</offset>
+          <name>flags3</name>
+          <type>X1</type>
+          <comment>Flags</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+          <bitfield>
+            <type>
+              <index>0:3</index>
+              <type>reserved</type>
+              <name />
+              <description />
+            </type>
+            <type>
+              <index>4</index>
+              <type>unsigned value</type>
+              <name>cntBothEdges</name>
+              <description>Only supported on certain products.
+Count both rising and falling edges on wheel-tick signal (only relevant if wheel-tick is measured by
+the u-blox receiver).
+Only turn on this feature if the wheel-tick signal has 50 % duty cycle. Turning on this feature with
+fixed-width pulses can lead to severe degradation of performance.
+Use wheel-tick pin for speed measurement. This field can only be used with modules supporting
+analog wheel-tick signals.</description>
+            </type>
+            <type>
+              <index>5:7</index>
+              <type>reserved</type>
+              <name />
+              <description />
+            </type>
+          </bitfield>
+        </block>
+        <block>
+          <offset>20</offset>
+          <name>speedDeadBand</name>
+          <type>U2</type>
+          <comment>Speed sensor dead band (0 = not set)</comment>
+          <scale>-</scale>
+          <unit>cm/s</unit>
+        </block>
+        <block>
+          <offset>22</offset>
+          <name>reserved2</name>
+          <type>U1[10]</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+      </payload>
+      <checksum>CK_A CK_B</checksum>
+    </structure>
+  </message>
+  <message>
     <name>UBX-CFG-ESRC</name>
     <type>Get/set</type>
     <description>External synchronization source configuration</description>
@@ -1943,7 +2420,7 @@ always high.</comment>
     <name>UBX-CFG-GNSS</name>
     <type>Get/set</type>
     <description>GNSS system configuration</description>
-    <comment>Gets or sets the GNSS system channel sharing configuration. If the receiver is sent a valid new configuration, it will respond with a UBX-ACK- ACK message and immediately change to the new configuration. Otherwise the receiver will reject the request, by issuing a UBX-ACK-NAK and continuing operation with the previous configuration. Configuration requirements:  It is necessary for at least one major GNSS to be enabled, after applying the  new configuration to the current one.  It is also required that at least 4 tracking channels are available to each enabled  major GNSS, i.e. maxTrkCh must have a minimum value of 4 for each enabled  major GNSS.  The number of tracking channels in use must not exceed the number of  tracking channels available in hardware, and the sum of all reserved tracking  channels needs to be less than or equal to the number of tracking channels in  use. Notes:  To avoid cross-correlation issues, it is recommended that GPS and QZSS are  always both enabled or both disabled.  Polling this message returns the configuration of all supported GNSS, whether  enabled or not; it may also include GNSS unsupported by the particular  product, but in such cases the enable flag will always be unset.  See section GNSS Configuration for a discussion of the use of this message.  See section Satellite Numbering for a description of the GNSS IDs available.  Configuration specific to the GNSS system can be done via other messages (e.  g. UBX-CFG-SBAS).</comment>
+    <comment>Gets or sets the GNSS system channel sharing configuration. If the receiver is sent a valid new configuration, it will respond with a UBX-ACK- ACK message and immediately change to the new configuration. Otherwise the receiver will reject the request, by issuing a UBX-ACK-NAK and continuing operation with the previous configuration. Configuration requirements:  It is necessary for at least one major GNSS to be enabled, after applying the  new configuration to the current one.  It is also required that at least 4 tracking channels are available to each  enabled major GNSS, i.e. maxTrkCh must have a minimum value of 4 for each  enabled major GNSS.  The number of tracking channels in use must not exceed the number of  tracking channels available in hardware, and the sum of all reserved tracking  channels needs to be less than or equal to the number of tracking channels in  use. Notes:  To avoid cross-correlation issues, it is recommended that GPS and QZSS are  always both enabled or both disabled.  Polling this message returns the configuration of all supported GNSS, whether  enabled or not; it may also include GNSS unsupported by the particular  product, but in such cases the enable flag will always be unset.  See section GNSS Configuration for a discussion of the use of this message.  See section Satellite Numbering for a description of the GNSS IDs available.  Configuration specific to the GNSS system can be done via other messages (e.  g. UBX-CFG-SBAS).</comment>
     <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15, 15.01, 16, 17, 18, 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01</firmware>
     <structure>
       <header>0xB5 0x62</header>
@@ -2058,20 +2535,24 @@ be configured in every enabled system.</comment>
 When gnssId is 0 (GPS)
 0x01 = GPS L1C/A
 0x10 = GPS L2C
+0x20 = GPS L5
 When gnssId is 1 (SBAS)
 0x01 = SBAS L1C/A
 When gnssId is 2 (Galileo)
 0x01 = Galileo E1 (not supported in protocol versions less than 18)
+0x10 = Galileo E5a
 0x20 = Galileo E5b
 When gnssId is 3 (BeiDou)
 0x01 = BeiDou B1I
 0x10 = BeiDou B2I
+0x80 = BeiDou B2A
 When gnssId is 4 (IMES)
 0x01 = IMES L1
 When gnssId is 5 (QZSS)
 0x01 = QZSS L1C/A
 0x04 = QZSS L1S
 0x10 = QZSS L2C
+0x20 = QZSS L5
 When gnssId is 6 (GLONASS)
 0x01 = GLONASS L1
 0x10 = GLONASS L2</description>
@@ -2093,7 +2574,7 @@ When gnssId is 6 (GLONASS)
     <name>UBX-CFG-HNR</name>
     <type>Get/set</type>
     <description>High navigation rate settings</description>
-    <comment>The u-blox receivers support high rates of navigation update up to 30 Hz. The navigation solution output UBX-NAV-HNR will not be aligned to the top of a second.  The update rate has a direct influence on the power consumption. The more  fixes that are required, the more CPU power and communication resources are   required.   For most applications a 1 Hz update rate would be sufficient.</comment>
+    <comment>The u-blox receivers support high rates of navigation update up to 30 Hz. The navigation solution output UBX-NAV-HNR will not be aligned to the top of a second.  The update rate has a direct influence on the power consumption. The more  fixes that are required, the more CPU power and communication resources are  required.  For most applications a 1 Hz update rate would be sufficient.</comment>
     <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15.01, 16 and 17 (only with ADR products) u-blox 8 / u-blox M8 protocol versions 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with ADR or UDR products)</firmware>
     <structure>
       <header>0xB5 0x62</header>
@@ -2154,7 +2635,7 @@ following are valid protocol identifiers:
     <name>UBX-CFG-INF</name>
     <type>Get/set</type>
     <description>Information message configuration</description>
-    <comment>The value of infMsgMask[x] below is formed so that each bit represents one of the INF class messages (bit 0 for ERROR, bit 1 for WARNING and so on). For a complete list, see the Message class INF. Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length. Output messages from the module contain only one configuration unit. Note that:   I/O ports 1 and 2 correspond to serial ports 1 and 2.   I/O port 0 is I2C (DDC).   I/O port 3 is USB.   I/O port 4 is SPI.   I/O port 5 is reserved for future use.</comment>
+    <comment>The value of infMsgMask[x] below is formed so that each bit represents one of the INF class messages (bit 0 for ERROR, bit 1 for WARNING and so on). For a complete list, see the Message class INF. Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length. Output messages from the module contain only one configuration unit. Note that:  I/O ports 1 and 2 correspond to serial ports 1 and 2.  I/O port 0 is I2C (DDC).  I/O port 3 is USB.  I/O port 4 is SPI.  I/O port 5 is reserved for future use.</comment>
     <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15, 15.01, 16, 17, 18, 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01</firmware>
     <structure>
       <header>0xB5 0x62</header>
@@ -2460,7 +2941,7 @@ applies.</comment>
     <name>UBX-CFG-MSG</name>
     <type>Get/set</type>
     <description>Set message rate(s)</description>
-    <comment>Get/set message rate configuration (s) to/from the receiver. See also section How to change between protocols.  Send rate is relative to the event a message is registered on. For example, if the  rate of a navigation message is set to 2, the message is sent every second  navigation solution. For configuring NMEA messages, the section NMEA  Messages Overview describes class and identifier numbers used.</comment>
+    <comment>Get/set message rate configuration (s) to/from the receiver. See also section How to change between protocols.  Send rate is relative to the event a message is registered on. For example, if  the rate of a navigation message is set to 2, the message is sent every second  navigation solution. For configuring NMEA messages, the section NMEA  Messages Overview describes class and identifier numbers used.</comment>
     <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15, 15.01, 16, 17, 18, 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01</firmware>
     <structure>
       <header>0xB5 0x62</header>
@@ -6847,11 +7328,96 @@ Every bit corresponds to a PRN number.</comment>
     </structure>
   </message>
   <message>
+    <name>UBX-CFG-SENIF</name>
+    <type>Get/set</type>
+    <description>I2C sensor interface configuration</description>
+    <comment>-</comment>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with ADR or UDR products)</firmware>
+    <structure>
+      <header>0xB5 0x62</header>
+      <class>0x06</class>
+      <id>0x88</id>
+      <length>6</length>
+      <payload>
+        <block>
+          <offset>0</offset>
+          <name>type</name>
+          <type>U1</type>
+          <comment>Type of interface, 0 for I2C</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>1</offset>
+          <name>version</name>
+          <type>U1</type>
+          <comment>Message version, 0 for this message</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>2</offset>
+          <name>flags</name>
+          <type>X2</type>
+          <comment>feature configuration flags</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+          <bitfield>
+            <type>
+              <index>0</index>
+              <type>unsigned value</type>
+              <name>senConn</name>
+              <description>Sensor is connected to I2C interface</description>
+            </type>
+            <type>
+              <index>1:15</index>
+              <type>reserved</type>
+              <name />
+              <description />
+            </type>
+          </bitfield>
+        </block>
+        <block>
+          <offset>4</offset>
+          <name>pioConf</name>
+          <type>X2</type>
+          <comment>PIO configuration flags (see graphic below
+)</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+          <bitfield>
+            <type>
+              <index>0:4</index>
+              <type>unsigned value</type>
+              <name>i2cSdaPio</name>
+              <description>PIO of the I2C SDA line
+Supported options:</description>
+            </type>
+            <type>
+              <index>5:9</index>
+              <type>unsigned value</type>
+              <name>i2cSclPio</name>
+              <description>PIO of the I2C SCL line
+Supported options:</description>
+            </type>
+            <type>
+              <index>10:15</index>
+              <type>reserved</type>
+              <name />
+              <description />
+            </type>
+          </bitfield>
+        </block>
+      </payload>
+      <checksum>CK_A CK_B</checksum>
+    </structure>
+  </message>
+  <message>
     <name>UBX-CFG-SLAS</name>
     <type>Get/set</type>
     <description>SLAS configuration</description>
     <comment>This message configures the QZSS SLAS (Sub-meter Level Augmentation System). See the SLAS Configuration Settings Description for a detailed description of how these settings affect receiver operation. To apply SLAS corrections, QZSS operation and L1S signal tracking must be enabled see UBX-CFG-GNSS</comment>
-    <firmware>Supported on: u-blox 8 / u-blox M8 with protocol version 19.2 (only with ADR or UDR products)</firmware>
+    <firmware>Supported on: u-blox 8 / u-blox M8 with protocol version 19.2 (only with ADR or UDR products )</firmware>
     <structure>
       <header>0xB5 0x62</header>
       <class>0x06</class>
@@ -7165,6 +7731,55 @@ switch to coherent pulse mode.</description>
               <description />
             </type>
           </bitfield>
+        </block>
+      </payload>
+      <checksum>CK_A CK_B</checksum>
+    </structure>
+  </message>
+  <message>
+    <name>UBX-CFG-SPT</name>
+    <type>Get/set</type>
+    <description>Configure and start a sensor production test</description>
+    <comment>The production test uses the built-in self-test capabilities of an attached sensor. This message is only supported if a sensor is directly connected to the u-blox receiver.</comment>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15.01, 16, 17, 18, 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with ADR products) u-blox 8 / u-blox M8 protocol versions 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with UDR products)</firmware>
+    <structure>
+      <header>0xB5 0x62</header>
+      <class>0x06</class>
+      <id>0x64</id>
+      <length>12</length>
+      <payload>
+        <block>
+          <offset>0</offset>
+          <name>version</name>
+          <type>U1</type>
+          <comment>Message version (0x00 for this version)</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>1</offset>
+          <name>reserved1</name>
+          <type>U1</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>2</offset>
+          <name>sensorId</name>
+          <type>U2</type>
+          <comment>ID of the sensor to be tested; see UBX-
+MON-SPT for defined IDs</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>4</offset>
+          <name>reserved2</name>
+          <type>U1[8]</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
         </block>
       </payload>
       <checksum>CK_A CK_B</checksum>
@@ -8099,6 +8714,139 @@ Host drivers.</comment>
     </structure>
   </message>
   <message>
+    <name>UBX-ESF-ALG</name>
+    <type>Periodic/Polled</type>
+    <description>IMU alignment information</description>
+    <comment>This message outputs the IMU alignment angles which define the rotation from the installation-frame to the IMU-frame (see the IMU-mount Misalignment section for more details). In addition, it outputs information about the automatic IMU-mount alignment (if enabled).</comment>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with ADR or UDR products)</firmware>
+    <structure>
+      <header>0xB5 0x62</header>
+      <class>0x10</class>
+      <id>0x14</id>
+      <length>16</length>
+      <payload>
+        <block>
+          <offset>0</offset>
+          <name>iTOW</name>
+          <type>U4</type>
+          <comment>GPS time of week of the navigation epoch.
+See the description of iTOW for details.</comment>
+          <scale>-</scale>
+          <unit>ms</unit>
+        </block>
+        <block>
+          <offset>4</offset>
+          <name>version</name>
+          <type>U1</type>
+          <comment>Message version (0x01 for this version)</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>5</offset>
+          <name>flags</name>
+          <type>U1</type>
+          <comment>Flags</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+          <bitfield>
+            <type>
+              <index>0</index>
+              <type>unsigned value</type>
+              <name>autoMntAlgOn</name>
+              <description>Automatic IMU-mount alignment on/off bit (0: automatic alignment is not running, 1: automatic
+alignment is running)</description>
+            </type>
+            <type>
+              <index>1:3</index>
+              <type>unsigned value</type>
+              <name>status</name>
+              <description>Status of the IMU-mount alignment (0: user-defined/fixed angles are used, 1: IMU-mount roll/pitch
+angles alignment is ongoing, 2: IMU-mount roll/pitch/yaw angles alignment is ongoing, 3: coarse
+IMU-mount alignment are used, 4: fine IMU-mount alignment are used)</description>
+            </type>
+            <type>
+              <index>4:7</index>
+              <type>reserved</type>
+              <name />
+              <description />
+            </type>
+          </bitfield>
+        </block>
+        <block>
+          <offset>6</offset>
+          <name>error</name>
+          <type>U1</type>
+          <comment>Flags</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+          <bitfield>
+            <type>
+              <index>0</index>
+              <type>unsigned value</type>
+              <name>tiltAlgError</name>
+              <description>IMU-mount tilt (roll and/or pitch) alignment error (0: no error, 1: error)</description>
+            </type>
+            <type>
+              <index>1</index>
+              <type>unsigned value</type>
+              <name>yawAlgError</name>
+              <description>IMU-mount yaw alignment error (0: no error, 1: error)</description>
+            </type>
+            <type>
+              <index>2</index>
+              <type>unsigned value</type>
+              <name>angleError</name>
+              <description>IMU-mount misalignment Euler angle singularity error (0: no error, 1: error). If this error bit is set, the
+IMU-mount roll and IMU-mount yaw angles cannot uniquely be defined due to the singularity issue
+happening with installations mounted with a +/- 90 degrees misalignment around pitch axis. This is
+also known as the 'gimbal-lock' problem affecting rotations described by Euler angles.</description>
+            </type>
+            <type>
+              <index>3:7</index>
+              <type>reserved</type>
+              <name />
+              <description />
+            </type>
+          </bitfield>
+        </block>
+        <block>
+          <offset>7</offset>
+          <name>reserved1</name>
+          <type>U1</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>8</offset>
+          <name>yaw</name>
+          <type>U4</type>
+          <comment>IMU-mount yaw angle [0, 360]</comment>
+          <scale>1e-2</scale>
+          <unit>deg</unit>
+        </block>
+        <block>
+          <offset>12</offset>
+          <name>pitch</name>
+          <type>I2</type>
+          <comment>IMU-mount pitch angle [-90, 90]</comment>
+          <scale>1e-2</scale>
+          <unit>deg</unit>
+        </block>
+        <block>
+          <offset>14</offset>
+          <name>roll</name>
+          <type>I2</type>
+          <comment>IMU-mount roll angle [-180, 180]</comment>
+          <scale>1e-2</scale>
+          <unit>deg</unit>
+        </block>
+      </payload>
+      <checksum>CK_A CK_B</checksum>
+    </structure>
+  </message>
+  <message>
     <name>UBX-ESF-INS</name>
     <type>Periodic/Polled</type>
     <description>Vehicle dynamics information</description>
@@ -8600,6 +9348,97 @@ calibrated.</description>
               </type>
             </bitfield>
           </block>
+        </block>
+      </payload>
+      <checksum>CK_A CK_B</checksum>
+    </structure>
+  </message>
+  <message>
+    <name>UBX-HNR-ATT</name>
+    <type>Periodic/Polled</type>
+    <description>Attitude solution</description>
+    <comment>This message outputs the attitude solution as roll, pitch and heading angles. More details about vehicle attitude can be found in the Vehicle Attitude Output (ADR) section for ADR products. More details about vehicle attitude can be found in the Vehicle Attitude Output (UDR) section for UDR products.</comment>
+    <firmware>Supported on: u-blox 8 / u-blox M8 with protocol version 19.2 (only with ADR or UDR products )</firmware>
+    <structure>
+      <header>0xB5 0x62</header>
+      <class>0x28</class>
+      <id>0x01</id>
+      <length>32</length>
+      <payload>
+        <block>
+          <offset>0</offset>
+          <name>iTOW</name>
+          <type>U4</type>
+          <comment>GPS time of week of the HNR epoch.</comment>
+          <scale>-</scale>
+          <unit>ms</unit>
+        </block>
+        <block>
+          <offset>4</offset>
+          <name>version</name>
+          <type>U1</type>
+          <comment>Message version (0x01 for this version)</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>5</offset>
+          <name>reserved1</name>
+          <type>U1[3]</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>8</offset>
+          <name>roll</name>
+          <type>I4</type>
+          <comment>Vehicle roll.</comment>
+          <scale>1e-5</scale>
+          <unit>deg</unit>
+        </block>
+        <block>
+          <offset>12</offset>
+          <name>pitch</name>
+          <type>I4</type>
+          <comment>Vehicle pitch.</comment>
+          <scale>1e-5</scale>
+          <unit>deg</unit>
+        </block>
+        <block>
+          <offset>16</offset>
+          <name>heading</name>
+          <type>I4</type>
+          <comment>Vehicle heading.</comment>
+          <scale>1e-5</scale>
+          <unit>deg</unit>
+        </block>
+        <block>
+          <offset>20</offset>
+          <name>accRoll</name>
+          <type>U4</type>
+          <comment>Vehicle roll accuracy (if null, roll angle is
+not available).</comment>
+          <scale>1e-5</scale>
+          <unit>deg</unit>
+        </block>
+        <block>
+          <offset>24</offset>
+          <name>accPitch</name>
+          <type>U4</type>
+          <comment>Vehicle pitch accuracy (if null, pitch angle
+is not available).</comment>
+          <scale>1e-5</scale>
+          <unit>deg</unit>
+        </block>
+        <block>
+          <offset>28</offset>
+          <name>accHeading</name>
+          <type>U4</type>
+          <comment>Vehicle heading accuracy (if null, heading
+angle is not available).</comment>
+          <scale>1e-5</scale>
+          <unit>deg</unit>
         </block>
       </payload>
       <checksum>CK_A CK_B</checksum>
@@ -9196,7 +10035,7 @@ See the description of iTOW for details.</comment>
               <index>0</index>
               <type>unsigned value</type>
               <name>extraPvt</name>
-              <description>Store extra PVT information
+              <description>Extra PVT information is valid
 The fields iTOW, tAcc, numSV, hMSL, vAcc, velN, velE, velD, sAcc, headAcc and pDOP are only valid if
 this flag is set.</description>
             </type>
@@ -9204,7 +10043,7 @@ this flag is set.</description>
               <index>1</index>
               <type>unsigned value</type>
               <name>extraOdo</name>
-              <description>Store odometer data
+              <description>Odometer data is valid
 The fields distance, totalDistance and distanceStd are only valid if this flag is set.
 Note: the odometer feature itself must also be enabled.</description>
             </type>
@@ -9830,7 +10669,7 @@ is zero-based.</comment>
     <name>UBX-LOG-INFO</name>
     <type>Output</type>
     <description>Log information</description>
-    <comment>This message is used to report information about the logging subsystem. Note:  The reported maximum log size will be smaller than that originally specified in  LOG-CREATE due to logging and filestore implementation overheads.  Log entries are compressed in a variable length fashion, so it may be difficult to  predict log space usage with any precision.  There may be times when the receiver does not have an accurate time (e.g. if  the week number is not yet known), in which case some entries will not have a  timestamp. This may result in the oldest/newest entry time values not taking  account of these entries.</comment>
+    <comment>This message is used to report information about the logging subsystem. Note:  The reported maximum log size will be smaller than that originally specified in  LOG-CREATE due to logging and filestore implementation overheads.  Log entries are compressed in a variable length fashion, so it may be difficult  to predict log space usage with any precision.  There may be times when the receiver does not have an accurate time (e.g. if  the week number is not yet known), in which case some entries will not have a  timestamp. This may result in the oldest/newest entry time values not taking  account of these entries.</comment>
     <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15, 15.01, 16, 17, 18, 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01</firmware>
     <structure>
       <header>0xB5 0x62</header>
@@ -14949,7 +15788,7 @@ receiver</comment>
     <name>UBX-MON-HW2</name>
     <type>Periodic/Polled</type>
     <description>Extended hardware status</description>
-    <comment>Status of different aspects of the hardware such as Imbalance, Low-Level Configuration and POST Results. The first four parameters of this message represent the complex signal from the RF front end. The following rules of thumb apply:  The smaller the absolute value of the variable ofsI and ofsQ, the better.  Ideally, the magnitude of the I-part (magI) and the Q-part (magQ) of the complex  signal should be the same.</comment>
+    <comment>Status of different aspects of the hardware such as Imbalance, Low-Level Configuration and POST Results. The first four parameters of this message represent the complex signal from the RF front end. The following rules of thumb apply:  The smaller the absolute value of the variable ofsI and ofsQ, the better.  Ideally, the magnitude of the I-part (magI) and the Q-part (magQ) of the  complex signal should be the same.</comment>
     <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15, 15.01, 16, 17, 18, 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01</firmware>
     <structure>
       <header>0xB5 0x62</header>
@@ -15816,6 +16655,221 @@ external input 1</comment>
     </structure>
   </message>
   <message>
+    <name>UBX-MON-SPT</name>
+    <type>Polled</type>
+    <description>Sensor production test</description>
+    <comment>This message reports the state of, and measurements made during, sensor self- tests. This message can also be used to retrieve information about detected sensor(s) and driver(s) used. This message is only supported if a sensor is directly connected to the u-blox chip. This includes modules that contain IMUs. Note that this message shows the status of the last self-test since sensor startup. The self-test results are not stored in non-volatile memory.</comment>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with ADR or UDR products)</firmware>
+    <structure>
+      <header>0xB5 0x62</header>
+      <class>0x0A</class>
+      <id>0x2F</id>
+      <length>4 + 12*numRes + 4*numSensor</length>
+      <payload>
+        <block>
+          <offset>0</offset>
+          <name>version</name>
+          <type>U1</type>
+          <comment>Message version (0x01 for this version)</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>1</offset>
+          <name>numSensor</name>
+          <type>U1</type>
+          <comment>number of sensors reported in this
+message</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>2</offset>
+          <name>numRes</name>
+          <type>U1</type>
+          <comment>number of result items reported in this
+message</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>3</offset>
+          <name>reserved1</name>
+          <type>U1</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block name="numSensor" type="repeated">
+          <block>
+            <offset>4 + 4*N</offset>
+            <name>sensorId</name>
+            <type>U1</type>
+            <comment>Sensor ID
+The following IDs are defined, others are
+reserved:
+1: ST LSM6DS0 6-axis IMU with
+temperature sensor
+2: Invensense MPU6500 6-axis IMU with
+temperature sensor
+3: Bosch BMI160 6-axis IMU with
+temperature sensor
+7: ST LSM6DS3 6-axis IMU with
+temperature sensor
+9: Bosch SMI130 6-axis IMU with
+temperature sensor
+12: MPU6515, 6-axis inertial sensor from
+Invensense
+13: ST LSM6DSL 6-axis IMU with
+temperature sensor
+14: SMG130, 3-axis gyroscope with
+temperature sensor from Bosch
+15: SMI230, 6-axis IMU with temperature
+sensor from Bosch
+16: BMI260, 6-axis IMU with temperature
+sensor from Bosch
+17: ICM330DLC, 6-axis IMU with
+temperature sensor from ST
+18: ICM330DHCX, 6-axis IMU with 105 deg
+temperature sensor from ST
+Not all sensors are supported in any
+released firmware. Refer to the release
+notes to find out which sensor is
+supported by a certain firmware.</comment>
+            <scale>-</scale>
+            <unit>-</unit>
+          </block>
+          <block>
+            <offset>5 + 4*N</offset>
+            <name>drvVer</name>
+            <type>X1</type>
+            <comment>Version information</comment>
+            <scale>-</scale>
+            <unit>-</unit>
+            <bitfield>
+              <type>
+                <index>0:3</index>
+                <type>unsigned value</type>
+                <name>drvVerMaj</name>
+                <description>Driver major version</description>
+              </type>
+              <type>
+                <index>4:7</index>
+                <type>unsigned value</type>
+                <name>drvVerMin</name>
+                <description>Driver minor version</description>
+              </type>
+            </bitfield>
+          </block>
+          <block>
+            <offset>6 + 4*N</offset>
+            <name>testState</name>
+            <type>U1</type>
+            <comment>State of one sensor's test, it can be
+0: test not yet started
+1: test started but not yet finished
+2: test did not finish due to error during
+execution
+3: test finished normally, test data is
+available</comment>
+            <scale>-</scale>
+            <unit>-</unit>
+          </block>
+          <block>
+            <offset>7 + 4*N</offset>
+            <name>drvFileName</name>
+            <type>U1</type>
+            <comment>0 if the active driver is loaded from image,
+last character of the file name if it is
+loaded from separate file.</comment>
+            <scale>-</scale>
+            <unit>-</unit>
+          </block>
+        </block>
+        <block name="numRes" type="repeated">
+          <block>
+            <offset>4 + 12*N + 4*numSensor</offset>
+            <name>sensorIdRes</name>
+            <type>U2</type>
+            <comment>Sensor ID; eligible values are the same as
+in sensorIdState field</comment>
+            <scale>-</scale>
+            <unit>-</unit>
+          </block>
+          <block>
+            <offset>6 + 12*N + 4*numSensor</offset>
+            <name>sensorType</name>
+            <type>U2</type>
+            <comment>Sensor type and axis (if applicable) to
+which the result refers
+The following values are defined, others
+are reserved:
+5: Gyroscope z axis
+12: Gyroscope temperature
+13: Gyroscope y axis
+14: Gyroscope x axis
+16: Accelerometer x axis
+17: Accelerometer y axis
+18: Accelerometer z axis
+19: Barometer
+22: Magnetometer x axis
+23: Magnetometer y axis
+24: Magnetometer z axis
+25: Barometer temperature</comment>
+            <scale>-</scale>
+            <unit>-</unit>
+          </block>
+          <block>
+            <offset>8 + 12*N + 4*numSensor</offset>
+            <name>resType</name>
+            <type>U2</type>
+            <comment>The type of result stored in the value field
+1: Measurement without self-test offset
+(raw and unscaled digital value)
+2: Measurement with positive self-test
+offset (raw and unscaled digital value)
+3: Measurement with negative self-test
+offset (raw and unscaled digital value)
+4: Minimum off-to-positive to pass self-
+test, as deduced from on-chip trimming
+information
+5: Maximum off-to-positive to pass self-
+test, as deduced from on-chip trimming
+information
+6: Minimum negative-to-positive to pass
+self-test, as deduced from on-chip
+trimming information
+7: Maximum negative-to-positive to pass
+self-test, as deduced from on-chip
+trimming information
+8: Self-test passed; test passed if value = 1
+and failed if 0. Used if the decision is read
+out from the sensor itself.</comment>
+            <scale>-</scale>
+            <unit>-</unit>
+          </block>
+          <block>
+            <offset>10 + 12*N + 4*numSensor</offset>
+            <name>reserved2</name>
+            <type>U1[2]</type>
+            <comment>Reserved</comment>
+            <scale>-</scale>
+            <unit>-</unit>
+          </block>
+          <block>
+            <offset>12 + 12*N + 4*numSensor</offset>
+            <name>value</name>
+            <type>I4</type>
+            <comment>value of the specific test result</comment>
+            <scale>-</scale>
+            <unit>-</unit>
+          </block>
+        </block>
+      </payload>
+      <checksum>CK_A CK_B</checksum>
+    </structure>
+  </message>
+  <message>
     <name>UBX-MON-TXBUF</name>
     <type>Periodic/Polled</type>
     <description>Transmitter buffer status</description>
@@ -16199,6 +17253,159 @@ See the description of iTOW for details.</comment>
     </structure>
   </message>
   <message>
+    <name>UBX-NAV-COV</name>
+    <type>Periodic/Polled</type>
+    <description>Covariance matrices</description>
+    <comment>This message outputs the covariance matrices for the position and velocity solutions in the topocentric coordinate system defined as the local-level North (N), East (E), Down (D) frame. As the covariance matrices are symmetric, only the upper triangular part is output.</comment>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15, 15.01, 16, 17, 18, 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01</firmware>
+    <structure>
+      <header>0xB5 0x62</header>
+      <class>0x01</class>
+      <id>0x36</id>
+      <length>64</length>
+      <payload>
+        <block>
+          <offset>0</offset>
+          <name>iTOW</name>
+          <type>U4</type>
+          <comment>GPS time of week of the navigation epoch.
+See the description of iTOW for details.</comment>
+          <scale>-</scale>
+          <unit>ms</unit>
+        </block>
+        <block>
+          <offset>4</offset>
+          <name>version</name>
+          <type>U1</type>
+          <comment>Message version (0x00 for this version)</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>5</offset>
+          <name>posCovValid</name>
+          <type>U1</type>
+          <comment>Position covariance matrix validity flag</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>6</offset>
+          <name>velCovValid</name>
+          <type>U1</type>
+          <comment>Velocity covariance matrix validity flag</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>7</offset>
+          <name>reserved1</name>
+          <type>U1[9]</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>16</offset>
+          <name>posCovNN</name>
+          <type>R4</type>
+          <comment>Position covariance matrix value p_NN</comment>
+          <scale>-</scale>
+          <unit>m^2</unit>
+        </block>
+        <block>
+          <offset>20</offset>
+          <name>posCovNE</name>
+          <type>R4</type>
+          <comment>Position covariance matrix value p_NE</comment>
+          <scale>-</scale>
+          <unit>m^2</unit>
+        </block>
+        <block>
+          <offset>24</offset>
+          <name>posCovND</name>
+          <type>R4</type>
+          <comment>Position covariance matrix value p_ND</comment>
+          <scale>-</scale>
+          <unit>m^2</unit>
+        </block>
+        <block>
+          <offset>28</offset>
+          <name>posCovEE</name>
+          <type>R4</type>
+          <comment>Position covariance matrix value p_EE</comment>
+          <scale>-</scale>
+          <unit>m^2</unit>
+        </block>
+        <block>
+          <offset>32</offset>
+          <name>posCovED</name>
+          <type>R4</type>
+          <comment>Position covariance matrix value p_ED</comment>
+          <scale>-</scale>
+          <unit>m^2</unit>
+        </block>
+        <block>
+          <offset>36</offset>
+          <name>posCovDD</name>
+          <type>R4</type>
+          <comment>Position covariance matrix value p_DD</comment>
+          <scale>-</scale>
+          <unit>m^2</unit>
+        </block>
+        <block>
+          <offset>40</offset>
+          <name>velCovNN</name>
+          <type>R4</type>
+          <comment>Velocity covariance matrix value v_NN</comment>
+          <scale>-</scale>
+          <unit>m^2/s^2</unit>
+        </block>
+        <block>
+          <offset>44</offset>
+          <name>velCovNE</name>
+          <type>R4</type>
+          <comment>Velocity covariance matrix value v_NE</comment>
+          <scale>-</scale>
+          <unit>m^2/s^2</unit>
+        </block>
+        <block>
+          <offset>48</offset>
+          <name>velCovND</name>
+          <type>R4</type>
+          <comment>Velocity covariance matrix value v_ND</comment>
+          <scale>-</scale>
+          <unit>m^2/s^2</unit>
+        </block>
+        <block>
+          <offset>52</offset>
+          <name>velCovEE</name>
+          <type>R4</type>
+          <comment>Velocity covariance matrix value v_EE</comment>
+          <scale>-</scale>
+          <unit>m^2/s^2</unit>
+        </block>
+        <block>
+          <offset>56</offset>
+          <name>velCovED</name>
+          <type>R4</type>
+          <comment>Velocity covariance matrix value v_ED</comment>
+          <scale>-</scale>
+          <unit>m^2/s^2</unit>
+        </block>
+        <block>
+          <offset>60</offset>
+          <name>velCovDD</name>
+          <type>R4</type>
+          <comment>Velocity covariance matrix value v_DD</comment>
+          <scale>-</scale>
+          <unit>m^2/s^2</unit>
+        </block>
+      </payload>
+      <checksum>CK_A CK_B</checksum>
+    </structure>
+  </message>
+  <message>
     <name>UBX-NAV-DGPS</name>
     <type>Periodic/Polled</type>
     <description>DGPS data used for NAV</description>
@@ -16341,7 +17548,7 @@ having channel number 15</description>
     <name>UBX-NAV-DOP</name>
     <type>Periodic/Polled</type>
     <description>Dilution of precision</description>
-    <comment>DOP values are dimensionless. All DOP values are scaled by a factor of 100. If the unit transmits a value of e.g. 156, the DOP value is 1.56.</comment>
+    <comment> DOP values are dimensionless.  All DOP values are scaled by a factor of 100. If the unit transmits a value of e.g.  156, the DOP value is 1.56.</comment>
     <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 15, 15.01, 16, 17, 18, 19, 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01</firmware>
     <structure>
       <header>0xB5 0x62</header>
@@ -16413,6 +17620,72 @@ See the description of iTOW for details.</comment>
           <comment>Easting DOP</comment>
           <scale>0.01</scale>
           <unit>-</unit>
+        </block>
+      </payload>
+      <checksum>CK_A CK_B</checksum>
+    </structure>
+  </message>
+  <message>
+    <name>UBX-NAV-EELL</name>
+    <type>Periodic/Polled</type>
+    <description>Position error ellipse parameters</description>
+    <comment>This message outputs the error ellipse parameters for the position solutions.</comment>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 19.1, 19.2, 20, 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01 (only with ADR products)</firmware>
+    <structure>
+      <header>0xB5 0x62</header>
+      <class>0x01</class>
+      <id>0x3d</id>
+      <length>16</length>
+      <payload>
+        <block>
+          <offset>0</offset>
+          <name>iTOW</name>
+          <type>U4</type>
+          <comment>GPS time of week of the navigation epoch.
+See the description of iTOW for details.</comment>
+          <scale>-</scale>
+          <unit>ms</unit>
+        </block>
+        <block>
+          <offset>4</offset>
+          <name>version</name>
+          <type>U1</type>
+          <comment>Message version (0x00 for this version)</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>5</offset>
+          <name>reserved1</name>
+          <type>U1</type>
+          <comment>Reserved</comment>
+          <scale>-</scale>
+          <unit>-</unit>
+        </block>
+        <block>
+          <offset>6</offset>
+          <name>errEllipseOrient</name>
+          <type>U2</type>
+          <comment>Orientation of semi-major axis of error
+ellipse (degrees from true north)</comment>
+          <scale>1e-2</scale>
+          <unit>deg</unit>
+        </block>
+        <block>
+          <offset>8</offset>
+          <name>errEllipseMajor</name>
+          <type>U4</type>
+          <comment>Semi-major axis of error ellipse</comment>
+          <scale>-</scale>
+          <unit>mm</unit>
+        </block>
+        <block>
+          <offset>12</offset>
+          <name>errEllipseMinor</name>
+          <type>U4</type>
+          <comment>Semi-minor axis of error ellipse</comment>
+          <scale>-</scale>
+          <unit>mm</unit>
         </block>
       </payload>
       <checksum>CK_A CK_B</checksum>
@@ -16532,7 +17805,7 @@ geofences
     <type>Periodic/Polled</type>
     <description>High precision position solution in ECEF</description>
     <comment>See important comments concerning validity of position given in section Navigation Output Filters.</comment>
-    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01</firmware>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 20.01, 20.1, 20.2 and 20.3</firmware>
     <structure>
       <header>0xB5 0x62</header>
       <class>0x01</class>
@@ -16660,7 +17933,7 @@ coordinate. Must be in the range of -99..
     <type>Periodic/Polled</type>
     <description>High precision geodetic position solution</description>
     <comment>See important comments concerning validity of position given in section Navigation Output Filters. This message outputs the Geodetic position with high precision in the currently selected ellipsoid. The default is the WGS84 Ellipsoid, but can be changed with the message UBX-CFG-DAT.</comment>
-    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 20.01, 20.1, 20.2, 20.3, 22, 22.01, 23 and 23.01</firmware>
+    <firmware>Supported on: u-blox 8 / u-blox M8 protocol versions 20.01, 20.1, 20.2 and 20.3</firmware>
     <structure>
       <header>0xB5 0x62</header>
       <class>0x01</class>
@@ -16900,7 +18173,7 @@ flags.</comment>
               <index>2</index>
               <type>unsigned value</type>
               <name>totRangeGPS</name>
-              <description>1 = Data reference ToW out of range.</description>
+              <description>1 = Data reference TOW out of range.</description>
             </type>
             <type>
               <index>3</index>
@@ -16976,7 +18249,7 @@ information flags.</comment>
               <index>2</index>
               <type>unsigned value</type>
               <name>totRangeGAL</name>
-              <description>1 = Data reference ToW out of range.</description>
+              <description>1 = Data reference TOW out of range.</description>
             </type>
             <type>
               <index>3</index>
@@ -17052,7 +18325,7 @@ information flags.</comment>
               <index>2</index>
               <type>unsigned value</type>
               <name>totRangeBDS</name>
-              <description>1 = Data reference ToW out of range.</description>
+              <description>1 = Data reference TOW out of range.</description>
             </type>
             <type>
               <index>3</index>
@@ -19073,10 +20346,10 @@ output</comment>
 1: No spoofing indicated
 2: Spoofing indicated
 3: Multiple spoofing indications
-Note that the spoofing state value only reflects the dector state for the current navigation epoch. As
-spoofing can be detected most easily at the transition from real signal to spoofing signal, this is also
-where the detector is triggered the most. I.e. a value of 1 - No spoofing indicated does not mean that
-the receiver is not spoofed, it simply states that the detector was not triggered in this epoch.</description>
+Note that the spoofing state value only reflects the detector state for the current navigation epoch.
+As spoofing can be detected most easily at the transition from real signal to spoofing signal, this is
+also where the detector is triggered the most. I.e. a value of 1 - No spoofing indicated does not mean
+that the receiver is not spoofed, it simply states that the detector was not triggered in this epoch.</description>
             </type>
             <type>
               <index>5</index>
