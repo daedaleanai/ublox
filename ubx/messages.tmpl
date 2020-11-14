@@ -4,10 +4,10 @@ package ubx
 // {{.Name}} ({{.Type}}) {{.Description | notabs}}
 // 
 // {{.Comment | notabs}}
-type {{.Name | msgtypename}} struct {
+type {{.TypeName}} struct {
 {{- range .Blocks}}
 	{{- if eq .Cardinality ""}}
-		{{block "field" .}}{{.Name | title}} {{if .Bitfield}}{{.Message.Name | msgtypename}}{{.Name | title}}{{else}}{{.Type | gotype}}{{end}} // {{if ne .Unit "-"}}[{{if ne .Scale "-"}}{{.Scale}} {{end}}{{.Unit}}] {{end}}{{.Comment |notabs -}}{{end}}
+		{{block "field" .}}{{.Name|title}} {{.ArraySpec}}{{if .Bitfield}}{{.Message.TypeName}}{{.Name | title}}{{else}}{{.FieldType}}{{end}} // {{if ne .Unit "-"}}[{{if ne .Scale "-"}}{{.Scale}} {{end}}{{.Unit}}] {{end}}{{.Comment |notabs -}}{{end}}
 	{{- else if eq .Cardinality "optional"}}
 		// Optional
 		{{- range .Nested}}
@@ -18,24 +18,24 @@ type {{.Name | msgtypename}} struct {
 		{{- range .Nested}}
 			{{template "field" .}}
 		{{- end}}
-		} // len: {{.CountField |title}}
+		} // len: {{.CountField}}
 	{{- end}}
 {{- end}}
 }
 
-func ({{.Name | msgtypename}}) classId() uint16 { return {{printf "0x%02x%02x" .Id .Class }} }
+func ({{.TypeName}}) classID() uint16 { return {{printf "0x%02x%02x" .Id .Class }} }
 
 {{- range .Blocks}}
 	{{- if eq .Cardinality ""}}
 		{{- block "enums" .}}
-		{{- if .Bitfield}}
-			type {{.Message.Name | msgtypename}}{{.Name | title}} {{.Type | gotype}}
-			const (
-			{{- range .Bitfield}}
-				 {{if .Name}}{{.Field.Message.Name | msgtypename}}{{.Field.Name | title}}{{.Name | title}} {{.Field.Message.Name | msgtypename}}{{.Field.Name | title}} = {{.Index | mask}} // {{.Description | notabs}}{{end}}
+			{{- if .Bitfield}}
+type {{.Message.TypeName}}{{.Name | title}} {{.FieldType}}
+const (
+{{- range .Bitfield}}
+	 {{if .Name}}{{.Block.Message.TypeName}}{{.Name | title}} {{.Block.Message.TypeName}}{{.Block.Name | title}}  = {{.Index | mask}} // {{.Description | notabs}}{{end}}
+{{- end}}
+)
 			{{- end}}
-			)
-		{{- end}}
 		{{- end}}
 	{{- else if eq .Cardinality "optional"}}
 		{{- range .Nested}}
