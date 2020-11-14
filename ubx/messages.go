@@ -152,7 +152,6 @@ const (
 	AidHui1HealthValid AidHui1Flags = 0x1 // Healthmask field in this message is valid
 	AidHui1UtcValid    AidHui1Flags = 0x2 // UTC parameter fields in this message are valid
 	AidHui1KlobValid   AidHui1Flags = 0x4 // Klobuchar parameter fields in this message are valid
-
 )
 
 // UBX-AID-INI (Poll Request) Poll GPS initial aiding data
@@ -187,28 +186,23 @@ func (AidIni1) classID() uint16 { return 0x010b }
 type AidIni1TmCfg uint16
 
 const (
-	AidIni1FEdge AidIni1TmCfg = 0x2 // use falling edge (default rising)
-
-	AidIni1Tm1 AidIni1TmCfg = 0x10 // time mark on extint 1 (default extint 0)
-
-	AidIni1F1 AidIni1TmCfg = 0x40 // frequency on extint 1 (default extint 0)
-
+	AidIni1FEdge AidIni1TmCfg = 0x2  // use falling edge (default rising)
+	AidIni1Tm1   AidIni1TmCfg = 0x10 // time mark on extint 1 (default extint 0)
+	AidIni1F1    AidIni1TmCfg = 0x40 // frequency on extint 1 (default extint 0)
 )
 
 type AidIni1Flags uint32
 
 const (
-	AidIni1Pos    AidIni1Flags = 0x1  // Position is valid
-	AidIni1Time   AidIni1Flags = 0x2  // Time is valid
-	AidIni1ClockD AidIni1Flags = 0x4  // Clock drift data contains valid clock drift, must not be set together with clockF
-	AidIni1Tp     AidIni1Flags = 0x8  // Use time pulse
-	AidIni1ClockF AidIni1Flags = 0x10 // Clock drift data contains valid frequency, must not be set together with clockD
-	AidIni1Lla    AidIni1Flags = 0x20 // Position is given in lat/long/alt (default is ECEF)
-	AidIni1AltInv AidIni1Flags = 0x40 // Altitude is not valid, if lla was set
-	AidIni1PrevTm AidIni1Flags = 0x80 // Use time mark received before AID-INI message (default uses mark received after message)
-
-	AidIni1Utc AidIni1Flags = 0x400 // Time is given as UTC date/time (default is GPS wno/tow)
-
+	AidIni1Pos    AidIni1Flags = 0x1   // Position is valid
+	AidIni1Time   AidIni1Flags = 0x2   // Time is valid
+	AidIni1ClockD AidIni1Flags = 0x4   // Clock drift data contains valid clock drift, must not be set together with clockF
+	AidIni1Tp     AidIni1Flags = 0x8   // Use time pulse
+	AidIni1ClockF AidIni1Flags = 0x10  // Clock drift data contains valid frequency, must not be set together with clockD
+	AidIni1Lla    AidIni1Flags = 0x20  // Position is given in lat/long/alt (default is ECEF)
+	AidIni1AltInv AidIni1Flags = 0x40  // Altitude is not valid, if lla was set
+	AidIni1PrevTm AidIni1Flags = 0x80  // Use time mark received before AID-INI message (default uses mark received after message)
+	AidIni1Utc    AidIni1Flags = 0x400 // Time is given as UTC date/time (default is GPS wno/tow)
 )
 
 // UBX-CFG-ANT (Get/set) Antenna control settings
@@ -229,7 +223,6 @@ const (
 	CfgAntOcd       CfgAntFlags = 0x4  // Enable open circuit detection
 	CfgAntPdwnOnSCD CfgAntFlags = 0x8  // Power down antenna supply if short circuit is detected. (only in combination with bit 1)
 	CfgAntRecovery  CfgAntFlags = 0x10 // Enable automatic recovery from short state
-
 )
 
 type CfgAntPins uint16
@@ -258,14 +251,11 @@ func (CfgBatch) classID() uint16 { return 0x9306 }
 type CfgBatchFlags byte
 
 const (
-	CfgBatchEnable CfgBatchFlags = 0x1 // Enable data batching
-
-	CfgBatchExtraPvt CfgBatchFlags = 0x4 // Store extra PVT information The fields iTOW, tAcc, numSV, hMSL, vAcc, velN, velE, velD, sAcc, headAcc and pDOP in UBX-LOG- BATCH are only valid if this flag is set.
-	CfgBatchExtraOdo CfgBatchFlags = 0x8 // Store odometer data The fields distance, totalDistance and distanceStd in UBX-LOG-BATCH are only valid if this flag is set. Note: the odometer feature itself must also be enabled.
-
+	CfgBatchEnable       CfgBatchFlags = 0x1  // Enable data batching
+	CfgBatchExtraPvt     CfgBatchFlags = 0x4  // Store extra PVT information The fields iTOW, tAcc, numSV, hMSL, vAcc, velN, velE, velD, sAcc, headAcc and pDOP in UBX-LOG- BATCH are only valid if this flag is set.
+	CfgBatchExtraOdo     CfgBatchFlags = 0x8  // Store odometer data The fields distance, totalDistance and distanceStd in UBX-LOG-BATCH are only valid if this flag is set. Note: the odometer feature itself must also be enabled.
 	CfgBatchPioEnable    CfgBatchFlags = 0x20 // Enable PIO notification
 	CfgBatchPioActiveLow CfgBatchFlags = 0x40 // PIO is active low
-
 )
 
 // UBX-CFG-CFG (Command) Clear, save and load configurations
@@ -284,29 +274,25 @@ func (CfgCfg) classID() uint16 { return 0x0906 }
 type CfgCfgClearMask uint32
 
 const (
-	CfgCfgIoPort  CfgCfgClearMask = 0x1  // Communications port settings. Modifying this sub-section results in an IO system reset. Because of this undefined data may be output for a short period of time after receiving the message.
-	CfgCfgMsgConf CfgCfgClearMask = 0x2  // Message configuration
-	CfgCfgInfMsg  CfgCfgClearMask = 0x4  // INF message configuration
-	CfgCfgNavConf CfgCfgClearMask = 0x8  // Navigation configuration
-	CfgCfgRxmConf CfgCfgClearMask = 0x10 // Receiver Manager configuration
-
+	CfgCfgIoPort   CfgCfgClearMask = 0x1    // Communications port settings. Modifying this sub-section results in an IO system reset. Because of this undefined data may be output for a short period of time after receiving the message.
+	CfgCfgMsgConf  CfgCfgClearMask = 0x2    // Message configuration
+	CfgCfgInfMsg   CfgCfgClearMask = 0x4    // INF message configuration
+	CfgCfgNavConf  CfgCfgClearMask = 0x8    // Navigation configuration
+	CfgCfgRxmConf  CfgCfgClearMask = 0x10   // Receiver Manager configuration
 	CfgCfgSenConf  CfgCfgClearMask = 0x100  // Sensor interface configuration (not supported in protocol versions less than 19)
 	CfgCfgRinvConf CfgCfgClearMask = 0x200  // Remote inventory configuration
 	CfgCfgAntConf  CfgCfgClearMask = 0x400  // Antenna configuration
 	CfgCfgLogConf  CfgCfgClearMask = 0x800  // Logging configuration
 	CfgCfgFtsConf  CfgCfgClearMask = 0x1000 // FTS configuration. Only applicable to the FTS product variant.
-
 )
 
 type CfgCfgDeviceMask byte
 
 const (
-	CfgCfgDevBBR    CfgCfgDeviceMask = 0x1 // Battery backed RAM
-	CfgCfgDevFlash  CfgCfgDeviceMask = 0x2 // Flash
-	CfgCfgDevEEPROM CfgCfgDeviceMask = 0x4 // EEPROM
-
+	CfgCfgDevBBR      CfgCfgDeviceMask = 0x1  // Battery backed RAM
+	CfgCfgDevFlash    CfgCfgDeviceMask = 0x2  // Flash
+	CfgCfgDevEEPROM   CfgCfgDeviceMask = 0x4  // EEPROM
 	CfgCfgDevSpiFlash CfgCfgDeviceMask = 0x10 // SPI Flash
-
 )
 
 // UBX-CFG-DAT (Set) Set user-defined datum
@@ -385,7 +371,6 @@ type CfgDoscFlags uint16
 const (
 	CfgDoscIsCalibrated CfgDoscFlags = 0x1  // 1 if the oscillator gain is calibrated, 0 if not
 	CfgDoscControlIf    CfgDoscFlags = 0x1e // Communication interface for oscillator control: 0: Custom DAC attached to receiver's I2C 1: Microchip MCP4726 (12 bit DAC) attached to receiver's I2C 2: TI DAC8571 (16 bit DAC) attached to receiver's I2C 13: 12 bit DAC attached to host 14: 14 bit DAC attached to host 15: 16 bit DAC attached to host Note that for DACs attached to the host, the host must monitor UBX-TIM-DOSC messages and pass the supplied raw values on to the DAC.
-
 )
 
 // UBX-CFG-ESFALG (Get/set) Get/set IMU-mount misalignment configuration
@@ -405,7 +390,6 @@ type CfgEsfalgBitfield uint32
 const (
 	CfgEsfalgVersion      CfgEsfalgBitfield = 0xff  // Message version (0x00 for this version)
 	CfgEsfalgDoAutoMntAlg CfgEsfalgBitfield = 0x100 // Only supported on certain products. Enable/disable automatic IMU-mount alignment (0: Disabled, 1: Enabled). This flag can only be used with modules containing an internal IMU.
-
 )
 
 // UBX-CFG-ESFA (Get/set) Get/set the Accelerometer (A) sensor configuration
@@ -462,12 +446,10 @@ func (CfgEsfwt) classID() uint16 { return 0x8206 }
 type CfgEsfwtFlags1 byte
 
 const (
-	CfgEsfwtCombineTicks CfgEsfwtFlags1 = 0x1 // Use combined rear wheel-ticks instead of the single tick
-
-	CfgEsfwtUseWtSpeed CfgEsfwtFlags1 = 0x10 // Use speed measurements (data type 11 in ESF-MEAS) instead of single ticks (data type 10)
-	CfgEsfwtDirPinPol  CfgEsfwtFlags1 = 0x20 // Only supported on certain products. Direction pin polarity 0: High signal level means forward direction, 1: High signal level means backward direction.
-	CfgEsfwtUseWtPin   CfgEsfwtFlags1 = 0x40 // Use wheel-tick pin for speed measurement.
-
+	CfgEsfwtCombineTicks CfgEsfwtFlags1 = 0x1  // Use combined rear wheel-ticks instead of the single tick
+	CfgEsfwtUseWtSpeed   CfgEsfwtFlags1 = 0x10 // Use speed measurements (data type 11 in ESF-MEAS) instead of single ticks (data type 10)
+	CfgEsfwtDirPinPol    CfgEsfwtFlags1 = 0x20 // Only supported on certain products. Direction pin polarity 0: High signal level means forward direction, 1: High signal level means backward direction.
+	CfgEsfwtUseWtPin     CfgEsfwtFlags1 = 0x40 // Use wheel-tick pin for speed measurement.
 )
 
 type CfgEsfwtFlags2 byte
@@ -477,14 +459,12 @@ const (
 	CfgEsfwtAutoDirPinPolOff  CfgEsfwtFlags2 = 0x2 // Only supported on certain products. Disable automatic wheel-tick direction pin polarity detection (0: enabled, 1: disabled). See dirPinPol field description for more details. (Not supported in protocol versions less than 19)
 	CfgEsfwtAutoSoftwareWtOff CfgEsfwtFlags2 = 0x4 // Only supported on certain products. Disable automatic use of wheel-tick or speed data received over the software interface if available (0: enabled, 1: disabled). In this case, data coming from the hardware interface (wheel-tick pins) will automatically be ignored if wheel-tick/speed data are available from the software interface. See useWtPin field description for more details. (Not supported in protocol versions less than 19)
 	CfgEsfwtAutoUseWtSpeedOff CfgEsfwtFlags2 = 0x8 // Disable automatic receiver reconfiguration for processing speed data instead of wheel-tick data if no wheel-tick data are available but speed data were detected (0: enabled, 1: disabled). See useWtSpeed field description for more details. (Not supported in protocol versions less than 19)
-
 )
 
 type CfgEsfwtFlags3 byte
 
 const (
 	CfgEsfwtCntBothEdges CfgEsfwtFlags3 = 0x10 // Only supported on certain products. Count both rising and falling edges on wheel-tick signal (only relevant if wheel-tick is measured by the u-blox receiver). Only turn on this feature if the wheel-tick signal has 50 % duty cycle. Turning on this feature with fixed-width pulses can lead to severe degradation of performance. Use wheel-tick pin for speed measurement. This field can only be used with modules supporting analog wheel-tick signals.
-
 )
 
 // UBX-CFG-ESRC (Get/set) External synchronization source configuration
@@ -517,7 +497,6 @@ type CfgEsrcFlags uint16
 const (
 	CfgEsrcPolarity CfgEsrcFlags = 0x1 // Polarity of signal: 0: leading edge is rising edge 1: leading edge is falling edge
 	CfgEsrcGnssUtc  CfgEsrcFlags = 0x2 // Time base of timing signal: 0: GNSS - as specified in CFG-TP5 (or GPS if CFG-TP5 indicates UTC) 1: UTC Only used if sourceType is 2.
-
 )
 
 // UBX-CFG-GEOFENCE (Get/set) Geofencing configuration
@@ -563,10 +542,8 @@ func (CfgGnss) classID() uint16 { return 0x3e06 }
 type CfgGnssFlags uint32
 
 const (
-	CfgGnssEnable CfgGnssFlags = 0x1 // Enable this system
-
+	CfgGnssEnable     CfgGnssFlags = 0x1      // Enable this system
 	CfgGnssSigCfgMask CfgGnssFlags = 0xff0000 // Signal configuration mask When gnssId is 0 (GPS) 0x01 = GPS L1C/A 0x10 = GPS L2C 0x20 = GPS L5 When gnssId is 1 (SBAS) 0x01 = SBAS L1C/A When gnssId is 2 (Galileo) 0x01 = Galileo E1 (not supported in protocol versions less than 18) 0x10 = Galileo E5a 0x20 = Galileo E5b When gnssId is 3 (BeiDou) 0x01 = BeiDou B1I 0x10 = BeiDou B2I 0x80 = BeiDou B2A When gnssId is 4 (IMES) 0x01 = IMES L1 When gnssId is 5 (QZSS) 0x01 = QZSS L1C/A 0x04 = QZSS L1S 0x10 = QZSS L2C 0x20 = QZSS L5 When gnssId is 6 (GLONASS) 0x01 = GLONASS L1 0x10 = GLONASS L2
-
 )
 
 // UBX-CFG-HNR (Get/set) High navigation rate settings
@@ -609,7 +586,6 @@ const (
 	CfgInf1NOTICE  CfgInf1InfMsgMask = 0x4  // enable NOTICE
 	CfgInf1TEST    CfgInf1InfMsgMask = 0x8  // enable TEST
 	CfgInf1DEBUG   CfgInf1InfMsgMask = 0x10 // enable DEBUG
-
 )
 
 // UBX-CFG-ITFM (Get/set) Jamming/interference monitor configuration
@@ -637,7 +613,6 @@ const (
 	CfgItfmGeneralBits CfgItfmConfig2 = 0xfff  // General settings - should be set to 0x31E in hex for correct setting
 	CfgItfmAntSetting  CfgItfmConfig2 = 0x3000 // Antenna setting, 0=unknown, 1=passive, 2=active
 	CfgItfmEnable2     CfgItfmConfig2 = 0x4000 // Set to 1 to scan auxiliary bands (u-blox 8 / u-blox M8 only, otherwise ignored)
-
 )
 
 // UBX-CFG-LOGFILTER (Get/set) Data logger configuration
@@ -660,7 +635,6 @@ const (
 	CfgLogfilterRecordEnabled          CfgLogfilterFlags = 0x1 // 1 = enable recording, 0 = disable recording
 	CfgLogfilterPsmOncePerWakupEnabled CfgLogfilterFlags = 0x2 // 1 = enable recording only one single position per PSM on/off mode wake-up period, 0 = disable once per wake-up
 	CfgLogfilterApplyAllFilterSettings CfgLogfilterFlags = 0x4 // 1 = apply all filter settings, 0 = only apply recordEnabled
-
 )
 
 // UBX-CFG-MSG (Poll Request) Poll a message configuration
@@ -734,9 +708,7 @@ const (
 	CfgNav5StaticHoldMask CfgNav5Mask = 0x40  // Apply static hold settings
 	CfgNav5DgpsMask       CfgNav5Mask = 0x80  // Apply DGPS settings
 	CfgNav5CnoThreshold   CfgNav5Mask = 0x100 // Apply CNO threshold settings (cnoThresh, cnoThreshNumSVs)
-
-	CfgNav5Utc CfgNav5Mask = 0x400 // Apply UTC settings (not supported in protocol versions less than 16).
-
+	CfgNav5Utc            CfgNav5Mask = 0x400 // Apply UTC settings (not supported in protocol versions less than 16).
 )
 
 // UBX-CFG-NAVX5 (Get/set) Navigation engine expert settings
@@ -770,31 +742,25 @@ func (CfgNavx5) classID() uint16 { return 0x2306 }
 type CfgNavx5Mask1 uint16
 
 const (
-	CfgNavx5MinMax CfgNavx5Mask1 = 0x4 // 1 = apply min/max SVs settings
-	CfgNavx5MinCno CfgNavx5Mask1 = 0x8 // 1 = apply minimum C/N0 setting
-
-	CfgNavx5Initial3dfix CfgNavx5Mask1 = 0x40 // 1 = apply initial 3D fix settings
-
-	CfgNavx5WknRoll CfgNavx5Mask1 = 0x200 // 1 = apply GPS weeknumber rollover settings
-	CfgNavx5AckAid  CfgNavx5Mask1 = 0x400 // 1 = apply assistance acknowledgement settings
-
-	CfgNavx5Ppp CfgNavx5Mask1 = 0x2000 // 1 = apply usePPP flag
-	CfgNavx5Aop CfgNavx5Mask1 = 0x4000 // 1 = apply aopCfg (useAOP flag) and aopOrbMaxErr settings (AssistNow Autonomous)
-
+	CfgNavx5MinMax       CfgNavx5Mask1 = 0x4    // 1 = apply min/max SVs settings
+	CfgNavx5MinCno       CfgNavx5Mask1 = 0x8    // 1 = apply minimum C/N0 setting
+	CfgNavx5Initial3dfix CfgNavx5Mask1 = 0x40   // 1 = apply initial 3D fix settings
+	CfgNavx5WknRoll      CfgNavx5Mask1 = 0x200  // 1 = apply GPS weeknumber rollover settings
+	CfgNavx5AckAid       CfgNavx5Mask1 = 0x400  // 1 = apply assistance acknowledgement settings
+	CfgNavx5Ppp          CfgNavx5Mask1 = 0x2000 // 1 = apply usePPP flag
+	CfgNavx5Aop          CfgNavx5Mask1 = 0x4000 // 1 = apply aopCfg (useAOP flag) and aopOrbMaxErr settings (AssistNow Autonomous)
 )
 
 type CfgNavx5Mask2 uint32
 
 const (
 	CfgNavx5Adr CfgNavx5Mask2 = 0x40 // Apply ADR sensor fusion on/off setting (useAdr flag)
-
 )
 
 type CfgNavx5AopCfg byte
 
 const (
 	CfgNavx5UseAOP CfgNavx5AopCfg = 0x1 // 1 = enable AssistNow Autonomous
-
 )
 
 // UBX-CFG-NAVX5 (Get/set) Navigation engine expert settings
@@ -831,17 +797,13 @@ func (CfgNavx51) classID() uint16 { return 0x2306 }
 type CfgNavx51Mask1 uint16
 
 const (
-	CfgNavx51MinMax CfgNavx51Mask1 = 0x4 // 1 = apply min/max SVs settings
-	CfgNavx51MinCno CfgNavx51Mask1 = 0x8 // 1 = apply minimum C/N0 setting
-
-	CfgNavx51Initial3dfix CfgNavx51Mask1 = 0x40 // 1 = apply initial 3D fix settings
-
-	CfgNavx51WknRoll CfgNavx51Mask1 = 0x200 // 1 = apply GPS weeknumber rollover settings
-	CfgNavx51AckAid  CfgNavx51Mask1 = 0x400 // 1 = apply assistance acknowledgement settings
-
-	CfgNavx51Ppp CfgNavx51Mask1 = 0x2000 // 1 = apply usePPP flag
-	CfgNavx51Aop CfgNavx51Mask1 = 0x4000 // 1 = apply aopCfg (useAOP flag) and aopOrbMaxErr settings (AssistNow Autonomous)
-
+	CfgNavx51MinMax       CfgNavx51Mask1 = 0x4    // 1 = apply min/max SVs settings
+	CfgNavx51MinCno       CfgNavx51Mask1 = 0x8    // 1 = apply minimum C/N0 setting
+	CfgNavx51Initial3dfix CfgNavx51Mask1 = 0x40   // 1 = apply initial 3D fix settings
+	CfgNavx51WknRoll      CfgNavx51Mask1 = 0x200  // 1 = apply GPS weeknumber rollover settings
+	CfgNavx51AckAid       CfgNavx51Mask1 = 0x400  // 1 = apply assistance acknowledgement settings
+	CfgNavx51Ppp          CfgNavx51Mask1 = 0x2000 // 1 = apply usePPP flag
+	CfgNavx51Aop          CfgNavx51Mask1 = 0x4000 // 1 = apply aopCfg (useAOP flag) and aopOrbMaxErr settings (AssistNow Autonomous)
 )
 
 type CfgNavx51Mask2 uint32
@@ -849,14 +811,12 @@ type CfgNavx51Mask2 uint32
 const (
 	CfgNavx51Adr          CfgNavx51Mask2 = 0x40 // Apply ADR/UDR sensor fusion on/off setting (useAdr flag)
 	CfgNavx51SigAttenComp CfgNavx51Mask2 = 0x80 // Only supported on certain products Apply signal attenuation compensation feature settings
-
 )
 
 type CfgNavx51AopCfg byte
 
 const (
 	CfgNavx51UseAOP CfgNavx51AopCfg = 0x1 // 1 = enable AssistNow Autonomous
-
 )
 
 // UBX-CFG-NAVX5 (Get/set) Navigation engine expert settings
@@ -895,17 +855,13 @@ func (CfgNavx52) classID() uint16 { return 0x2306 }
 type CfgNavx52Mask1 uint16
 
 const (
-	CfgNavx52MinMax CfgNavx52Mask1 = 0x4 // 1 = apply min/max SVs settings
-	CfgNavx52MinCno CfgNavx52Mask1 = 0x8 // 1 = apply minimum C/N0 setting
-
-	CfgNavx52Initial3dfix CfgNavx52Mask1 = 0x40 // 1 = apply initial 3D fix settings
-
-	CfgNavx52WknRoll CfgNavx52Mask1 = 0x200 // 1 = apply GPS weeknumber rollover settings
-	CfgNavx52AckAid  CfgNavx52Mask1 = 0x400 // 1 = apply assistance acknowledgement settings
-
-	CfgNavx52Ppp CfgNavx52Mask1 = 0x2000 // 1 = apply usePPP flag
-	CfgNavx52Aop CfgNavx52Mask1 = 0x4000 // 1 = apply aopCfg (useAOP flag) and aopOrbMaxErr settings (AssistNow Autonomous)
-
+	CfgNavx52MinMax       CfgNavx52Mask1 = 0x4    // 1 = apply min/max SVs settings
+	CfgNavx52MinCno       CfgNavx52Mask1 = 0x8    // 1 = apply minimum C/N0 setting
+	CfgNavx52Initial3dfix CfgNavx52Mask1 = 0x40   // 1 = apply initial 3D fix settings
+	CfgNavx52WknRoll      CfgNavx52Mask1 = 0x200  // 1 = apply GPS weeknumber rollover settings
+	CfgNavx52AckAid       CfgNavx52Mask1 = 0x400  // 1 = apply assistance acknowledgement settings
+	CfgNavx52Ppp          CfgNavx52Mask1 = 0x2000 // 1 = apply usePPP flag
+	CfgNavx52Aop          CfgNavx52Mask1 = 0x4000 // 1 = apply aopCfg (useAOP flag) and aopOrbMaxErr settings (AssistNow Autonomous)
 )
 
 type CfgNavx52Mask2 uint32
@@ -913,14 +869,12 @@ type CfgNavx52Mask2 uint32
 const (
 	CfgNavx52Adr          CfgNavx52Mask2 = 0x40 // Apply ADR/UDR sensor fusion on/off setting (useAdr flag)
 	CfgNavx52SigAttenComp CfgNavx52Mask2 = 0x80 // Only supported on certain products Apply signal attenuation compensation feature settings
-
 )
 
 type CfgNavx52AopCfg byte
 
 const (
 	CfgNavx52UseAOP CfgNavx52AopCfg = 0x1 // 1 = enable AssistNow Autonomous
-
 )
 
 // UBX-CFG-NMEA (Get/set) NMEA protocol configuration (deprecated)
@@ -944,7 +898,6 @@ const (
 	CfgNmeaDateFilt      CfgNmeaFilter = 0x8  // Enable date output for invalid dates
 	CfgNmeaGpsOnlyFilter CfgNmeaFilter = 0x10 // Restrict output to GPS satellites only
 	CfgNmeaTrackFilt     CfgNmeaFilter = 0x20 // Enable COG output even if COG is frozen
-
 )
 
 type CfgNmeaFlags byte
@@ -952,7 +905,6 @@ type CfgNmeaFlags byte
 const (
 	CfgNmeaCompat   CfgNmeaFlags = 0x1 // enable compatibility mode. This might be needed for certain applications when customer's NMEA parser expects a fixed number of digits in position coordinates.
 	CfgNmeaConsider CfgNmeaFlags = 0x2 // enable considering mode.
-
 )
 
 // UBX-CFG-NMEA (Get/set) NMEA protocol configuration V0 (deprecated)
@@ -981,7 +933,6 @@ const (
 	CfgNmea1DateFilt      CfgNmea1Filter = 0x8  // Enable date output for invalid dates
 	CfgNmea1GpsOnlyFilter CfgNmea1Filter = 0x10 // Restrict output to GPS satellites only
 	CfgNmea1TrackFilt     CfgNmea1Filter = 0x20 // Enable COG output even if COG is frozen
-
 )
 
 type CfgNmea1Flags byte
@@ -989,20 +940,17 @@ type CfgNmea1Flags byte
 const (
 	CfgNmea1Compat   CfgNmea1Flags = 0x1 // enable compatibility mode. This might be needed for certain applications when customer's NMEA parser expects a fixed number of digits in position coordinates.
 	CfgNmea1Consider CfgNmea1Flags = 0x2 // enable considering mode.
-
 )
 
 type CfgNmea1GnssToFilter uint32
 
 const (
-	CfgNmea1Gps     CfgNmea1GnssToFilter = 0x1 // Disable reporting of GPS satellites
-	CfgNmea1Sbas    CfgNmea1GnssToFilter = 0x2 // Disable reporting of SBAS satellites
-	CfgNmea1Galileo CfgNmea1GnssToFilter = 0x4 // Disable reporting of Galileo satellites
-
+	CfgNmea1Gps     CfgNmea1GnssToFilter = 0x1  // Disable reporting of GPS satellites
+	CfgNmea1Sbas    CfgNmea1GnssToFilter = 0x2  // Disable reporting of SBAS satellites
+	CfgNmea1Galileo CfgNmea1GnssToFilter = 0x4  // Disable reporting of Galileo satellites
 	CfgNmea1Qzss    CfgNmea1GnssToFilter = 0x10 // Disable reporting of QZSS satellites
 	CfgNmea1Glonass CfgNmea1GnssToFilter = 0x20 // Disable reporting of GLONASS satellites
 	CfgNmea1Beidou  CfgNmea1GnssToFilter = 0x40 // Disable reporting of BeiDou satellites
-
 )
 
 // UBX-CFG-NMEA (Get/set) Extended NMEA protocol configuration V1
@@ -1033,7 +981,6 @@ const (
 	CfgNmea2DateFilt      CfgNmea2Filter = 0x8  // Enable date output for invalid dates
 	CfgNmea2GpsOnlyFilter CfgNmea2Filter = 0x10 // Restrict output to GPS satellites only
 	CfgNmea2TrackFilt     CfgNmea2Filter = 0x20 // Enable COG output even if COG is frozen
-
 )
 
 type CfgNmea2Flags byte
@@ -1043,20 +990,17 @@ const (
 	CfgNmea2Consider CfgNmea2Flags = 0x2 // enable considering mode.
 	CfgNmea2Limit82  CfgNmea2Flags = 0x4 // enable strict limit to 82 characters maximum.
 	CfgNmea2HighPrec CfgNmea2Flags = 0x8 // enable high precision mode. This flag cannot be set in conjunction with either compatibility mode or Limit82 mode (not supported in protocol versions less than 20.01).
-
 )
 
 type CfgNmea2GnssToFilter uint32
 
 const (
-	CfgNmea2Gps     CfgNmea2GnssToFilter = 0x1 // Disable reporting of GPS satellites
-	CfgNmea2Sbas    CfgNmea2GnssToFilter = 0x2 // Disable reporting of SBAS satellites
-	CfgNmea2Galileo CfgNmea2GnssToFilter = 0x4 // Disable reporting of Galileo satellites
-
+	CfgNmea2Gps     CfgNmea2GnssToFilter = 0x1  // Disable reporting of GPS satellites
+	CfgNmea2Sbas    CfgNmea2GnssToFilter = 0x2  // Disable reporting of SBAS satellites
+	CfgNmea2Galileo CfgNmea2GnssToFilter = 0x4  // Disable reporting of Galileo satellites
 	CfgNmea2Qzss    CfgNmea2GnssToFilter = 0x10 // Disable reporting of QZSS satellites
 	CfgNmea2Glonass CfgNmea2GnssToFilter = 0x20 // Disable reporting of GLONASS satellites
 	CfgNmea2Beidou  CfgNmea2GnssToFilter = 0x40 // Disable reporting of BeiDou satellites
-
 )
 
 // UBX-CFG-ODO (Get/set) Odometer, low-speed COG engine settings
@@ -1085,14 +1029,12 @@ const (
 	CfgOdoUseCOG   CfgOdoFlags = 0x2 // Low-speed COG filter enabled flag
 	CfgOdoOutLPVel CfgOdoFlags = 0x4 // Output low-pass filtered velocity flag
 	CfgOdoOutLPCog CfgOdoFlags = 0x8 // Output low-pass filtered heading (COG) flag
-
 )
 
 type CfgOdoOdoCfg byte
 
 const (
 	CfgOdoProfile CfgOdoOdoCfg = 0x7 // Profile type (0=running, 1=cycling, 2=swimming, 3=car, 4=custom)
-
 )
 
 // UBX-CFG-PM2 (Get/set) Extended power management configuration
@@ -1117,18 +1059,15 @@ func (CfgPm2) classID() uint16 { return 0x3b06 }
 type CfgPm2Flags uint32
 
 const (
-	CfgPm2ExtintSel    CfgPm2Flags = 0x10 // EXTINT pin select 0 EXTINT0 1 EXTINT1
-	CfgPm2ExtintWake   CfgPm2Flags = 0x20 // EXTINT pin control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
-	CfgPm2ExtintBackup CfgPm2Flags = 0x40 // EXTINT pin control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
-
-	CfgPm2LimitPeakCurr CfgPm2Flags = 0x300  // Limit peak current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
-	CfgPm2WaitTimeFix   CfgPm2Flags = 0x400  // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time
-	CfgPm2UpdateRTC     CfgPm2Flags = 0x800  // Update Real Time Clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC.
-	CfgPm2UpdateEPH     CfgPm2Flags = 0x1000 // Update Ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data
-
+	CfgPm2ExtintSel     CfgPm2Flags = 0x10    // EXTINT pin select 0 EXTINT0 1 EXTINT1
+	CfgPm2ExtintWake    CfgPm2Flags = 0x20    // EXTINT pin control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
+	CfgPm2ExtintBackup  CfgPm2Flags = 0x40    // EXTINT pin control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
+	CfgPm2LimitPeakCurr CfgPm2Flags = 0x300   // Limit peak current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
+	CfgPm2WaitTimeFix   CfgPm2Flags = 0x400   // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time
+	CfgPm2UpdateRTC     CfgPm2Flags = 0x800   // Update Real Time Clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC.
+	CfgPm2UpdateEPH     CfgPm2Flags = 0x1000  // Update Ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data
 	CfgPm2DoNotEnterOff CfgPm2Flags = 0x10000 // Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead
 	CfgPm2Mode          CfgPm2Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
-
 )
 
 // UBX-CFG-PM2 (Get/set) Extended power management configuration
@@ -1154,18 +1093,16 @@ func (CfgPm21) classID() uint16 { return 0x3b06 }
 type CfgPm21Flags uint32
 
 const (
-	CfgPm21ExtintSel      CfgPm21Flags = 0x10   // EXTINT pin select 0 EXTINT0 1 EXTINT1
-	CfgPm21ExtintWake     CfgPm21Flags = 0x20   // EXTINT Pin Control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
-	CfgPm21ExtintBackup   CfgPm21Flags = 0x40   // EXTINT Pin Control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
-	CfgPm21ExtintInactive CfgPm21Flags = 0x80   // EXTINT Pin Control 0 disabled 1 enabled, force backup in case EXTINT pin is inactive for time longer than extintIncactivityMs
-	CfgPm21LimitPeakCurr  CfgPm21Flags = 0x300  // Limit Peak Current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
-	CfgPm21WaitTimeFix    CfgPm21Flags = 0x400  // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time
-	CfgPm21UpdateRTC      CfgPm21Flags = 0x800  // Update Real Time Clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC.
-	CfgPm21UpdateEPH      CfgPm21Flags = 0x1000 // Update Ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data
-
-	CfgPm21DoNotEnterOff CfgPm21Flags = 0x10000 // Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters (Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead
-	CfgPm21Mode          CfgPm21Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
-
+	CfgPm21ExtintSel      CfgPm21Flags = 0x10    // EXTINT pin select 0 EXTINT0 1 EXTINT1
+	CfgPm21ExtintWake     CfgPm21Flags = 0x20    // EXTINT Pin Control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
+	CfgPm21ExtintBackup   CfgPm21Flags = 0x40    // EXTINT Pin Control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
+	CfgPm21ExtintInactive CfgPm21Flags = 0x80    // EXTINT Pin Control 0 disabled 1 enabled, force backup in case EXTINT pin is inactive for time longer than extintIncactivityMs
+	CfgPm21LimitPeakCurr  CfgPm21Flags = 0x300   // Limit Peak Current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
+	CfgPm21WaitTimeFix    CfgPm21Flags = 0x400   // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time
+	CfgPm21UpdateRTC      CfgPm21Flags = 0x800   // Update Real Time Clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC.
+	CfgPm21UpdateEPH      CfgPm21Flags = 0x1000  // Update Ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data
+	CfgPm21DoNotEnterOff  CfgPm21Flags = 0x10000 // Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters (Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead
+	CfgPm21Mode           CfgPm21Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
 )
 
 // UBX-CFG-PM2 (Get/set) Extended power management configuration
@@ -1191,19 +1128,17 @@ func (CfgPm22) classID() uint16 { return 0x3b06 }
 type CfgPm22Flags uint32
 
 const (
-	CfgPm22OptTarget      CfgPm22Flags = 0xe    // Optimization target 000 performance (default) 001 power save 010 reserved 011 reserved 100 reserved 101 reserved 110 reserved 111 reserved
-	CfgPm22ExtintSel      CfgPm22Flags = 0x10   // EXTINT pin select 0 EXTINT0 1 EXTINT1
-	CfgPm22ExtintWake     CfgPm22Flags = 0x20   // EXTINT pin control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
-	CfgPm22ExtintBackup   CfgPm22Flags = 0x40   // EXTINT pin control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
-	CfgPm22ExtintInactive CfgPm22Flags = 0x80   // EXTINT pin control 0 disabled 1 enabled, force backup in case EXTINT pin is inactive for time longer than extintIncactivityMs
-	CfgPm22LimitPeakCurr  CfgPm22Flags = 0x300  // Limit peak current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
-	CfgPm22WaitTimeFix    CfgPm22Flags = 0x400  // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time (not supported in protocol versions 23 to 23.01).
-	CfgPm22UpdateRTC      CfgPm22Flags = 0x800  // Update real time clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC. (not supported in protocol versions 23 to 23.01, and 32+).
-	CfgPm22UpdateEPH      CfgPm22Flags = 0x1000 // Update ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data.
-
-	CfgPm22DoNotEnterOff CfgPm22Flags = 0x10000 // Behavior of receiver in case of no fix Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters (Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead (not supported in protocol versions 23 to 23.01).
-	CfgPm22Mode          CfgPm22Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) (not supported in protocol versions 23 to 23.01) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
-
+	CfgPm22OptTarget      CfgPm22Flags = 0xe     // Optimization target 000 performance (default) 001 power save 010 reserved 011 reserved 100 reserved 101 reserved 110 reserved 111 reserved
+	CfgPm22ExtintSel      CfgPm22Flags = 0x10    // EXTINT pin select 0 EXTINT0 1 EXTINT1
+	CfgPm22ExtintWake     CfgPm22Flags = 0x20    // EXTINT pin control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
+	CfgPm22ExtintBackup   CfgPm22Flags = 0x40    // EXTINT pin control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
+	CfgPm22ExtintInactive CfgPm22Flags = 0x80    // EXTINT pin control 0 disabled 1 enabled, force backup in case EXTINT pin is inactive for time longer than extintIncactivityMs
+	CfgPm22LimitPeakCurr  CfgPm22Flags = 0x300   // Limit peak current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
+	CfgPm22WaitTimeFix    CfgPm22Flags = 0x400   // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time (not supported in protocol versions 23 to 23.01).
+	CfgPm22UpdateRTC      CfgPm22Flags = 0x800   // Update real time clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC. (not supported in protocol versions 23 to 23.01, and 32+).
+	CfgPm22UpdateEPH      CfgPm22Flags = 0x1000  // Update ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data.
+	CfgPm22DoNotEnterOff  CfgPm22Flags = 0x10000 // Behavior of receiver in case of no fix Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters (Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead (not supported in protocol versions 23 to 23.01).
+	CfgPm22Mode           CfgPm22Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) (not supported in protocol versions 23 to 23.01) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
 )
 
 // UBX-CFG-PMS (Get/set) Power mode setup
@@ -1257,39 +1192,32 @@ const (
 type CfgPrt1Mode uint32
 
 const (
-	CfgPrt1CharLen CfgPrt1Mode = 0xc0 // Character length 00 5bit (not supported) 01 6bit (not supported) 10 7bit (supported only with parity) 11 8bit
-
+	CfgPrt1CharLen   CfgPrt1Mode = 0xc0   // Character length 00 5bit (not supported) 01 6bit (not supported) 10 7bit (supported only with parity) 11 8bit
 	CfgPrt1Parity    CfgPrt1Mode = 0xe00  // 000 Even parity 001 Odd parity 10X No parity X1X Reserved
 	CfgPrt1NStopBits CfgPrt1Mode = 0x3000 // Number of Stop bits 00 1 Stop bit 01 1.5 Stop bit 10 2 Stop bit 11 0.5 Stop bit
-
 )
 
 type CfgPrt1InProtoMask uint16
 
 const (
-	CfgPrt1InUbx  CfgPrt1InProtoMask = 0x1 // UBX protocol
-	CfgPrt1InNmea CfgPrt1InProtoMask = 0x2 // NMEA protocol
-	CfgPrt1InRtcm CfgPrt1InProtoMask = 0x4 // RTCM2 protocol
-
+	CfgPrt1InUbx   CfgPrt1InProtoMask = 0x1  // UBX protocol
+	CfgPrt1InNmea  CfgPrt1InProtoMask = 0x2  // NMEA protocol
+	CfgPrt1InRtcm  CfgPrt1InProtoMask = 0x4  // RTCM2 protocol
 	CfgPrt1InRtcm3 CfgPrt1InProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
-
 )
 
 type CfgPrt1OutProtoMask uint16
 
 const (
-	CfgPrt1OutUbx  CfgPrt1OutProtoMask = 0x1 // UBX protocol
-	CfgPrt1OutNmea CfgPrt1OutProtoMask = 0x2 // NMEA protocol
-
+	CfgPrt1OutUbx   CfgPrt1OutProtoMask = 0x1  // UBX protocol
+	CfgPrt1OutNmea  CfgPrt1OutProtoMask = 0x2  // NMEA protocol
 	CfgPrt1OutRtcm3 CfgPrt1OutProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
-
 )
 
 type CfgPrt1Flags uint16
 
 const (
 	CfgPrt1ExtendedTxTimeout CfgPrt1Flags = 0x2 // Extended TX timeout: if set, the port will time out if allocated TX memory >=4 kB and no activity for 1. 5 s. If not set the port will time out if no activity for 1.5 s regardless on the amount of allocated TX memory .
-
 )
 
 // UBX-CFG-PRT (Get/set) Port configuration for USB port
@@ -1320,22 +1248,18 @@ const (
 type CfgPrt2InProtoMask uint16
 
 const (
-	CfgPrt2InUbx  CfgPrt2InProtoMask = 0x1 // UBX protocol
-	CfgPrt2InNmea CfgPrt2InProtoMask = 0x2 // NMEA protocol
-	CfgPrt2InRtcm CfgPrt2InProtoMask = 0x4 // RTCM2 protocol
-
+	CfgPrt2InUbx   CfgPrt2InProtoMask = 0x1  // UBX protocol
+	CfgPrt2InNmea  CfgPrt2InProtoMask = 0x2  // NMEA protocol
+	CfgPrt2InRtcm  CfgPrt2InProtoMask = 0x4  // RTCM2 protocol
 	CfgPrt2InRtcm3 CfgPrt2InProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
-
 )
 
 type CfgPrt2OutProtoMask uint16
 
 const (
-	CfgPrt2OutUbx  CfgPrt2OutProtoMask = 0x1 // UBX protocol
-	CfgPrt2OutNmea CfgPrt2OutProtoMask = 0x2 // NMEA protocol
-
+	CfgPrt2OutUbx   CfgPrt2OutProtoMask = 0x1  // UBX protocol
+	CfgPrt2OutNmea  CfgPrt2OutProtoMask = 0x2  // NMEA protocol
 	CfgPrt2OutRtcm3 CfgPrt2OutProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
-
 )
 
 // UBX-CFG-PRT (Get/set) Port configuration for SPI port
@@ -1367,38 +1291,31 @@ const (
 type CfgPrt3Mode uint32
 
 const (
-	CfgPrt3SpiMode CfgPrt3Mode = 0x6 // 00 SPI Mode 0: CPOL = 0, CPHA = 0 01 SPI Mode 1: CPOL = 0, CPHA = 1 10 SPI Mode 2: CPOL = 1, CPHA = 0 11 SPI Mode 3: CPOL = 1, CPHA = 1
-
-	CfgPrt3FfCnt CfgPrt3Mode = 0x3f00 // Number of bytes containing 0xFF to receive before switching off reception. Range: 0 (mechanism off) - 63
-
+	CfgPrt3SpiMode CfgPrt3Mode = 0x6    // 00 SPI Mode 0: CPOL = 0, CPHA = 0 01 SPI Mode 1: CPOL = 0, CPHA = 1 10 SPI Mode 2: CPOL = 1, CPHA = 0 11 SPI Mode 3: CPOL = 1, CPHA = 1
+	CfgPrt3FfCnt   CfgPrt3Mode = 0x3f00 // Number of bytes containing 0xFF to receive before switching off reception. Range: 0 (mechanism off) - 63
 )
 
 type CfgPrt3InProtoMask uint16
 
 const (
-	CfgPrt3InUbx  CfgPrt3InProtoMask = 0x1 // UBX protocol
-	CfgPrt3InNmea CfgPrt3InProtoMask = 0x2 // NMEA protocol
-	CfgPrt3InRtcm CfgPrt3InProtoMask = 0x4 // RTCM2 protocol
-
+	CfgPrt3InUbx   CfgPrt3InProtoMask = 0x1  // UBX protocol
+	CfgPrt3InNmea  CfgPrt3InProtoMask = 0x2  // NMEA protocol
+	CfgPrt3InRtcm  CfgPrt3InProtoMask = 0x4  // RTCM2 protocol
 	CfgPrt3InRtcm3 CfgPrt3InProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
-
 )
 
 type CfgPrt3OutProtoMask uint16
 
 const (
-	CfgPrt3OutUbx  CfgPrt3OutProtoMask = 0x1 // UBX protocol
-	CfgPrt3OutNmea CfgPrt3OutProtoMask = 0x2 // NMEA protocol
-
+	CfgPrt3OutUbx   CfgPrt3OutProtoMask = 0x1  // UBX protocol
+	CfgPrt3OutNmea  CfgPrt3OutProtoMask = 0x2  // NMEA protocol
 	CfgPrt3OutRtcm3 CfgPrt3OutProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
-
 )
 
 type CfgPrt3Flags uint16
 
 const (
 	CfgPrt3ExtendedTxTimeout CfgPrt3Flags = 0x2 // Extended TX timeout: if set, the port will time out if allocated TX memory >=4 kB and no activity for 1. 5 s.
-
 )
 
 // UBX-CFG-PRT (Get/set) Port configuration for I2C (DDC) port
@@ -1431,35 +1348,29 @@ type CfgPrt4Mode uint32
 
 const (
 	CfgPrt4SlaveAddr CfgPrt4Mode = 0xfe // Slave address Range: 0x07 < slaveAddr < 0x78. Bit 0 must be 0
-
 )
 
 type CfgPrt4InProtoMask uint16
 
 const (
-	CfgPrt4InUbx  CfgPrt4InProtoMask = 0x1 // UBX protocol
-	CfgPrt4InNmea CfgPrt4InProtoMask = 0x2 // NMEA protocol
-	CfgPrt4InRtcm CfgPrt4InProtoMask = 0x4 // RTCM2 protocol
-
+	CfgPrt4InUbx   CfgPrt4InProtoMask = 0x1  // UBX protocol
+	CfgPrt4InNmea  CfgPrt4InProtoMask = 0x2  // NMEA protocol
+	CfgPrt4InRtcm  CfgPrt4InProtoMask = 0x4  // RTCM2 protocol
 	CfgPrt4InRtcm3 CfgPrt4InProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
-
 )
 
 type CfgPrt4OutProtoMask uint16
 
 const (
-	CfgPrt4OutUbx  CfgPrt4OutProtoMask = 0x1 // UBX protocol
-	CfgPrt4OutNmea CfgPrt4OutProtoMask = 0x2 // NMEA protocol
-
+	CfgPrt4OutUbx   CfgPrt4OutProtoMask = 0x1  // UBX protocol
+	CfgPrt4OutNmea  CfgPrt4OutProtoMask = 0x2  // NMEA protocol
 	CfgPrt4OutRtcm3 CfgPrt4OutProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
-
 )
 
 type CfgPrt4Flags uint16
 
 const (
 	CfgPrt4ExtendedTxTimeout CfgPrt4Flags = 0x2 // Extended TX timeout: if set, the port will time out if allocated TX memory >=4 kB and no activity for 1. 5s.
-
 )
 
 // UBX-CFG-PWR (Set) Put receiver in a defined power state
@@ -1501,7 +1412,6 @@ type CfgRinvFlags byte
 const (
 	CfgRinvDump   CfgRinvFlags = 0x1 // Dump data at startup. Does not work if flag binary is set.
 	CfgRinvBinary CfgRinvFlags = 0x2 // Data is binary.
-
 )
 
 // UBX-CFG-RST (Command) Reset receiver / Clear backup data structures
@@ -1518,17 +1428,16 @@ func (CfgRst) classID() uint16 { return 0x0406 }
 type CfgRstNavBbrMask uint16
 
 const (
-	CfgRstEph    CfgRstNavBbrMask = 0x1   // Ephemeris
-	CfgRstAlm    CfgRstNavBbrMask = 0x2   // Almanac
-	CfgRstHealth CfgRstNavBbrMask = 0x4   // Health
-	CfgRstKlob   CfgRstNavBbrMask = 0x8   // Klobuchar parameters
-	CfgRstPos    CfgRstNavBbrMask = 0x10  // Position
-	CfgRstClkd   CfgRstNavBbrMask = 0x20  // Clock drift
-	CfgRstOsc    CfgRstNavBbrMask = 0x40  // Oscillator parameter
-	CfgRstUtc    CfgRstNavBbrMask = 0x80  // UTC correction + GPS leap seconds parameters
-	CfgRstRtc    CfgRstNavBbrMask = 0x100 // RTC
-
-	CfgRstAop CfgRstNavBbrMask = 0x8000 // Autonomous orbit parameters
+	CfgRstEph    CfgRstNavBbrMask = 0x1    // Ephemeris
+	CfgRstAlm    CfgRstNavBbrMask = 0x2    // Almanac
+	CfgRstHealth CfgRstNavBbrMask = 0x4    // Health
+	CfgRstKlob   CfgRstNavBbrMask = 0x8    // Klobuchar parameters
+	CfgRstPos    CfgRstNavBbrMask = 0x10   // Position
+	CfgRstClkd   CfgRstNavBbrMask = 0x20   // Clock drift
+	CfgRstOsc    CfgRstNavBbrMask = 0x40   // Oscillator parameter
+	CfgRstUtc    CfgRstNavBbrMask = 0x80   // UTC correction + GPS leap seconds parameters
+	CfgRstRtc    CfgRstNavBbrMask = 0x100  // RTC
+	CfgRstAop    CfgRstNavBbrMask = 0x8000 // Autonomous orbit parameters
 )
 
 // UBX-CFG-RXM (Get/set) RXM configuration
@@ -1569,7 +1478,6 @@ type CfgSbasMode byte
 const (
 	CfgSbasEnabled CfgSbasMode = 0x1 // SBAS enabled (1) / disabled (0) - This field is deprecated; use UBX-CFG-GNSS to enable/disable SBAS operation
 	CfgSbasTest    CfgSbasMode = 0x2 // SBAS testbed: Use data anyhow (1) / Ignore data when in test mode (SBAS msg 0)
-
 )
 
 type CfgSbasUsage byte
@@ -1578,7 +1486,6 @@ const (
 	CfgSbasRange     CfgSbasUsage = 0x1 // Use SBAS GEOs as a ranging source (for navigation)
 	CfgSbasDiffCorr  CfgSbasUsage = 0x2 // Use SBAS differential corrections
 	CfgSbasIntegrity CfgSbasUsage = 0x4 // Use SBAS integrity information. If enabled, the receiver will only use GPS satellites for which integrity information is available.
-
 )
 
 // UBX-CFG-SENIF (Get/set) I2C sensor interface configuration
@@ -1597,7 +1504,6 @@ type CfgSenifFlags uint16
 
 const (
 	CfgSenifSenConn CfgSenifFlags = 0x1 // Sensor is connected to I2C interface
-
 )
 
 type CfgSenifPioConf uint16
@@ -1605,7 +1511,6 @@ type CfgSenifPioConf uint16
 const (
 	CfgSenifI2cSdaPio CfgSenifPioConf = 0x1f  // PIO of the I2C SDA line Supported options:
 	CfgSenifI2cSclPio CfgSenifPioConf = 0x3e0 // PIO of the I2C SCL line Supported options:
-
 )
 
 // UBX-CFG-SLAS (Get/set) SLAS configuration
@@ -1624,7 +1529,6 @@ const (
 	CfgSlasEnabled CfgSlasMode = 0x1 // Apply QZSS SLAS DGNSS corrections: Enabled (1) / Disabled (0)
 	CfgSlasTest    CfgSlasMode = 0x2 // Use QZSS SLAS data when in test mode (SLAS msg 0): Use data anyhow (1) / Ignore data when in Test Mode (0)
 	CfgSlasRaim    CfgSlasMode = 0x4 // Raim out measurements that are not corrected by QZSS SLAS, if at least 5 measurements are corrected: Enabled (1) / Disabled (0)
-
 )
 
 // UBX-CFG-SMGR (Get/set) Synchronization manager configuration
@@ -1652,28 +1556,25 @@ const (
 	CfgSmgrMeasGNSS     CfgSmgrMessageCfg = 0x2 // 1 = report the internal oscillator's offset relative to GNSS
 	CfgSmgrMeasEXTINT0  CfgSmgrMessageCfg = 0x4 // 1 = report the internal oscillator's offset relative to the source on EXTINT0
 	CfgSmgrMeasEXTINT1  CfgSmgrMessageCfg = 0x8 // 1 = report the internal oscillator's offset relative to the source on EXTINT1
-
 )
 
 type CfgSmgrFlags uint32
 
 const (
-	CfgSmgrDisableInternal   CfgSmgrFlags = 0x1  // 1 = disable disciplining of the internal oscillator
-	CfgSmgrDisableExternal   CfgSmgrFlags = 0x2  // 1 = disable disciplining of the external oscillator
-	CfgSmgrPreferenceMode    CfgSmgrFlags = 0x4  // Reference selection preference 0 - best frequency accuracy 1 - best phase accuracy
-	CfgSmgrEnableGNSS        CfgSmgrFlags = 0x8  // 1 = enable use of GNSS as synchronization source
-	CfgSmgrEnableEXTINT0     CfgSmgrFlags = 0x10 // 1 = enable use of EXTINT0 as synchronization source
-	CfgSmgrEnableEXTINT1     CfgSmgrFlags = 0x20 // 1 = enable use of EXTINT1 as synchronization source
-	CfgSmgrEnableHostMeasInt CfgSmgrFlags = 0x40 // 1 = enable use of host measurements on the internal oscillator as synchronization source Measurements made by the host must be sent to the receiver using a UBX-TIM-SMEAS-DATA0 message.
-	CfgSmgrEnableHostMeasExt CfgSmgrFlags = 0x80 // 1 = enable use of host measurements on the external oscillator as synchronization source Measurements made by the host must be sent to the receiver using a UBX-TIM-SMEAS-DATA0 message.
-
+	CfgSmgrDisableInternal    CfgSmgrFlags = 0x1     // 1 = disable disciplining of the internal oscillator
+	CfgSmgrDisableExternal    CfgSmgrFlags = 0x2     // 1 = disable disciplining of the external oscillator
+	CfgSmgrPreferenceMode     CfgSmgrFlags = 0x4     // Reference selection preference 0 - best frequency accuracy 1 - best phase accuracy
+	CfgSmgrEnableGNSS         CfgSmgrFlags = 0x8     // 1 = enable use of GNSS as synchronization source
+	CfgSmgrEnableEXTINT0      CfgSmgrFlags = 0x10    // 1 = enable use of EXTINT0 as synchronization source
+	CfgSmgrEnableEXTINT1      CfgSmgrFlags = 0x20    // 1 = enable use of EXTINT1 as synchronization source
+	CfgSmgrEnableHostMeasInt  CfgSmgrFlags = 0x40    // 1 = enable use of host measurements on the internal oscillator as synchronization source Measurements made by the host must be sent to the receiver using a UBX-TIM-SMEAS-DATA0 message.
+	CfgSmgrEnableHostMeasExt  CfgSmgrFlags = 0x80    // 1 = enable use of host measurements on the external oscillator as synchronization source Measurements made by the host must be sent to the receiver using a UBX-TIM-SMEAS-DATA0 message.
 	CfgSmgrUseAnyFix          CfgSmgrFlags = 0x400   // 0 - use over-determined navigation solutions only 1 - use any fix
 	CfgSmgrDisableMaxSlewRate CfgSmgrFlags = 0x800   // 0 - use the value in the field maxSlewRate for maximum time correction in corrective time pulse mode 1 - don't use the value in the field maxSlewRate
 	CfgSmgrIssueFreqWarning   CfgSmgrFlags = 0x1000  // 1 = issue a warning (via UBX-TIM-TOS flag) when frequency uncertainty exceeds freqTolerance
 	CfgSmgrIssueTimeWarning   CfgSmgrFlags = 0x2000  // 1 = issue a warning (via UBX-TIM-TOS flag) when time uncertainty exceeds timeTolerance
 	CfgSmgrTPCoherent         CfgSmgrFlags = 0xc000  // Control time pulse coherency 0 - Coherent pulses. Time phase offsets will be corrected gradually by varying the GNSS oscillator rate within frequency tolerance limits. There will always be the correct number of GNSS oscillator cycles between time pulses. Given tight limits this may take a long time 1 - Non-coherent pulses. In this mode the receiver will correct time phase offsets as quickly as allowed by the specified maximum slew rate, in which case there may not be the expected number of GNSS oscillator cycles between time pulses. 2 - Post-initialization coherent pulses. The receiver will run in non-coherent mode as described above until the pulse timing has been corrected and PLL is active on the internal oscillator, but will then switch to coherent pulse mode.
 	CfgSmgrDisableOffset      CfgSmgrFlags = 0x10000 // 1 = disable automatic storage of oscillator offset
-
 )
 
 // UBX-CFG-SPT (Get/set) Configure and start a sensor production test
@@ -1710,7 +1611,6 @@ type CfgTmode2Flags uint16
 const (
 	CfgTmode2Lla    CfgTmode2Flags = 0x1 // Position is given in LAT/LON/ALT (default is ECEF)
 	CfgTmode2AltInv CfgTmode2Flags = 0x2 // Altitude is not valid, in case lla was set
-
 )
 
 // UBX-CFG-TMODE3 (Get/set) Time mode settings 3
@@ -1740,7 +1640,6 @@ type CfgTmode3Flags uint16
 const (
 	CfgTmode3Mode CfgTmode3Flags = 0xff  // Receiver Mode: 0 Disabled 1 Survey In 2 Fixed Mode (true ARP position information required) 3-255 Reserved
 	CfgTmode3Lla  CfgTmode3Flags = 0x100 // Position is given in LAT/LON/ALT (default is ECEF)
-
 )
 
 // UBX-CFG-TP5 (Poll Request) Poll time pulse parameters for time pulse 0
@@ -1790,7 +1689,6 @@ const (
 	CfgTp52AlignToTow     CfgTp52Flags = 0x20 // align pulse to top of second (period time must be integer fraction of 1s)
 	CfgTp52Polarity       CfgTp52Flags = 0x40 // pulse polarity: 0 = falling edge at top of second 1 = rising edge at top of second
 	CfgTp52GridUtcGps     CfgTp52Flags = 0x80 // timegrid to use: 0 = UTC 1 = GPS
-
 )
 
 // UBX-CFG-TP5 (Get/set) Time pulse parameters
@@ -1824,7 +1722,6 @@ const (
 	CfgTp53Polarity       CfgTp53Flags = 0x40   // Pulse polarity: 0: falling edge at top of second 1: rising edge at top of second
 	CfgTp53GridUtcGnss    CfgTp53Flags = 0x780  // Timegrid to use: 0: UTC 1: GPS 2: GLONASS 3: BeiDou 4: Galileo (not supported in protocol versions less than 18) This flag is only relevant if 'lockGnssFreq' and 'alignToTow' are set. Note that configured GNSS time is estimated by the receiver if locked to any GNSS system. If the receiver has a valid GNSS fix it will attempt to steer the TP to the specified time grid even if the specified time is not based on information from the constellation's satellites. To ensure timing based purely on a given GNSS, restrict the supported constellations in UBX-CFG-GNSS.
 	CfgTp53SyncMode       CfgTp53Flags = 0x3800 // Sync Manager lock mode to use: 0: switch to 'freqPeriodLock' and 'pulseLenRatioLock' as soon as Sync Manager has an accurate time, never switch back to 'freqPeriod' and 'pulseLenRatio' 1: switch to 'freqPeriodLock' and 'pulseLenRatioLock' as soon as Sync Manager has an accurate time, and switch back to 'freqPeriod' and 'pulseLenRatio' as soon as time gets inaccurate This field is only relevant for the FTS product variant. This field is only relevant if the flag 'lockedOtherSet' is set.
-
 )
 
 // UBX-CFG-TXSLOT (Set) TX buffer time slots configuration
@@ -1850,7 +1747,6 @@ const (
 	CfgTxslotUART2 CfgTxslotEnable = 0x4  // UART 2
 	CfgTxslotUSB   CfgTxslotEnable = 0x8  // USB
 	CfgTxslotSPI   CfgTxslotEnable = 0x10 // SPI
-
 )
 
 // UBX-CFG-USB (Get/set) USB configuration
@@ -1875,7 +1771,6 @@ type CfgUsbFlags uint16
 const (
 	CfgUsbReEnum    CfgUsbFlags = 0x1 // force re-enumeration
 	CfgUsbPowerMode CfgUsbFlags = 0x2 // self-powered (1), bus-powered (0)
-
 )
 
 // UBX-ESF-ALG (Periodic/Polled) IMU alignment information
@@ -1899,7 +1794,6 @@ type EsfAlgFlags byte
 const (
 	EsfAlgAutoMntAlgOn EsfAlgFlags = 0x1 // Automatic IMU-mount alignment on/off bit (0: automatic alignment is not running, 1: automatic alignment is running)
 	EsfAlgStatus       EsfAlgFlags = 0xe // Status of the IMU-mount alignment (0: user-defined/fixed angles are used, 1: IMU-mount roll/pitch angles alignment is ongoing, 2: IMU-mount roll/pitch/yaw angles alignment is ongoing, 3: coarse IMU-mount alignment are used, 4: fine IMU-mount alignment are used)
-
 )
 
 type EsfAlgError byte
@@ -1908,7 +1802,6 @@ const (
 	EsfAlgTiltAlgError EsfAlgError = 0x1 // IMU-mount tilt (roll and/or pitch) alignment error (0: no error, 1: error)
 	EsfAlgYawAlgError  EsfAlgError = 0x2 // IMU-mount yaw alignment error (0: no error, 1: error)
 	EsfAlgAngleError   EsfAlgError = 0x4 // IMU-mount misalignment Euler angle singularity error (0: no error, 1: error). If this error bit is set, the IMU-mount roll and IMU-mount yaw angles cannot uniquely be defined due to the singularity issue happening with installations mounted with a +/- 90 degrees misalignment around pitch axis. This is also known as the 'gimbal-lock' problem affecting rotations described by Euler angles.
-
 )
 
 // UBX-ESF-INS (Periodic/Polled) Vehicle dynamics information
@@ -1938,7 +1831,6 @@ const (
 	EsfInsXAccelValid   EsfInsBitfield0 = 0x800  // Compensated x-axis acceleration data validity flag (0: not valid, 1: valid).
 	EsfInsYAccelValid   EsfInsBitfield0 = 0x1000 // Compensated y-axis acceleration data validity flag (0: not valid, 1: valid).
 	EsfInsZAccelValid   EsfInsBitfield0 = 0x2000 // Compensated z-axis acceleration data validity flag (0: not valid, 1: valid).
-
 )
 
 // UBX-ESF-MEAS (Input/Output) External sensor fusion measurements
@@ -1960,11 +1852,10 @@ func (EsfMeas) classID() uint16 { return 0x0210 }
 type EsfMeasFlags uint16
 
 const (
-	EsfMeasTimeMarkSent   EsfMeasFlags = 0x3 // Time mark signal was supplied just prior to sending this message: 0 = none, 1 = on Ext0, 2 = on Ext1
-	EsfMeasTimeMarkEdge   EsfMeasFlags = 0x4 // Trigger on rising (0) or falling (1) edge of time mark signal
-	EsfMeasCalibTtagValid EsfMeasFlags = 0x8 // Calibration time tag available. Always set to zero.
-
-	EsfMeasNumMeas EsfMeasFlags = 0xf800 // Number of measurements contained in this message (optional, can be obtained from message size)
+	EsfMeasTimeMarkSent   EsfMeasFlags = 0x3    // Time mark signal was supplied just prior to sending this message: 0 = none, 1 = on Ext0, 2 = on Ext1
+	EsfMeasTimeMarkEdge   EsfMeasFlags = 0x4    // Trigger on rising (0) or falling (1) edge of time mark signal
+	EsfMeasCalibTtagValid EsfMeasFlags = 0x8    // Calibration time tag available. Always set to zero.
+	EsfMeasNumMeas        EsfMeasFlags = 0xf800 // Number of measurements contained in this message (optional, can be obtained from message size)
 )
 
 type EsfMeasData uint32
@@ -1972,7 +1863,6 @@ type EsfMeasData uint32
 const (
 	EsfMeasDataField EsfMeasData = 0xffffff   // Data
 	EsfMeasDataType  EsfMeasData = 0x3f000000 // Type of data (0 = no data; 1..63 = data type)
-
 )
 
 // UBX-ESF-RAW (Output) Raw sensor measurements
@@ -2028,7 +1918,6 @@ type EsfStatusSensStatus2 byte
 const (
 	EsfStatusCalibStatus EsfStatusSensStatus2 = 0x3 // 00: Sensor is not calibrated 01: Sensor is calibrating 10/11: Sensor is calibrated Good dead reckoning performance is only possible when all used sensors are calibrated. Depending on the quality of the GNSS signals and the sensor data, the sensors may take a longer time to get calibrated.
 	EsfStatusTimeStatus  EsfStatusSensStatus2 = 0xc // 00: No data 01: Reception of the first byte used to tag the measurement 10: Event input used to tag the measurement 11: Time tag provided with the data
-
 )
 
 type EsfStatusFaults byte
@@ -2038,7 +1927,6 @@ const (
 	EsfStatusBadTTag     EsfStatusFaults = 0x2 // Bad measurement time-tags detected
 	EsfStatusMissingMeas EsfStatusFaults = 0x4 // Missing or time-misaligned measurements detected
 	EsfStatusNoisyMeas   EsfStatusFaults = 0x8 // High measurement noise-level detected
-
 )
 
 // UBX-HNR-ATT (Periodic/Polled) Attitude solution
@@ -2085,7 +1973,6 @@ const (
 	HnrInsXAccelValid   HnrInsBitfield0 = 0x800  // Compensated x-axis acceleration data validity flag (0: not valid, 1: valid).
 	HnrInsYAccelValid   HnrInsBitfield0 = 0x1000 // Compensated y-axis acceleration data validity flag (0: not valid, 1: valid).
 	HnrInsZAccelValid   HnrInsBitfield0 = 0x2000 // Compensated z-axis acceleration data validity flag (0: not valid, 1: valid).
-
 )
 
 // UBX-HNR-PVT (Periodic/Polled) High rate output of PVT solution
@@ -2127,7 +2014,6 @@ const (
 	HnrPvtValidDate     HnrPvtValid = 0x1 // 1 = Valid UTC Date (see Integration manual Time Validity section for details)
 	HnrPvtValidTime     HnrPvtValid = 0x2 // 1 = Valid UTC Time of Day (see Integration manual Time Validity section for details)
 	HnrPvtFullyResolved HnrPvtValid = 0x4 // 1 = UTC Time of Day has been fully resolved (no seconds uncertainty)
-
 )
 
 type HnrPvtFlags byte
@@ -2138,7 +2024,6 @@ const (
 	HnrPvtWKNSET       HnrPvtFlags = 0x4  // 1 = Valid GPS week number
 	HnrPvtTOWSET       HnrPvtFlags = 0x8  // 1 = Valid GPS time of week (iTOW & fTOW)
 	HnrPvtHeadVehValid HnrPvtFlags = 0x10 // 1= Heading of vehicle is valid
-
 )
 
 // UBX-INF-DEBUG (Output) ASCII output with debug contents
@@ -2245,7 +2130,6 @@ type LogBatchContentValid byte
 const (
 	LogBatchExtraPvt LogBatchContentValid = 0x1 // Extra PVT information is valid The fields iTOW, tAcc, numSV, hMSL, vAcc, velN, velE, velD, sAcc, headAcc and pDOP are only valid if this flag is set.
 	LogBatchExtraOdo LogBatchContentValid = 0x2 // Odometer data is valid The fields distance, totalDistance and distanceStd are only valid if this flag is set. Note: the odometer feature itself must also be enabled.
-
 )
 
 type LogBatchValid byte
@@ -2253,7 +2137,6 @@ type LogBatchValid byte
 const (
 	LogBatchValidDate LogBatchValid = 0x1 // 1 = valid UTC Date (see Time Validity section for details)
 	LogBatchValidTime LogBatchValid = 0x2 // 1 = valid UTC Time of Day (see Time Validity section for details)
-
 )
 
 type LogBatchFlags byte
@@ -2262,7 +2145,6 @@ const (
 	LogBatchGnssFixOK LogBatchFlags = 0x1  // 1 = valid fix (i.e within DOP & accuracy masks)
 	LogBatchDiffSoln  LogBatchFlags = 0x2  // 1 = differential corrections were applied
 	LogBatchPsmState  LogBatchFlags = 0x1c // Power save mode state (see Power Management) 0: PSM is not active 1: Enabled (an intermediate state before Acquisition state) 2: Acquisition 3: Tracking 4: Power optimized tracking 5: Inactive
-
 )
 
 // UBX-LOG-CREATE (Command) Create log file
@@ -2282,7 +2164,6 @@ type LogCreateLogCfg byte
 
 const (
 	LogCreateCircular LogCreateLogCfg = 0x1 // Log is circular (new entries overwrite old ones in a full log) if this bit set
-
 )
 
 // UBX-LOG-ERASE (Command) Erase logged data
@@ -2368,7 +2249,6 @@ const (
 	LogInfo1Recording LogInfo1Status = 0x8  // Log entry recording is currently turned on
 	LogInfo1Inactive  LogInfo1Status = 0x10 // Logging system not active - no log present
 	LogInfo1Circular  LogInfo1Status = 0x20 // The current log is circular
-
 )
 
 // UBX-LOG-RETRIEVEBATCH (Command) Request batch data
@@ -2386,7 +2266,6 @@ type LogRetrievebatchFlags byte
 
 const (
 	LogRetrievebatchSendMonFirst LogRetrievebatchFlags = 0x1 // Send UBX-MON-BATCH message before sending the UBX-LOG-BATCH message(s).
-
 )
 
 // UBX-LOG-RETRIEVEPOSEXTRA (Output) Odometer log entry
@@ -3035,7 +2914,6 @@ const (
 	MgaIniTime_utcSource MgaIniTime_utcRef = 0xf  // 0: none, i.e. on receipt of message (will be inaccurate!) 1: relative to pulse sent to EXTINT0 2: relative to pulse sent to EXTINT1 3-15: reserved
 	MgaIniTime_utcFall   MgaIniTime_utcRef = 0x10 // use falling edge of EXTINT pulse (default rising) - only if source is EXTINT
 	MgaIniTime_utcLast   MgaIniTime_utcRef = 0x20 // use last EXTINT pulse (default next pulse) - only if source is EXTINT
-
 )
 
 // UBX-MGA-INI-TIME_GNSS (Input) Initial time assistance
@@ -3063,7 +2941,6 @@ const (
 	MgaIniTime_gnssSource MgaIniTime_gnssRef = 0xf  // 0: none, i.e. on receipt of message (will be inaccurate!) 1: relative to pulse sent to EXTINT0 2: relative to pulse sent to EXTINT1 3-15: reserved
 	MgaIniTime_gnssFall   MgaIniTime_gnssRef = 0x10 // use falling edge of EXTINT pulse (default rising) - only if source is EXTINT
 	MgaIniTime_gnssLast   MgaIniTime_gnssRef = 0x20 // use last EXTINT pulse (default next pulse) - only if source is EXTINT
-
 )
 
 // UBX-MGA-INI-CLKD (Input) Initial clock drift assistance
@@ -3098,7 +2975,6 @@ type MgaIniFreqFlags byte
 const (
 	MgaIniFreqSource MgaIniFreqFlags = 0xf  // 0: frequency available on EXTINT0 1: frequency available on EXTINT1 2-15: reserved
 	MgaIniFreqFall   MgaIniFreqFlags = 0x10 // use falling edge of EXTINT pulse (default rising)
-
 )
 
 // UBX-MGA-INI-EOP (Input) Earth orientation parameters assistance
@@ -3232,7 +3108,6 @@ const (
 	MonGnssGlonassSup MonGnssSupported = 0x2 // GLONASS is supported
 	MonGnssBeidouSup  MonGnssSupported = 0x4 // BeiDou is supported
 	MonGnssGalileoSup MonGnssSupported = 0x8 // Galileo is supported
-
 )
 
 type MonGnssDefaultGnss byte
@@ -3242,7 +3117,6 @@ const (
 	MonGnssGlonassDef MonGnssDefaultGnss = 0x2 // GLONASS is default-enabled
 	MonGnssBeidouDef  MonGnssDefaultGnss = 0x4 // BeiDou is default-enabled
 	MonGnssGalileoDef MonGnssDefaultGnss = 0x8 // Galileo is default-enabled
-
 )
 
 type MonGnssEnabled byte
@@ -3252,7 +3126,6 @@ const (
 	MonGnssGlonassEna MonGnssEnabled = 0x2 // GLONASS is enabled
 	MonGnssBeidouEna  MonGnssEnabled = 0x4 // BeiDou is enabled
 	MonGnssGalileoEna MonGnssEnabled = 0x8 // Galileo is enabled
-
 )
 
 // UBX-MON-HW2 (Periodic/Polled) Extended hardware status
@@ -3305,7 +3178,6 @@ const (
 	MonHwSafeBoot     MonHwFlags = 0x2  // Safeboot mode (0 = inactive, 1 = active)
 	MonHwJammingState MonHwFlags = 0xc  // Output from jamming/interference monitor (0 = unknown or feature disabled, 1 = ok - no significant jamming, 2 = warning - interference visible but fix OK, 3 = critical - interference visible and no fix)
 	MonHwXtalAbsent   MonHwFlags = 0x10 // RTC xtal has been determined to be absent (not supported in protocol versions less than 18)
-
 )
 
 // UBX-MON-IO (Periodic/Polled) I/O system status
@@ -3369,7 +3241,6 @@ type MonPatch1PatchInfo uint32
 const (
 	MonPatch1Activated MonPatch1PatchInfo = 0x1 // 1: the patch is active, 0: otherwise
 	MonPatch1Location  MonPatch1PatchInfo = 0x6 // Indicates where the patch is stored. 0: eFuse, 1: ROM, 2: BBR, 3: file system
-
 )
 
 // UBX-MON-RXBUF (Periodic/Polled) Receiver buffer status
@@ -3396,7 +3267,6 @@ type MonRxrFlags byte
 
 const (
 	MonRxrAwake MonRxrFlags = 0x1 // not in backup mode
-
 )
 
 // UBX-MON-SMGR (Periodic/Polled) Synchronization manager status
@@ -3422,7 +3292,6 @@ const (
 	MonSmgrIntOscState MonSmgrIntOsc = 0xf  // State of the oscillator: 0: autonomous operation 1: calibration ongoing 2: oscillator is steered by the host 3: idle state
 	MonSmgrIntOscCalib MonSmgrIntOsc = 0x10 // 1 = oscillator gain is calibrated
 	MonSmgrIntOscDisc  MonSmgrIntOsc = 0x20 // 1 = signal is disciplined
-
 )
 
 type MonSmgrExtOsc uint16
@@ -3431,14 +3300,12 @@ const (
 	MonSmgrExtOscState MonSmgrExtOsc = 0xf  // State of the oscillator: 0: autonomous operation 1: calibration ongoing 2: oscillator is steered by the host 3: idle state
 	MonSmgrExtOscCalib MonSmgrExtOsc = 0x10 // 1 = oscillator gain is calibrated
 	MonSmgrExtOscDisc  MonSmgrExtOsc = 0x20 // 1 = signal is disciplined
-
 )
 
 type MonSmgrGnss byte
 
 const (
 	MonSmgrGnssAvail MonSmgrGnss = 0x1 // 1 = GNSS is present
-
 )
 
 type MonSmgrExtInt0 byte
@@ -3447,7 +3314,6 @@ const (
 	MonSmgrExtInt0Avail    MonSmgrExtInt0 = 0x1 // 1 = signal present at this input
 	MonSmgrExtInt0Type     MonSmgrExtInt0 = 0x2 // Source type: 0: frequency 1: time
 	MonSmgrExtInt0FeedBack MonSmgrExtInt0 = 0x4 // This source is used as feedback of the external oscillator
-
 )
 
 type MonSmgrExtInt1 byte
@@ -3456,39 +3322,6 @@ const (
 	MonSmgrExtInt1Avail    MonSmgrExtInt1 = 0x1 // 1 = signal present at this input
 	MonSmgrExtInt1Type     MonSmgrExtInt1 = 0x2 // Source type: 0: frequency 1: time
 	MonSmgrExtInt1FeedBack MonSmgrExtInt1 = 0x4 // This source is used as feedback of the external oscillator
-
-)
-
-// UBX-MON-SPT (Polled) Sensor production test
-//
-// This message reports the state of, and measurements made during, sensor self- tests. This message can also be used to retrieve information about detected sensor(s) and driver(s) used. This message is only supported if a sensor is directly connected to the u-blox chip. This includes modules that contain IMUs. Note that this message shows the status of the last self-test since sensor startup. The self-test results are not stored in non-volatile memory.
-type MonSpt struct {
-	Version   byte // Message version (0x01 for this version)
-	NumSensor byte // number of sensors reported in this message
-	NumRes    byte // number of result items reported in this message
-	Reserved1 byte // Reserved
-	Items     []*struct {
-		SensorId    byte         // Sensor ID The following IDs are defined, others are reserved: 1: ST LSM6DS0 6-axis IMU with temperature sensor 2: Invensense MPU6500 6-axis IMU with temperature sensor 3: Bosch BMI160 6-axis IMU with temperature sensor 7: ST LSM6DS3 6-axis IMU with temperature sensor 9: Bosch SMI130 6-axis IMU with temperature sensor 12: MPU6515, 6-axis inertial sensor from Invensense 13: ST LSM6DSL 6-axis IMU with temperature sensor 14: SMG130, 3-axis gyroscope with temperature sensor from Bosch 15: SMI230, 6-axis IMU with temperature sensor from Bosch 16: BMI260, 6-axis IMU with temperature sensor from Bosch 17: ICM330DLC, 6-axis IMU with temperature sensor from ST 18: ICM330DHCX, 6-axis IMU with 105 deg temperature sensor from ST Not all sensors are supported in any released firmware. Refer to the release notes to find out which sensor is supported by a certain firmware.
-		DrvVer      MonSptDrvVer // Version information
-		TestState   byte         // State of one sensor's test, it can be 0: test not yet started 1: test started but not yet finished 2: test did not finish due to error during execution 3: test finished normally, test data is available
-		DrvFileName byte         // 0 if the active driver is loaded from image, last character of the file name if it is loaded from separate file.
-	} // len: numSensor
-	Items []*struct {
-		SensorIdRes uint16  // Sensor ID; eligible values are the same as in sensorIdState field
-		SensorType  uint16  // Sensor type and axis (if applicable) to which the result refers The following values are defined, others are reserved: 5: Gyroscope z axis 12: Gyroscope temperature 13: Gyroscope y axis 14: Gyroscope x axis 16: Accelerometer x axis 17: Accelerometer y axis 18: Accelerometer z axis 19: Barometer 22: Magnetometer x axis 23: Magnetometer y axis 24: Magnetometer z axis 25: Barometer temperature
-		ResType     uint16  // The type of result stored in the value field 1: Measurement without self-test offset (raw and unscaled digital value) 2: Measurement with positive self-test offset (raw and unscaled digital value) 3: Measurement with negative self-test offset (raw and unscaled digital value) 4: Minimum off-to-positive to pass self- test, as deduced from on-chip trimming information 5: Maximum off-to-positive to pass self- test, as deduced from on-chip trimming information 6: Minimum negative-to-positive to pass self-test, as deduced from on-chip trimming information 7: Maximum negative-to-positive to pass self-test, as deduced from on-chip trimming information 8: Self-test passed; test passed if value = 1 and failed if 0. Used if the decision is read out from the sensor itself.
-		Reserved2   [2]byte // Reserved
-		Value       int32   // value of the specific test result
-	} // len: numRes
-}
-
-func (MonSpt) classID() uint16 { return 0x2f0a }
-
-type MonSptDrvVer byte
-
-const (
-	MonSptDrvVerMaj MonSptDrvVer = 0xf  // Driver major version
-	MonSptDrvVerMin MonSptDrvVer = 0xf0 // Driver minor version
 )
 
 // UBX-MON-TXBUF (Periodic/Polled) Transmitter buffer status
@@ -3551,7 +3384,6 @@ type NavAopstatusAopCfg byte
 
 const (
 	NavAopstatusUseAOP NavAopstatusAopCfg = 0x1 // AOP enabled flag
-
 )
 
 // UBX-NAV-ATT (Periodic/Polled) Attitude solution
@@ -3636,7 +3468,6 @@ type NavDgpsFlags byte
 const (
 	NavDgpsChannel  NavDgpsFlags = 0xf  // GPS channel number this SV is on. Channel numbers in the firmware greater than 15 are displayed as having channel number 15
 	NavDgpsDgpsUsed NavDgpsFlags = 0x10 // 1 = DGPS used for this SV
-
 )
 
 // UBX-NAV-DOP (Periodic/Polled) Dilution of precision
@@ -3718,7 +3549,6 @@ type NavHpposecefFlags byte
 
 const (
 	NavHpposecefInvalidEcef NavHpposecefFlags = 0x1 // 1 = Invalid ecefX, ecefY, ecefZ, ecefXHp, ecefYHp and ecefZHp
-
 )
 
 // UBX-NAV-HPPOSLLH (Periodic/Polled) High precision geodetic position solution
@@ -3747,7 +3577,6 @@ type NavHpposllhFlags byte
 
 const (
 	NavHpposllhInvalidLlh NavHpposllhFlags = 0x1 // 1 = Invalid lon, lat, height, hMSL, lonHp, latHp, heightHp and hMSLHp
-
 )
 
 // UBX-NAV-NMI (Periodic/Polled) Navigation message cross-check information
@@ -3773,7 +3602,6 @@ type NavNmiGpsNmiFlags byte
 const (
 	NavNmiWnoCheckedGPS NavNmiGpsNmiFlags = 0x1 // 1 = week number check performed.
 	NavNmiWnoInvalidGPS NavNmiGpsNmiFlags = 0x2 // 1 = week number invalid.
-
 )
 
 type NavNmiGpsLsFlags byte
@@ -3784,7 +3612,6 @@ const (
 	NavNmiTotRangeGPS NavNmiGpsLsFlags = 0x4  // 1 = Data reference TOW out of range.
 	NavNmiLsEventGPS  NavNmiGpsLsFlags = 0x8  // 1 = Unexpected leap second event.
 	NavNmiRecNowGPS   NavNmiGpsLsFlags = 0x10 // 1 = Data received this epoch.
-
 )
 
 type NavNmiGalNmiFlags byte
@@ -3792,7 +3619,6 @@ type NavNmiGalNmiFlags byte
 const (
 	NavNmiWnoCheckedGAL NavNmiGalNmiFlags = 0x1 // 1 = week number check performed.
 	NavNmiWnoInvalidGAL NavNmiGalNmiFlags = 0x2 // 1 = week number invalid.
-
 )
 
 type NavNmiGalLsFlags byte
@@ -3803,7 +3629,6 @@ const (
 	NavNmiTotRangeGAL NavNmiGalLsFlags = 0x4  // 1 = Data reference TOW out of range.
 	NavNmiLsEventGAL  NavNmiGalLsFlags = 0x8  // 1 = Unexpected leap second event.
 	NavNmiRecNowGAL   NavNmiGalLsFlags = 0x10 // 1 = Data received this epoch.
-
 )
 
 type NavNmiBdsNmiFlags byte
@@ -3811,7 +3636,6 @@ type NavNmiBdsNmiFlags byte
 const (
 	NavNmiWnoCheckedBDS NavNmiBdsNmiFlags = 0x1 // 1 = week number check performed.
 	NavNmiWnoInvalidBDS NavNmiBdsNmiFlags = 0x2 // 1 = week number invalid.
-
 )
 
 type NavNmiBdsLsFlags byte
@@ -3822,7 +3646,6 @@ const (
 	NavNmiTotRangeBDS NavNmiBdsLsFlags = 0x4  // 1 = Data reference TOW out of range.
 	NavNmiLsEventBDS  NavNmiBdsLsFlags = 0x8  // 1 = Unexpected leap second event.
 	NavNmiRecNowBDS   NavNmiBdsLsFlags = 0x10 // 1 = Data received this epoch.
-
 )
 
 type NavNmiGloNmiFlags byte
@@ -3830,7 +3653,6 @@ type NavNmiGloNmiFlags byte
 const (
 	NavNmiWnoCheckedGLO NavNmiGloNmiFlags = 0x1 // 1 = week number check performed.
 	NavNmiWnoInvalidGLO NavNmiGloNmiFlags = 0x2 // 1 = week number invalid.
-
 )
 
 // UBX-NAV-ODO (Periodic/Polled) Odometer solution
@@ -3872,7 +3694,6 @@ type NavOrbSvFlag byte
 const (
 	NavOrbHealth     NavOrbSvFlag = 0x3 // SV health: 0: unknown 1: healthy 2: not healty
 	NavOrbVisibility NavOrbSvFlag = 0xc // SV health: 0: unknown 1: below horizon 2: above horizon 3: above elevation mask
-
 )
 
 type NavOrbEph byte
@@ -3972,7 +3793,6 @@ const (
 	NavPvtValidTime     NavPvtValid = 0x2 // 1 = valid UTC time of day (see Time Validity section for details)
 	NavPvtFullyResolved NavPvtValid = 0x4 // 1 = UTC time of day has been fully resolved (no seconds uncertainty). Cannot be used to check if time is completely solved.
 	NavPvtValidMag      NavPvtValid = 0x8 // 1 = valid magnetic declination
-
 )
 
 type NavPvtFlags byte
@@ -3996,7 +3816,6 @@ type NavPvtFlags3 byte
 
 const (
 	NavPvtInvalidLlh NavPvtFlags3 = 0x1 // 1 = Invalid lon, lat, height and hMSL
-
 )
 
 // UBX-NAV-RELPOSNED (Periodic/Polled) Relative positioning information in NED frame
@@ -4032,7 +3851,6 @@ const (
 	NavRelposnedIsMoving    NavRelposnedFlags = 0x20 // 1 if the receiver is operating in moving baseline mode (not supported in protocol versions less than 20.3)
 	NavRelposnedRefPosMiss  NavRelposnedFlags = 0x40 // 1 if extrapolated reference position was used to compute moving baseline solution this epoch (not supported in protocol versions less than 20.3)
 	NavRelposnedRefObsMiss  NavRelposnedFlags = 0x80 // 1 if extrapolated reference observations were used to compute moving baseline solution this epoch (not supported in protocol versions less than 20.3)
-
 )
 
 // UBX-NAV-RESETODO (Command) Reset odometer
@@ -4067,25 +3885,22 @@ func (NavSat) classID() uint16 { return 0x3501 }
 type NavSatFlags uint32
 
 const (
-	NavSatQualityInd  NavSatFlags = 0x7    // Signal quality indicator: 0: no signal 1: searching signal 2: signal acquired 3: signal detected but unusable 4: code locked and time synchronized 5, 6, 7: code and carrier locked and time synchronized Note: Since IMES signals are not time synchronized, a channel tracking an IMES signal can never reach a quality indicator value of higher than 3.
-	NavSatSvUsed      NavSatFlags = 0x8    // 1 = Signal in the subset specified in Signal Identifiers is currently being used for navigation
-	NavSatHealth      NavSatFlags = 0x30   // Signal health flag: 0: unknown 1: healthy 2: unhealthy
-	NavSatDiffCorr    NavSatFlags = 0x40   // 1 = differential correction data is available for this SV
-	NavSatSmoothed    NavSatFlags = 0x80   // 1 = carrier smoothed pseudorange used
-	NavSatOrbitSource NavSatFlags = 0x700  // Orbit source: 0: no orbit information is available for this SV 1: ephemeris is used 2: almanac is used 3: AssistNow Offline orbit is used 4: AssistNow Autonomous orbit is used 5, 6, 7: other orbit information is used
-	NavSatEphAvail    NavSatFlags = 0x800  // 1 = ephemeris is available for this SV
-	NavSatAlmAvail    NavSatFlags = 0x1000 // 1 = almanac is available for this SV
-	NavSatAnoAvail    NavSatFlags = 0x2000 // 1 = AssistNow Offline data is available for this SV
-	NavSatAopAvail    NavSatFlags = 0x4000 // 1 = AssistNow Autonomous data is available for this SV
-
-	NavSatSbasCorrUsed NavSatFlags = 0x10000 // 1 = SBAS corrections have been used for a signal in the subset specified in Signal Identifiers
-	NavSatRtcmCorrUsed NavSatFlags = 0x20000 // 1 = RTCM corrections have been used for a signal in the subset specified in Signal Identifiers
-	NavSatSlasCorrUsed NavSatFlags = 0x40000 // 1 = QZSS SLAS corrections have been used for a signal in the subset specified in Signal Identifiers
-
-	NavSatPrCorrUsed NavSatFlags = 0x100000 // 1 = Pseudorange corrections have been used for a signal in the subset specified in Signal Identifiers
-	NavSatCrCorrUsed NavSatFlags = 0x200000 // 1 = Carrier range corrections have been used for a signal in the subset specified in Signal Identifiers
-	NavSatDoCorrUsed NavSatFlags = 0x400000 // 1 = Range rate (Doppler) corrections have been used for a signal in the subset specified in Signal Identifiers
-
+	NavSatQualityInd   NavSatFlags = 0x7      // Signal quality indicator: 0: no signal 1: searching signal 2: signal acquired 3: signal detected but unusable 4: code locked and time synchronized 5, 6, 7: code and carrier locked and time synchronized Note: Since IMES signals are not time synchronized, a channel tracking an IMES signal can never reach a quality indicator value of higher than 3.
+	NavSatSvUsed       NavSatFlags = 0x8      // 1 = Signal in the subset specified in Signal Identifiers is currently being used for navigation
+	NavSatHealth       NavSatFlags = 0x30     // Signal health flag: 0: unknown 1: healthy 2: unhealthy
+	NavSatDiffCorr     NavSatFlags = 0x40     // 1 = differential correction data is available for this SV
+	NavSatSmoothed     NavSatFlags = 0x80     // 1 = carrier smoothed pseudorange used
+	NavSatOrbitSource  NavSatFlags = 0x700    // Orbit source: 0: no orbit information is available for this SV 1: ephemeris is used 2: almanac is used 3: AssistNow Offline orbit is used 4: AssistNow Autonomous orbit is used 5, 6, 7: other orbit information is used
+	NavSatEphAvail     NavSatFlags = 0x800    // 1 = ephemeris is available for this SV
+	NavSatAlmAvail     NavSatFlags = 0x1000   // 1 = almanac is available for this SV
+	NavSatAnoAvail     NavSatFlags = 0x2000   // 1 = AssistNow Offline data is available for this SV
+	NavSatAopAvail     NavSatFlags = 0x4000   // 1 = AssistNow Autonomous data is available for this SV
+	NavSatSbasCorrUsed NavSatFlags = 0x10000  // 1 = SBAS corrections have been used for a signal in the subset specified in Signal Identifiers
+	NavSatRtcmCorrUsed NavSatFlags = 0x20000  // 1 = RTCM corrections have been used for a signal in the subset specified in Signal Identifiers
+	NavSatSlasCorrUsed NavSatFlags = 0x40000  // 1 = QZSS SLAS corrections have been used for a signal in the subset specified in Signal Identifiers
+	NavSatPrCorrUsed   NavSatFlags = 0x100000 // 1 = Pseudorange corrections have been used for a signal in the subset specified in Signal Identifiers
+	NavSatCrCorrUsed   NavSatFlags = 0x200000 // 1 = Carrier range corrections have been used for a signal in the subset specified in Signal Identifiers
+	NavSatDoCorrUsed   NavSatFlags = 0x400000 // 1 = Range rate (Doppler) corrections have been used for a signal in the subset specified in Signal Identifiers
 )
 
 // UBX-NAV-SBAS (Periodic/Polled) SBAS status data
@@ -4122,7 +3937,6 @@ const (
 	NavSbasIntegrity   NavSbasService = 0x4  // GEO is providing integrity
 	NavSbasTestmode    NavSbasService = 0x8  // GEO is in test mode
 	NavSbasBad         NavSbasService = 0x10 // Problem with signal or broadcast data indicated
-
 )
 
 // UBX-NAV-SLAS (Periodic/Polled) QZSS L1S SLAS status data
@@ -4155,7 +3969,6 @@ const (
 	NavSlasGmsAvailable    NavSlasServiceFlags = 0x1 // 1 = Ground monitoring station available
 	NavSlasQzssSvAvailable NavSlasServiceFlags = 0x2 // 1 = Correction providing QZSS SV available
 	NavSlasTestMode        NavSlasServiceFlags = 0x4 // 1 = Currently used QZSS SV in test mode
-
 )
 
 // UBX-NAV-SOL (Periodic/Polled) Navigation solution information
@@ -4190,7 +4003,6 @@ const (
 	NavSolDiffSoln NavSolFlags = 0x2 // 1 = DGPS used
 	NavSolWKNSET   NavSolFlags = 0x4 // 1 = Valid GPS week number (see Time Validity section for details)
 	NavSolTOWSET   NavSolFlags = 0x8 // 1 = Valid GPS time of week (iTOW & fTOW, see Time Validity section for details)
-
 )
 
 // UBX-NAV-STATUS (Periodic/Polled) Receiver navigation status
@@ -4215,26 +4027,22 @@ const (
 	NavStatusDiffSoln NavStatusFlags = 0x2 // 1 = differential corrections were applied
 	NavStatusWknSet   NavStatusFlags = 0x4 // 1 = Week Number valid (see Time Validity section for details)
 	NavStatusTowSet   NavStatusFlags = 0x8 // 1 = Time of Week valid (see Time Validity section for details)
-
 )
 
 type NavStatusFixStat byte
 
 const (
-	NavStatusDiffCorr      NavStatusFixStat = 0x1 // 1 = differential corrections available
-	NavStatusCarrSolnValid NavStatusFixStat = 0x2 // 1 = valid carrSoln
-
-	NavStatusMapMatching NavStatusFixStat = 0xc0 // map matching status: 00: none 01: valid but not used, i.e. map matching data was received, but was too old 10: valid and used, map matching data was applied 11: valid and used, map matching data was applied. In case of sensor unavailability map matching data enables dead reckoning. This requires map matched latitude/longitude or heading data.
+	NavStatusDiffCorr      NavStatusFixStat = 0x1  // 1 = differential corrections available
+	NavStatusCarrSolnValid NavStatusFixStat = 0x2  // 1 = valid carrSoln
+	NavStatusMapMatching   NavStatusFixStat = 0xc0 // map matching status: 00: none 01: valid but not used, i.e. map matching data was received, but was too old 10: valid and used, map matching data was applied 11: valid and used, map matching data was applied. In case of sensor unavailability map matching data enables dead reckoning. This requires map matched latitude/longitude or heading data.
 )
 
 type NavStatusFlags2 byte
 
 const (
-	NavStatusPsmState NavStatusFlags2 = 0x3 // power save mode state 0: ACQUISITION [or when psm disabled] 1: TRACKING 2: POWER OPTIMIZED TRACKING 3: INACTIVE
-
+	NavStatusPsmState      NavStatusFlags2 = 0x3  // power save mode state 0: ACQUISITION [or when psm disabled] 1: TRACKING 2: POWER OPTIMIZED TRACKING 3: INACTIVE
 	NavStatusSpoofDetState NavStatusFlags2 = 0x18 // Spoofing detection state (not supported in protocol versions less than 18) 0: Unknown or deactivated 1: No spoofing indicated 2: Spoofing indicated 3: Multiple spoofing indications Note that the spoofing state value only reflects the detector state for the current navigation epoch. As spoofing can be detected most easily at the transition from real signal to spoofing signal, this is also where the detector is triggered the most. I.e. a value of 1 - No spoofing indicated does not mean that the receiver is not spoofed, it simply states that the detector was not triggered in this epoch.
-
-	NavStatusCarrSoln NavStatusFlags2 = 0xc0 // Carrier phase range solution status: 0: no carrier phase range solution 1: carrier phase range solution with floating ambiguities 2: carrier phase range solution with fixed ambiguities
+	NavStatusCarrSoln      NavStatusFlags2 = 0xc0 // Carrier phase range solution status: 0: no carrier phase range solution 1: carrier phase range solution with floating ambiguities 2: carrier phase range solution with fixed ambiguities
 )
 
 // UBX-NAV-SVINFO (Periodic/Polled) Space vehicle information
@@ -4263,7 +4071,6 @@ type NavSvinfoGlobalFlags byte
 
 const (
 	NavSvinfoChipGen NavSvinfoGlobalFlags = 0x7 // Chip hardware generation 0: Antaris, Antaris 4 1: u-blox 5 2: u-blox 6 3: u-blox 7 4: u-blox 8 / u-blox M8
-
 )
 
 type NavSvinfoFlags byte
@@ -4283,7 +4090,6 @@ type NavSvinfoQuality byte
 
 const (
 	NavSvinfoQualityInd NavSvinfoQuality = 0xf // Signal Quality indicator (range 0..7). The following list shows the meaning of the different QI values: 0: no signal 1: searching signal 2: signal acquired 3: signal detected but unusable 4: code locked and time synchronized 5, 6, 7: code and carrier locked and time synchronized Note: Since IMES signals are not time synchronized, a channel tracking an IMES signal can never reach a quality indicator value of higher than 3.
-
 )
 
 // UBX-NAV-SVIN (Periodic/Polled) Survey-in data
@@ -4331,7 +4137,6 @@ const (
 	NavTimebdsSowValid   NavTimebdsValid = 0x1 // 1 = Valid SOW and fSOW (see Time Validity section for details)
 	NavTimebdsWeekValid  NavTimebdsValid = 0x2 // 1 = Valid week (see Time Validity section for details)
 	NavTimebdsLeapSValid NavTimebdsValid = 0x4 // 1 = Valid leap second
-
 )
 
 // UBX-NAV-TIMEGAL (Periodic/Polled) Galileo time solution
@@ -4355,7 +4160,6 @@ const (
 	NavTimegalGalTowValid NavTimegalValid = 0x1 // 1 = Valid galTow and fGalTow (see the section Time validity in the Integration manual for details)
 	NavTimegalGalWnoValid NavTimegalValid = 0x2 // 1 = Valid galWno (see the section Time validity in the Integration manual for details)
 	NavTimegalLeapSValid  NavTimegalValid = 0x4 // 1 = Valid leapS
-
 )
 
 // UBX-NAV-TIMEGLO (Periodic/Polled) GLONASS time solution
@@ -4378,7 +4182,6 @@ type NavTimegloValid byte
 const (
 	NavTimegloTodValid  NavTimegloValid = 0x1 // 1 = Valid TOD and fTOD (see Time Validity section for details)
 	NavTimegloDateValid NavTimegloValid = 0x2 // 1 = Valid N4 and Nt (see Time Validity section for details)
-
 )
 
 // UBX-NAV-TIMEGPS (Periodic/Polled) GPS time solution
@@ -4401,7 +4204,6 @@ const (
 	NavTimegpsTowValid   NavTimegpsValid = 0x1 // 1 = Valid GPS time of week (iTOW & fTOW, (see Time Validity section for details)
 	NavTimegpsWeekValid  NavTimegpsValid = 0x2 // 1 = Valid GPS week number (see Time Validity section for details)
 	NavTimegpsLeapSValid NavTimegpsValid = 0x4 // 1 = Valid GPS leap seconds
-
 )
 
 // UBX-NAV-TIMELS (Periodic/Polled) Leap second event information
@@ -4429,7 +4231,6 @@ type NavTimelsValid byte
 const (
 	NavTimelsValidCurrLs        NavTimelsValid = 0x1 // 1 = Valid current number of leap seconds value.
 	NavTimelsValidTimeToLsEvent NavTimelsValid = 0x2 // 1 = Valid time to next leap second event or from the last leap second event if no future event scheduled.
-
 )
 
 // UBX-NAV-TIMEUTC (Periodic/Polled) UTC time solution
@@ -4453,10 +4254,9 @@ func (NavTimeutc) classID() uint16 { return 0x2101 }
 type NavTimeutcValid byte
 
 const (
-	NavTimeutcValidTOW NavTimeutcValid = 0x1 // 1 = Valid Time of Week (see Time Validity section for details)
-	NavTimeutcValidWKN NavTimeutcValid = 0x2 // 1 = Valid Week Number (see Time Validity section for details)
-	NavTimeutcValidUTC NavTimeutcValid = 0x4 // 1 = Valid UTC Time
-
+	NavTimeutcValidTOW    NavTimeutcValid = 0x1  // 1 = Valid Time of Week (see Time Validity section for details)
+	NavTimeutcValidWKN    NavTimeutcValid = 0x2  // 1 = Valid Week Number (see Time Validity section for details)
+	NavTimeutcValidUTC    NavTimeutcValid = 0x4  // 1 = Valid UTC Time
 	NavTimeutcUtcStandard NavTimeutcValid = 0xf0 // UTC standard identifier. 0: Information not available 1: Communications Research Labratory (CRL), Tokyo, Japan 2: National Institute of Standards and Technology (NIST) 3: U.S. Naval Observatory (USNO) 4: International Bureau of Weights and Measures (BIPM) 5: European laboratories 6: Former Soviet Union (SU) 7: National Time Service Center (NTSC), China 15: Unknown
 )
 
@@ -4522,7 +4322,6 @@ type RxmImesPosition1_1 uint32
 const (
 	RxmImesPos1Floor RxmImesPosition1_1 = 0xff       // Floor number [1.0 floor resolution] (Offset: -50 floor)
 	RxmImesPos1Lat   RxmImesPosition1_1 = 0x7fffff00 // Latitude [deg * (180 / 2^23)]
-
 )
 
 type RxmImesPosition1_2 uint32
@@ -4530,7 +4329,6 @@ type RxmImesPosition1_2 uint32
 const (
 	RxmImesPos1Lon   RxmImesPosition1_2 = 0xffffff  // Longitude [deg * (360 / 2^24)]
 	RxmImesPos1Valid RxmImesPosition1_2 = 0x1000000 // Position 1 Frame valid
-
 )
 
 type RxmImesPosition2_1 uint32
@@ -4540,7 +4338,6 @@ const (
 	RxmImesPos2Alt   RxmImesPosition2_1 = 0x1ffe00 // Altitude [m] (Offset: -95m)
 	RxmImesPos2Acc   RxmImesPosition2_1 = 0x600000 // Accuracy Index (0:undef, 1:<7m, 2:<15m, 3:>15m)
 	RxmImesPos2Valid RxmImesPosition2_1 = 0x800000 // Position 2 Frame valid
-
 )
 
 type RxmImesShortIdFrame uint32
@@ -4549,7 +4346,6 @@ const (
 	RxmImesShortId       RxmImesShortIdFrame = 0xfff  // Short ID
 	RxmImesShortValid    RxmImesShortIdFrame = 0x1000 // Short ID Frame valid
 	RxmImesShortBoundary RxmImesShortIdFrame = 0x2000 // Boundary Bit
-
 )
 
 type RxmImesMediumId_2 uint32
@@ -4558,7 +4354,6 @@ const (
 	RxmImesMediumIdMSB    RxmImesMediumId_2 = 0x1 // Medium ID MSB
 	RxmImesMediumValid    RxmImesMediumId_2 = 0x2 // Medium ID Frame valid
 	RxmImesMediumboundary RxmImesMediumId_2 = 0x4 // Boundary Bit
-
 )
 
 // UBX-RXM-MEASX (Periodic/Polled) Satellite measurements for RRLP
@@ -4602,7 +4397,6 @@ type RxmMeasxFlags byte
 
 const (
 	RxmMeasxTowSet RxmMeasxFlags = 0x3 // TOW set (0 = no, 1 or 2 = yes)
-
 )
 
 // UBX-RXM-PMREQ (Command) Power management request
@@ -4619,7 +4413,6 @@ type RxmPmreqFlags uint32
 
 const (
 	RxmPmreqBackup RxmPmreqFlags = 0x2 // The receiver goes into backup mode for a time period defined by duration, provided that it is not connected to USB
-
 )
 
 // UBX-RXM-PMREQ (Command) Power management request
@@ -4640,18 +4433,15 @@ type RxmPmreq1Flags uint32
 const (
 	RxmPmreq1Backup RxmPmreq1Flags = 0x2 // The receiver goes into backup mode for a time period defined by duration, provided that it is not connected to USB
 	RxmPmreq1Force  RxmPmreq1Flags = 0x4 // Force receiver backup while USB is connected. USB interface will be disabled.
-
 )
 
 type RxmPmreq1WakeupSources uint32
 
 const (
-	RxmPmreq1Uartrx RxmPmreq1WakeupSources = 0x8 // Wake up the receiver if there is an edge on the UART RX pin
-
+	RxmPmreq1Uartrx  RxmPmreq1WakeupSources = 0x8  // Wake up the receiver if there is an edge on the UART RX pin
 	RxmPmreq1Extint0 RxmPmreq1WakeupSources = 0x20 // Wake up the receiver if there is an edge on the EXTINT0 pin
 	RxmPmreq1Extint1 RxmPmreq1WakeupSources = 0x40 // Wake up the receiver if there is an edge on the EXTINT1 pin
 	RxmPmreq1Spics   RxmPmreq1WakeupSources = 0x80 // Wake up the receiver if there is an edge on the SPI CS pin
-
 )
 
 // UBX-RXM-RAWX (Periodic/Polled) Multi-GNSS raw measurement data
@@ -4689,28 +4479,24 @@ type RxmRawxRecStat byte
 const (
 	RxmRawxLeapSec  RxmRawxRecStat = 0x1 // Leap seconds have been determined
 	RxmRawxClkReset RxmRawxRecStat = 0x2 // Clock reset applied. Typically the receiver clock is changed in increments of integer milliseconds.
-
 )
 
 type RxmRawxPrStdev byte
 
 const (
 	RxmRawxPrStd RxmRawxPrStdev = 0xf // Estimated pseudorange standard deviation
-
 )
 
 type RxmRawxCpStdev byte
 
 const (
 	RxmRawxCpStd RxmRawxCpStdev = 0xf // Estimated carrier phase standard deviation
-
 )
 
 type RxmRawxDoStdev byte
 
 const (
 	RxmRawxDoStd RxmRawxDoStdev = 0xf // Estimated Doppler standard deviation
-
 )
 
 type RxmRawxTrkStat byte
@@ -4720,7 +4506,6 @@ const (
 	RxmRawxCpValid    RxmRawxTrkStat = 0x2 // Carrier phase valid
 	RxmRawxHalfCyc    RxmRawxTrkStat = 0x4 // Half cycle valid
 	RxmRawxSubHalfCyc RxmRawxTrkStat = 0x8 // Half cycle subtracted from phase
-
 )
 
 // UBX-RXM-RAWX (Periodic/Polled) Multi-GNSS raw measurements
@@ -4759,28 +4544,24 @@ type RxmRawx1RecStat byte
 const (
 	RxmRawx1LeapSec  RxmRawx1RecStat = 0x1 // Leap seconds have been determined
 	RxmRawx1ClkReset RxmRawx1RecStat = 0x2 // Clock reset applied. Typically the receiver clock is changed in increments of integer milliseconds.
-
 )
 
 type RxmRawx1PrStdev byte
 
 const (
 	RxmRawx1PrStd RxmRawx1PrStdev = 0xf // Estimated pseudorange standard deviation
-
 )
 
 type RxmRawx1CpStdev byte
 
 const (
 	RxmRawx1CpStd RxmRawx1CpStdev = 0xf // Estimated carrier phase standard deviation
-
 )
 
 type RxmRawx1DoStdev byte
 
 const (
 	RxmRawx1DoStd RxmRawx1DoStdev = 0xf // Estimated Doppler standard deviation
-
 )
 
 type RxmRawx1TrkStat byte
@@ -4790,7 +4571,6 @@ const (
 	RxmRawx1CpValid    RxmRawx1TrkStat = 0x2 // Carrier phase valid
 	RxmRawx1HalfCyc    RxmRawx1TrkStat = 0x4 // Half cycle valid
 	RxmRawx1SubHalfCyc RxmRawx1TrkStat = 0x8 // Half cycle subtracted from phase
-
 )
 
 // UBX-RXM-RLM (Output) Galileo SAR short-RLM report
@@ -4843,7 +4623,6 @@ type RxmRtcmFlags byte
 const (
 	RxmRtcmCrcFailed RxmRtcmFlags = 0x1 // 0 when RTCM message received and passed CRC check, 1 when failed, in which case refStation and msgType might be corrupted and misleading
 	RxmRtcmMsgUsed   RxmRtcmFlags = 0x6 // 2 = RTCM message used successfully by the receiver, 1 = not used, 0 = do not know
-
 )
 
 // UBX-RXM-SFRBX (Output) Broadcast navigation data subframe
@@ -4977,7 +4756,6 @@ type TimHocFlags byte
 const (
 	TimHocRaw        TimHocFlags = 0x1 // Type of value: 0: frequency offset 1: raw digital output
 	TimHocDifference TimHocFlags = 0x2 // Nature of value: 0: absolute (i.e. relative to 0) 1: relative to current setting
-
 )
 
 // UBX-TIM-SMEAS (Input/Output) Source measurement
@@ -5009,7 +4787,6 @@ type TimSmeasFlags byte
 const (
 	TimSmeasFreqValid  TimSmeasFlags = 0x1 // 1 = frequency measurement is valid
 	TimSmeasPhaseValid TimSmeasFlags = 0x2 // 1 = phase measurement is valid
-
 )
 
 // UBX-TIM-SVIN (Periodic/Polled) Survey-in data
@@ -5103,7 +4880,6 @@ const (
 	TimTosRaim          TimTosFlags = 0x800  // 1 = (T)RAIM system is currently active. Note this flag only reports the current state of the GNSS solution; it is not affected by whether or not the GNSS solution is being used to discipline the oscillator.
 	TimTosCohPulse      TimTosFlags = 0x1000 // 1 = coherent pulse generation is currently in operation
 	TimTosLockedPulse   TimTosFlags = 0x2000 // 1 = time pulse is locked
-
 )
 
 // UBX-TIM-TP (Periodic/Polled) Time pulse time data
@@ -5127,7 +4903,6 @@ const (
 	TimTpUtc         TimTpFlags = 0x2  // 0 = UTC not available 1 = UTC available
 	TimTpRaim        TimTpFlags = 0xc  // (T)RAIM information 0 = Information not available 1 = Not active 2 = Active
 	TimTpQErrInvalid TimTpFlags = 0x10 // 0 = Quantization error valid 1 = Quantization error invalid
-
 )
 
 type TimTpRefInfo byte
@@ -5195,7 +4970,6 @@ type TimVrfyFlags byte
 
 const (
 	TimVrfySrc TimVrfyFlags = 0x7 // Aiding time source 0 = no time aiding done 2 = source was RTC 3 = source was assistance data
-
 )
 
 // UBX-UPD-SOS (Poll Request) Poll backup restore status

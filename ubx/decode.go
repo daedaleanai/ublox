@@ -12,6 +12,17 @@ var (
 	errInvalidChkSum = errors.New("invalid UBX checksum")
 )
 
+type Message interface {
+	classID() uint16
+}
+
+type RawMessage struct {
+	ClassID uint16
+	Data    []byte
+}
+
+func (msg *RawMessage) classID() uint16 { return msg.ClassID }
+
 func Decode(frame []byte) (msg Message, err error) {
 
 	buf := bytes.NewReader(frame)
@@ -49,18 +60,16 @@ func Decode(frame []byte) (msg Message, err error) {
 		msg = &AckAck{}
 	case (AckNak{}).classID():
 		msg = &AckNak{}
-	case (CfgCfg1{}).classID():
-		msg = &CfgCfg1{}
-	case (CfgCfg2{}).classID():
-		msg = &CfgCfg2{}
+	case (CfgCfg{}).classID():
+		msg = &CfgCfg{}
 	case (CfgHnr{}).classID():
 		msg = &CfgHnr{}
+	case (CfgMsg{}).classID():
+		msg = &CfgMsg{}
 	case (CfgMsg1{}).classID():
 		msg = &CfgMsg1{}
 	case (CfgMsg2{}).classID():
 		msg = &CfgMsg2{}
-	case (CfgMsg3{}).classID():
-		msg = &CfgMsg3{}
 	case (CfgRate{}).classID():
 		msg = &CfgRate{}
 	case (NavPvt{}).classID():
