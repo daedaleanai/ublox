@@ -37,6 +37,7 @@ type Block struct {
 	Cardinality string `xml:"type,attr"` // repeated or optional, in which case 'nested' is non nil
 	CountField  string `xml:"name,attr"` // for repeated fields: name of the count field
 
+	// non-repeated, non-optional fields
 	Offset   string
 	Name     string
 	Type     string
@@ -45,19 +46,9 @@ type Block struct {
 	Unit     string
 	Bitfield []*BitDef `xml:"Bitfield>Type"`
 
-	Nested []*Block `xml:"Block"`
+	Nested []*Block `xml:"Block"` // for repeated or optional blocks, this contains the subfields
 
 	Message *Message `xml:"-"` // link back up
-}
-
-func (b *Block) Link(m *Message) {
-	b.Message = m
-	for _, v := range b.Bitfield {
-		v.Field = b
-	}
-	for _, v := range b.Nested {
-		v.Link(m)
-	}
 }
 
 type BitDef struct {
@@ -105,6 +96,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// uniqueify message names
 	dupcount := map[string]int{}
 	for _, msg := range definitions.Message {
 		n := msg.Name
