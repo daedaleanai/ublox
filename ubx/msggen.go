@@ -86,6 +86,32 @@ func (m *Message) TypeName() string {
 	return strings.Join(parts[1:], "")
 }
 
+var (
+	reUnit       = regexp.MustCompile(`^[a-zA-Z^/2]+$`)
+	reScaleDec   = regexp.MustCompile(`^1e-\d+$`)
+	reScaleLeft  = regexp.MustCompile(`^2\^-\d+$`)
+	reScaleRight = regexp.MustCompile(`^2\^\d+$`)
+	repl         = strings.NewReplacer("^", "", "/", "_")
+)
+
+// Return the fieldname to use for a Go struct.
+// if the units are not too wild they are suffixed as lowercase, with '/' converted to _
+// if the scaling is 1e-d, or 2^d, or 2^-d, we suffix ed, ld or rd resp. (Daedalean convention on variable naming)
+func (b *Block) FieldName() string {
+	n := strings.Title(b.Name)
+	if u := reUnit.FindString(b.Unit); u != "" {
+		n = n + "_" + repl.Replace(strings.ToLower(u))
+		if s := reScaleDec.FindString(b.Scale); s != "" {
+			n = n + "e" + s[3:]
+		} else if s := reScaleLeft.FindString(b.Scale); s != "" {
+			n = n + "l" + s[3:]
+		} else if s := reScaleRight.FindString(b.Scale); s != "" {
+			n = n + "r" + s[2:]
+		}
+	}
+	return n
+}
+
 func (b *Block) FieldType() string {
 	tp := b.Type
 	if i := strings.Index(tp, "["); i >= 0 {
@@ -181,6 +207,7 @@ func main() {
 	}
 
 	var buf bytes.Buffer
+	fmt.Fprintf(&buf, "// Generated Code -- DO NOT EDIT.\n//go:generate go run msggen.go %s %s %s\n\n", flag.Arg(0), flag.Arg(1), flag.Arg(2))
 	if err := tmpl.Execute(&buf, definitions); err != nil {
 		log.Fatal(err)
 	}
@@ -209,8 +236,6 @@ func main() {
 		}
 		defer os.Stdout.Close()
 	}
-
-	fmt.Printf("// Generated Code -- DO NOT EDIT.\n//go:generate go run msggen.go %s %s %s\n", flag.Arg(0), flag.Arg(1), flag.Arg(2))
 
 	if _, err := os.Stdout.Write(bb); err != nil {
 		log.Fatal(err)

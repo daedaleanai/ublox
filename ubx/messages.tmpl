@@ -2,12 +2,12 @@ package ubx
 
 {{range .Message}}
 // {{.Name}} ({{.Type}}) {{.Description | notabs}}
-// 
+// Class/Id {{printf "0x%02x 0x%02x" .Class .Id}} {{.Length}} bytes
 // {{.Comment | notabs}}
 type {{.TypeName}} struct {
 {{- range .Blocks}}
 	{{- if eq .Cardinality ""}}
-		{{block "field" .}}{{.Name|title}} {{.ArraySpec}}{{if .Bitfield}}{{.Message.TypeName}}{{.Name | title}}{{else}}{{.FieldType}}{{end}} // {{if ne .Unit "-"}}[{{if ne .Scale "-"}}{{.Scale}} {{end}}{{.Unit}}] {{end}}{{.Comment |notabs -}}{{end}}
+		{{block "field" .}}{{.FieldName}} {{.ArraySpec}}{{if .Bitfield}}{{.Message.TypeName}}{{.Name | title}}{{else}}{{.FieldType}}{{end}} // {{if ne .Unit "-"}}[{{if ne .Scale "-"}}{{.Scale}} {{end}}{{.Unit}}] {{end}}{{.Comment |notabs -}}{{end}}
 	{{- else if eq .Cardinality "optional"}}
 		// Optional
 		{{- range .Nested}}
@@ -50,3 +50,10 @@ const (
 	{{- end}}
 {{- end}}
 {{end}}
+
+/*
+{{- range .Message}}
+TODO: edit the xml so that id, class and lenght are unique 
+{{.TypeName}} {{printf "0x%02x%02x" .Id .Class }}  {{.Length}} 
+{{- end}}
+*/

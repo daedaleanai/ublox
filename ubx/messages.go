@@ -1,9 +1,10 @@
 // Generated Code -- DO NOT EDIT.
 //go:generate go run msggen.go messages.tmpl messages.xml messages.go
+
 package ubx
 
 // UBX-ACK-ACK (Output) Message acknowledged
-//
+// Class/Id 0x05 0x01 2 bytes
 // Output upon processing of an input message. A UBX-ACK-ACK is sent as soon as possible but at least within one second.
 type AckAck struct {
 	ClsID byte // Class ID of the Acknowledged Message
@@ -13,7 +14,7 @@ type AckAck struct {
 func (AckAck) classID() uint16 { return 0x0105 }
 
 // UBX-ACK-NAK (Output) Message not acknowledged
-//
+// Class/Id 0x05 0x00 2 bytes
 // Output upon processing of an input message. A UBX-ACK-NAK is sent as soon as possible but at least within one second.
 type AckNak struct {
 	ClsID byte // Class ID of the Not-Acknowledged Message
@@ -23,7 +24,7 @@ type AckNak struct {
 func (AckNak) classID() uint16 { return 0x0005 }
 
 // UBX-AID-ALM (Poll Request) Poll GPS aiding almanac data
-//
+// Class/Id 0x0b 0x30 0 bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead Poll GPS aiding data (Almanac) for all 32 SVs by sending this message to the receiver without any payload. The receiver will return 32 messages of type AID- ALM as defined below.
 type AidAlm struct {
 }
@@ -31,7 +32,7 @@ type AidAlm struct {
 func (AidAlm) classID() uint16 { return 0x300b }
 
 // UBX-AID-ALM (Poll Request) Poll GPS aiding almanac data for a SV
-//
+// Class/Id 0x0b 0x30 1 bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead Poll GPS aiding data (Almanac) for an SV by sending this message to the receiver. The receiver will return one message of type AID-ALM as defined below.
 type AidAlm1 struct {
 	Svid byte // SV ID for which the receiver shall return its Almanac Data (Valid Range: 1 .. 32 or 51, 56, 63).
@@ -40,7 +41,7 @@ type AidAlm1 struct {
 func (AidAlm1) classID() uint16 { return 0x300b }
 
 // UBX-AID-ALM (Input/Output) GPS aiding almanac input/output message
-//
+// Class/Id 0x0b 0x30 (8) or (40) bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead  If the WEEK Value is 0, DWRD0 to DWRD7 are not sent as the Almanac is not  available for the given SV. This may happen even if NAV-SVINFO and RXM-  SVSI are indicating almanac availability as the internal data may not represent  the content of an original broadcast almanac (or only parts thereof).  DWORD0 to DWORD7 contain the 8 words following the Hand-Over Word (  HOW ) from the GPS navigation message, either pages 1 to 24 of sub-frame 5  or pages 2 to 10 of subframe 4. See IS-GPS-200 for a full description of the  contents of the Almanac pages.  In DWORD0 to DWORD7, the parity bits have been removed, and the 24 bits of  data are located in Bits 0 to 23. Bits 24 to 31 shall be ignored.  Example: Parameter e (Eccentricity) from Almanac Subframe 4/5, Word 3, Bits  69-84 within the subframe can be found in DWRD0, Bits 15-0 whereas Bit 0 is  the LSB.
 type AidAlm2 struct {
 	Svid uint32 // SV ID for which this Almanac Data is (Valid Range: 1 .. 32 or 51, 56, 63).
@@ -52,7 +53,7 @@ type AidAlm2 struct {
 func (AidAlm2) classID() uint16 { return 0x300b }
 
 // UBX-AID-AOP (Poll Request) Poll AssistNow Autonomous data, all satellites
-//
+// Class/Id 0x0b 0x33 0 bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead Poll AssistNow Autonomous aiding data for all GPS satellites by sending this empty message. The receiver will return an AID-AOP message (see definition below) for each GPS satellite for which data is available.
 type AidAop struct {
 }
@@ -60,7 +61,7 @@ type AidAop struct {
 func (AidAop) classID() uint16 { return 0x330b }
 
 // UBX-AID-AOP (Poll Request) Poll AssistNow Autonomous data, one GPS satellite
-//
+// Class/Id 0x0b 0x33 1 bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead Poll the AssistNow Autonomous data for the specified GPS satellite. The receiver will return a AID-AOP message (see definition below) if data is available for the requested satellite.
 type AidAop1 struct {
 	Svid byte // GPS SV ID for which the data is requested (valid range: 1..32).
@@ -69,7 +70,7 @@ type AidAop1 struct {
 func (AidAop1) classID() uint16 { return 0x330b }
 
 // UBX-AID-AOP (Input/Output) AssistNow Autonomous data
-//
+// Class/Id 0x0b 0x33 68 bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead If enabled, this message is output at irregular intervals. It is output whenever AssistNow Autonomous has produced new data for a satellite. Depending on the availability of the optional data the receiver will output either version of the message. If this message is polled using one of the two poll requests described above the receiver will send this message if AssistNow Autonomous data is available or the corresponding poll request message if no AssistNow Autonomous data is available for each satellite (i.e. svid 1..32). At the user's choice the optional data may be chopped from the payload of a previously polled message when sending the message back to the receiver. Sending a valid AID- AOP message to the receiver will automatically enable the AssistNow Autonomous feature on the receiver. See the section AssistNow Autonomous in the receiver description for details on this feature.
 type AidAop2 struct {
 	GnssId    byte     // GNSS identifier (see Satellite Numbering)
@@ -81,7 +82,7 @@ type AidAop2 struct {
 func (AidAop2) classID() uint16 { return 0x330b }
 
 // UBX-AID-EPH (Poll Request) Poll GPS aiding ephemeris data
-//
+// Class/Id 0x0b 0x31 0 bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead Poll GPS Aiding Data (Ephemeris) for all 32 SVs by sending this message to the receiver without any payload. The receiver will return 32 messages of type AID- EPH as defined below.
 type AidEph struct {
 }
@@ -89,7 +90,7 @@ type AidEph struct {
 func (AidEph) classID() uint16 { return 0x310b }
 
 // UBX-AID-EPH (Poll Request) Poll GPS aiding ephemeris data for a SV
-//
+// Class/Id 0x0b 0x31 1 bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead Poll GPS Constellation Data (Ephemeris) for an SV by sending this message to the receiver. The receiver will return one message of type AID-EPH as defined below.
 type AidEph1 struct {
 	Svid byte // SV ID for which the receiver shall return its Ephemeris Data (Valid Range: 1 .. 32).
@@ -98,7 +99,7 @@ type AidEph1 struct {
 func (AidEph1) classID() uint16 { return 0x310b }
 
 // UBX-AID-EPH (Input/Output) GPS aiding ephemeris input/output message
-//
+// Class/Id 0x0b 0x31 (8) or (104) bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead  SF1D0 to SF3D7 is only sent if ephemeris is available for this SV. If not, the  payload may be reduced to 8 Bytes, or all bytes are set to zero, indicating that  this SV Number does not have valid ephemeris for the moment. This may  happen even if NAV-SVINFO and RXM-SVSI are indicating ephemeris  availability as the internal data may not represent the content of an original  broadcast ephemeris (or only parts thereof).  SF1D0 to SF3D7 contain the 24 words following the Hand-Over Word ( HOW )  from the GPS navigation message, subframes 1 to 3. The Truncated TOW  Count is not valid and cannot be used. See IS-GPS-200 for a full description of  the contents of the Subframes.  In SF1D0 to SF3D7, the parity bits have been removed, and the 24 bits of data  are located in Bits 0 to 23. Bits 24 to 31 shall be ignored.  When polled, the data contained in this message does not represent the full  original ephemeris broadcast. Some fields that are irrelevant to u-blox  receivers may be missing. The week number in Subframe 1 has already been  modified to match the Time Of Ephemeris (TOE).
 type AidEph2 struct {
 	Svid uint32 // SV ID for which this ephemeris data is (Valid Range: 1 .. 32).
@@ -112,7 +113,7 @@ type AidEph2 struct {
 func (AidEph2) classID() uint16 { return 0x310b }
 
 // UBX-AID-HUI (Poll Request) Poll GPS health, UTC, ionosphere parameters
-//
+// Class/Id 0x0b 0x02 0 bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead -
 type AidHui struct {
 }
@@ -120,28 +121,28 @@ type AidHui struct {
 func (AidHui) classID() uint16 { return 0x020b }
 
 // UBX-AID-HUI (Input/Output) GPS health, UTC and ionosphere parameters
-//
+// Class/Id 0x0b 0x02 72 bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead This message contains a health bit mask, UTC time and Klobuchar parameters. For more information on these parameters, see the ICD-GPS-200 documentation.
 type AidHui1 struct {
-	Health   uint32       // Bitmask, every bit represenst a GPS SV (1- 32). If the bit is set the SV is healthy.
-	UtcA0    float64      // UTC - parameter A0
-	UtcA1    float64      // UTC - parameter A1
-	UtcTOW   int32        // UTC - reference time of week
-	UtcWNT   int16        // UTC - reference week number
-	UtcLS    int16        // UTC - time difference due to leap seconds before event
-	UtcWNF   int16        // UTC - week number when next leap second event occurs
-	UtcDN    int16        // UTC - day of week when next leap second event occurs
-	UtcLSF   int16        // UTC - time difference due to leap seconds after event
-	UtcSpare int16        // UTC - Spare to ensure structure is a multiple of 4 bytes
-	KlobA0   float32      // [s] Klobuchar - alpha 0
-	KlobA1   float32      // [s/semicircle] Klobuchar - alpha 1
-	KlobA2   float32      // [s/semicircle^2] Klobuchar - alpha 2
-	KlobA3   float32      // [s/semicircle^3] Klobuchar - alpha 3
-	KlobB0   float32      // [s] Klobuchar - beta 0
-	KlobB1   float32      // [s/semicircle] Klobuchar - beta 1
-	KlobB2   float32      // [s/semicircle^2] Klobuchar - beta 2
-	KlobB3   float32      // [s/semicircle^3] Klobuchar - beta 3
-	Flags    AidHui1Flags // flags
+	Health               uint32       // Bitmask, every bit represenst a GPS SV (1- 32). If the bit is set the SV is healthy.
+	UtcA0                float64      // UTC - parameter A0
+	UtcA1                float64      // UTC - parameter A1
+	UtcTOW               int32        // UTC - reference time of week
+	UtcWNT               int16        // UTC - reference week number
+	UtcLS                int16        // UTC - time difference due to leap seconds before event
+	UtcWNF               int16        // UTC - week number when next leap second event occurs
+	UtcDN                int16        // UTC - day of week when next leap second event occurs
+	UtcLSF               int16        // UTC - time difference due to leap seconds after event
+	UtcSpare             int16        // UTC - Spare to ensure structure is a multiple of 4 bytes
+	KlobA0_s             float32      // [s] Klobuchar - alpha 0
+	KlobA1_s_semicircle  float32      // [s/semicircle] Klobuchar - alpha 1
+	KlobA2_s_semicircle2 float32      // [s/semicircle^2] Klobuchar - alpha 2
+	KlobA3               float32      // [s/semicircle^3] Klobuchar - alpha 3
+	KlobB0_s             float32      // [s] Klobuchar - beta 0
+	KlobB1_s_semicircle  float32      // [s/semicircle] Klobuchar - beta 1
+	KlobB2_s_semicircle2 float32      // [s/semicircle^2] Klobuchar - beta 2
+	KlobB3               float32      // [s/semicircle^3] Klobuchar - beta 3
+	Flags                AidHui1Flags // flags
 }
 
 func (AidHui1) classID() uint16 { return 0x020b }
@@ -155,7 +156,7 @@ const (
 )
 
 // UBX-AID-INI (Poll Request) Poll GPS initial aiding data
-//
+// Class/Id 0x0b 0x01 0 bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead -
 type AidIni struct {
 }
@@ -163,19 +164,19 @@ type AidIni struct {
 func (AidIni) classID() uint16 { return 0x010b }
 
 // UBX-AID-INI (Input/Output) Aiding position, time, frequency, clock drift
-//
+// Class/Id 0x0b 0x01 48 bytes
 // All UBX-AID messages are deprecated; use UBX-MGA messages instead This message contains position, time and clock drift information. The position can be input in either the ECEF X/Y/Z coordinate system or as lat/lon/height. The time can either be input as inexact value via the standard communication interface, suffering from latency depending on the baud rate, or using hardware time synchronization where an accurate time pulse is input on the external interrupts. It is also possible to supply hardware frequency aiding by connecting a continuous signal to an external interrupt.
 type AidIni1 struct {
 	EcefXOrLat       int32        // [cm_or_deg*1e-7] WGS84 ECEF X coordinate or latitude, depending on flags below
 	EcefYOrLon       int32        // [cm_or_deg*1e-7] WGS84 ECEF Y coordinate or longitude, depending on flags below
-	EcefZOrAlt       int32        // [cm] WGS84 ECEF Z coordinate or altitude, depending on flags below
-	PosAcc           uint32       // [cm] Position accuracy (stddev)
+	EcefZOrAlt_cm    int32        // [cm] WGS84 ECEF Z coordinate or altitude, depending on flags below
+	PosAcc_cm        uint32       // [cm] Position accuracy (stddev)
 	TmCfg            AidIni1TmCfg // Time mark configuration
 	WnoOrDate        uint16       // [week_or_yearMonth] Actual week number or yearSince2000/Month (YYMM), depending on flags below
 	TowOrTime        uint32       // [ms_or_dayHourMinuteSec] Actual time of week or DayOfMonth/Hour/Minute/Second (DDHHMMSS), depending on flags below
-	TowNs            int32        // [ns] Fractional part of time of week
-	TAccMs           uint32       // [ms] Milliseconds part of time accuracy
-	TAccNs           uint32       // [ns] Nanoseconds part of time accuracy
+	TowNs_ns         int32        // [ns] Fractional part of time of week
+	TAccMs_ms        uint32       // [ms] Milliseconds part of time accuracy
+	TAccNs_ns        uint32       // [ns] Nanoseconds part of time accuracy
 	ClkDOrFreq       int32        // [ns/s_or_Hz*1e-2] Clock drift or frequency, depending on flags below
 	ClkDAccOrFreqAcc uint32       // [ns/s_or_ppb] Accuracy of clock drift or frequency, depending on flags below
 	Flags            AidIni1Flags // Bitmask with the following flags
@@ -206,7 +207,7 @@ const (
 )
 
 // UBX-CFG-ANT (Get/set) Antenna control settings
-//
+// Class/Id 0x06 0x13 4 bytes
 // This message allows the user to configure the antenna supervisor. The antenna supervisor can be used to detect the status of an active antenna and control it. It can be used to turn off the supply to the antenna in the event of a short cirquit (for example) or to manage power consumption in power save mode. Refer to antenna supervisor configuration in the Integration manual for more information regarding the behavior of the antenna supervisor. Refer to UBX-MON-HW for a description of the fields in the message used to obtain the status of the antenna. Note that not all pins can be used for antenna supervisor operation, it is recommended that you use the default pins, consult the Integration manual if you need to use other pins.
 type CfgAnt struct {
 	Flags CfgAntFlags // Antenna flag mask
@@ -235,7 +236,7 @@ const (
 )
 
 // UBX-CFG-BATCH (Get/set) Get/set data batching configuration
-//
+// Class/Id 0x06 0x93 8 bytes
 // Gets or sets the configuration for data batching. See Data Batching for more information.
 type CfgBatch struct {
 	Version   byte          // Message version (0x00 for this version)
@@ -259,7 +260,7 @@ const (
 )
 
 // UBX-CFG-CFG (Command) Clear, save and load configurations
-//
+// Class/Id 0x06 0x09 (12) or (13) bytes
 // See Receiver configuration for a detailed description on how receiver configuration should be used. The three masks are made up of individual bits, each bit indicating the sub-section of all configurations on which the corresponding action shall be carried out. The reserved bits in the masks must be set to '0'. For detailed information refer to the Organization of the configuration sections. Note that commands can be combined. The sequence of execution is clear, save, load.
 type CfgCfg struct {
 	ClearMask CfgCfgClearMask // Mask with configuration sub-sections to clear (i.e. load default configurations to permanent configurations in non-volatile memory)
@@ -296,43 +297,43 @@ const (
 )
 
 // UBX-CFG-DAT (Set) Set user-defined datum
-//
+// Class/Id 0x06 0x06 44 bytes
 // For more information see the description of Geodetic Systems and Frames.
 type CfgDat struct {
-	MajA  float64 // [m] Semi-major axis ( accepted range = 6,300, 000.0 to 6,500,000.0 meters ).
-	Flat  float64 // 1.0 / flattening ( accepted range is 0.0 to 500.0 ).
-	DX    float32 // [m] X axis shift at the origin ( accepted range is +/- 5000.0 meters ).
-	DY    float32 // [m] Y axis shift at the origin ( accepted range is +/- 5000.0 meters ).
-	DZ    float32 // [m] Z axis shift at the origin ( accepted range is +/- 5000.0 meters ).
-	RotX  float32 // [s] Rotation about the X axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	RotY  float32 // [s] Rotation about the Y axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	RotZ  float32 // [s] Rotation about the Z axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	Scale float32 // [ppm] Scale change ( accepted range is 0.0 to 50.0 parts per million ).
+	MajA_m    float64 // [m] Semi-major axis ( accepted range = 6,300, 000.0 to 6,500,000.0 meters ).
+	Flat      float64 // 1.0 / flattening ( accepted range is 0.0 to 500.0 ).
+	DX_m      float32 // [m] X axis shift at the origin ( accepted range is +/- 5000.0 meters ).
+	DY_m      float32 // [m] Y axis shift at the origin ( accepted range is +/- 5000.0 meters ).
+	DZ_m      float32 // [m] Z axis shift at the origin ( accepted range is +/- 5000.0 meters ).
+	RotX_s    float32 // [s] Rotation about the X axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	RotY_s    float32 // [s] Rotation about the Y axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	RotZ_s    float32 // [s] Rotation about the Z axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	Scale_ppm float32 // [ppm] Scale change ( accepted range is 0.0 to 50.0 parts per million ).
 }
 
 func (CfgDat) classID() uint16 { return 0x0606 }
 
 // UBX-CFG-DAT (Get) Get currently defined datum
-//
+// Class/Id 0x06 0x06 52 bytes
 // Returns the parameters of the currently defined datum. If no user-defined datum has been set, this will default to WGS84.
 type CfgDat1 struct {
 	DatumNum  uint16  // Datum number: 0 = WGS84, 0xFFFF = user-defined
 	DatumName [6]byte // ASCII string: WGS84 or USER
-	MajA      float64 // [m] Semi-major axis ( accepted range = 6,300, 000.0 to 6,500,000.0 meters ).
+	MajA_m    float64 // [m] Semi-major axis ( accepted range = 6,300, 000.0 to 6,500,000.0 meters ).
 	Flat      float64 // 1.0 / flattening ( accepted range is 0.0 to 500.0 ).
-	DX        float32 // [m] X axis shift at the origin ( accepted range is +/- 5000.0 meters ).
-	DY        float32 // [m] Y axis shift at the origin ( accepted range is +/- 5000.0 meters ).
-	DZ        float32 // [m] Z axis shift at the origin ( accepted range is +/- 5000.0 meters ).
-	RotX      float32 // [s] Rotation about the X axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	RotY      float32 // [s] Rotation about the Y axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	RotZ      float32 // [s] Rotation about the Z axis ( accepted range is +/- 20.0 milli-arc seconds ).
-	Scale     float32 // [ppm] Scale change ( accepted range is 0.0 to 50.0 parts per million ).
+	DX_m      float32 // [m] X axis shift at the origin ( accepted range is +/- 5000.0 meters ).
+	DY_m      float32 // [m] Y axis shift at the origin ( accepted range is +/- 5000.0 meters ).
+	DZ_m      float32 // [m] Z axis shift at the origin ( accepted range is +/- 5000.0 meters ).
+	RotX_s    float32 // [s] Rotation about the X axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	RotY_s    float32 // [s] Rotation about the Y axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	RotZ_s    float32 // [s] Rotation about the Z axis ( accepted range is +/- 20.0 milli-arc seconds ).
+	Scale_ppm float32 // [ppm] Scale change ( accepted range is 0.0 to 50.0 parts per million ).
 }
 
 func (CfgDat1) classID() uint16 { return 0x0606 }
 
 // UBX-CFG-DGNSS (Get/set) DGNSS configuration
-//
+// Class/Id 0x06 0x70 4 bytes
 // This message allows the user to configure the DGNSS configuration of the receiver.
 type CfgDgnss struct {
 	DgnssMode byte    // Specifies differential mode: 2: RTK float: No attempts are made to fix ambiguities. 3: RTK fixed: Ambiguities are fixed whenever possible.
@@ -342,25 +343,25 @@ type CfgDgnss struct {
 func (CfgDgnss) classID() uint16 { return 0x7006 }
 
 // UBX-CFG-DOSC (Get/set) Disciplined oscillator configuration
-//
+// Class/Id 0x06 0x61 4 + 32*numOsc bytes
 // This message allows the characteristics of the internal or external oscillator to be described to the receiver. The gainVco and gainUncertainty parameters are normally set using the calibration process initiated using UBX-TIM-VCOCAL. The behavior of the system can be badly affected by setting the wrong values, so customers are advised to only change these parameters with care.
 type CfgDosc struct {
 	Version   byte    // Message version (0x00 for this version)
 	NumOsc    byte    // Number of oscillators to configure (affects length of this message)
 	Reserved1 [2]byte // Reserved
 	Items     []*struct {
-		OscId           byte         // Id of oscillator. 0 - internal oscillator 1 - external oscillator
-		Reserved2       byte         // Reserved
-		Flags           CfgDoscFlags // flags
-		Freq            uint32       // [2^-2 Hz] Nominal frequency of source
-		PhaseOffset     int32        // [ps] Intended phase offset of the oscillator relative to the leading edge of the time pulse
-		WithTemp        uint32       // [2^-8 ppb] Oscillator stability limit over operating temperature range (must be > 0)
-		WithAge         uint32       // [2^-8 ppb/year] Oscillator stability with age (must be > 0)
-		TimeToTemp      uint16       // [s] The minimum time that it could take for a temperature variation to move the oscillator frequency by 'withTemp' (must be > 0)
-		Reserved3       [2]byte      // Reserved
-		GainVco         int32        // [2^-16 ppb/raw LSB] Oscillator control gain/slope; change of frequency per unit change in raw control change
-		GainUncertainty byte         // Relative uncertainty (1 standard deviation) of oscillator control gain/slope
-		Reserved4       [3]byte      // Reserved
+		OscId              byte         // Id of oscillator. 0 - internal oscillator 1 - external oscillator
+		Reserved2          byte         // Reserved
+		Flags              CfgDoscFlags // flags
+		Freq_hzl2          uint32       // [2^-2 Hz] Nominal frequency of source
+		PhaseOffset_ps     int32        // [ps] Intended phase offset of the oscillator relative to the leading edge of the time pulse
+		WithTemp_ppbl8     uint32       // [2^-8 ppb] Oscillator stability limit over operating temperature range (must be > 0)
+		WithAge_ppb_yearl8 uint32       // [2^-8 ppb/year] Oscillator stability with age (must be > 0)
+		TimeToTemp_s       uint16       // [s] The minimum time that it could take for a temperature variation to move the oscillator frequency by 'withTemp' (must be > 0)
+		Reserved3          [2]byte      // Reserved
+		GainVco            int32        // [2^-16 ppb/raw LSB] Oscillator control gain/slope; change of frequency per unit change in raw control change
+		GainUncertainty    byte         // Relative uncertainty (1 standard deviation) of oscillator control gain/slope
+		Reserved4          [3]byte      // Reserved
 	} // len: numOsc
 }
 
@@ -374,13 +375,13 @@ const (
 )
 
 // UBX-CFG-ESFALG (Get/set) Get/set IMU-mount misalignment configuration
-//
+// Class/Id 0x06 0x56 12 bytes
 // Get/set the IMU-mount misalignment configuration (rotation from installation- frame to the IMU-frame). A detailed description on how to compose this configuration is given in the ADR Installation section for ADR products. A detailed description on how to compose this configuration is given in the UDR Installation section for UDR products.
 type CfgEsfalg struct {
-	Bitfield CfgEsfalgBitfield // Bitfield
-	Yaw      uint32            // [1e-2 deg] User-defined IMU-mount yaw angle [0, 360]
-	Pitch    int16             // [1e-2 deg] User-defined IMU-mount pitch angle [-90, 90]
-	Roll     int16             // [1e-2 deg] User-defined IMU-mount roll angle [-180, 180]
+	Bitfield    CfgEsfalgBitfield // Bitfield
+	Yaw_dege2   uint32            // [1e-2 deg] User-defined IMU-mount yaw angle [0, 360]
+	Pitch_dege2 int16             // [1e-2 deg] User-defined IMU-mount pitch angle [-90, 90]
+	Roll_dege2  int16             // [1e-2 deg] User-defined IMU-mount roll angle [-180, 180]
 }
 
 func (CfgEsfalg) classID() uint16 { return 0x5606 }
@@ -393,52 +394,52 @@ const (
 )
 
 // UBX-CFG-ESFA (Get/set) Get/set the Accelerometer (A) sensor configuration
-//
+// Class/Id 0x06 0x4c 20 bytes
 // Get/set the configuration for the accelerometer sensor required for External Sensor Fusion (ESF) based navigation. More details can be found in the Accelerometer Configuration section.
 type CfgEsfa struct {
-	Version      byte    // Message version (0x00 for this version)
-	Reserved1    [9]byte // Reserved
-	AccelRmsThdl byte    // [2^-6 m/s^2] Accelerometer RMS threshold below which automatically estimated accelerometer noise-level (accuracy) is updated.
-	Frequency    byte    // [Hz] Nominal accelerometer sensor data sampling frequency.
-	Latency      uint16  // [ms] Accelerometer sensor data latency due to e.g. CAN bus.
-	Accuracy     uint16  // [1e-4 m/s^2] Accelerometer sensor data accuracy.
-	Reserved2    [4]byte // Reserved
+	Version             byte    // Message version (0x00 for this version)
+	Reserved1           [9]byte // Reserved
+	AccelRmsThdl_m_s2l6 byte    // [2^-6 m/s^2] Accelerometer RMS threshold below which automatically estimated accelerometer noise-level (accuracy) is updated.
+	Frequency_hz        byte    // [Hz] Nominal accelerometer sensor data sampling frequency.
+	Latency_ms          uint16  // [ms] Accelerometer sensor data latency due to e.g. CAN bus.
+	Accuracy_m_s2e4     uint16  // [1e-4 m/s^2] Accelerometer sensor data accuracy.
+	Reserved2           [4]byte // Reserved
 }
 
 func (CfgEsfa) classID() uint16 { return 0x4c06 }
 
 // UBX-CFG-ESFG (Get/set) Get/set the Gyroscope (G) sensor configuration
-//
+// Class/Id 0x06 0x4d 20 bytes
 // Get/set the configuration for the gyroscope sensor required for External Sensor Fusion (ESF) based navigation. More details can be found in the Gyroscope Configuration section.
 type CfgEsfg struct {
-	Version         byte    // Message version (0x00 for this version)
-	Reserved1       [7]byte // Reserved
-	TcTableSaveRate uint16  // [s] Temperature-dependent gyroscope bias table saving update rate.
-	GyroRmsThdl     byte    // [2^-8 deg/s] Gyroscope sensor RMS threshold below which automatically estimated gyroscope noise-level (accuracy) is updated.
-	Frequency       byte    // [Hz] Nominal gyroscope sensor data sampling frequency.
-	Latency         uint16  // [ms] Gyroscope sensor data latency due to e.g. CAN bus.
-	Accuracy        uint16  // [1e-3 deg/s] Gyroscope sensor data accuracy.
-	Reserved2       [4]byte // Reserved
+	Version             byte    // Message version (0x00 for this version)
+	Reserved1           [7]byte // Reserved
+	TcTableSaveRate_s   uint16  // [s] Temperature-dependent gyroscope bias table saving update rate.
+	GyroRmsThdl_deg_sl8 byte    // [2^-8 deg/s] Gyroscope sensor RMS threshold below which automatically estimated gyroscope noise-level (accuracy) is updated.
+	Frequency_hz        byte    // [Hz] Nominal gyroscope sensor data sampling frequency.
+	Latency_ms          uint16  // [ms] Gyroscope sensor data latency due to e.g. CAN bus.
+	Accuracy_deg_se3    uint16  // [1e-3 deg/s] Gyroscope sensor data accuracy.
+	Reserved2           [4]byte // Reserved
 }
 
 func (CfgEsfg) classID() uint16 { return 0x4d06 }
 
 // UBX-CFG-ESFWT (Get/set) Get/set wheel-tick configuration
-//
+// Class/Id 0x06 0x82 32 bytes
 // Get/set the wheel-tick configuration for GWT or GAWT solution. Further information on the configuration parameters is given in the Automotive Dead Reckoning (ADR) chapter. This field can only be used with modules supporting analog wheel-tick signals and containing an internal IMU.
 type CfgEsfwt struct {
-	Version       byte           // Message version (0x00 for this version)
-	Flags1        CfgEsfwtFlags1 // Flags
-	Flags2        CfgEsfwtFlags2 // Flags
-	Reserved1     [1]byte        // Reserved
-	WtFactor      uint32         // Wheel-tick scale factor to obtain distance [m] from wheel-ticks (0 = not set)
-	WtQuantError  uint32         // [1e-6 m (orm/s)] Wheel-tick quantization. If useWtSpeed is set then this is interpreted as the speed measurement error RMS.
-	WtCountMax    uint32         // Wheel-tick counter maximum value (rollover - 1). If null, relative wheel-tick counts are assumed (and therefore no rollover). If not null, absolute wheel-tick counts are assumed and the value corresponds to the highest tick count value before rollover happens. If useWtSpeed is set then this value is ignored. If value is set to 1, absolute wheel-tick counts are assumed and the value will be automatic calculated if possible. It is only possible for automatic calibration to calculate wtCntMax if it can be represented as a number of set bits (i.e. 2^N). If it cannot be represented in this way it must be set to the correct absolute tick value manually.
-	WtLatency     uint16         // [ms] Wheel-tick data latency due to e.g. CAN bus
-	WtFrequency   byte           // [Hz] Nominal wheel-tick data frequency (0 = not set)
-	Flags3        CfgEsfwtFlags3 // Flags
-	SpeedDeadBand uint16         // [cm/s] Speed sensor dead band (0 = not set)
-	Reserved2     [10]byte       // Reserved
+	Version            byte           // Message version (0x00 for this version)
+	Flags1             CfgEsfwtFlags1 // Flags
+	Flags2             CfgEsfwtFlags2 // Flags
+	Reserved1          [1]byte        // Reserved
+	WtFactor           uint32         // Wheel-tick scale factor to obtain distance [m] from wheel-ticks (0 = not set)
+	WtQuantError       uint32         // [1e-6 m (orm/s)] Wheel-tick quantization. If useWtSpeed is set then this is interpreted as the speed measurement error RMS.
+	WtCountMax         uint32         // Wheel-tick counter maximum value (rollover - 1). If null, relative wheel-tick counts are assumed (and therefore no rollover). If not null, absolute wheel-tick counts are assumed and the value corresponds to the highest tick count value before rollover happens. If useWtSpeed is set then this value is ignored. If value is set to 1, absolute wheel-tick counts are assumed and the value will be automatic calculated if possible. It is only possible for automatic calibration to calculate wtCntMax if it can be represented as a number of set bits (i.e. 2^N). If it cannot be represented in this way it must be set to the correct absolute tick value manually.
+	WtLatency_ms       uint16         // [ms] Wheel-tick data latency due to e.g. CAN bus
+	WtFrequency_hz     byte           // [Hz] Nominal wheel-tick data frequency (0 = not set)
+	Flags3             CfgEsfwtFlags3 // Flags
+	SpeedDeadBand_cm_s uint16         // [cm/s] Speed sensor dead band (0 = not set)
+	Reserved2          [10]byte       // Reserved
 }
 
 func (CfgEsfwt) classID() uint16 { return 0x8206 }
@@ -468,25 +469,25 @@ const (
 )
 
 // UBX-CFG-ESRC (Get/set) External synchronization source configuration
-//
+// Class/Id 0x06 0x60 4 + 36*numSources bytes
 // External time or frequency source configuration. The stability of time and frequency sources is described using different fields, see sourceType field documentation.
 type CfgEsrc struct {
 	Version    byte    // Message version (0x00 for this version)
 	NumSources byte    // Number of sources (affects length of this message)
 	Reserved1  [2]byte // Reserved
 	Items      []*struct {
-		ExtInt            byte         // EXTINT index of this source (0 for EXTINT0 and 1 for EXTINT1)
-		SourceType        byte         // Source type: 0:  none 1: frequency source; use withTemp, withAge, timeToTemp and maxDevLifeTime to describe the stability of the source 2:  time source; use offset, offsetUncertainty and jitter fields to describe the stability of the source 3:  feedback from external oscillator; stability data is taken from the external oscillator's configuration
-		Flags             CfgEsrcFlags // Flags
-		Freq              uint32       // [2^-2 Hz] Nominal frequency of source
-		Reserved2         [4]byte      // Reserved
-		WithTemp          uint32       // [2^-8 ppb] Oscillator stability limit over operating temperature range (must be > 0) Only used if sourceType is 1.
-		WithAge           uint32       // [2^-8 ppb/year] Oscillator stability with age (must be > 0) Only used if sourceType is 1.
-		TimeToTemp        uint16       // [s] The minimum time that it could take for a temperature variation to move the oscillator frequency by 'withTemp' (must be > 0) Only used if sourceType is 1.
-		MaxDevLifeTime    uint16       // [ppb] Maximum frequency deviation during lifetime (must be > 0) Only used if sourceType is 1.
-		Offset            int32        // [ns] Phase offset of signal Only used if sourceType is 2.
-		OffsetUncertainty uint32       // [ns] Uncertainty of phase offset (one standard deviation) Only used if sourceType is 2.
-		Jitter            uint32       // [ns/s] Phase jitter (must be > 0) Only used if sourceType is 2.
+		ExtInt               byte         // EXTINT index of this source (0 for EXTINT0 and 1 for EXTINT1)
+		SourceType           byte         // Source type: 0:  none 1: frequency source; use withTemp, withAge, timeToTemp and maxDevLifeTime to describe the stability of the source 2:  time source; use offset, offsetUncertainty and jitter fields to describe the stability of the source 3:  feedback from external oscillator; stability data is taken from the external oscillator's configuration
+		Flags                CfgEsrcFlags // Flags
+		Freq_hzl2            uint32       // [2^-2 Hz] Nominal frequency of source
+		Reserved2            [4]byte      // Reserved
+		WithTemp_ppbl8       uint32       // [2^-8 ppb] Oscillator stability limit over operating temperature range (must be > 0) Only used if sourceType is 1.
+		WithAge_ppb_yearl8   uint32       // [2^-8 ppb/year] Oscillator stability with age (must be > 0) Only used if sourceType is 1.
+		TimeToTemp_s         uint16       // [s] The minimum time that it could take for a temperature variation to move the oscillator frequency by 'withTemp' (must be > 0) Only used if sourceType is 1.
+		MaxDevLifeTime_ppb   uint16       // [ppb] Maximum frequency deviation during lifetime (must be > 0) Only used if sourceType is 1.
+		Offset_ns            int32        // [ns] Phase offset of signal Only used if sourceType is 2.
+		OffsetUncertainty_ns uint32       // [ns] Uncertainty of phase offset (one standard deviation) Only used if sourceType is 2.
+		Jitter_ns_s          uint32       // [ns/s] Phase jitter (must be > 0) Only used if sourceType is 2.
 	} // len: numSources
 }
 
@@ -500,7 +501,7 @@ const (
 )
 
 // UBX-CFG-GEOFENCE (Get/set) Geofencing configuration
-//
+// Class/Id 0x06 0x69 8 + 12*numFences bytes
 // Gets or sets the geofencing configuration. See the Geofencing description for feature details. If the receiver is sent a valid new configuration, it will respond with a UBX-ACK- ACK message and immediately change to the new configuration. Otherwise the receiver will reject the request, by issuing a UBX-ACK-NAK and continuing operation with the previous configuration. Note that the acknowledge message does not indicate whether the PIO configuration has been successfully applied (pin assigned), it only indicates the successful configuration of the feature. The configured PIO must be previously unoccupied for successful assignment.
 type CfgGeofence struct {
 	Version     byte    // Message version (0x00 for this version)
@@ -512,16 +513,16 @@ type CfgGeofence struct {
 	Pin         byte    // PIO pin number
 	Reserved2   [1]byte // Reserved
 	Items       []*struct {
-		Lat    int32  // [1e-7 deg] Latitude of the geofence circle center
-		Lon    int32  // [1e-7 deg] Longitude of the geofence circle center
-		Radius uint32 // [1e-2 m] Radius of the geofence circle
+		Lat_dege7  int32  // [1e-7 deg] Latitude of the geofence circle center
+		Lon_dege7  int32  // [1e-7 deg] Longitude of the geofence circle center
+		Radius_me2 uint32 // [1e-2 m] Radius of the geofence circle
 	} // len: numFences
 }
 
 func (CfgGeofence) classID() uint16 { return 0x6906 }
 
 // UBX-CFG-GNSS (Get/set) GNSS system configuration
-//
+// Class/Id 0x06 0x3e 4 + 8*numConfigBlocks bytes
 // Gets or sets the GNSS system channel sharing configuration. If the receiver is sent a valid new configuration, it will respond with a UBX-ACK- ACK message and immediately change to the new configuration. Otherwise the receiver will reject the request, by issuing a UBX-ACK-NAK and continuing operation with the previous configuration. Configuration requirements:  It is necessary for at least one major GNSS to be enabled, after applying the  new configuration to the current one.  It is also required that at least 4 tracking channels are available to each  enabled major GNSS, i.e. maxTrkCh must have a minimum value of 4 for each  enabled major GNSS.  The number of tracking channels in use must not exceed the number of  tracking channels available in hardware, and the sum of all reserved tracking  channels needs to be less than or equal to the number of tracking channels in  use. Notes:  To avoid cross-correlation issues, it is recommended that GPS and QZSS are  always both enabled or both disabled.  Polling this message returns the configuration of all supported GNSS, whether  enabled or not; it may also include GNSS unsupported by the particular  product, but in such cases the enable flag will always be unset.  See section GNSS Configuration for a discussion of the use of this message.  See section Satellite Numbering for a description of the GNSS IDs available.  Configuration specific to the GNSS system can be done via other messages (e.  g. UBX-CFG-SBAS).
 type CfgGnss struct {
 	MsgVer          byte // Message version (0x00 for this version)
@@ -547,17 +548,17 @@ const (
 )
 
 // UBX-CFG-HNR (Get/set) High navigation rate settings
-//
+// Class/Id 0x06 0x5c 4 bytes
 // The u-blox receivers support high rates of navigation update up to 30 Hz. The navigation solution output UBX-NAV-HNR will not be aligned to the top of a second.  The update rate has a direct influence on the power consumption. The more  fixes that are required, the more CPU power and communication resources are  required.  For most applications a 1 Hz update rate would be sufficient.
 type CfgHnr struct {
-	HighNavRate byte    // [Hz] Rate of navigation solution output
-	Reserved1   [3]byte // Reserved
+	HighNavRate_hz byte    // [Hz] Rate of navigation solution output
+	Reserved1      [3]byte // Reserved
 }
 
 func (CfgHnr) classID() uint16 { return 0x5c06 }
 
 // UBX-CFG-INF (Poll Request) Poll configuration for one protocol
-//
+// Class/Id 0x06 0x02 1 bytes
 // -
 type CfgInf struct {
 	ProtocolID byte // Protocol identifier, identifying the output protocol for this poll request. The following are valid protocol identifiers: 0: UBX protocol 1: NMEA protocol 2-255: Reserved
@@ -566,7 +567,7 @@ type CfgInf struct {
 func (CfgInf) classID() uint16 { return 0x0206 }
 
 // UBX-CFG-INF (Get/set) Information message configuration
-//
+// Class/Id 0x06 0x02 0 + 10*N bytes
 // The value of infMsgMask[x] below is formed so that each bit represents one of the INF class messages (bit 0 for ERROR, bit 1 for WARNING and so on). For a complete list, see the Message class INF. Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length. Output messages from the module contain only one configuration unit. Note that:  I/O ports 1 and 2 correspond to serial ports 1 and 2.  I/O port 0 is I2C (DDC).  I/O port 3 is USB.  I/O port 4 is SPI.  I/O port 5 is reserved for future use.
 type CfgInf1 struct {
 	Items []*struct {
@@ -589,7 +590,7 @@ const (
 )
 
 // UBX-CFG-ITFM (Get/set) Jamming/interference monitor configuration
-//
+// Class/Id 0x06 0x39 8 bytes
 // -
 type CfgItfm struct {
 	Config  CfgItfmConfig  // Interference config word
@@ -616,15 +617,15 @@ const (
 )
 
 // UBX-CFG-LOGFILTER (Get/set) Data logger configuration
-//
+// Class/Id 0x06 0x47 12 bytes
 // This message can be used to configure the data logger, i.e. to enable/disable the log recording and to get/set the position entry filter settings. Position entries can be filtered based on time difference, position difference or current speed thresholds. Position and speed filtering also have a minimum time interval. A position is logged if any of the thresholds are exceeded. If a threshold is set to zero it is ignored. The maximum rate of position logging is 1 Hz. The filter settings will be configured to the provided values only if the 'applyAllFilterSettings' flag is set. This allows the recording to be enabled/disabled independently of configuring the filter settings. Configuring the data logger in the absence of a logging file is supported. By doing so, once the logging file is created, the data logger configuration will take effect immediately and logging recording and filtering will activate according to the configuration.
 type CfgLogfilter struct {
-	Version           byte              // Message version (0x01 for this version)
-	Flags             CfgLogfilterFlags // Flags
-	MinInterval       uint16            // [s] Minimum time interval between logged positions (0 = not set). This is only applied in combination with the speed and/or position thresholds. If both minInterval and timeThreshold are set, minInterval must be less than or equal to timeThreshold.
-	TimeThreshold     uint16            // [s] If the time difference is greater than the threshold, then the position is logged (0 = not set).
-	SpeedThreshold    uint16            // [m/s] If the current speed is greater than the threshold, then the position is logged (0 = not set). minInterval also applies.
-	PositionThreshold uint32            // [m] If the 3D position difference is greater than the threshold, then the position is logged (0 = not set). minInterval also applies.
+	Version             byte              // Message version (0x01 for this version)
+	Flags               CfgLogfilterFlags // Flags
+	MinInterval_s       uint16            // [s] Minimum time interval between logged positions (0 = not set). This is only applied in combination with the speed and/or position thresholds. If both minInterval and timeThreshold are set, minInterval must be less than or equal to timeThreshold.
+	TimeThreshold_s     uint16            // [s] If the time difference is greater than the threshold, then the position is logged (0 = not set).
+	SpeedThreshold_m_s  uint16            // [m/s] If the current speed is greater than the threshold, then the position is logged (0 = not set). minInterval also applies.
+	PositionThreshold_m uint32            // [m] If the 3D position difference is greater than the threshold, then the position is logged (0 = not set). minInterval also applies.
 }
 
 func (CfgLogfilter) classID() uint16 { return 0x4706 }
@@ -638,7 +639,7 @@ const (
 )
 
 // UBX-CFG-MSG (Poll Request) Poll a message configuration
-//
+// Class/Id 0x06 0x01 2 bytes
 // -
 type CfgMsg struct {
 	MsgClass byte // Message class
@@ -648,7 +649,7 @@ type CfgMsg struct {
 func (CfgMsg) classID() uint16 { return 0x0106 }
 
 // UBX-CFG-MSG (Get/set) Set message rate(s)
-//
+// Class/Id 0x06 0x01 8 bytes
 // Get/set message rate configuration (s) to/from the receiver. See also section How to change between protocols.  Send rate is relative to the event a message is registered on. For example, if  the rate of a navigation message is set to 2, the message is sent every second  navigation solution. For configuring NMEA messages, the section NMEA  Messages Overview describes class and identifier numbers used.
 type CfgMsg1 struct {
 	MsgClass byte    // Message class
@@ -659,7 +660,7 @@ type CfgMsg1 struct {
 func (CfgMsg1) classID() uint16 { return 0x0106 }
 
 // UBX-CFG-MSG (Get/set) Set message rate
-//
+// Class/Id 0x06 0x01 3 bytes
 // Set message rate configuration for the current port. See also section How to change between protocols.
 type CfgMsg2 struct {
 	MsgClass byte // Message class
@@ -670,28 +671,28 @@ type CfgMsg2 struct {
 func (CfgMsg2) classID() uint16 { return 0x0106 }
 
 // UBX-CFG-NAV5 (Get/set) Navigation engine settings
-//
+// Class/Id 0x06 0x24 36 bytes
 // See the Navigation Configuration Settings Description for a detailed description of how these settings affect receiver operation.
 type CfgNav5 struct {
-	Mask              CfgNav5Mask // Parameters bitmask. Only the masked parameters will be applied.
-	DynModel          byte        // Dynamic platform model: 0: portable 2: stationary 3: pedestrian 4: automotive 5: sea 6: airborne with <1g acceleration 7: airborne with <2g acceleration 8: airborne with <4g acceleration 9: wrist-worn watch (not supported in protocol versions less than 18) 10: bike (supported in protocol versions 19. 2)
-	FixMode           byte        // Position fixing mode: 1: 2D only 2: 3D only 3: auto 2D/3D
-	FixedAlt          int32       // [0.01 m] Fixed altitude (mean sea level) for 2D fix mode
-	FixedAltVar       uint32      // [0.0001 m^2] Fixed altitude variance for 2D mode
-	MinElev           int8        // [deg] Minimum elevation for a GNSS satellite to be used in NAV
-	DrLimit           byte        // [s] Reserved
-	PDop              uint16      // Position DOP mask to use
-	TDop              uint16      // Time DOP mask to use
-	PAcc              uint16      // [m] Position accuracy mask
-	TAcc              uint16      // [m] Time accuracy mask
-	StaticHoldThresh  byte        // [cm/s] Static hold threshold
-	DgnssTimeout      byte        // [s] DGNSS timeout
-	CnoThreshNumSVs   byte        // Number of satellites required to have C/N0 above cnoThresh for a fix to be attempted
-	CnoThresh         byte        // [dBHz] C/N0 threshold for deciding whether to attempt a fix
-	Reserved1         [2]byte     // Reserved
-	StaticHoldMaxDist uint16      // [m] Static hold distance threshold (before quitting static hold)
-	UtcStandard       byte        // UTC standard to be used: 0: Automatic; receiver selects based on GNSS configuration (see GNSS time bases) 3: UTC as operated by the U.S. Naval Observatory (USNO); derived from GPS time 5: UTC as combined from multiple European laboratories; derived from Galileo time 6: UTC as operated by the former Soviet Union (SU); derived from GLONASS time 7: UTC as operated by the National Time Service Center (NTSC), China; derived from BeiDou time (not supported in protocol versions less than 16).
-	Reserved2         [5]byte     // Reserved
+	Mask                  CfgNav5Mask // Parameters bitmask. Only the masked parameters will be applied.
+	DynModel              byte        // Dynamic platform model: 0: portable 2: stationary 3: pedestrian 4: automotive 5: sea 6: airborne with <1g acceleration 7: airborne with <2g acceleration 8: airborne with <4g acceleration 9: wrist-worn watch (not supported in protocol versions less than 18) 10: bike (supported in protocol versions 19. 2)
+	FixMode               byte        // Position fixing mode: 1: 2D only 2: 3D only 3: auto 2D/3D
+	FixedAlt_me2          int32       // [1e-2 m] Fixed altitude (mean sea level) for 2D fix mode
+	FixedAltVar_m2e4      uint32      // [1e-4 m^2] Fixed altitude variance for 2D mode
+	MinElev_deg           int8        // [deg] Minimum elevation for a GNSS satellite to be used in NAV
+	DrLimit_s             byte        // [s] Reserved
+	PDop                  uint16      // Position DOP mask to use
+	TDop                  uint16      // Time DOP mask to use
+	PAcc_m                uint16      // [m] Position accuracy mask
+	TAcc_m                uint16      // [m] Time accuracy mask
+	StaticHoldThresh_cm_s byte        // [cm/s] Static hold threshold
+	DgnssTimeout_s        byte        // [s] DGNSS timeout
+	CnoThreshNumSVs       byte        // Number of satellites required to have C/N0 above cnoThresh for a fix to be attempted
+	CnoThresh_dbhz        byte        // [dBHz] C/N0 threshold for deciding whether to attempt a fix
+	Reserved1             [2]byte     // Reserved
+	StaticHoldMaxDist_m   uint16      // [m] Static hold distance threshold (before quitting static hold)
+	UtcStandard           byte        // UTC standard to be used: 0: Automatic; receiver selects based on GNSS configuration (see GNSS time bases) 3: UTC as operated by the U.S. Naval Observatory (USNO); derived from GPS time 5: UTC as combined from multiple European laboratories; derived from Galileo time 6: UTC as operated by the former Soviet Union (SU); derived from GLONASS time 7: UTC as operated by the National Time Service Center (NTSC), China; derived from BeiDou time (not supported in protocol versions less than 16).
+	Reserved2             [5]byte     // Reserved
 }
 
 func (CfgNav5) classID() uint16 { return 0x2406 }
@@ -712,29 +713,29 @@ const (
 )
 
 // UBX-CFG-NAVX5 (Get/set) Navigation engine expert settings
-//
+// Class/Id 0x06 0x23 40 bytes
 // -
 type CfgNavx5 struct {
-	Version      uint16         // Message version (0x0000 for this version)
-	Mask1        CfgNavx5Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Mask2        CfgNavx5Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Reserved1    [2]byte        // Reserved
-	MinSVs       byte           // [#SVs] Minimum number of satellites for navigation
-	MaxSVs       byte           // [#SVs] Maximum number of satellites for navigation
-	MinCNO       byte           // [dBHz] Minimum satellite signal level for navigation
-	Reserved2    byte           // Reserved
-	IniFix3D     byte           // 1 = initial fix must be 3D
-	Reserved3    [2]byte        // Reserved
-	AckAiding    byte           // 1 = issue acknowledgements for assistance message input
-	WknRollover  uint16         // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
-	Reserved4    [6]byte        // Reserved
-	UsePPP       byte           // 1 = use Precise Point Positioning (only available with the PPP product variant)
-	AopCfg       CfgNavx5AopCfg // AssistNow Autonomous configuration
-	Reserved5    [2]byte        // Reserved
-	AopOrbMaxErr uint16         // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
-	Reserved6    [4]byte        // Reserved
-	Reserved7    [3]byte        // Reserved
-	UseAdr       byte           // Only supported on certain products Enable/disable ADR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
+	Version        uint16         // Message version (0x0000 for this version)
+	Mask1          CfgNavx5Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Mask2          CfgNavx5Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Reserved1      [2]byte        // Reserved
+	MinSVs         byte           // [#SVs] Minimum number of satellites for navigation
+	MaxSVs         byte           // [#SVs] Maximum number of satellites for navigation
+	MinCNO_dbhz    byte           // [dBHz] Minimum satellite signal level for navigation
+	Reserved2      byte           // Reserved
+	IniFix3D       byte           // 1 = initial fix must be 3D
+	Reserved3      [2]byte        // Reserved
+	AckAiding      byte           // 1 = issue acknowledgements for assistance message input
+	WknRollover    uint16         // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
+	Reserved4      [6]byte        // Reserved
+	UsePPP         byte           // 1 = use Precise Point Positioning (only available with the PPP product variant)
+	AopCfg         CfgNavx5AopCfg // AssistNow Autonomous configuration
+	Reserved5      [2]byte        // Reserved
+	AopOrbMaxErr_m uint16         // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
+	Reserved6      [4]byte        // Reserved
+	Reserved7      [3]byte        // Reserved
+	UseAdr         byte           // Only supported on certain products Enable/disable ADR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
 }
 
 func (CfgNavx5) classID() uint16 { return 0x2306 }
@@ -764,32 +765,32 @@ const (
 )
 
 // UBX-CFG-NAVX5 (Get/set) Navigation engine expert settings
-//
+// Class/Id 0x06 0x23 40 bytes
 // (Polling will send back a version 3 message in protocol versions 19.2).
 type CfgNavx51 struct {
-	Version          uint16          // Message version (0x0002 for this version)
-	Mask1            CfgNavx51Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Mask2            CfgNavx51Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Reserved1        [2]byte         // Reserved
-	MinSVs           byte            // [#SVs] Minimum number of satellites for navigation
-	MaxSVs           byte            // [#SVs] Maximum number of satellites for navigation
-	MinCNO           byte            // [dBHz] Minimum satellite signal level for navigation
-	Reserved2        byte            // Reserved
-	IniFix3D         byte            // 1 = initial fix must be 3D
-	Reserved3        [2]byte         // Reserved
-	AckAiding        byte            // 1 = issue acknowledgements for assistance message input
-	WknRollover      uint16          // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
-	SigAttenCompMode byte            // [dBHz] Only supported on certain products Permanently attenuated signal compensation (0 = disabled, 255 = automatic, 1..63 = maximum expected C/N0 value)
-	Reserved4        byte            // Reserved
-	Reserved5        [2]byte         // Reserved
-	Reserved6        [2]byte         // Reserved
-	UsePPP           byte            // 1 = use Precise Point Positioning (only available with the PPP product variant)
-	AopCfg           CfgNavx51AopCfg // AssistNow Autonomous configuration
-	Reserved7        [2]byte         // Reserved
-	AopOrbMaxErr     uint16          // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
-	Reserved8        [4]byte         // Reserved
-	Reserved9        [3]byte         // Reserved
-	UseAdr           byte            // Only supported on certain products Enable/disable ADR/UDR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
+	Version               uint16          // Message version (0x0002 for this version)
+	Mask1                 CfgNavx51Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Mask2                 CfgNavx51Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Reserved1             [2]byte         // Reserved
+	MinSVs                byte            // [#SVs] Minimum number of satellites for navigation
+	MaxSVs                byte            // [#SVs] Maximum number of satellites for navigation
+	MinCNO_dbhz           byte            // [dBHz] Minimum satellite signal level for navigation
+	Reserved2             byte            // Reserved
+	IniFix3D              byte            // 1 = initial fix must be 3D
+	Reserved3             [2]byte         // Reserved
+	AckAiding             byte            // 1 = issue acknowledgements for assistance message input
+	WknRollover           uint16          // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
+	SigAttenCompMode_dbhz byte            // [dBHz] Only supported on certain products Permanently attenuated signal compensation (0 = disabled, 255 = automatic, 1..63 = maximum expected C/N0 value)
+	Reserved4             byte            // Reserved
+	Reserved5             [2]byte         // Reserved
+	Reserved6             [2]byte         // Reserved
+	UsePPP                byte            // 1 = use Precise Point Positioning (only available with the PPP product variant)
+	AopCfg                CfgNavx51AopCfg // AssistNow Autonomous configuration
+	Reserved7             [2]byte         // Reserved
+	AopOrbMaxErr_m        uint16          // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
+	Reserved8             [4]byte         // Reserved
+	Reserved9             [3]byte         // Reserved
+	UseAdr                byte            // Only supported on certain products Enable/disable ADR/UDR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
 }
 
 func (CfgNavx51) classID() uint16 { return 0x2306 }
@@ -820,34 +821,34 @@ const (
 )
 
 // UBX-CFG-NAVX5 (Get/set) Navigation engine expert settings
-//
+// Class/Id 0x06 0x23 44 bytes
 // -
 type CfgNavx52 struct {
-	Version          uint16          // Message version (0x0003 for this version)
-	Mask1            CfgNavx52Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Mask2            CfgNavx52Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Reserved1        [2]byte         // Reserved
-	MinSVs           byte            // [#SVs] Minimum number of satellites for navigation
-	MaxSVs           byte            // [#SVs] Maximum number of satellites for navigation
-	MinCNO           byte            // [dBHz] Minimum satellite signal level for navigation
-	Reserved2        byte            // Reserved
-	IniFix3D         byte            // 1 = initial fix must be 3D
-	Reserved3        [2]byte         // Reserved
-	AckAiding        byte            // 1 = issue acknowledgements for assistance message input
-	WknRollover      uint16          // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
-	SigAttenCompMode byte            // [dBHz] Only supported on certain products Permanently attenuated signal compensation (0 = disabled, 255 = automatic, 1..63 = maximum expected C/N0 value)
-	Reserved4        byte            // Reserved
-	Reserved5        [2]byte         // Reserved
-	Reserved6        [2]byte         // Reserved
-	UsePPP           byte            // 1 = use Precise Point Positioning (only available with the PPP product variant)
-	AopCfg           CfgNavx52AopCfg // AssistNow Autonomous configuration
-	Reserved7        [2]byte         // Reserved
-	AopOrbMaxErr     uint16          // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
-	Reserved8        [4]byte         // Reserved
-	Reserved9        [3]byte         // Reserved
-	UseAdr           byte            // Only supported on certain products Enable/disable ADR/UDR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
-	Reserved10       [2]byte         // Reserved
-	Reserved11       [2]byte         // Reserved
+	Version               uint16          // Message version (0x0003 for this version)
+	Mask1                 CfgNavx52Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Mask2                 CfgNavx52Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Reserved1             [2]byte         // Reserved
+	MinSVs                byte            // [#SVs] Minimum number of satellites for navigation
+	MaxSVs                byte            // [#SVs] Maximum number of satellites for navigation
+	MinCNO_dbhz           byte            // [dBHz] Minimum satellite signal level for navigation
+	Reserved2             byte            // Reserved
+	IniFix3D              byte            // 1 = initial fix must be 3D
+	Reserved3             [2]byte         // Reserved
+	AckAiding             byte            // 1 = issue acknowledgements for assistance message input
+	WknRollover           uint16          // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
+	SigAttenCompMode_dbhz byte            // [dBHz] Only supported on certain products Permanently attenuated signal compensation (0 = disabled, 255 = automatic, 1..63 = maximum expected C/N0 value)
+	Reserved4             byte            // Reserved
+	Reserved5             [2]byte         // Reserved
+	Reserved6             [2]byte         // Reserved
+	UsePPP                byte            // 1 = use Precise Point Positioning (only available with the PPP product variant)
+	AopCfg                CfgNavx52AopCfg // AssistNow Autonomous configuration
+	Reserved7             [2]byte         // Reserved
+	AopOrbMaxErr_m        uint16          // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
+	Reserved8             [4]byte         // Reserved
+	Reserved9             [3]byte         // Reserved
+	UseAdr                byte            // Only supported on certain products Enable/disable ADR/UDR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
+	Reserved10            [2]byte         // Reserved
+	Reserved11            [2]byte         // Reserved
 }
 
 func (CfgNavx52) classID() uint16 { return 0x2306 }
@@ -878,7 +879,7 @@ const (
 )
 
 // UBX-CFG-NMEA (Get/set) NMEA protocol configuration (deprecated)
-//
+// Class/Id 0x06 0x17 4 bytes
 // This message version is provided for backwards compatibility only. Use the last version listed below instead (its fields are backwards compatible with this version, it just has extra fields defined). Get/set the NMEA protocol configuration. See section NMEA Protocol Configuration for a detailed description of the configuration effects on NMEA output.
 type CfgNmea struct {
 	Filter      CfgNmeaFilter // filter flags
@@ -908,7 +909,7 @@ const (
 )
 
 // UBX-CFG-NMEA (Get/set) NMEA protocol configuration V0 (deprecated)
-//
+// Class/Id 0x06 0x17 12 bytes
 // This message version is provided for backwards compatibility only. Use the last version listed below instead (its fields are backwards compatible with this version, it just has extra fields defined). Get/set the NMEA protocol configuration. See section NMEA Protocol Configuration for a detailed description of the configuration effects on NMEA output.
 type CfgNmea1 struct {
 	Filter       CfgNmea1Filter       // filter flags
@@ -954,7 +955,7 @@ const (
 )
 
 // UBX-CFG-NMEA (Get/set) Extended NMEA protocol configuration V1
-//
+// Class/Id 0x06 0x17 20 bytes
 // Get/set the NMEA protocol configuration. See section NMEA Protocol Configuration for a detailed description of the configuration effects on NMEA output.
 type CfgNmea2 struct {
 	Filter       CfgNmea2Filter       // filter flags
@@ -1004,20 +1005,20 @@ const (
 )
 
 // UBX-CFG-ODO (Get/set) Odometer, low-speed COG engine settings
-//
+// Class/Id 0x06 0x1e 20 bytes
 // This feature is not supported for the FTS product variant. -
 type CfgOdo struct {
-	Version      byte         // Message version (0x00 for this version)
-	Reserved1    [3]byte      // Reserved
-	Flags        CfgOdoFlags  // Odometer/Low-speed COG filter flags
-	OdoCfg       CfgOdoOdoCfg // Odometer filter settings
-	Reserved2    [6]byte      // Reserved
-	CogMaxSpeed  byte         // [1e-1 m/s] Speed below which course-over-ground (COG) is computed with the low-speed COG filter
-	CogMaxPosAcc byte         // [m] Maximum acceptable position accuracy for computing COG with the low-speed COG filter
-	Reserved3    [2]byte      // Reserved
-	VelLpGain    byte         // Velocity low-pass filter level, range 0..255
-	CogLpGain    byte         // COG low-pass filter level (at speed < 8 m/s), range 0..255
-	Reserved4    [2]byte      // Reserved
+	Version           byte         // Message version (0x00 for this version)
+	Reserved1         [3]byte      // Reserved
+	Flags             CfgOdoFlags  // Odometer/Low-speed COG filter flags
+	OdoCfg            CfgOdoOdoCfg // Odometer filter settings
+	Reserved2         [6]byte      // Reserved
+	CogMaxSpeed_m_se1 byte         // [1e-1 m/s] Speed below which course-over-ground (COG) is computed with the low-speed COG filter
+	CogMaxPosAcc_m    byte         // [m] Maximum acceptable position accuracy for computing COG with the low-speed COG filter
+	Reserved3         [2]byte      // Reserved
+	VelLpGain         byte         // Velocity low-pass filter level, range 0..255
+	CogLpGain         byte         // COG low-pass filter level (at speed < 8 m/s), range 0..255
+	Reserved4         [2]byte      // Reserved
 }
 
 func (CfgOdo) classID() uint16 { return 0x1e06 }
@@ -1038,20 +1039,20 @@ const (
 )
 
 // UBX-CFG-PM2 (Get/set) Extended power management configuration
-//
+// Class/Id 0x06 0x3b 44 bytes
 // This feature is not supported for either the ADR or FTS products. -
 type CfgPm2 struct {
-	Version            byte        // Message version (0x01 for this version)
-	Reserved1          byte        // Reserved
-	MaxStartupStateDur byte        // [s] Maximum time to spend in Acquisition state. If 0: bound disabled (see maxStartupStateDur) (not supported in protocol versions less than 17).
-	Reserved2          byte        // Reserved
-	Flags              CfgPm2Flags // PSM configuration flags
-	UpdatePeriod       uint32      // [ms] Position update period. If set to 0, the receiver will never retry a fix and it will wait for external events
-	SearchPeriod       uint32      // [ms] Acquisition retry period if previously failed. If set to 0, the receiver will never retry a startup
-	GridOffset         uint32      // [ms] Grid offset relative to GPS start of week
-	OnTime             uint16      // [s] Time to stay in Tracking state
-	MinAcqTime         uint16      // [s] minimal search time
-	Reserved3          [20]byte    // Reserved
+	Version              byte        // Message version (0x01 for this version)
+	Reserved1            byte        // Reserved
+	MaxStartupStateDur_s byte        // [s] Maximum time to spend in Acquisition state. If 0: bound disabled (see maxStartupStateDur) (not supported in protocol versions less than 17).
+	Reserved2            byte        // Reserved
+	Flags                CfgPm2Flags // PSM configuration flags
+	UpdatePeriod_ms      uint32      // [ms] Position update period. If set to 0, the receiver will never retry a fix and it will wait for external events
+	SearchPeriod_ms      uint32      // [ms] Acquisition retry period if previously failed. If set to 0, the receiver will never retry a startup
+	GridOffset_ms        uint32      // [ms] Grid offset relative to GPS start of week
+	OnTime_s             uint16      // [s] Time to stay in Tracking state
+	MinAcqTime_s         uint16      // [s] minimal search time
+	Reserved3            [20]byte    // Reserved
 }
 
 func (CfgPm2) classID() uint16 { return 0x3b06 }
@@ -1071,21 +1072,21 @@ const (
 )
 
 // UBX-CFG-PM2 (Get/set) Extended power management configuration
-//
+// Class/Id 0x06 0x3b 48 bytes
 // This feature is not supported for either the ADR or FTS products. -
 type CfgPm21 struct {
-	Version            byte         // Message version (0x02 for this version) Note: the message version number is the same as for protocol version 23.01; please select correct message version based on the protocol version supported by your firmware.
-	Reserved1          byte         // Reserved
-	MaxStartupStateDur byte         // [s] Maximum time to spend in Acquisition state. If 0: bound disabled (see maxStartupStateDur) (not supported in protocol versions less than 17).
-	Reserved2          byte         // Reserved
-	Flags              CfgPm21Flags // PSM configuration flags
-	UpdatePeriod       uint32       // [ms] Position update period. If set to 0, the receiver will never retry a fix and it will wait for external events
-	SearchPeriod       uint32       // [ms] Acquisition retry period if previously failed. If set to 0, the receiver will never retry a startup
-	GridOffset         uint32       // [ms] Grid offset relative to GPS start of week
-	OnTime             uint16       // [s] Time to stay in Tracking state
-	MinAcqTime         uint16       // [s] minimal search time
-	Reserved3          [20]byte     // Reserved
-	ExtintInactivityMs uint32       // [ms] inactivity time out on EXTINT pin if enabled
+	Version               byte         // Message version (0x02 for this version) Note: the message version number is the same as for protocol version 23.01; please select correct message version based on the protocol version supported by your firmware.
+	Reserved1             byte         // Reserved
+	MaxStartupStateDur_s  byte         // [s] Maximum time to spend in Acquisition state. If 0: bound disabled (see maxStartupStateDur) (not supported in protocol versions less than 17).
+	Reserved2             byte         // Reserved
+	Flags                 CfgPm21Flags // PSM configuration flags
+	UpdatePeriod_ms       uint32       // [ms] Position update period. If set to 0, the receiver will never retry a fix and it will wait for external events
+	SearchPeriod_ms       uint32       // [ms] Acquisition retry period if previously failed. If set to 0, the receiver will never retry a startup
+	GridOffset_ms         uint32       // [ms] Grid offset relative to GPS start of week
+	OnTime_s              uint16       // [s] Time to stay in Tracking state
+	MinAcqTime_s          uint16       // [s] minimal search time
+	Reserved3             [20]byte     // Reserved
+	ExtintInactivityMs_ms uint32       // [ms] inactivity time out on EXTINT pin if enabled
 }
 
 func (CfgPm21) classID() uint16 { return 0x3b06 }
@@ -1106,21 +1107,21 @@ const (
 )
 
 // UBX-CFG-PM2 (Get/set) Extended power management configuration
-//
+// Class/Id 0x06 0x3b 48 bytes
 // This feature is not supported for either the ADR or FTS products. -
 type CfgPm22 struct {
-	Version            byte         // Message version (0x02 for this version) Note: the message version number is the same as for protocol versions 18 up to 22; please select correct message version based on the protocol version supported by your firmware.
-	Reserved1          byte         // Reserved
-	MaxStartupStateDur byte         // [s] Maximum time to spend in Acquisition state. If 0: bound disabled. (see maxStartupStateDur) (not supported in protocol versions 23 to 23.01).
-	Reserved2          byte         // Reserved
-	Flags              CfgPm22Flags // PSM configuration flags
-	UpdatePeriod       uint32       // [ms] Position update period. If set to 0, the receiver will never retry a fix and it will wait for external events .
-	SearchPeriod       uint32       // [ms] Acquisition retry period if previously failed. If set to 0, the receiver will never retry a startup. (not supported in protocol versions 23 to 23.01).
-	GridOffset         uint32       // [ms] Grid offset relative to GPS start of week (not supported in protocol versions 23 to 23.01).
-	OnTime             uint16       // [s] Time to stay in Tracking state (not supported in protocol versions 23 to 23.01).
-	MinAcqTime         uint16       // [s] Minimal search time
-	Reserved3          [20]byte     // Reserved
-	ExtintInactivityMs uint32       // [ms] inactivity time out on EXTINT pin if enabled
+	Version               byte         // Message version (0x02 for this version) Note: the message version number is the same as for protocol versions 18 up to 22; please select correct message version based on the protocol version supported by your firmware.
+	Reserved1             byte         // Reserved
+	MaxStartupStateDur_s  byte         // [s] Maximum time to spend in Acquisition state. If 0: bound disabled. (see maxStartupStateDur) (not supported in protocol versions 23 to 23.01).
+	Reserved2             byte         // Reserved
+	Flags                 CfgPm22Flags // PSM configuration flags
+	UpdatePeriod_ms       uint32       // [ms] Position update period. If set to 0, the receiver will never retry a fix and it will wait for external events .
+	SearchPeriod_ms       uint32       // [ms] Acquisition retry period if previously failed. If set to 0, the receiver will never retry a startup. (not supported in protocol versions 23 to 23.01).
+	GridOffset_ms         uint32       // [ms] Grid offset relative to GPS start of week (not supported in protocol versions 23 to 23.01).
+	OnTime_s              uint16       // [s] Time to stay in Tracking state (not supported in protocol versions 23 to 23.01).
+	MinAcqTime_s          uint16       // [s] Minimal search time
+	Reserved3             [20]byte     // Reserved
+	ExtintInactivityMs_ms uint32       // [ms] inactivity time out on EXTINT pin if enabled
 }
 
 func (CfgPm22) classID() uint16 { return 0x3b06 }
@@ -1142,20 +1143,20 @@ const (
 )
 
 // UBX-CFG-PMS (Get/set) Power mode setup
-//
+// Class/Id 0x06 0x86 8 bytes
 // Using UBX-CFG-PMS to set Super-E mode to 1, 2 or 4 Hz navigation rates sets minAcqTime to 180 s instead of the default 300 s in protocol version 23.01.
 type CfgPms struct {
 	Version         byte    // Message version (0x00 for this version)
 	PowerSetupValue byte    // Power setup value 0x00 = Full power 0x01 = Balanced 0x02 = Interval 0x03 = Aggressive with 1 Hz 0x04 = Aggressive with 2 Hz 0x05 = Aggressive with 4 Hz 0xFF = Invalid (only when polling)
-	Period          uint16  // [s] Position update period and search period. Recommended minimum period is 10 s, although the receiver accepts any value bigger than 5 s. Only valid when powerSetupValue set to Interval, otherwise must be set to '0'.
-	OnTime          uint16  // [s] Duration of the ON phase, must be smaller than the period. Only valid when powerSetupValue set to Interval, otherwise must be set to '0'.
+	Period_s        uint16  // [s] Position update period and search period. Recommended minimum period is 10 s, although the receiver accepts any value bigger than 5 s. Only valid when powerSetupValue set to Interval, otherwise must be set to '0'.
+	OnTime_s        uint16  // [s] Duration of the ON phase, must be smaller than the period. Only valid when powerSetupValue set to Interval, otherwise must be set to '0'.
 	Reserved1       [2]byte // Reserved
 }
 
 func (CfgPms) classID() uint16 { return 0x8606 }
 
 // UBX-CFG-PRT (Poll Request) Polls the configuration for one I/O port
-//
+// Class/Id 0x06 0x00 1 bytes
 // Sending this message with a port ID as payload results in having the receiver return the configuration for the specified port.
 type CfgPrt struct {
 	PortID byte // Port identifier number (see the other versions of CFG-PRT for valid values)
@@ -1164,18 +1165,18 @@ type CfgPrt struct {
 func (CfgPrt) classID() uint16 { return 0x0006 }
 
 // UBX-CFG-PRT (Get/set) Port configuration for UART ports
-//
+// Class/Id 0x06 0x00 20 bytes
 // Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit. Note that this message can affect baud rate and other transmission parameters. Because there may be messages queued for transmission there may be uncertainty about which protocol applies to such messages. In addition a message currently in transmission may be corrupted by a protocol change. Host data reception parameters may have to be changed to be able to receive future messages, including the acknowledge message resulting from the CFG-PRT message.
 type CfgPrt1 struct {
-	PortID       byte                // Port identifier number (see Integration manual for valid UART port IDs)
-	Reserved1    byte                // Reserved
-	TxReady      CfgPrt1TxReady      // TX ready PIN configuration
-	Mode         CfgPrt1Mode         // A bit mask describing the UART mode
-	BaudRate     uint32              // [Bits/s] Baud rate in bits/second
-	InProtoMask  CfgPrt1InProtoMask  // A mask describing which input protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port.
-	OutProtoMask CfgPrt1OutProtoMask // A mask describing which output protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port.
-	Flags        CfgPrt1Flags        // Flags bit mask
-	Reserved2    [2]byte             // Reserved
+	PortID          byte                // Port identifier number (see Integration manual for valid UART port IDs)
+	Reserved1       byte                // Reserved
+	TxReady         CfgPrt1TxReady      // TX ready PIN configuration
+	Mode            CfgPrt1Mode         // A bit mask describing the UART mode
+	BaudRate_bits_s uint32              // [Bits/s] Baud rate in bits/second
+	InProtoMask     CfgPrt1InProtoMask  // A mask describing which input protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port.
+	OutProtoMask    CfgPrt1OutProtoMask // A mask describing which output protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port.
+	Flags           CfgPrt1Flags        // Flags bit mask
+	Reserved2       [2]byte             // Reserved
 }
 
 func (CfgPrt1) classID() uint16 { return 0x0006 }
@@ -1221,7 +1222,7 @@ const (
 )
 
 // UBX-CFG-PRT (Get/set) Port configuration for USB port
-//
+// Class/Id 0x06 0x00 20 bytes
 // Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit.
 type CfgPrt2 struct {
 	PortID       byte                // Port identifier number (= 3 for USB port)
@@ -1263,7 +1264,7 @@ const (
 )
 
 // UBX-CFG-PRT (Get/set) Port configuration for SPI port
-//
+// Class/Id 0x06 0x00 20 bytes
 // Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length. Output messages from the module contain only one configuration unit.
 type CfgPrt3 struct {
 	PortID       byte                // Port identifier number (= 4 for SPI port)
@@ -1319,7 +1320,7 @@ const (
 )
 
 // UBX-CFG-PRT (Get/set) Port configuration for I2C (DDC) port
-//
+// Class/Id 0x06 0x00 20 bytes
 // Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit.
 type CfgPrt4 struct {
 	PortID       byte                // Port identifier number (= 0 for I2C (DDC) port)
@@ -1374,7 +1375,7 @@ const (
 )
 
 // UBX-CFG-PWR (Set) Put receiver in a defined power state
-//
+// Class/Id 0x06 0x57 8 bytes
 // This message is deprecated in protocol versions greater than 17. Use UBX-CFG- RST for GNSS start/stop and UBX-RXM-PMREQ for software backup. -
 type CfgPwr struct {
 	Version   byte    // Message version (0x01 for this version)
@@ -1385,18 +1386,18 @@ type CfgPwr struct {
 func (CfgPwr) classID() uint16 { return 0x5706 }
 
 // UBX-CFG-RATE (Get/set) Navigation/measurement rate settings
-//
+// Class/Id 0x06 0x08 6 bytes
 // This message allows the user to alter the rate at which navigation solutions (and the measurements that they depend on) are generated by the receiver. The calculation of the navigation solution will always be aligned to the top of a second zero (first second of the week) of the configured reference time system. (Navigation period is an integer multiple of the measurement period in protocol versions greater than 17).  Each measurement triggers the measurements generation and, if available,  raw data output.  The navRate value defines that every nth measurement triggers a navigation  epoch.  The update rate has a direct influence on the power consumption. The more  fixes that are required, the more CPU power and communication resources are  required.  For most applications a 1 Hz update rate would be sufficient.  When using power save mode, measurement and navigation rate can differ  from the values configured here.  See Measurement and navigation rate with power save mode for details.
 type CfgRate struct {
-	MeasRate uint16 // [ms] The elapsed time between GNSS measurements, which defines the rate, e. g. 100 ms => 10 Hz, 1000 ms => 1 Hz, 10000 ms => 0.1 Hz. Measurement rate should be greater than or equal to 25 ms. (Measurement rate should be greater than or equal to 50 ms in protocol versions less than 24).
-	NavRate  uint16 // [cycles] The ratio between the number of measurements and the number of navigation solutions, e.g. 5 means five measurements for every navigation solution. Maximum value is 127. (This parameter is ignored and the navRate is fixed to 1 in protocol versions less than 18).
-	TimeRef  uint16 // The time system to which measurements are aligned: 0: UTC time 1: GPS time 2: GLONASS time (not supported in protocol versions less than 18) 3: BeiDou time (not supported in protocol versions less than 18) 4: Galileo time (not supported in protocol versions less than 18)
+	MeasRate_ms    uint16 // [ms] The elapsed time between GNSS measurements, which defines the rate, e. g. 100 ms => 10 Hz, 1000 ms => 1 Hz, 10000 ms => 0.1 Hz. Measurement rate should be greater than or equal to 25 ms. (Measurement rate should be greater than or equal to 50 ms in protocol versions less than 24).
+	NavRate_cycles uint16 // [cycles] The ratio between the number of measurements and the number of navigation solutions, e.g. 5 means five measurements for every navigation solution. Maximum value is 127. (This parameter is ignored and the navRate is fixed to 1 in protocol versions less than 18).
+	TimeRef        uint16 // The time system to which measurements are aligned: 0: UTC time 1: GPS time 2: GLONASS time (not supported in protocol versions less than 18) 3: BeiDou time (not supported in protocol versions less than 18) 4: Galileo time (not supported in protocol versions less than 18)
 }
 
 func (CfgRate) classID() uint16 { return 0x0806 }
 
 // UBX-CFG-RINV (Get/set) Contents of remote inventory
-//
+// Class/Id 0x06 0x34 1 + 1*N bytes
 // If N is greater than 30, the excess bytes are discarded.
 type CfgRinv struct {
 	Flags CfgRinvFlags // Flags
@@ -1415,7 +1416,7 @@ const (
 )
 
 // UBX-CFG-RST (Command) Reset receiver / Clear backup data structures
-//
+// Class/Id 0x06 0x04 4 bytes
 // Do not expect this message to be acknowledged by the receiver.  Newer FW version will not acknowledge this message at all.  Older FW version will acknowledge this message but the acknowledge may not  be sent completely before the receiver is reset.
 type CfgRst struct {
 	NavBbrMask CfgRstNavBbrMask // BBR sections to clear. The following special sets apply: 0x0000 Hot start 0x0001 Warm start 0xFFFF Cold start
@@ -1441,7 +1442,7 @@ const (
 )
 
 // UBX-CFG-RXM (Get/set) RXM configuration
-//
+// Class/Id 0x06 0x11 2 bytes
 // For a detailed description see section Power management in Integration manual Note that Power save mode cannot be selected when the receiver is configured to process GLONASS signals (using UBX-CFG-GNSS).
 type CfgRxm struct {
 	Reserved1 byte // Reserved
@@ -1451,7 +1452,7 @@ type CfgRxm struct {
 func (CfgRxm) classID() uint16 { return 0x1106 }
 
 // UBX-CFG-RXM (Get/set) RXM configuration
-//
+// Class/Id 0x06 0x11 2 bytes
 // For a detailed description see section Power Management.
 type CfgRxm1 struct {
 	Reserved1 byte // Reserved
@@ -1461,7 +1462,7 @@ type CfgRxm1 struct {
 func (CfgRxm1) classID() uint16 { return 0x1106 }
 
 // UBX-CFG-SBAS (Get/set) SBAS configuration
-//
+// Class/Id 0x06 0x16 8 bytes
 // This message configures the SBAS receiver subsystem (i.e. WAAS, EGNOS, MSAS). See the SBAS configuration settings description for a detailed description of how these settings affect receiver operation.
 type CfgSbas struct {
 	Mode      CfgSbasMode  // SBAS mode
@@ -1489,7 +1490,7 @@ const (
 )
 
 // UBX-CFG-SENIF (Get/set) I2C sensor interface configuration
-//
+// Class/Id 0x06 0x88 6 bytes
 // -
 type CfgSenif struct {
 	Type    byte            // Type of interface, 0 for I2C
@@ -1514,7 +1515,7 @@ const (
 )
 
 // UBX-CFG-SLAS (Get/set) SLAS configuration
-//
+// Class/Id 0x06 0x8d 4 bytes
 // This message configures the QZSS SLAS (Sub-meter Level Augmentation System). See the SLAS Configuration Settings Description for a detailed description of how these settings affect receiver operation. To apply SLAS corrections, QZSS operation and L1S signal tracking must be enabled see UBX-CFG-GNSS
 type CfgSlas struct {
 	Mode      CfgSlasMode // SLAS Mode
@@ -1532,19 +1533,19 @@ const (
 )
 
 // UBX-CFG-SMGR (Get/set) Synchronization manager configuration
-//
+// Class/Id 0x06 0x62 20 bytes
 // -
 type CfgSmgr struct {
-	Version           byte              // Message version (0x00 for this version)
-	MinGNSSFix        byte              // Minimum number of GNSS fixes before we commit to use it as a source
-	MaxFreqChangeRate uint16            // [ppb/s] Maximum frequency change rate during disciplining. Must not exceed 30ppb/s
-	MaxPhaseCorrRate  uint16            // [ns/s] Maximum phase correction rate in coherent time pulse mode. For maximum phase correction rate in corrective time pulse mode see maxSlewRate. Note that in coherent time pulse mode phase correction is achieved by intentional frequency offset. Allowing for a high phase correction rate can result in large intentional frequency offset. Must not exceed 100ns/s
-	Reserved1         [2]byte           // Reserved
-	FreqTolerance     uint16            // [ppb] Limit of possible deviation from nominal before UBX-TIM-TOS indicates that frequency is out of tolerance
-	TimeTolerance     uint16            // [ns] Limit of possible deviation from nominal before UBX-TIM-TOS indicates that time pulse is out of tolerance
-	MessageCfg        CfgSmgrMessageCfg // Sync manager message configuration
-	MaxSlewRate       uint16            // [us/s] Maximum slew rate, the maximum time correction that shall be applied between locked pulses in corrective time pulse mode. To have no limit on the slew rate, set the flag disableMaxSlewRate to 1 For maximum phase correction rate in coherent time pulse mode see maxPhaseCorrRate.
-	Flags             CfgSmgrFlags      // Flags
+	Version                 byte              // Message version (0x00 for this version)
+	MinGNSSFix              byte              // Minimum number of GNSS fixes before we commit to use it as a source
+	MaxFreqChangeRate_ppb_s uint16            // [ppb/s] Maximum frequency change rate during disciplining. Must not exceed 30ppb/s
+	MaxPhaseCorrRate_ns_s   uint16            // [ns/s] Maximum phase correction rate in coherent time pulse mode. For maximum phase correction rate in corrective time pulse mode see maxSlewRate. Note that in coherent time pulse mode phase correction is achieved by intentional frequency offset. Allowing for a high phase correction rate can result in large intentional frequency offset. Must not exceed 100ns/s
+	Reserved1               [2]byte           // Reserved
+	FreqTolerance_ppb       uint16            // [ppb] Limit of possible deviation from nominal before UBX-TIM-TOS indicates that frequency is out of tolerance
+	TimeTolerance_ns        uint16            // [ns] Limit of possible deviation from nominal before UBX-TIM-TOS indicates that time pulse is out of tolerance
+	MessageCfg              CfgSmgrMessageCfg // Sync manager message configuration
+	MaxSlewRate_us_s        uint16            // [us/s] Maximum slew rate, the maximum time correction that shall be applied between locked pulses in corrective time pulse mode. To have no limit on the slew rate, set the flag disableMaxSlewRate to 1 For maximum phase correction rate in coherent time pulse mode see maxPhaseCorrRate.
+	Flags                   CfgSmgrFlags      // Flags
 }
 
 func (CfgSmgr) classID() uint16 { return 0x6206 }
@@ -1578,7 +1579,7 @@ const (
 )
 
 // UBX-CFG-SPT (Get/set) Configure and start a sensor production test
-//
+// Class/Id 0x06 0x64 12 bytes
 // The production test uses the built-in self-test capabilities of an attached sensor. This message is only supported if a sensor is directly connected to the u-blox receiver.
 type CfgSpt struct {
 	Version   byte    // Message version (0x00 for this version)
@@ -1590,18 +1591,18 @@ type CfgSpt struct {
 func (CfgSpt) classID() uint16 { return 0x6406 }
 
 // UBX-CFG-TMODE2 (Get/set) Time mode settings 2
-//
+// Class/Id 0x06 0x3d 28 bytes
 // This message is available only for timing receivers See the Time Mode Description for details. This message replaces the deprecated UBX-CFG-TMODE message.
 type CfgTmode2 struct {
-	TimeMode     byte           // Time Transfer Mode: 0 Disabled 1 Survey In 2 Fixed Mode (true position information required) 3-255 Reserved
-	Reserved1    byte           // Reserved
-	Flags        CfgTmode2Flags // Time mode flags
-	EcefXOrLat   int32          // [cm_or_deg*1e-7] WGS84 ECEF X coordinate or latitude, depending on flags above
-	EcefYOrLon   int32          // [cm_or_deg*1e-7] WGS84 ECEF Y coordinate or longitude, depending on flags above
-	EcefZOrAlt   int32          // [cm] WGS84 ECEF Z coordinate or altitude, depending on flags above
-	FixedPosAcc  uint32         // [mm] Fixed position 3D accuracy
-	SvinMinDur   uint32         // [s] Survey-in minimum duration
-	SvinAccLimit uint32         // [mm] Survey-in position accuracy limit
+	TimeMode        byte           // Time Transfer Mode: 0 Disabled 1 Survey In 2 Fixed Mode (true position information required) 3-255 Reserved
+	Reserved1       byte           // Reserved
+	Flags           CfgTmode2Flags // Time mode flags
+	EcefXOrLat      int32          // [cm_or_deg*1e-7] WGS84 ECEF X coordinate or latitude, depending on flags above
+	EcefYOrLon      int32          // [cm_or_deg*1e-7] WGS84 ECEF Y coordinate or longitude, depending on flags above
+	EcefZOrAlt_cm   int32          // [cm] WGS84 ECEF Z coordinate or altitude, depending on flags above
+	FixedPosAcc_mm  uint32         // [mm] Fixed position 3D accuracy
+	SvinMinDur_s    uint32         // [s] Survey-in minimum duration
+	SvinAccLimit_mm uint32         // [mm] Survey-in position accuracy limit
 }
 
 func (CfgTmode2) classID() uint16 { return 0x3d06 }
@@ -1614,23 +1615,23 @@ const (
 )
 
 // UBX-CFG-TMODE3 (Get/set) Time mode settings 3
-//
+// Class/Id 0x06 0x71 40 bytes
 // Configures the receiver to be in Time Mode. The position referred to in this message is that of the Antenna Reference Point (ARP). See the Time Mode Description for details.
 type CfgTmode3 struct {
-	Version      byte           // Message version (0x00 for this version)
-	Reserved1    byte           // Reserved
-	Flags        CfgTmode3Flags // Receiver mode flags
-	EcefXOrLat   int32          // [cm_or_deg*1e-7] WGS84 ECEF X coordinate (or latitude) of the ARP position, depending on flags above
-	EcefYOrLon   int32          // [cm_or_deg*1e-7] WGS84 ECEF Y coordinate (or longitude) of the ARP position, depending on flags above
-	EcefZOrAlt   int32          // [cm] WGS84 ECEF Z coordinate (or altitude) of the ARP position, depending on flags above
-	EcefXOrLatHP int8           // [0.1_mm_or_deg*1e-9] High-precision WGS84 ECEF X coordinate (or latitude) of the ARP position, depending on flags above. Must be in the range -99..+99. The precise WGS84 ECEF X coordinate in units of cm, or the precise WGS84 ECEF latitude in units of 1e-7 degrees, is given by ecefXOrLat + (ecefXOrLatHP * 1e-2)
-	EcefYOrLonHP int8           // [0.1_mm_or_deg*1e-9] High-precision WGS84 ECEF Y coordinate (or longitude) of the ARP position, depending on flags above. Must be in the range -99..+99. The precise WGS84 ECEF Y coordinate in units of cm, or the precise WGS84 ECEF longitude in units of 1e-7 degrees, is given by ecefYOrLon + (ecefYOrLonHP * 1e-2)
-	EcefZOrAltHP int8           // [0.1_mm] High-precision WGS84 ECEF Z coordinate (or altitude) of the ARP position, depending on flags above. Must be in the range -99..+99. The precise WGS84 ECEF Z coordinate, or altitude coordinate, in units of cm is given by ecefZOrAlt + (ecefZOrAltHP * 1e-2)
-	Reserved2    byte           // Reserved
-	FixedPosAcc  uint32         // [0.1_mm] Fixed position 3D accuracy
-	SvinMinDur   uint32         // [s] Survey-in minimum duration
-	SvinAccLimit uint32         // [0.1_mm] Survey-in position accuracy limit
-	Reserved3    [8]byte        // Reserved
+	Version       byte           // Message version (0x00 for this version)
+	Reserved1     byte           // Reserved
+	Flags         CfgTmode3Flags // Receiver mode flags
+	EcefXOrLat    int32          // [cm_or_deg*1e-7] WGS84 ECEF X coordinate (or latitude) of the ARP position, depending on flags above
+	EcefYOrLon    int32          // [cm_or_deg*1e-7] WGS84 ECEF Y coordinate (or longitude) of the ARP position, depending on flags above
+	EcefZOrAlt_cm int32          // [cm] WGS84 ECEF Z coordinate (or altitude) of the ARP position, depending on flags above
+	EcefXOrLatHP  int8           // [0.1_mm_or_deg*1e-9] High-precision WGS84 ECEF X coordinate (or latitude) of the ARP position, depending on flags above. Must be in the range -99..+99. The precise WGS84 ECEF X coordinate in units of cm, or the precise WGS84 ECEF latitude in units of 1e-7 degrees, is given by ecefXOrLat + (ecefXOrLatHP * 1e-2)
+	EcefYOrLonHP  int8           // [0.1_mm_or_deg*1e-9] High-precision WGS84 ECEF Y coordinate (or longitude) of the ARP position, depending on flags above. Must be in the range -99..+99. The precise WGS84 ECEF Y coordinate in units of cm, or the precise WGS84 ECEF longitude in units of 1e-7 degrees, is given by ecefYOrLon + (ecefYOrLonHP * 1e-2)
+	EcefZOrAltHP  int8           // [0.1_mm] High-precision WGS84 ECEF Z coordinate (or altitude) of the ARP position, depending on flags above. Must be in the range -99..+99. The precise WGS84 ECEF Z coordinate, or altitude coordinate, in units of cm is given by ecefZOrAlt + (ecefZOrAltHP * 1e-2)
+	Reserved2     byte           // Reserved
+	FixedPosAcc   uint32         // [0.1_mm] Fixed position 3D accuracy
+	SvinMinDur_s  uint32         // [s] Survey-in minimum duration
+	SvinAccLimit  uint32         // [0.1_mm] Survey-in position accuracy limit
+	Reserved3     [8]byte        // Reserved
 }
 
 func (CfgTmode3) classID() uint16 { return 0x7106 }
@@ -1643,7 +1644,7 @@ const (
 )
 
 // UBX-CFG-TP5 (Poll Request) Poll time pulse parameters for time pulse 0
-//
+// Class/Id 0x06 0x31 0 bytes
 // Sending this (empty / no-payload) message to the receiver results in the receiver returning a message of type UBX-CFG-TP5 with a payload as defined below for timepulse 0.
 type CfgTp5 struct {
 }
@@ -1651,7 +1652,7 @@ type CfgTp5 struct {
 func (CfgTp5) classID() uint16 { return 0x3106 }
 
 // UBX-CFG-TP5 (Poll Request) Poll time pulse parameters
-//
+// Class/Id 0x06 0x31 1 bytes
 // Sending this message to the receiver results in the receiver returning a message of type UBX-CFG-TP5 with a payload as defined below for the specified time pulse.
 type CfgTp51 struct {
 	TpIdx byte // Time pulse selection (0 = TIMEPULSE, 1 = TIMEPULSE2)
@@ -1660,20 +1661,20 @@ type CfgTp51 struct {
 func (CfgTp51) classID() uint16 { return 0x3106 }
 
 // UBX-CFG-TP5 (Get/set) Time pulse parameters
-//
-// This message is used to get/set time pulse parameters. For more information see section Time pulse.
+// Class/Id 0x06 0x31 32 bytes
+// -
 type CfgTp52 struct {
-	TpIdx             byte         // Time pulse selection (0 = TIMEPULSE, 1 = TIMEPULSE2)
-	Version           byte         // Message version (0x00 for this version)
-	Reserved1         [2]byte      // Reserved
-	AntCableDelay     int16        // [ns] Antenna cable delay
-	RfGroupDelay      int16        // [ns] RF group delay
-	FreqPeriod        uint32       // [Hz_or_us] Frequency or period time, depending on setting of bit 'isFreq'
-	FreqPeriodLock    uint32       // [Hz_or_us] Frequency or period time when locked to GPS time, only used if 'lockedOtherSet' is set
-	PulseLenRatio     uint32       // [us_or_2^-32] Pulse length or duty cycle, depending on 'isLength'
-	PulseLenRatioLock uint32       // [us_or_2^-32] Pulse length or duty cycle when locked to GPS time, only used if 'lockedOtherSet' is set
-	UserConfigDelay   int32        // [ns] User-configurable time pulse delay
-	Flags             CfgTp52Flags // Configuration flags
+	TpIdx              byte         // Time pulse selection (0 = TIMEPULSE, 1 = TIMEPULSE2)
+	Version            byte         // Message version (0x01 for this version)
+	Reserved1          [2]byte      // Reserved
+	AntCableDelay_ns   int16        // [ns] Antenna cable delay
+	RfGroupDelay_ns    int16        // [ns] RF group delay
+	FreqPeriod         uint32       // [Hz_or_us] Frequency or period time, depending on setting of bit 'isFreq'
+	FreqPeriodLock     uint32       // [Hz_or_us] Frequency or period time when locked to GNSS time, only used if 'lockedOtherSet' is set
+	PulseLenRatio      uint32       // [us_or_2^-32] Pulse length or duty cycle, depending on 'isLength'
+	PulseLenRatioLock  uint32       // [us_or_2^-32] Pulse length or duty cycle when locked to GNSS time, only used if 'lockedOtherSet' is set
+	UserConfigDelay_ns int32        // [ns] User-configurable time pulse delay
+	Flags              CfgTp52Flags // Configuration flags
 }
 
 func (CfgTp52) classID() uint16 { return 0x3106 }
@@ -1681,51 +1682,19 @@ func (CfgTp52) classID() uint16 { return 0x3106 }
 type CfgTp52Flags uint32
 
 const (
-	CfgTp52Active         CfgTp52Flags = 0x1  // if set enable time pulse; if pin assigned to another function, other function takes precedence
-	CfgTp52LockGpsFreq    CfgTp52Flags = 0x2  // if set synchronize time pulse to GPS as soon as GPS time is valid, otherwise use local clock
-	CfgTp52LockedOtherSet CfgTp52Flags = 0x4  // if set use 'freqPeriodLock' and 'pulseLenRatioLock' as soon as GPS time is valid and 'freqPeriod' and 'pulseLenRatio' if GPS time is invalid, if flag is cleared 'freqPeriod' and 'pulseLenRatio' used regardless of GPS time
-	CfgTp52IsFreq         CfgTp52Flags = 0x8  // if set 'freqPeriodLock' and 'freqPeriod' interpreted as frequency, otherwise interpreted as period
-	CfgTp52IsLength       CfgTp52Flags = 0x10 // if set 'pulseLenRatioLock' and 'pulseLenRatio' interpreted as pulse length, otherwise interpreted as duty cycle
-	CfgTp52AlignToTow     CfgTp52Flags = 0x20 // align pulse to top of second (period time must be integer fraction of 1s)
-	CfgTp52Polarity       CfgTp52Flags = 0x40 // pulse polarity: 0 = falling edge at top of second 1 = rising edge at top of second
-	CfgTp52GridUtcGps     CfgTp52Flags = 0x80 // timegrid to use: 0 = UTC 1 = GPS
-)
-
-// UBX-CFG-TP5 (Get/set) Time pulse parameters
-//
-// -
-type CfgTp53 struct {
-	TpIdx             byte         // Time pulse selection (0 = TIMEPULSE, 1 = TIMEPULSE2)
-	Version           byte         // Message version (0x01 for this version)
-	Reserved1         [2]byte      // Reserved
-	AntCableDelay     int16        // [ns] Antenna cable delay
-	RfGroupDelay      int16        // [ns] RF group delay
-	FreqPeriod        uint32       // [Hz_or_us] Frequency or period time, depending on setting of bit 'isFreq'
-	FreqPeriodLock    uint32       // [Hz_or_us] Frequency or period time when locked to GNSS time, only used if 'lockedOtherSet' is set
-	PulseLenRatio     uint32       // [us_or_2^-32] Pulse length or duty cycle, depending on 'isLength'
-	PulseLenRatioLock uint32       // [us_or_2^-32] Pulse length or duty cycle when locked to GNSS time, only used if 'lockedOtherSet' is set
-	UserConfigDelay   int32        // [ns] User-configurable time pulse delay
-	Flags             CfgTp53Flags // Configuration flags
-}
-
-func (CfgTp53) classID() uint16 { return 0x3106 }
-
-type CfgTp53Flags uint32
-
-const (
-	CfgTp53Active         CfgTp53Flags = 0x1    // If set enable time pulse; if pin assigned to another function, other function takes precedence. Must be set for FTS variant.
-	CfgTp53LockGnssFreq   CfgTp53Flags = 0x2    // If set, synchronize time pulse to GNSS as soon as GNSS time is valid. If not set, or before GNSS time is valid, use local clock. This flag is ignored by the FTS product variant; in this case the receiver always locks to the best available time/frequency reference (which is not necessarily GNSS). This flag can be unset only in Timing product variants.
-	CfgTp53LockedOtherSet CfgTp53Flags = 0x4    // If set the receiver switches between the timepulse settings given by 'freqPeriodLocked' & 'pulseLenLocked' and those given by 'freqPeriod' & 'pulseLen'. The 'Locked' settings are used where the receiver has an accurate sense of time. For non-FTS products, this occurs when GNSS solution with a reliable time is available, but for FTS products the setting syncMode field governs behavior. In all cases, the receiver only uses 'freqPeriod' & 'pulseLen' when the flag is unset.
-	CfgTp53IsFreq         CfgTp53Flags = 0x8    // If set 'freqPeriodLock' and 'freqPeriod' are interpreted as frequency, otherwise interpreted as period.
-	CfgTp53IsLength       CfgTp53Flags = 0x10   // If set 'pulseLenRatioLock' and 'pulseLenRatio' interpreted as pulse length, otherwise interpreted as duty cycle.
-	CfgTp53AlignToTow     CfgTp53Flags = 0x20   // Align pulse to top of second (period time must be integer fraction of 1s). Also set 'lockGnssFreq' to use this feature. This flag is ignored by the FTS product variant; it is assumed to be always set (as is lockGnssFreq). Set maxSlewRate and maxPhaseCorrRate fields of UBX-CFG-SMGR to 0 to disable alignment.
-	CfgTp53Polarity       CfgTp53Flags = 0x40   // Pulse polarity: 0: falling edge at top of second 1: rising edge at top of second
-	CfgTp53GridUtcGnss    CfgTp53Flags = 0x780  // Timegrid to use: 0: UTC 1: GPS 2: GLONASS 3: BeiDou 4: Galileo (not supported in protocol versions less than 18) This flag is only relevant if 'lockGnssFreq' and 'alignToTow' are set. Note that configured GNSS time is estimated by the receiver if locked to any GNSS system. If the receiver has a valid GNSS fix it will attempt to steer the TP to the specified time grid even if the specified time is not based on information from the constellation's satellites. To ensure timing based purely on a given GNSS, restrict the supported constellations in UBX-CFG-GNSS.
-	CfgTp53SyncMode       CfgTp53Flags = 0x3800 // Sync Manager lock mode to use: 0: switch to 'freqPeriodLock' and 'pulseLenRatioLock' as soon as Sync Manager has an accurate time, never switch back to 'freqPeriod' and 'pulseLenRatio' 1: switch to 'freqPeriodLock' and 'pulseLenRatioLock' as soon as Sync Manager has an accurate time, and switch back to 'freqPeriod' and 'pulseLenRatio' as soon as time gets inaccurate This field is only relevant for the FTS product variant. This field is only relevant if the flag 'lockedOtherSet' is set.
+	CfgTp52Active         CfgTp52Flags = 0x1    // If set enable time pulse; if pin assigned to another function, other function takes precedence. Must be set for FTS variant.
+	CfgTp52LockGnssFreq   CfgTp52Flags = 0x2    // If set, synchronize time pulse to GNSS as soon as GNSS time is valid. If not set, or before GNSS time is valid, use local clock. This flag is ignored by the FTS product variant; in this case the receiver always locks to the best available time/frequency reference (which is not necessarily GNSS). This flag can be unset only in Timing product variants.
+	CfgTp52LockedOtherSet CfgTp52Flags = 0x4    // If set the receiver switches between the timepulse settings given by 'freqPeriodLocked' & 'pulseLenLocked' and those given by 'freqPeriod' & 'pulseLen'. The 'Locked' settings are used where the receiver has an accurate sense of time. For non-FTS products, this occurs when GNSS solution with a reliable time is available, but for FTS products the setting syncMode field governs behavior. In all cases, the receiver only uses 'freqPeriod' & 'pulseLen' when the flag is unset.
+	CfgTp52IsFreq         CfgTp52Flags = 0x8    // If set 'freqPeriodLock' and 'freqPeriod' are interpreted as frequency, otherwise interpreted as period.
+	CfgTp52IsLength       CfgTp52Flags = 0x10   // If set 'pulseLenRatioLock' and 'pulseLenRatio' interpreted as pulse length, otherwise interpreted as duty cycle.
+	CfgTp52AlignToTow     CfgTp52Flags = 0x20   // Align pulse to top of second (period time must be integer fraction of 1s). Also set 'lockGnssFreq' to use this feature. This flag is ignored by the FTS product variant; it is assumed to be always set (as is lockGnssFreq). Set maxSlewRate and maxPhaseCorrRate fields of UBX-CFG-SMGR to 0 to disable alignment.
+	CfgTp52Polarity       CfgTp52Flags = 0x40   // Pulse polarity: 0: falling edge at top of second 1: rising edge at top of second
+	CfgTp52GridUtcGnss    CfgTp52Flags = 0x780  // Timegrid to use: 0: UTC 1: GPS 2: GLONASS 3: BeiDou 4: Galileo (not supported in protocol versions less than 18) This flag is only relevant if 'lockGnssFreq' and 'alignToTow' are set. Note that configured GNSS time is estimated by the receiver if locked to any GNSS system. If the receiver has a valid GNSS fix it will attempt to steer the TP to the specified time grid even if the specified time is not based on information from the constellation's satellites. To ensure timing based purely on a given GNSS, restrict the supported constellations in UBX-CFG-GNSS.
+	CfgTp52SyncMode       CfgTp52Flags = 0x3800 // Sync Manager lock mode to use: 0: switch to 'freqPeriodLock' and 'pulseLenRatioLock' as soon as Sync Manager has an accurate time, never switch back to 'freqPeriod' and 'pulseLenRatio' 1: switch to 'freqPeriodLock' and 'pulseLenRatioLock' as soon as Sync Manager has an accurate time, and switch back to 'freqPeriod' and 'pulseLenRatio' as soon as time gets inaccurate This field is only relevant for the FTS product variant. This field is only relevant if the flag 'lockedOtherSet' is set.
 )
 
 // UBX-CFG-TXSLOT (Set) TX buffer time slots configuration
-//
+// Class/Id 0x06 0x53 16 bytes
 // This message configures how transmit time slots are defined for the receiver interfaces. These time slots are relative to the chosen time pulse. A receiver that supports this message offers 3 time slots: nr. 0, 1 and 2. These time pulses follow each other and their associated priorities decrease in this order. The end of each can be specified in this message, the beginning is when the circularly previous slot ends (i.e. slot 0 starts when slot 2 finishes).
 type CfgTxslot struct {
 	Version   byte            // Message version (0x00 for this version)
@@ -1750,18 +1719,18 @@ const (
 )
 
 // UBX-CFG-USB (Get/set) USB configuration
-//
+// Class/Id 0x06 0x1b 108 bytes
 // -
 type CfgUsb struct {
-	VendorID         uint16      // Vendor ID. This field shall only be set to registered Vendor IDs. Changing this field requires special Host drivers.
-	ProductID        uint16      // Product ID. Changing this field requires special Host drivers.
-	Reserved1        [2]byte     // Reserved
-	Reserved2        [2]byte     // Reserved
-	PowerConsumption uint16      // [mA] Power consumed by the device
-	Flags            CfgUsbFlags // various configuration flags
-	VendorString     [32]byte    // String containing the vendor name. 32 ASCII bytes including 0-termination.
-	ProductString    [32]byte    // String containing the product name. 32 ASCII bytes including 0-termination.
-	SerialNumber     [32]byte    // String containing the serial number. 32 ASCII bytes including 0-termination. Changing the String fields requires special Host drivers.
+	VendorID            uint16      // Vendor ID. This field shall only be set to registered Vendor IDs. Changing this field requires special Host drivers.
+	ProductID           uint16      // Product ID. Changing this field requires special Host drivers.
+	Reserved1           [2]byte     // Reserved
+	Reserved2           [2]byte     // Reserved
+	PowerConsumption_ma uint16      // [mA] Power consumed by the device
+	Flags               CfgUsbFlags // various configuration flags
+	VendorString        [32]byte    // String containing the vendor name. 32 ASCII bytes including 0-termination.
+	ProductString       [32]byte    // String containing the product name. 32 ASCII bytes including 0-termination.
+	SerialNumber        [32]byte    // String containing the serial number. 32 ASCII bytes including 0-termination. Changing the String fields requires special Host drivers.
 }
 
 func (CfgUsb) classID() uint16 { return 0x1b06 }
@@ -1774,17 +1743,17 @@ const (
 )
 
 // UBX-ESF-ALG (Periodic/Polled) IMU alignment information
-//
+// Class/Id 0x10 0x14 16 bytes
 // This message outputs the IMU alignment angles which define the rotation from the installation-frame to the IMU-frame (see the IMU-mount Misalignment section for more details). In addition, it outputs information about the automatic IMU-mount alignment (if enabled).
 type EsfAlg struct {
-	ITOW      uint32      // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Version   byte        // Message version (0x01 for this version)
-	Flags     EsfAlgFlags // Flags
-	Error     EsfAlgError // Flags
-	Reserved1 byte        // Reserved
-	Yaw       uint32      // [1e-2 deg] IMU-mount yaw angle [0, 360]
-	Pitch     int16       // [1e-2 deg] IMU-mount pitch angle [-90, 90]
-	Roll      int16       // [1e-2 deg] IMU-mount roll angle [-180, 180]
+	ITOW_ms     uint32      // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Version     byte        // Message version (0x01 for this version)
+	Flags       EsfAlgFlags // Flags
+	Error       EsfAlgError // Flags
+	Reserved1   byte        // Reserved
+	Yaw_dege2   uint32      // [1e-2 deg] IMU-mount yaw angle [0, 360]
+	Pitch_dege2 int16       // [1e-2 deg] IMU-mount pitch angle [-90, 90]
+	Roll_dege2  int16       // [1e-2 deg] IMU-mount roll angle [-180, 180]
 }
 
 func (EsfAlg) classID() uint16 { return 0x1410 }
@@ -1805,18 +1774,18 @@ const (
 )
 
 // UBX-ESF-INS (Periodic/Polled) Vehicle dynamics information
-//
+// Class/Id 0x10 0x15 36 bytes
 // This message outputs information about the vehicle dynamics. For ADR products (in protocol versions less than 19.2), the output dynamics information (angular rates and accelerations) is expressed with respect to the vehicle-frame. More information can be found in the ADR Navigation Output section. For ADR products, the output dynamics information (angular rates and accelerations) is expressed with respect to the vehicle-frame. More information can be found in the ADR Navigation Output section. For UDR products, the output dynamics information (angular rates and accelerations) are expressed with respect to the body-frame. More information can be found in the UDR Navigation Output section.
 type EsfIns struct {
-	Bitfield0 EsfInsBitfield0 // Bitfield
-	Reserved1 [4]byte         // Reserved
-	ITOW      uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	XAngRate  int32           // [1e-3 deg/s] Compensated x-axis angular rate.
-	YAngRate  int32           // [1e-3 deg/s] Compensated y-axis angular rate.
-	ZAngRate  int32           // [1e-3 deg/s] Compensated z-axis angular rate.
-	XAccel    int32           // [1e-2 m/s^2] Compensated x-axis acceleration (gravity- free).
-	YAccel    int32           // [1e-2 m/s^2] Compensated y-axis acceleration (gravity- free).
-	ZAccel    int32           // [1e-2 m/s^2] Compensated z-axis acceleration (gravity- free).
+	Bitfield0        EsfInsBitfield0 // Bitfield
+	Reserved1        [4]byte         // Reserved
+	ITOW_ms          uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	XAngRate_deg_se3 int32           // [1e-3 deg/s] Compensated x-axis angular rate.
+	YAngRate_deg_se3 int32           // [1e-3 deg/s] Compensated y-axis angular rate.
+	ZAngRate_deg_se3 int32           // [1e-3 deg/s] Compensated z-axis angular rate.
+	XAccel_m_s2e2    int32           // [1e-2 m/s^2] Compensated x-axis acceleration (gravity- free).
+	YAccel_m_s2e2    int32           // [1e-2 m/s^2] Compensated y-axis acceleration (gravity- free).
+	ZAccel_m_s2e2    int32           // [1e-2 m/s^2] Compensated z-axis acceleration (gravity- free).
 }
 
 func (EsfIns) classID() uint16 { return 0x1510 }
@@ -1834,7 +1803,7 @@ const (
 )
 
 // UBX-ESF-MEAS (Input/Output) External sensor fusion measurements
-//
+// Class/Id 0x10 0x02 (8 + 4*numMeas) or (12 + 4*numMeas) bytes
 // Possible data types for the data field are described in the ESF Measurement Data section.
 type EsfMeas struct {
 	TimeTag uint32       // Time tag of measurement generated by external sensor
@@ -1844,7 +1813,7 @@ type EsfMeas struct {
 		Data EsfMeasData // data
 	} // len: numMeas
 	// Optional
-	CalibTtag uint32 // [ms] Receiver local time calibrated. This field must not be supplied when calibTtagValid is set to 0.
+	CalibTtag_ms uint32 // [ms] Receiver local time calibrated. This field must not be supplied when calibTtagValid is set to 0.
 }
 
 func (EsfMeas) classID() uint16 { return 0x0210 }
@@ -1866,7 +1835,7 @@ const (
 )
 
 // UBX-ESF-RAW (Output) Raw sensor measurements
-//
+// Class/Id 0x10 0x03 4 + 8*N bytes
 // The message contains measurements from the active inertial sensors connected to the GNSS chip. Possible data types for the data field are accelerometer, gyroscope and temperature readings as described in the ESF Measurement Data section. Note that the rate selected in UBX-CFG-MSG is not respected. If a positive rate is selected then all raw measurements will be output. See also Raw Sensor Measurement Data.
 type EsfRaw struct {
 	Reserved1 [4]byte // Reserved
@@ -1886,10 +1855,10 @@ const (
 )
 
 // UBX-ESF-STATUS (Periodic/Polled) External sensor fusion status
-//
+// Class/Id 0x10 0x10 16 + 4*numSens bytes
 // -
 type EsfStatus struct {
-	ITOW       uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ITOW_ms    uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	Version    byte    // Message version (0x02 for this version)
 	Reserved1  [7]byte // Reserved
 	FusionMode byte    // Fusion mode: 0: Initialization mode: receiver is initializing some unknown values required for doing sensor fusion 1: Fusion mode: GNSS and sensor data are used for navigation solution computation 2: Suspended fusion mode: sensor fusion is temporarily disabled due to e.g. invalid sensor data or detected ferry 3: Disabled fusion mode: sensor fusion is permanently disabled until receiver reset due e.g. to sensor error More details can be found in the Fusion Modes section.
@@ -1898,7 +1867,7 @@ type EsfStatus struct {
 	Items      []*struct {
 		SensStatus1 EsfStatusSensStatus1 // Sensor status, part 1
 		SensStatus2 EsfStatusSensStatus2 // Sensor status, part 2
-		Freq        byte                 // [Hz] Observation frequency
+		Freq_hz     byte                 // [Hz] Observation frequency
 		Faults      EsfStatusFaults      // Sensor faults
 	} // len: numSens
 }
@@ -1930,35 +1899,35 @@ const (
 )
 
 // UBX-HNR-ATT (Periodic/Polled) Attitude solution
-//
+// Class/Id 0x28 0x01 32 bytes
 // This message outputs the attitude solution as roll, pitch and heading angles. More details about vehicle attitude can be found in the Vehicle Attitude Output (ADR) section for ADR products. More details about vehicle attitude can be found in the Vehicle Attitude Output (UDR) section for UDR products.
 type HnrAtt struct {
-	ITOW       uint32  // [ms] GPS time of week of the HNR epoch.
-	Version    byte    // Message version (0x01 for this version)
-	Reserved1  [3]byte // Reserved
-	Roll       int32   // [1e-5 deg] Vehicle roll.
-	Pitch      int32   // [1e-5 deg] Vehicle pitch.
-	Heading    int32   // [1e-5 deg] Vehicle heading.
-	AccRoll    uint32  // [1e-5 deg] Vehicle roll accuracy (if null, roll angle is not available).
-	AccPitch   uint32  // [1e-5 deg] Vehicle pitch accuracy (if null, pitch angle is not available).
-	AccHeading uint32  // [1e-5 deg] Vehicle heading accuracy (if null, heading angle is not available).
+	ITOW_ms          uint32  // [ms] GPS time of week of the HNR epoch.
+	Version          byte    // Message version (0x01 for this version)
+	Reserved1        [3]byte // Reserved
+	Roll_dege5       int32   // [1e-5 deg] Vehicle roll.
+	Pitch_dege5      int32   // [1e-5 deg] Vehicle pitch.
+	Heading_dege5    int32   // [1e-5 deg] Vehicle heading.
+	AccRoll_dege5    uint32  // [1e-5 deg] Vehicle roll accuracy (if null, roll angle is not available).
+	AccPitch_dege5   uint32  // [1e-5 deg] Vehicle pitch accuracy (if null, pitch angle is not available).
+	AccHeading_dege5 uint32  // [1e-5 deg] Vehicle heading accuracy (if null, heading angle is not available).
 }
 
 func (HnrAtt) classID() uint16 { return 0x0128 }
 
 // UBX-HNR-INS (Periodic/Polled) Vehicle dynamics information
-//
+// Class/Id 0x28 0x02 36 bytes
 // This message outputs high rate information about vehicle dynamics computed by the Inertial Navigation System (INS) during ESF-based navigation. For ADR products (in protocol versions less than 19.2), the output dynamics information (angular rates and accelerations) is expressed with respect to the vehicle-frame. More information can be found in the ADR Navigation Output section. For UDR products, the output dynamics information (angular rates and accelerations) is expressed with respect to the body-frame. More information can be found in the UDR Navigation Output section. For ADR products, the output dynamics information (angular rates and accelerations) is expressed with respect to the vehicle-frame. More information can be found in the ADR Navigation Output section.
 type HnrIns struct {
-	Bitfield0 HnrInsBitfield0 // Bitfield
-	Reserved1 [4]byte         // Reserved
-	ITOW      uint32          // [ms] GPS time of week of the HNR epoch.
-	XAngRate  int32           // [1e-3 deg/s] Compensated x-axis angular rate.
-	YAngRate  int32           // [1e-3 deg/s] Compensated y-axis angular rate.
-	ZAngRate  int32           // [1e-3 deg/s] Compensated z-axis angular rate.
-	XAccel    int32           // [1e-2 m/s^2] Compensated x-axis acceleration (with gravity).
-	YAccel    int32           // [1e-2 m/s^2] Compensated y-axis acceleration (with gravity).
-	ZAccel    int32           // [1e-2 m/s^2] Compensated z-axis acceleration (with gravity).
+	Bitfield0        HnrInsBitfield0 // Bitfield
+	Reserved1        [4]byte         // Reserved
+	ITOW_ms          uint32          // [ms] GPS time of week of the HNR epoch.
+	XAngRate_deg_se3 int32           // [1e-3 deg/s] Compensated x-axis angular rate.
+	YAngRate_deg_se3 int32           // [1e-3 deg/s] Compensated y-axis angular rate.
+	ZAngRate_deg_se3 int32           // [1e-3 deg/s] Compensated z-axis angular rate.
+	XAccel_m_s2e2    int32           // [1e-2 m/s^2] Compensated x-axis acceleration (with gravity).
+	YAccel_m_s2e2    int32           // [1e-2 m/s^2] Compensated y-axis acceleration (with gravity).
+	ZAccel_m_s2e2    int32           // [1e-2 m/s^2] Compensated z-axis acceleration (with gravity).
 }
 
 func (HnrIns) classID() uint16 { return 0x0228 }
@@ -1976,34 +1945,34 @@ const (
 )
 
 // UBX-HNR-PVT (Periodic/Polled) High rate output of PVT solution
-//
+// Class/Id 0x28 0x00 72 bytes
 // This message provides the position, velocity and time solution with high output rate. Note that during a leap second there may be more or less than 60 seconds in a minute. See the description of leap seconds for details.
 type HnrPvt struct {
-	ITOW      uint32      // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Year      uint16      // [y] Year (UTC)
-	Month     byte        // [month] Month, range 1..12 (UTC)
-	Day       byte        // [d] Day of month, range 1..31 (UTC)
-	Hour      byte        // [h] Hour of day, range 0..23 (UTC)
-	Min       byte        // [min] Minute of hour, range 0..59 (UTC)
-	Sec       byte        // [s] Seconds of minute, range 0..60 (UTC)
-	Valid     HnrPvtValid // Validity Flags
-	Nano      int32       // [ns] Fraction of second, range -1e9 .. 1e9 (UTC)
-	GpsFix    byte        // GPSfix Type, range 0..5 0x00 = No Fix 0x01 = Dead Reckoning only 0x02 = 2D-Fix 0x03 = 3D-Fix 0x04 = GPS + dead reckoning combined 0x05 = Time only fix 0x06..0xff: reserved
-	Flags     HnrPvtFlags // Fix Status Flags
-	Reserved1 [2]byte     // Reserved
-	Lon       int32       // [1e-7 deg] Longitude
-	Lat       int32       // [1e-7 deg] Latitude
-	Height    int32       // [mm] Height above Ellipsoid
-	HMSL      int32       // [mm] Height above mean sea level
-	GSpeed    int32       // [mm/s] Ground Speed (2-D)
-	Speed     int32       // [mm/s] Speed (3-D)
-	HeadMot   int32       // [1e-5 deg] Heading of motion (2-D)
-	HeadVeh   int32       // [1e-5 deg] Heading of vehicle (2-D)
-	HAcc      uint32      // [mm] Horizontal accuracy
-	VAcc      uint32      // [mm] Vertical accuracy
-	SAcc      uint32      // [mm/s] Speed accuracy
-	HeadAcc   uint32      // [1e-5 deg] Heading accuracy
-	Reserved2 [4]byte     // Reserved
+	ITOW_ms       uint32      // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Year_y        uint16      // [y] Year (UTC)
+	Month_month   byte        // [month] Month, range 1..12 (UTC)
+	Day_d         byte        // [d] Day of month, range 1..31 (UTC)
+	Hour_h        byte        // [h] Hour of day, range 0..23 (UTC)
+	Min_min       byte        // [min] Minute of hour, range 0..59 (UTC)
+	Sec_s         byte        // [s] Seconds of minute, range 0..60 (UTC)
+	Valid         HnrPvtValid // Validity Flags
+	Nano_ns       int32       // [ns] Fraction of second, range -1e9 .. 1e9 (UTC)
+	GpsFix        byte        // GPSfix Type, range 0..5 0x00 = No Fix 0x01 = Dead Reckoning only 0x02 = 2D-Fix 0x03 = 3D-Fix 0x04 = GPS + dead reckoning combined 0x05 = Time only fix 0x06..0xff: reserved
+	Flags         HnrPvtFlags // Fix Status Flags
+	Reserved1     [2]byte     // Reserved
+	Lon_dege7     int32       // [1e-7 deg] Longitude
+	Lat_dege7     int32       // [1e-7 deg] Latitude
+	Height_mm     int32       // [mm] Height above Ellipsoid
+	HMSL_mm       int32       // [mm] Height above mean sea level
+	GSpeed_mm_s   int32       // [mm/s] Ground Speed (2-D)
+	Speed_mm_s    int32       // [mm/s] Speed (3-D)
+	HeadMot_dege5 int32       // [1e-5 deg] Heading of motion (2-D)
+	HeadVeh_dege5 int32       // [1e-5 deg] Heading of vehicle (2-D)
+	HAcc_mm       uint32      // [mm] Horizontal accuracy
+	VAcc_mm       uint32      // [mm] Vertical accuracy
+	SAcc_mm_s     uint32      // [mm/s] Speed accuracy
+	HeadAcc_dege5 uint32      // [1e-5 deg] Heading accuracy
+	Reserved2     [4]byte     // Reserved
 }
 
 func (HnrPvt) classID() uint16 { return 0x0028 }
@@ -2027,7 +1996,7 @@ const (
 )
 
 // UBX-INF-DEBUG (Output) ASCII output with debug contents
-//
+// Class/Id 0x04 0x04 0 + 1*N bytes
 // This message has a variable length payload, representing an ASCII string.
 type InfDebug struct {
 	Items []*struct {
@@ -2038,7 +2007,7 @@ type InfDebug struct {
 func (InfDebug) classID() uint16 { return 0x0404 }
 
 // UBX-INF-ERROR (Output) ASCII output with error contents
-//
+// Class/Id 0x04 0x00 0 + 1*N bytes
 // This message has a variable length payload, representing an ASCII string.
 type InfError struct {
 	Items []*struct {
@@ -2049,7 +2018,7 @@ type InfError struct {
 func (InfError) classID() uint16 { return 0x0004 }
 
 // UBX-INF-NOTICE (Output) ASCII output with informational contents
-//
+// Class/Id 0x04 0x02 0 + 1*N bytes
 // This message has a variable length payload, representing an ASCII string.
 type InfNotice struct {
 	Items []*struct {
@@ -2060,7 +2029,7 @@ type InfNotice struct {
 func (InfNotice) classID() uint16 { return 0x0204 }
 
 // UBX-INF-TEST (Output) ASCII output with test contents
-//
+// Class/Id 0x04 0x03 0 + 1*N bytes
 // This message has a variable length payload, representing an ASCII string.
 type InfTest struct {
 	Items []*struct {
@@ -2071,7 +2040,7 @@ type InfTest struct {
 func (InfTest) classID() uint16 { return 0x0304 }
 
 // UBX-INF-WARNING (Output) ASCII output with warning contents
-//
+// Class/Id 0x04 0x01 0 + 1*N bytes
 // This message has a variable length payload, representing an ASCII string.
 type InfWarning struct {
 	Items []*struct {
@@ -2082,45 +2051,45 @@ type InfWarning struct {
 func (InfWarning) classID() uint16 { return 0x0104 }
 
 // UBX-LOG-BATCH (Polled) Batched data
-//
+// Class/Id 0x21 0x11 100 bytes
 // This message combines position, velocity and time solution, including accuracy figures. The output of this message can be requested via UBX-LOG-RETRIEVEBATCH. The content of this message is influenced by UBX-CFG-BATCH. Depending on the flags extraPvt and extraOdo some of the fields in this message may not be valid. This validity information is also indicated in this message via flags of the same name. See Data Batching for more information. Note that during a leap second there may be more or less than 60 seconds in a minute. See the description of leap seconds for details.
 type LogBatch struct {
-	Version       byte                 // Message version (0x00 for this version)
-	ContentValid  LogBatchContentValid // Content validity flags
-	MsgCnt        uint16               // Message counter; increments for each sent UBX-LOG-BATCH message.
-	ITOW          uint32               // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details. Only valid if extraPvt is set.
-	Year          uint16               // [y] Year (UTC)
-	Month         byte                 // [month] Month, range 1..12 (UTC)
-	Day           byte                 // [d] Day of month, range 1..31 (UTC)
-	Hour          byte                 // [h] Hour of day, range 0..23 (UTC)
-	Min           byte                 // [min] Minute of hour, range 0..59 (UTC)
-	Sec           byte                 // [s] Seconds of minute, range 0..60 (UTC)
-	Valid         LogBatchValid        // Validity flags
-	TAcc          uint32               // [ns] Time accuracy estimate (UTC) Only valid if extraPvt is set.
-	FracSec       int32                // [ns] Fraction of second, range -1e9 .. 1e9 (UTC)
-	FixType       byte                 // GNSSfix Type: 0: no fix 2: 2D-fix 3: 3D-fix
-	Flags         LogBatchFlags        // Fix status flags
-	Flags2        byte                 // Additional flags
-	NumSV         byte                 // Number of satellites used in Nav Solution Only valid if extraPvt is set.
-	Lon           int32                // [1e-7 deg] Longitude
-	Lat           int32                // [1e-7 deg] Latitude
-	Height        int32                // [mm] Height above ellipsoid
-	HMSL          int32                // [mm] Height above mean sea level Only valid if extraPvt is set.
-	HAcc          uint32               // [mm] Horizontal accuracy estimate
-	VAcc          uint32               // [mm] Vertical accuracy estimate Only valid if extraPvt is set.
-	VelN          int32                // [mm/s] NED north velocity Only valid if extraPvt is set.
-	VelE          int32                // [mm/s] NED east velocity Only valid if extraPvt is set.
-	VelD          int32                // [mm/s] NED down velocity Only valid if extraPvt is set.
-	GSpeed        int32                // [mm/s] Ground Speed (2-D)
-	HeadMot       int32                // [1e-5 deg] Heading of motion (2-D)
-	SAcc          uint32               // [mm/s] Speed accuracy estimate Only valid if extraPvt is set.
-	HeadAcc       uint32               // [1e-5 deg] Heading accuracy estimate Only valid if extraPvt is set.
-	PDOP          uint16               // Position DOP Only valid if extraPvt is set.
-	Reserved1     [2]byte              // Reserved
-	Distance      uint32               // [m] Ground distance since last reset Only valid if extraOdo is set.
-	TotalDistance uint32               // [m] Total cumulative ground distance Only valid if extraOdo is set.
-	DistanceStd   uint32               // [m] Ground distance accuracy (1-sigma) Only valid if extraOdo is set.
-	Reserved2     [4]byte              // Reserved
+	Version         byte                 // Message version (0x00 for this version)
+	ContentValid    LogBatchContentValid // Content validity flags
+	MsgCnt          uint16               // Message counter; increments for each sent UBX-LOG-BATCH message.
+	ITOW_ms         uint32               // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details. Only valid if extraPvt is set.
+	Year_y          uint16               // [y] Year (UTC)
+	Month_month     byte                 // [month] Month, range 1..12 (UTC)
+	Day_d           byte                 // [d] Day of month, range 1..31 (UTC)
+	Hour_h          byte                 // [h] Hour of day, range 0..23 (UTC)
+	Min_min         byte                 // [min] Minute of hour, range 0..59 (UTC)
+	Sec_s           byte                 // [s] Seconds of minute, range 0..60 (UTC)
+	Valid           LogBatchValid        // Validity flags
+	TAcc_ns         uint32               // [ns] Time accuracy estimate (UTC) Only valid if extraPvt is set.
+	FracSec_ns      int32                // [ns] Fraction of second, range -1e9 .. 1e9 (UTC)
+	FixType         byte                 // GNSSfix Type: 0: no fix 2: 2D-fix 3: 3D-fix
+	Flags           LogBatchFlags        // Fix status flags
+	Flags2          byte                 // Additional flags
+	NumSV           byte                 // Number of satellites used in Nav Solution Only valid if extraPvt is set.
+	Lon_dege7       int32                // [1e-7 deg] Longitude
+	Lat_dege7       int32                // [1e-7 deg] Latitude
+	Height_mm       int32                // [mm] Height above ellipsoid
+	HMSL_mm         int32                // [mm] Height above mean sea level Only valid if extraPvt is set.
+	HAcc_mm         uint32               // [mm] Horizontal accuracy estimate
+	VAcc_mm         uint32               // [mm] Vertical accuracy estimate Only valid if extraPvt is set.
+	VelN_mm_s       int32                // [mm/s] NED north velocity Only valid if extraPvt is set.
+	VelE_mm_s       int32                // [mm/s] NED east velocity Only valid if extraPvt is set.
+	VelD_mm_s       int32                // [mm/s] NED down velocity Only valid if extraPvt is set.
+	GSpeed_mm_s     int32                // [mm/s] Ground Speed (2-D)
+	HeadMot_dege5   int32                // [1e-5 deg] Heading of motion (2-D)
+	SAcc_mm_s       uint32               // [mm/s] Speed accuracy estimate Only valid if extraPvt is set.
+	HeadAcc_dege5   uint32               // [1e-5 deg] Heading accuracy estimate Only valid if extraPvt is set.
+	PDOP            uint16               // Position DOP Only valid if extraPvt is set.
+	Reserved1       [2]byte              // Reserved
+	Distance_m      uint32               // [m] Ground distance since last reset Only valid if extraOdo is set.
+	TotalDistance_m uint32               // [m] Total cumulative ground distance Only valid if extraOdo is set.
+	DistanceStd_m   uint32               // [m] Ground distance accuracy (1-sigma) Only valid if extraOdo is set.
+	Reserved2       [4]byte              // Reserved
 }
 
 func (LogBatch) classID() uint16 { return 0x1121 }
@@ -2148,14 +2117,14 @@ const (
 )
 
 // UBX-LOG-CREATE (Command) Create log file
-//
+// Class/Id 0x21 0x07 8 bytes
 // This message is used to create an initial logging file and activate the logging subsystem. UBX-ACK-ACK or UBX-ACK-NAK are returned to indicate success or failure. This message does not handle activation of recording or filtering of log entries (see UBX-CFG-LOGFILTER).
 type LogCreate struct {
-	Version         byte            // Message version (0x00 for this version)
-	LogCfg          LogCreateLogCfg // Config flags
-	Reserved1       byte            // Reserved
-	LogSize         byte            // Indicates the size of the log: 0 (maximum safe size): Ensures that logging will not be interrupted and enough space will be left available for all other uses of the filestore 1 (minimum size): 2 (user-defined): See 'userDefinedSize' below
-	UserDefinedSize uint32          // [bytes] Sets the maximum amount of space in the filestore that can be used by the logging task. This field is only applicable if logSize is set to user-defined.
+	Version               byte            // Message version (0x00 for this version)
+	LogCfg                LogCreateLogCfg // Config flags
+	Reserved1             byte            // Reserved
+	LogSize               byte            // Indicates the size of the log: 0 (maximum safe size): Ensures that logging will not be interrupted and enough space will be left available for all other uses of the filestore 1 (minimum size): 2 (user-defined): See 'userDefinedSize' below
+	UserDefinedSize_bytes uint32          // [bytes] Sets the maximum amount of space in the filestore that can be used by the logging task. This field is only applicable if logSize is set to user-defined.
 }
 
 func (LogCreate) classID() uint16 { return 0x0721 }
@@ -2167,7 +2136,7 @@ const (
 )
 
 // UBX-LOG-ERASE (Command) Erase logged data
-//
+// Class/Id 0x21 0x03 0 bytes
 // This message deactivates the logging system and erases all logged data. UBX-ACK-ACK or UBX-ACK-NAK are returned to indicate success or failure.
 type LogErase struct {
 }
@@ -2175,7 +2144,7 @@ type LogErase struct {
 func (LogErase) classID() uint16 { return 0x0321 }
 
 // UBX-LOG-FINDTIME (Input) Find index of a log entry based on a given time
-//
+// Class/Id 0x21 0x0e 12 bytes
 // This message can be used for a time-based search of a log. It can find the index of the first log entry with time equal to the given time, otherwise the index of the most recent entry with time less than the given time. This index can then be used with the UBX-LOG-RETRIEVE message to provide time-based retrieval of log entries. Searching a log is effective for a given time later than the base date (January 1st, 2004). Searching a log for a given time earlier than the base date will result in an 'entry not found' response. (Searching a log for a given time earlier than the base date will result in a UBX-ACK-NAK message in protocol versions less than 18). Searching a log for a given time greater than the last recorded entry's time will return the index of the last recorded entry. (If the logging has stopped due to lack of file space, such a search will result in a UBX-ACK-NAK message in protocol versions less than 18).
 type LogFindtime struct {
 	Version   byte    // Message version (0x00 for this version)
@@ -2193,7 +2162,7 @@ type LogFindtime struct {
 func (LogFindtime) classID() uint16 { return 0x0e21 }
 
 // UBX-LOG-FINDTIME (Output) Response to FINDTIME request
-//
+// Class/Id 0x21 0x0e 8 bytes
 // -
 type LogFindtime1 struct {
 	Version     byte    // Message version (0x01 for this version)
@@ -2205,7 +2174,7 @@ type LogFindtime1 struct {
 func (LogFindtime1) classID() uint16 { return 0x0e21 }
 
 // UBX-LOG-INFO (Poll Request) Poll for log information
-//
+// Class/Id 0x21 0x08 0 bytes
 // Upon sending of this message, the receiver returns UBX-LOG-INFO as defined below.
 type LogInfo struct {
 }
@@ -2213,32 +2182,32 @@ type LogInfo struct {
 func (LogInfo) classID() uint16 { return 0x0821 }
 
 // UBX-LOG-INFO (Output) Log information
-//
+// Class/Id 0x21 0x08 48 bytes
 // This message is used to report information about the logging subsystem. Note:  The reported maximum log size will be smaller than that originally specified in  LOG-CREATE due to logging and filestore implementation overheads.  Log entries are compressed in a variable length fashion, so it may be difficult  to predict log space usage with any precision.  There may be times when the receiver does not have an accurate time (e.g. if  the week number is not yet known), in which case some entries will not have a  timestamp. This may result in the oldest/newest entry time values not taking  account of these entries.
 type LogInfo1 struct {
-	Version           byte           // Message version (0x01 for this version)
-	Reserved1         [3]byte        // Reserved
-	FilestoreCapacity uint32         // [bytes] The capacity of the filestore
-	Reserved2         [8]byte        // Reserved
-	CurrentMaxLogSize uint32         // [bytes] The maximum size the current log is allowed to grow to
-	CurrentLogSize    uint32         // [bytes] Approximate amount of space in log currently occupied
-	EntryCount        uint32         // Number of entries in the log. Note: for circular logs this value will decrease when a group of entries is deleted to make space for new ones.
-	OldestYear        uint16         // Oldest entry UTC year (1-65635) or zero if there are no entries with known time
-	OldestMonth       byte           // Oldest month (1-12)
-	OldestDay         byte           // Oldest day (1-31)
-	OldestHour        byte           // Oldest hour (0-23)
-	OldestMinute      byte           // Oldest minute (0-59)
-	OldestSecond      byte           // Oldest second (0-60)
-	Reserved3         byte           // Reserved
-	NewestYear        uint16         // Newest year (1-65635) or zero if there are no entries with known time
-	NewestMonth       byte           // Newest month (1-12)
-	NewestDay         byte           // Newest day (1-31)
-	NewestHour        byte           // Newest hour (0-23)
-	NewestMinute      byte           // Newest minute (0-59)
-	NewestSecond      byte           // Newest second (0-60)
-	Reserved4         byte           // Reserved
-	Status            LogInfo1Status // Log status flags
-	Reserved5         [3]byte        // Reserved
+	Version                 byte           // Message version (0x01 for this version)
+	Reserved1               [3]byte        // Reserved
+	FilestoreCapacity_bytes uint32         // [bytes] The capacity of the filestore
+	Reserved2               [8]byte        // Reserved
+	CurrentMaxLogSize_bytes uint32         // [bytes] The maximum size the current log is allowed to grow to
+	CurrentLogSize_bytes    uint32         // [bytes] Approximate amount of space in log currently occupied
+	EntryCount              uint32         // Number of entries in the log. Note: for circular logs this value will decrease when a group of entries is deleted to make space for new ones.
+	OldestYear              uint16         // Oldest entry UTC year (1-65635) or zero if there are no entries with known time
+	OldestMonth             byte           // Oldest month (1-12)
+	OldestDay               byte           // Oldest day (1-31)
+	OldestHour              byte           // Oldest hour (0-23)
+	OldestMinute            byte           // Oldest minute (0-59)
+	OldestSecond            byte           // Oldest second (0-60)
+	Reserved3               byte           // Reserved
+	NewestYear              uint16         // Newest year (1-65635) or zero if there are no entries with known time
+	NewestMonth             byte           // Newest month (1-12)
+	NewestDay               byte           // Newest day (1-31)
+	NewestHour              byte           // Newest hour (0-23)
+	NewestMinute            byte           // Newest minute (0-59)
+	NewestSecond            byte           // Newest second (0-60)
+	Reserved4               byte           // Reserved
+	Status                  LogInfo1Status // Log status flags
+	Reserved5               [3]byte        // Reserved
 }
 
 func (LogInfo1) classID() uint16 { return 0x0821 }
@@ -2252,7 +2221,7 @@ const (
 )
 
 // UBX-LOG-RETRIEVEBATCH (Command) Request batch data
-//
+// Class/Id 0x21 0x10 4 bytes
 // This message is used to request batched data. Batch entries are returned in chronological order, using one UBX-LOG-BATCH per navigation epoch. The speed of transfer can be maximized by using a high data rate. See Data Batching for more information.
 type LogRetrievebatch struct {
 	Version   byte                  // Message version (0x00 for this version)
@@ -2269,7 +2238,7 @@ const (
 )
 
 // UBX-LOG-RETRIEVEPOSEXTRA (Output) Odometer log entry
-//
+// Class/Id 0x21 0x0f 32 bytes
 // This message is used to report an odometer log entry
 type LogRetrieveposextra struct {
 	EntryIndex uint32   // The index of this log entry
@@ -2289,33 +2258,33 @@ type LogRetrieveposextra struct {
 func (LogRetrieveposextra) classID() uint16 { return 0x0f21 }
 
 // UBX-LOG-RETRIEVEPOS (Output) Position fix log entry
-//
+// Class/Id 0x21 0x0b 40 bytes
 // This message is used to report a position fix log entry
 type LogRetrievepos struct {
-	EntryIndex uint32 // The index of this log entry
-	Lon        int32  // [1e-7 deg] Longitude
-	Lat        int32  // [1e-7 deg] Latitude
-	HMSL       int32  // [mm] Height above mean sea level
-	HAcc       uint32 // [mm] Horizontal accuracy estimate
-	GSpeed     uint32 // [mm/s] Ground speed (2-D)
-	Heading    uint32 // [1e-5 deg] Heading
-	Version    byte   // Message version (0x00 for this version)
-	FixType    byte   // Fix type: 0x01: Dead Reckoning only 0x02: 2D-Fix 0x03: 3D-Fix 0x04: GNSS + Dead Reckoning combined
-	Year       uint16 // Year (1-65635) of UTC time
-	Month      byte   // Month (1-12) of UTC time
-	Day        byte   // Day (1-31) of UTC time
-	Hour       byte   // Hour (0-23) of UTC time
-	Minute     byte   // Minute (0-59) of UTC time
-	Second     byte   // Second (0-60) of UTC time
-	Reserved1  byte   // Reserved
-	NumSV      byte   // Number of satellites used in the position fix
-	Reserved2  byte   // Reserved
+	EntryIndex    uint32 // The index of this log entry
+	Lon_dege7     int32  // [1e-7 deg] Longitude
+	Lat_dege7     int32  // [1e-7 deg] Latitude
+	HMSL_mm       int32  // [mm] Height above mean sea level
+	HAcc_mm       uint32 // [mm] Horizontal accuracy estimate
+	GSpeed_mm_s   uint32 // [mm/s] Ground speed (2-D)
+	Heading_dege5 uint32 // [1e-5 deg] Heading
+	Version       byte   // Message version (0x00 for this version)
+	FixType       byte   // Fix type: 0x01: Dead Reckoning only 0x02: 2D-Fix 0x03: 3D-Fix 0x04: GNSS + Dead Reckoning combined
+	Year          uint16 // Year (1-65635) of UTC time
+	Month         byte   // Month (1-12) of UTC time
+	Day           byte   // Day (1-31) of UTC time
+	Hour          byte   // Hour (0-23) of UTC time
+	Minute        byte   // Minute (0-59) of UTC time
+	Second        byte   // Second (0-60) of UTC time
+	Reserved1     byte   // Reserved
+	NumSV         byte   // Number of satellites used in the position fix
+	Reserved2     byte   // Reserved
 }
 
 func (LogRetrievepos) classID() uint16 { return 0x0b21 }
 
 // UBX-LOG-RETRIEVESTRING (Output) Byte string log entry
-//
+// Class/Id 0x21 0x0d 16 + 1*byteCount bytes
 // This message is used to report a byte string log entry
 type LogRetrievestring struct {
 	EntryIndex uint32 // The index of this log entry
@@ -2337,7 +2306,7 @@ type LogRetrievestring struct {
 func (LogRetrievestring) classID() uint16 { return 0x0d21 }
 
 // UBX-LOG-RETRIEVE (Command) Request log data
-//
+// Class/Id 0x21 0x09 12 bytes
 // This message is used to request logged data (log recording must first be disabled, see UBX-CFG-LOGFILTER). Log entries are returned in chronological order, using the messages UBX-LOG- RETRIEVEPOS and UBX-LOG-RETRIEVESTRING. If the odometer was enabled at the time a position was logged, then message UBX-LOG-RETRIEVEPOSEXTRA will also be used. The maximum number of entries that can be returned in response to a single UBX-LOG-RETRIEVE message is 256. If more entries than this are required the message will need to be sent multiple times with different startNumbers. The retrieve will be stopped if any UBX-LOG message is received. The speed of transfer can be maximized by using a high data rate and temporarily stopping the GPS processing (see UBX-CFG-RST).
 type LogRetrieve struct {
 	StartNumber uint32  // Index of first log entry to be transferred. If it is larger than the index of the last available log entry, then the first log entry to be transferred is the last available log entry. The indexing of log entries is zero- based.
@@ -2349,7 +2318,7 @@ type LogRetrieve struct {
 func (LogRetrieve) classID() uint16 { return 0x0921 }
 
 // UBX-LOG-STRING (Command) Store arbitrary string in on-board flash
-//
+// Class/Id 0x21 0x04 0 + 1*N bytes
 // This message can be used to store an arbitrary byte string in the on-board flash memory. The maximum length that can be stored is 256 bytes.
 type LogString struct {
 	Items []*struct {
@@ -2360,7 +2329,7 @@ type LogString struct {
 func (LogString) classID() uint16 { return 0x0421 }
 
 // UBX-MGA-ACK-DATA0 (Output) Multiple GNSS acknowledge message
-//
+// Class/Id 0x13 0x60 8 bytes
 // This message is sent by a u-blox receiver to acknowledge the receipt of an assistance message. Acknowledgments are enabled by setting the ackAiding parameter in the UBX- CFG-NAVX5 message. See the description of flow control for details.
 type MgaAckData0 struct {
 	Type            byte    // Type of acknowledgment: 0: The message was not used by the receiver (see infoCode field for an indication of why) 1: The message was accepted for use by the receiver (the infoCode field will be 0)
@@ -2373,7 +2342,7 @@ type MgaAckData0 struct {
 func (MgaAckData0) classID() uint16 { return 0x6013 }
 
 // UBX-MGA-ANO (Input) Multiple GNSS AssistNow Offline assistance
-//
+// Class/Id 0x13 0x20 76 bytes
 // This message is created by the AssistNow Offline service to deliver AssistNow Offline assistance to the receiver. See the description of AssistNow Offline for details.
 type MgaAno struct {
 	Type      byte     // Message type (0x00 for this type)
@@ -2391,53 +2360,53 @@ type MgaAno struct {
 func (MgaAno) classID() uint16 { return 0x2013 }
 
 // UBX-MGA-BDS-EPH (Input) BeiDou ephemeris assistance
-//
+// Class/Id 0x13 0x03 88 bytes
 // This message allows the delivery of BeiDou ephemeris assistance to a receiver. See the description of AssistNow Online for details.
 type MgaBdsEph struct {
-	Type      byte    // Message type (0x01 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	SvId      byte    // BeiDou satellite identifier (see Satellite Numbering)
-	Reserved1 byte    // Reserved
-	SatH1     byte    // Autonomous satellite Health flag
-	IODC      byte    // Issue of Data, Clock
-	A2        int16   // [2^-66 s/s^2] Time polynomial coefficient 2
-	A1        int32   // [2^-50 s/s] Time polynomial coefficient 1
-	A0        int32   // [2^-33 s] Time polynomial coefficient 0
-	Toc       uint32  // [2^3 s] Clock data reference time
-	TGD1      int16   // [0.1 ns] Equipment Group Delay Differential
-	URAI      byte    // User Range Accuracy Index
-	IODE      byte    // Issue of Data, Ephemeris
-	Toe       uint32  // [2^3 s] Ephemeris reference time
-	SqrtA     uint32  // [2^-19 m^0.5] Square root of semi-major axis
-	E         uint32  // Eccentricity
-	Omega     int32   // [2^-31 semi-circles] Argument of perigee
-	Deltan    int16   // [2^-43 semi-circles/s] Mean motion difference from computed value
-	IDOT      int16   // [2^-43 semi-circles/s] Rate of inclination angle
-	M0        int32   // [2^-31 semi-circles] Mean anomaly at reference time
-	Omega0    int32   // [2^-31 semi-circles] Longitude of ascending node of orbital of plane computed according to reference time
-	OmegaDot  int32   // [2^-43 semi-circles/s] Rate of right ascension
-	I0        int32   // [2^-31 semi-circles] Inclination angle at reference time
-	Cuc       int32   // [2^-31 semi-circles] Amplitude of cosine harmonic correction term to the argument of latitude
-	Cus       int32   // [2^-31 semi-circles] Amplitude of sine harmonic correction term to the argument of latitude
-	Crc       int32   // [2^-6 m] Amplitude of cosine harmonic correction term to the orbit radius
-	Crs       int32   // [2^-6 m] Amplitude of sine harmonic correction term to the orbit radius
-	Cic       int32   // [2^-31 semi-circles] Amplitude of cosine harmonic correction term to the angle of inclination
-	Cis       int32   // [2^-31 semi-circles] Amplitude of sine harmonic correction term to the angle of inclination
-	Reserved2 [4]byte // Reserved
+	Type       byte    // Message type (0x01 for this type)
+	Version    byte    // Message version (0x00 for this version)
+	SvId       byte    // BeiDou satellite identifier (see Satellite Numbering)
+	Reserved1  byte    // Reserved
+	SatH1      byte    // Autonomous satellite Health flag
+	IODC       byte    // Issue of Data, Clock
+	A2_s_s2l66 int16   // [2^-66 s/s^2] Time polynomial coefficient 2
+	A1_s_sl50  int32   // [2^-50 s/s] Time polynomial coefficient 1
+	A0_sl33    int32   // [2^-33 s] Time polynomial coefficient 0
+	Toc_sr3    uint32  // [2^3 s] Clock data reference time
+	TGD1_nse1  int16   // [1e-1 ns] Equipment Group Delay Differential
+	URAI       byte    // User Range Accuracy Index
+	IODE       byte    // Issue of Data, Ephemeris
+	Toe_sr3    uint32  // [2^3 s] Ephemeris reference time
+	SqrtA      uint32  // [2^-19 m^0.5] Square root of semi-major axis
+	E          uint32  // Eccentricity
+	Omega      int32   // [2^-31 semi-circles] Argument of perigee
+	Deltan     int16   // [2^-43 semi-circles/s] Mean motion difference from computed value
+	IDOT       int16   // [2^-43 semi-circles/s] Rate of inclination angle
+	M0         int32   // [2^-31 semi-circles] Mean anomaly at reference time
+	Omega0     int32   // [2^-31 semi-circles] Longitude of ascending node of orbital of plane computed according to reference time
+	OmegaDot   int32   // [2^-43 semi-circles/s] Rate of right ascension
+	I0         int32   // [2^-31 semi-circles] Inclination angle at reference time
+	Cuc        int32   // [2^-31 semi-circles] Amplitude of cosine harmonic correction term to the argument of latitude
+	Cus        int32   // [2^-31 semi-circles] Amplitude of sine harmonic correction term to the argument of latitude
+	Crc_ml6    int32   // [2^-6 m] Amplitude of cosine harmonic correction term to the orbit radius
+	Crs_ml6    int32   // [2^-6 m] Amplitude of sine harmonic correction term to the orbit radius
+	Cic        int32   // [2^-31 semi-circles] Amplitude of cosine harmonic correction term to the angle of inclination
+	Cis        int32   // [2^-31 semi-circles] Amplitude of sine harmonic correction term to the angle of inclination
+	Reserved2  [4]byte // Reserved
 }
 
 func (MgaBdsEph) classID() uint16 { return 0x0313 }
 
 // UBX-MGA-BDS-ALM (Input) BeiDou almanac assistance
-//
+// Class/Id 0x13 0x03 40 bytes
 // This message allows the delivery of BeiDou almanac assistance to a receiver. See the description of AssistNow Online for details.
 type MgaBdsAlm struct {
 	Type      byte    // Message type (0x02 for this version)
 	Version   byte    // Message version (0x00 for this version)
 	SvId      byte    // BeiDou satellite identifier (see Satellite Numbering)
 	Reserved1 byte    // Reserved
-	Wna       byte    // [week] Almanac Week Number
-	Toa       byte    // [2^12 s] Almanac reference time
+	Wna_week  byte    // [week] Almanac Week Number
+	Toa_sr12  byte    // [2^12 s] Almanac reference time
 	DeltaI    int16   // [2^-19 semi-circles] Almanac correction of orbit reference inclination at reference time
 	SqrtA     uint32  // [2^-11 m^0.5] Almanac square root of semi-major axis
 	E         uint32  // Almanac eccentricity
@@ -2445,15 +2414,15 @@ type MgaBdsAlm struct {
 	M0        int32   // [2^-23 semi-circles] Almanac mean anomaly at reference time
 	Omega0    int32   // [2^-23 semi-circles] Almanac longitude of ascending node of orbit plane at computed according to reference time
 	OmegaDot  int32   // [2^-38 semi-circles/s] Almanac rate of right ascension
-	A0        int16   // [2^-20 s] Almanac satellite clock bias
-	A1        int16   // [2^-38 s/s] Almanac satellite clock rate
+	A0_sl20   int16   // [2^-20 s] Almanac satellite clock bias
+	A1_s_sl38 int16   // [2^-38 s/s] Almanac satellite clock rate
 	Reserved2 [4]byte // Reserved
 }
 
 func (MgaBdsAlm) classID() uint16 { return 0x0313 }
 
 // UBX-MGA-BDS-HEALTH (Input) BeiDou health assistance
-//
+// Class/Id 0x13 0x03 68 bytes
 // This message allows the delivery of BeiDou health assistance to a receiver. See the description of AssistNow Online for details.
 type MgaBdsHealth struct {
 	Type       byte       // Message type (0x04 for this type)
@@ -2466,47 +2435,47 @@ type MgaBdsHealth struct {
 func (MgaBdsHealth) classID() uint16 { return 0x0313 }
 
 // UBX-MGA-BDS-UTC (Input) BeiDou UTC assistance
-//
+// Class/Id 0x13 0x03 20 bytes
 // This message allows the delivery of BeiDou UTC assistance to a receiver. See the description of AssistNow Online for details.
 type MgaBdsUtc struct {
-	Type      byte    // Message type (0x05 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	Reserved1 [2]byte // Reserved
-	A0UTC     int32   // [2^-30 s] BDT clock bias relative to UTC
-	A1UTC     int32   // [2^-50 s/s] BDT clock rate relative to UTC
-	DtLS      int8    // [s] Delta time due to leap seconds before the new leap second effective
-	Reserved2 [1]byte // Reserved
-	WnRec     byte    // [week] BeiDou week number of reception of this UTC parameter set (8-bit truncated)
-	WnLSF     byte    // [week] Week number of the new leap second
-	DN        byte    // [day] Day number of the new leap second
-	DtLSF     int8    // [s] Delta time due to leap seconds after the new leap second effective
-	Reserved3 [2]byte // Reserved
+	Type         byte    // Message type (0x05 for this type)
+	Version      byte    // Message version (0x00 for this version)
+	Reserved1    [2]byte // Reserved
+	A0UTC_sl30   int32   // [2^-30 s] BDT clock bias relative to UTC
+	A1UTC_s_sl50 int32   // [2^-50 s/s] BDT clock rate relative to UTC
+	DtLS_s       int8    // [s] Delta time due to leap seconds before the new leap second effective
+	Reserved2    [1]byte // Reserved
+	WnRec_week   byte    // [week] BeiDou week number of reception of this UTC parameter set (8-bit truncated)
+	WnLSF_week   byte    // [week] Week number of the new leap second
+	DN_day       byte    // [day] Day number of the new leap second
+	DtLSF_s      int8    // [s] Delta time due to leap seconds after the new leap second effective
+	Reserved3    [2]byte // Reserved
 }
 
 func (MgaBdsUtc) classID() uint16 { return 0x0313 }
 
 // UBX-MGA-BDS-IONO (Input) BeiDou ionosphere assistance
-//
+// Class/Id 0x13 0x03 16 bytes
 // This message allows the delivery of BeiDou ionospheric assistance to a receiver. See the description of AssistNow Online for details.
 type MgaBdsIono struct {
-	Type      byte    // Message type (0x06 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	Reserved1 [2]byte // Reserved
-	Alpha0    int8    // [2^-30 s] Ionospheric parameter alpha0
-	Alpha1    int8    // [2^-27 s/pi] Ionospheric parameter alpha1
-	Alpha2    int8    // [2^-24 s/pi^2] Ionospheric parameter alpha2
-	Alpha3    int8    // [2^-24 s/pi^3] Ionospheric parameter alpha3
-	Beta0     int8    // [2^11 s] Ionospheric parameter beta0
-	Beta1     int8    // [2^14 s/pi] Ionospheric parameter beta1
-	Beta2     int8    // [2^16 s/pi^2] Ionospheric parameter beta2
-	Beta3     int8    // [2^16 s/pi^3] Ionospheric parameter beta3
-	Reserved2 [4]byte // Reserved
+	Type            byte    // Message type (0x06 for this type)
+	Version         byte    // Message version (0x00 for this version)
+	Reserved1       [2]byte // Reserved
+	Alpha0_sl30     int8    // [2^-30 s] Ionospheric parameter alpha0
+	Alpha1_s_pil27  int8    // [2^-27 s/pi] Ionospheric parameter alpha1
+	Alpha2_s_pi2l24 int8    // [2^-24 s/pi^2] Ionospheric parameter alpha2
+	Alpha3          int8    // [2^-24 s/pi^3] Ionospheric parameter alpha3
+	Beta0_sr11      int8    // [2^11 s] Ionospheric parameter beta0
+	Beta1_s_pir14   int8    // [2^14 s/pi] Ionospheric parameter beta1
+	Beta2_s_pi2r16  int8    // [2^16 s/pi^2] Ionospheric parameter beta2
+	Beta3           int8    // [2^16 s/pi^3] Ionospheric parameter beta3
+	Reserved2       [4]byte // Reserved
 }
 
 func (MgaBdsIono) classID() uint16 { return 0x0313 }
 
 // UBX-MGA-DBD (Poll Request) Poll the navigation database
-//
+// Class/Id 0x13 0x80 0 bytes
 // Poll the whole navigation data base. The receiver will send all available data from its internal database. The receiver will indicate the finish of the transmission with a UBX-MGA-ACK. The msgPayloadStart field of the UBX-MGA-ACK message will contain a U4 representing the number of UBX-MGA-DBD-DATA* messages sent.
 type MgaDbd struct {
 }
@@ -2514,7 +2483,7 @@ type MgaDbd struct {
 func (MgaDbd) classID() uint16 { return 0x8013 }
 
 // UBX-MGA-DBD (Input/Output) Navigation database dump entry
-//
+// Class/Id 0x13 0x80 12 + 1*N bytes
 // UBX-MGA-DBD messages are only intended to be sent back to the same receiver that generated them. Navigation database entry. The data fields are firmware-specific. Transmission of this type of message will be acknowledged by UBX-MGA-ACK messages, if acknowledgment has been enabled. See the description of flow control for details. The maximum payload size for firmware 2.01 onwards is 164 bytes (which makes the maximum message size 172 bytes).
 type MgaDbd1 struct {
 	Reserved1 [12]byte // Reserved
@@ -2526,7 +2495,7 @@ type MgaDbd1 struct {
 func (MgaDbd1) classID() uint16 { return 0x8013 }
 
 // UBX-MGA-FLASH-DATA (Input) Transfer MGA-ANO data block to flash
-//
+// Class/Id 0x13 0x21 6 + 1*size bytes
 // This message is used to transfer a block of MGA-ANO data from host to the receiver. Upon reception of this message, the receiver will write the payload data to its internal non-volatile memory (flash). Also, on reception of the first MGA- FLASH-DATA message, the receiver will erase the flash allocated to storing any existing MGA-ANO data. The payload can be up to 512 bytes. Payloads larger than this would exceed the receiver's internal buffering capabilities. The receiver will ACK/NACK this message using the message alternatives given below. The host shall wait for an acknowledge message before sending the next data block. See Flash-based AssistNow Offline for details.
 type MgaFlashData struct {
 	Type     byte   // Message type (0x01 for this type)
@@ -2541,7 +2510,7 @@ type MgaFlashData struct {
 func (MgaFlashData) classID() uint16 { return 0x2113 }
 
 // UBX-MGA-FLASH-STOP (Input) Finish flashing MGA-ANO data
-//
+// Class/Id 0x13 0x21 2 bytes
 // This message is used to tell the receiver that there are no more MGA-FLASH type 1 messages coming, and that it can do any final internal operations needed to commit the data to flash as a background activity. A UBX-MGA-ACK message will be sent at the end of this process. Note that there may be a delay of several seconds before the UBX-MGA-ACK for this message is sent because of the time taken for this processing. See Flash-based AssistNow Offline for details.
 type MgaFlashStop struct {
 	Type    byte // Message type (0x02 for this type)
@@ -2551,7 +2520,7 @@ type MgaFlashStop struct {
 func (MgaFlashStop) classID() uint16 { return 0x2113 }
 
 // UBX-MGA-FLASH-ACK (Output) Acknowledge last FLASH-DATA or -STOP
-//
+// Class/Id 0x13 0x21 6 bytes
 // This message reports an ACK/NACK to the host for the last MGA-FLASH type 1 or type 2 message message received. See Flash-based AssistNow Offline for details.
 type MgaFlashAck struct {
 	Type      byte   // Message type (0x03 for this type)
@@ -2564,246 +2533,246 @@ type MgaFlashAck struct {
 func (MgaFlashAck) classID() uint16 { return 0x2113 }
 
 // UBX-MGA-GAL-EPH (Input) Galileo ephemeris assistance
-//
+// Class/Id 0x13 0x02 76 bytes
 // This message allows the delivery of Galileo ephemeris assistance to a receiver. See the description of AssistNow Online for details.
 type MgaGalEph struct {
-	Type            byte    // Message type (0x01 for this type)
-	Version         byte    // Message version (0x00 for this version)
-	SvId            byte    // Galileo Satellite identifier (see Satellite Numbering)
-	Reserved1       byte    // Reserved
-	IodNav          uint16  // Ephemeris and clock correction Issue of Data
-	DeltaN          int16   // [2^-43 semi-circles/s] Mean motion difference from computed value
-	M0              int32   // [2^-31 semi-circles] Mean anomaly at reference time
-	E               uint32  // Eccentricity
-	SqrtA           uint32  // [2^-19 m^0.5] Square root of the semi-major axis
-	Omega0          int32   // [2^-31 semi-circles] Longitude of ascending node of orbital plane at weekly epoch
-	I0              int32   // [2^-31 semi-circles] Inclination angle at reference time
-	Omega           int32   // [2^-31 semi-circles] Argument of perigee
-	OmegaDot        int32   // [2^-43 semi-circles/s] Rate of change of right ascension
-	IDot            int16   // [2^-43 semi-circles/s] Rate of change of inclination angle
-	Cuc             int16   // [2^-29 radians] Amplitude of the cosine harmonic correction term to the argument of latitude
-	Cus             int16   // [2^-29 radians] Amplitude of the sine harmonic correction term to the argument of latitude
-	Crc             int16   // [2^-5 radians] Amplitude of the cosine harmonic correction term to the orbit radius
-	Crs             int16   // [2^-5 radians] Amplitude of the sine harmonic correction term to the orbit radius
-	Cic             int16   // [2^-29 radians] Amplitude of the cosine harmonic correction term to the angle of inclination
-	Cis             int16   // [2^-29 radians] Amplitude of the sine harmonic correction term to the angle of inclination
-	Toe             uint16  // [60 s] Ephemeris reference time
-	Af0             int32   // [2^-34 s] SV clock bias correction coefficient
-	Af1             int32   // [2^-46 s/s] SV clock drift correction coefficient
-	Af2             int8    // [2^-59 s/ssquared] SV clock drift rate correction coefficient
-	SisaIndexE1E5b  byte    // Signal-In-Space Accuracy index for dual frequency E1-E5b
-	Toc             uint16  // [60 s] Clock correction data reference Time of Week
-	BgdE1E5b        int16   // E1-E5b Broadcast Group Delay
-	Reserved2       [2]byte // Reserved
-	HealthE1B       byte    // E1-B Signal Health Status
-	DataValidityE1B byte    // E1-B Data Validity Status
-	HealthE5b       byte    // E5b Signal Health Status
-	DataValidityE5b byte    // E5b Data Validity Status
-	Reserved3       [4]byte // Reserved
+	Type              byte    // Message type (0x01 for this type)
+	Version           byte    // Message version (0x00 for this version)
+	SvId              byte    // Galileo Satellite identifier (see Satellite Numbering)
+	Reserved1         byte    // Reserved
+	IodNav            uint16  // Ephemeris and clock correction Issue of Data
+	DeltaN            int16   // [2^-43 semi-circles/s] Mean motion difference from computed value
+	M0                int32   // [2^-31 semi-circles] Mean anomaly at reference time
+	E                 uint32  // Eccentricity
+	SqrtA             uint32  // [2^-19 m^0.5] Square root of the semi-major axis
+	Omega0            int32   // [2^-31 semi-circles] Longitude of ascending node of orbital plane at weekly epoch
+	I0                int32   // [2^-31 semi-circles] Inclination angle at reference time
+	Omega             int32   // [2^-31 semi-circles] Argument of perigee
+	OmegaDot          int32   // [2^-43 semi-circles/s] Rate of change of right ascension
+	IDot              int16   // [2^-43 semi-circles/s] Rate of change of inclination angle
+	Cuc_radiansl29    int16   // [2^-29 radians] Amplitude of the cosine harmonic correction term to the argument of latitude
+	Cus_radiansl29    int16   // [2^-29 radians] Amplitude of the sine harmonic correction term to the argument of latitude
+	Crc_radiansl5     int16   // [2^-5 radians] Amplitude of the cosine harmonic correction term to the orbit radius
+	Crs_radiansl5     int16   // [2^-5 radians] Amplitude of the sine harmonic correction term to the orbit radius
+	Cic_radiansl29    int16   // [2^-29 radians] Amplitude of the cosine harmonic correction term to the angle of inclination
+	Cis_radiansl29    int16   // [2^-29 radians] Amplitude of the sine harmonic correction term to the angle of inclination
+	Toe_s             uint16  // [60 s] Ephemeris reference time
+	Af0_sl34          int32   // [2^-34 s] SV clock bias correction coefficient
+	Af1_s_sl46        int32   // [2^-46 s/s] SV clock drift correction coefficient
+	Af2_s_ssquaredl59 int8    // [2^-59 s/ssquared] SV clock drift rate correction coefficient
+	SisaIndexE1E5b    byte    // Signal-In-Space Accuracy index for dual frequency E1-E5b
+	Toc_s             uint16  // [60 s] Clock correction data reference Time of Week
+	BgdE1E5b          int16   // E1-E5b Broadcast Group Delay
+	Reserved2         [2]byte // Reserved
+	HealthE1B         byte    // E1-B Signal Health Status
+	DataValidityE1B   byte    // E1-B Data Validity Status
+	HealthE5b         byte    // E5b Signal Health Status
+	DataValidityE5b   byte    // E5b Data Validity Status
+	Reserved3         [4]byte // Reserved
 }
 
 func (MgaGalEph) classID() uint16 { return 0x0213 }
 
 // UBX-MGA-GAL-ALM (Input) Galileo almanac assistance
-//
+// Class/Id 0x13 0x02 32 bytes
 // This message allows the delivery of Galileo almanac assistance to a receiver. See the description of AssistNow Online for details.
 type MgaGalAlm struct {
-	Type       byte    // Message type (0x02 for this type)
-	Version    byte    // Message version (0x00 for this version)
-	SvId       byte    // Galileo Satellite identifier (see Satellite Numbering)
-	Reserved1  byte    // Reserved
-	Ioda       byte    // Almanac Issue of Data
-	AlmWNa     byte    // [week] Almanac reference week number
-	Toa        uint16  // [600 s] Almanac reference time
-	DeltaSqrtA int16   // [2^-9 m^0.5] Difference with respect to the square root of the nominal semi-major axis (29 600 km)
-	E          uint16  // Eccentricity
-	DeltaI     int16   // [2^-14 semi-circles] Inclination at reference time relative to i0 = 56 degree
-	Omega0     int16   // [2^-15 semi-circles] Longitude of ascending node of orbital plane at weekly epoch
-	OmegaDot   int16   // [2^-33 semi-circles/s] Rate of change of right ascension
-	Omega      int16   // [2^-15 semi-circles] Argument of perigee
-	M0         int16   // [2^-15 semi-circles] Satellite mean anomaly at reference time
-	Af0        int16   // [2^-19 s] Satellite clock correction bias 'truncated'
-	Af1        int16   // [2^-38 s/s] Satellite clock correction linear 'truncated'
-	HealthE1B  byte    // Satellite E1-B signal health status
-	HealthE5b  byte    // Satellite E5b signal health status
-	Reserved2  [4]byte // Reserved
+	Type        byte    // Message type (0x02 for this type)
+	Version     byte    // Message version (0x00 for this version)
+	SvId        byte    // Galileo Satellite identifier (see Satellite Numbering)
+	Reserved1   byte    // Reserved
+	Ioda        byte    // Almanac Issue of Data
+	AlmWNa_week byte    // [week] Almanac reference week number
+	Toa_s       uint16  // [600 s] Almanac reference time
+	DeltaSqrtA  int16   // [2^-9 m^0.5] Difference with respect to the square root of the nominal semi-major axis (29 600 km)
+	E           uint16  // Eccentricity
+	DeltaI      int16   // [2^-14 semi-circles] Inclination at reference time relative to i0 = 56 degree
+	Omega0      int16   // [2^-15 semi-circles] Longitude of ascending node of orbital plane at weekly epoch
+	OmegaDot    int16   // [2^-33 semi-circles/s] Rate of change of right ascension
+	Omega       int16   // [2^-15 semi-circles] Argument of perigee
+	M0          int16   // [2^-15 semi-circles] Satellite mean anomaly at reference time
+	Af0_sl19    int16   // [2^-19 s] Satellite clock correction bias 'truncated'
+	Af1_s_sl38  int16   // [2^-38 s/s] Satellite clock correction linear 'truncated'
+	HealthE1B   byte    // Satellite E1-B signal health status
+	HealthE5b   byte    // Satellite E5b signal health status
+	Reserved2   [4]byte // Reserved
 }
 
 func (MgaGalAlm) classID() uint16 { return 0x0213 }
 
 // UBX-MGA-GAL-TIMEOFFSET (Input) Galileo GPS time offset assistance
-//
+// Class/Id 0x13 0x02 12 bytes
 // This message allows the delivery of Galileo time to GPS time offset. See the description of AssistNow Online for details.
 type MgaGalTimeoffset struct {
-	Type      byte    // Message type (0x03 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	Reserved1 [2]byte // Reserved
-	A0G       int16   // [2^-35 s] Constant term of the polynomial describing the offset
-	A1G       int16   // [2^-51 s/s] Rate of change of the offset
-	T0G       byte    // [3600 s] Reference time for GGTO data
-	Wn0G      byte    // [weeks] Week Number of GGTO reference
-	Reserved2 [2]byte // Reserved
+	Type       byte    // Message type (0x03 for this type)
+	Version    byte    // Message version (0x00 for this version)
+	Reserved1  [2]byte // Reserved
+	A0G_sl35   int16   // [2^-35 s] Constant term of the polynomial describing the offset
+	A1G_s_sl51 int16   // [2^-51 s/s] Rate of change of the offset
+	T0G_s      byte    // [3600 s] Reference time for GGTO data
+	Wn0G_weeks byte    // [weeks] Week Number of GGTO reference
+	Reserved2  [2]byte // Reserved
 }
 
 func (MgaGalTimeoffset) classID() uint16 { return 0x0213 }
 
 // UBX-MGA-GAL-UTC (Input) Galileo UTC assistance
-//
+// Class/Id 0x13 0x02 20 bytes
 // This message allows the delivery of Galileo UTC assistance to a receiver. See the description of AssistNow Online for details.
 type MgaGalUtc struct {
-	Type      byte    // Message type (0x05 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	Reserved1 [2]byte // Reserved
-	A0        int32   // [2^-30 s] First parameter of UTC polynomial
-	A1        int32   // [2^-50 s/s] Second parameter of UTC polynomial
-	DtLS      int8    // [s] Delta time due to current leap seconds
-	Tot       byte    // [3600 s] UTC parameters reference time of week (Galileo time)
-	Wnt       byte    // [weeks] UTC parameters reference week number (the 8-bit WNt field)
-	WnLSF     byte    // [weeks] Week number at the end of which the future leap second becomes effective (the 8-bit WNLSF field)
-	DN        byte    // [days] Day number at the end of which the future leap second becomes effective
-	DTLSF     int8    // [s] Delta time due to future leap seconds
-	Reserved2 [2]byte // Reserved
+	Type        byte    // Message type (0x05 for this type)
+	Version     byte    // Message version (0x00 for this version)
+	Reserved1   [2]byte // Reserved
+	A0_sl30     int32   // [2^-30 s] First parameter of UTC polynomial
+	A1_s_sl50   int32   // [2^-50 s/s] Second parameter of UTC polynomial
+	DtLS_s      int8    // [s] Delta time due to current leap seconds
+	Tot_s       byte    // [3600 s] UTC parameters reference time of week (Galileo time)
+	Wnt_weeks   byte    // [weeks] UTC parameters reference week number (the 8-bit WNt field)
+	WnLSF_weeks byte    // [weeks] Week number at the end of which the future leap second becomes effective (the 8-bit WNLSF field)
+	DN_days     byte    // [days] Day number at the end of which the future leap second becomes effective
+	DTLSF_s     int8    // [s] Delta time due to future leap seconds
+	Reserved2   [2]byte // Reserved
 }
 
 func (MgaGalUtc) classID() uint16 { return 0x0213 }
 
 // UBX-MGA-GLO-EPH (Input) GLONASS ephemeris assistance
-//
+// Class/Id 0x13 0x06 48 bytes
 // This message allows the delivery of GLONASS ephemeris assistance to a receiver. See the description of AssistNow Online for details.
 type MgaGloEph struct {
-	Type      byte    // Message type (0x01 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	SvId      byte    // GLONASS Satellite identifier (see Satellite Numbering)
-	Reserved1 byte    // Reserved
-	FT        byte    // User range accuracy
-	B         byte    // Health flag from string 2
-	M         byte    // Type of GLONASS satellite (1 indicates GLONASS-M)
-	H         int8    // Carrier frequency number of navigation RF signal, Range=(-7 .. 6), -128 for unknown
-	X         int32   // [2^-11 km] X component of the SV position in PZ-90. 02 coordinate System
-	Y         int32   // [2^-11 km] Y component of the SV position in PZ-90. 02 coordinate System
-	Z         int32   // [2^-11 km] Z component of the SV position in PZ-90. 02 coordinate System
-	Dx        int32   // [2^-20 km/s] X component of the SV velocity in PZ-90. 02 coordinate System
-	Dy        int32   // [2^-20 km/s] Y component of the SV velocity in PZ-90. 02 coordinate System
-	Dz        int32   // [2^-20 km/s] Z component of the SV velocity in PZ-90. 02 coordinate System
-	Ddx       int8    // [2^-30 km/s^2] X component of the SV acceleration in PZ- 90.02 coordinate System
-	Ddy       int8    // [2^-30 km/s^2] Y component of the SV acceleration in PZ- 90.02 coordinate System
-	Ddz       int8    // [2^-30 km/s^2] Z component of the SV acceleration in PZ- 90.02 coordinate System
-	Tb        byte    // [15 minutes] Index of a time interval within current day according to UTC(SU)
-	Gamma     int16   // Relative carrier frequency deviation
-	E         byte    // [days] Ephemeris data age indicator
-	DeltaTau  int8    // [2^-30 s] Time difference between L2 and L1 band
-	Tau       int32   // [2^-30 s] SV clock bias
-	Reserved2 [4]byte // Reserved
+	Type          byte    // Message type (0x01 for this type)
+	Version       byte    // Message version (0x00 for this version)
+	SvId          byte    // GLONASS Satellite identifier (see Satellite Numbering)
+	Reserved1     byte    // Reserved
+	FT            byte    // User range accuracy
+	B             byte    // Health flag from string 2
+	M             byte    // Type of GLONASS satellite (1 indicates GLONASS-M)
+	H             int8    // Carrier frequency number of navigation RF signal, Range=(-7 .. 6), -128 for unknown
+	X_kml11       int32   // [2^-11 km] X component of the SV position in PZ-90. 02 coordinate System
+	Y_kml11       int32   // [2^-11 km] Y component of the SV position in PZ-90. 02 coordinate System
+	Z_kml11       int32   // [2^-11 km] Z component of the SV position in PZ-90. 02 coordinate System
+	Dx_km_sl20    int32   // [2^-20 km/s] X component of the SV velocity in PZ-90. 02 coordinate System
+	Dy_km_sl20    int32   // [2^-20 km/s] Y component of the SV velocity in PZ-90. 02 coordinate System
+	Dz_km_sl20    int32   // [2^-20 km/s] Z component of the SV velocity in PZ-90. 02 coordinate System
+	Ddx_km_s2l30  int8    // [2^-30 km/s^2] X component of the SV acceleration in PZ- 90.02 coordinate System
+	Ddy_km_s2l30  int8    // [2^-30 km/s^2] Y component of the SV acceleration in PZ- 90.02 coordinate System
+	Ddz_km_s2l30  int8    // [2^-30 km/s^2] Z component of the SV acceleration in PZ- 90.02 coordinate System
+	Tb_minutes    byte    // [15 minutes] Index of a time interval within current day according to UTC(SU)
+	Gamma         int16   // Relative carrier frequency deviation
+	E_days        byte    // [days] Ephemeris data age indicator
+	DeltaTau_sl30 int8    // [2^-30 s] Time difference between L2 and L1 band
+	Tau_sl30      int32   // [2^-30 s] SV clock bias
+	Reserved2     [4]byte // Reserved
 }
 
 func (MgaGloEph) classID() uint16 { return 0x0613 }
 
 // UBX-MGA-GLO-ALM (Input) GLONASS almanac assistance
-//
+// Class/Id 0x13 0x06 36 bytes
 // This message allows the delivery of GLONASS almanac assistance to a receiver. See the description of AssistNow Online for details.
 type MgaGloAlm struct {
-	Type      byte    // Message type (0x02 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	SvId      byte    // GLONASS Satellite identifier (see Satellite Numbering)
-	Reserved1 byte    // Reserved
-	N         uint16  // [days] Reference calender day number of almanac within the four-year period (from string 5)
-	M         byte    // Type of GLONASS satellite (1 indicates GLONASS-M)
-	C         byte    // Unhealthy flag at instant of almanac upload (1 indicates operability of satellite)
-	Tau       int16   // [2^-18 s] Coarse time correction to GLONASS time
-	Epsilon   uint16  // Eccentricity
-	Lambda    int32   // [2^-20 semi-circles] Longitude of the first (within the N-day) ascending node of satellite orbit in PC-90. 02 coordinate system
-	DeltaI    int32   // [2^-20 semi-circles] Correction to the mean value of inclination
-	TLambda   uint32  // [2^-5 s] Time of the first ascending node passage
-	DeltaT    int32   // [2^-9 s/orbital-period] Correction to the mean value of Draconian period
-	DeltaDT   int8    // [2^-14 s/orbital-period^2] Rate of change of Draconian period
-	H         int8    // Carrier frequency number of navigation RF signal, Range=(-7 .. 6)
-	Omega     int16   // Argument of perigee
-	Reserved2 [4]byte // Reserved
+	Type        byte    // Message type (0x02 for this type)
+	Version     byte    // Message version (0x00 for this version)
+	SvId        byte    // GLONASS Satellite identifier (see Satellite Numbering)
+	Reserved1   byte    // Reserved
+	N_days      uint16  // [days] Reference calender day number of almanac within the four-year period (from string 5)
+	M           byte    // Type of GLONASS satellite (1 indicates GLONASS-M)
+	C           byte    // Unhealthy flag at instant of almanac upload (1 indicates operability of satellite)
+	Tau_sl18    int16   // [2^-18 s] Coarse time correction to GLONASS time
+	Epsilon     uint16  // Eccentricity
+	Lambda      int32   // [2^-20 semi-circles] Longitude of the first (within the N-day) ascending node of satellite orbit in PC-90. 02 coordinate system
+	DeltaI      int32   // [2^-20 semi-circles] Correction to the mean value of inclination
+	TLambda_sl5 uint32  // [2^-5 s] Time of the first ascending node passage
+	DeltaT      int32   // [2^-9 s/orbital-period] Correction to the mean value of Draconian period
+	DeltaDT     int8    // [2^-14 s/orbital-period^2] Rate of change of Draconian period
+	H           int8    // Carrier frequency number of navigation RF signal, Range=(-7 .. 6)
+	Omega       int16   // Argument of perigee
+	Reserved2   [4]byte // Reserved
 }
 
 func (MgaGloAlm) classID() uint16 { return 0x0613 }
 
 // UBX-MGA-GLO-TIMEOFFSET (Input) GLONASS auxiliary time offset assistance
-//
+// Class/Id 0x13 0x06 20 bytes
 // This message allows the delivery of auxiliary GLONASS assistance (including the GLONASS time offsets to other GNSS systems) to a receiver. See the description of AssistNow Online for details.
 type MgaGloTimeoffset struct {
-	Type      byte    // Message type (0x03 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	N         uint16  // [days] Reference calendar day number within the four-year period of almanac (from string 5)
-	TauC      int32   // [2^-27 s] Time scale correction to UTC(SU) time
-	TauGps    int32   // [2^-31 s] Correction to GPS time relative to GLONASS time
-	B1        int16   // [2^-10 s] Coefficient to determine delta UT1
-	B2        int16   // [2^-16 s/msd] Rate of change of delta UT1
-	Reserved1 [4]byte // Reserved
+	Type        byte    // Message type (0x03 for this type)
+	Version     byte    // Message version (0x00 for this version)
+	N_days      uint16  // [days] Reference calendar day number within the four-year period of almanac (from string 5)
+	TauC_sl27   int32   // [2^-27 s] Time scale correction to UTC(SU) time
+	TauGps_sl31 int32   // [2^-31 s] Correction to GPS time relative to GLONASS time
+	B1_sl10     int16   // [2^-10 s] Coefficient to determine delta UT1
+	B2_s_msdl16 int16   // [2^-16 s/msd] Rate of change of delta UT1
+	Reserved1   [4]byte // Reserved
 }
 
 func (MgaGloTimeoffset) classID() uint16 { return 0x0613 }
 
 // UBX-MGA-GPS-EPH (Input) GPS ephemeris assistance
-//
+// Class/Id 0x13 0x00 68 bytes
 // This message allows the delivery of GPS ephemeris assistance to a receiver. See the description of AssistNow Online for details.
 type MgaGpsEph struct {
-	Type        byte    // Message type (0x01 for this type)
-	Version     byte    // Message version (0x00 for this version)
-	SvId        byte    // GPS Satellite identifier (see Satellite Numbering)
-	Reserved1   byte    // Reserved
-	FitInterval byte    // Fit interval flag
-	UraIndex    byte    // URA index
-	SvHealth    byte    // SV health
-	Tgd         int8    // [2^-31 s] Group delay differential
-	Iodc        uint16  // IODC
-	Toc         uint16  // [2^4 s] Clock data reference time
-	Reserved2   byte    // Reserved
-	Af2         int8    // [2^-55 s/ssquared] Time polynomial coefficient 2
-	Af1         int16   // [2^-43 s/s] Time polynomial coefficient 1
-	Af0         int32   // [2^-31 s] Time polynomial coefficient 0
-	Crs         int16   // [2^-5 m] Crs
-	DeltaN      int16   // [2^-43 semi-circles/s] Mean motion difference from computed value
-	M0          int32   // [2^-31 semi-circles] Mean anomaly at reference time
-	Cuc         int16   // [2^-29 radians] Amplitude of cosine harmonic correction term to argument of latitude
-	Cus         int16   // [2^-29 radians] Amplitude of sine harmonic correction term to argument of latitude
-	E           uint32  // Eccentricity
-	SqrtA       uint32  // [2^-19 m^0.5] Square root of the semi-major axis
-	Toe         uint16  // [2^4 s] Reference time of ephemeris
-	Cic         int16   // [2^-29 radians] Amplitude of cos harmonic correction term to angle of inclination
-	Omega0      int32   // [2^-31 semi-circles] Longitude of ascending node of orbit plane at weekly epoch
-	Cis         int16   // [2^-29 radians] Amplitude of sine harmonic correction term to angle of inclination
-	Crc         int16   // [2^-5 m] Amplitude of cosine harmonic correction term to orbit radius
-	I0          int32   // [2^-31 semi-circles] Inclination angle at reference time
-	Omega       int32   // [2^-31 semi-circles] Argument of perigee
-	OmegaDot    int32   // [2^-43 semi-circles/s] Rate of right ascension
-	Idot        int16   // [2^-43 semi-circles/s] Rate of inclination angle
-	Reserved3   [2]byte // Reserved
+	Type              byte    // Message type (0x01 for this type)
+	Version           byte    // Message version (0x00 for this version)
+	SvId              byte    // GPS Satellite identifier (see Satellite Numbering)
+	Reserved1         byte    // Reserved
+	FitInterval       byte    // Fit interval flag
+	UraIndex          byte    // URA index
+	SvHealth          byte    // SV health
+	Tgd_sl31          int8    // [2^-31 s] Group delay differential
+	Iodc              uint16  // IODC
+	Toc_sr4           uint16  // [2^4 s] Clock data reference time
+	Reserved2         byte    // Reserved
+	Af2_s_ssquaredl55 int8    // [2^-55 s/ssquared] Time polynomial coefficient 2
+	Af1_s_sl43        int16   // [2^-43 s/s] Time polynomial coefficient 1
+	Af0_sl31          int32   // [2^-31 s] Time polynomial coefficient 0
+	Crs_ml5           int16   // [2^-5 m] Crs
+	DeltaN            int16   // [2^-43 semi-circles/s] Mean motion difference from computed value
+	M0                int32   // [2^-31 semi-circles] Mean anomaly at reference time
+	Cuc_radiansl29    int16   // [2^-29 radians] Amplitude of cosine harmonic correction term to argument of latitude
+	Cus_radiansl29    int16   // [2^-29 radians] Amplitude of sine harmonic correction term to argument of latitude
+	E                 uint32  // Eccentricity
+	SqrtA             uint32  // [2^-19 m^0.5] Square root of the semi-major axis
+	Toe_sr4           uint16  // [2^4 s] Reference time of ephemeris
+	Cic_radiansl29    int16   // [2^-29 radians] Amplitude of cos harmonic correction term to angle of inclination
+	Omega0            int32   // [2^-31 semi-circles] Longitude of ascending node of orbit plane at weekly epoch
+	Cis_radiansl29    int16   // [2^-29 radians] Amplitude of sine harmonic correction term to angle of inclination
+	Crc_ml5           int16   // [2^-5 m] Amplitude of cosine harmonic correction term to orbit radius
+	I0                int32   // [2^-31 semi-circles] Inclination angle at reference time
+	Omega             int32   // [2^-31 semi-circles] Argument of perigee
+	OmegaDot          int32   // [2^-43 semi-circles/s] Rate of right ascension
+	Idot              int16   // [2^-43 semi-circles/s] Rate of inclination angle
+	Reserved3         [2]byte // Reserved
 }
 
 func (MgaGpsEph) classID() uint16 { return 0x0013 }
 
 // UBX-MGA-GPS-ALM (Input) GPS almanac assistance
-//
+// Class/Id 0x13 0x00 36 bytes
 // This message allows the delivery of GPS almanac assistance to a receiver. See the description of AssistNow Online for details.
 type MgaGpsAlm struct {
-	Type      byte    // Message type (0x02 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	SvId      byte    // GPS Satellite identifier (see Satellite Numbering)
-	SvHealth  byte    // SV health information
-	E         uint16  // Eccentricity
-	AlmWNa    byte    // [week] Reference week number of almanac (the 8-bit WNa field)
-	Toa       byte    // [2^12 s] Reference time of almanac
-	DeltaI    int16   // [2^-19 semi-circles] Delta inclination angle at reference time
-	OmegaDot  int16   // [2^-38 semi-circles/s] Rate of right ascension
-	SqrtA     uint32  // [2^-11 m^0.5] Square root of the semi-major axis
-	Omega0    int32   // [2^-23 semi-circles] Longitude of ascending node of orbit plane
-	Omega     int32   // [2^-23 semi-circles] Argument of perigee
-	M0        int32   // [2^-23 semi-circles] Mean anomaly at reference time
-	Af0       int16   // [2^-20 s] Time polynomial coefficient 0 (8 MSBs)
-	Af1       int16   // [2^-38 s/s] Time polynomial coefficient 1
-	Reserved1 [4]byte // Reserved
+	Type        byte    // Message type (0x02 for this type)
+	Version     byte    // Message version (0x00 for this version)
+	SvId        byte    // GPS Satellite identifier (see Satellite Numbering)
+	SvHealth    byte    // SV health information
+	E           uint16  // Eccentricity
+	AlmWNa_week byte    // [week] Reference week number of almanac (the 8-bit WNa field)
+	Toa_sr12    byte    // [2^12 s] Reference time of almanac
+	DeltaI      int16   // [2^-19 semi-circles] Delta inclination angle at reference time
+	OmegaDot    int16   // [2^-38 semi-circles/s] Rate of right ascension
+	SqrtA       uint32  // [2^-11 m^0.5] Square root of the semi-major axis
+	Omega0      int32   // [2^-23 semi-circles] Longitude of ascending node of orbit plane
+	Omega       int32   // [2^-23 semi-circles] Argument of perigee
+	M0          int32   // [2^-23 semi-circles] Mean anomaly at reference time
+	Af0_sl20    int16   // [2^-20 s] Time polynomial coefficient 0 (8 MSBs)
+	Af1_s_sl38  int16   // [2^-38 s/s] Time polynomial coefficient 1
+	Reserved1   [4]byte // Reserved
 }
 
 func (MgaGpsAlm) classID() uint16 { return 0x0013 }
 
 // UBX-MGA-GPS-HEALTH (Input) GPS health assistance
-//
+// Class/Id 0x13 0x00 40 bytes
 // This message allows the delivery of GPS health assistance to a receiver. See the description of AssistNow Online for details.
 type MgaGpsHealth struct {
 	Type       byte     // Message type (0x04 for this type)
@@ -2816,94 +2785,94 @@ type MgaGpsHealth struct {
 func (MgaGpsHealth) classID() uint16 { return 0x0013 }
 
 // UBX-MGA-GPS-UTC (Input) GPS UTC assistance
-//
+// Class/Id 0x13 0x00 20 bytes
 // This message allows the delivery of GPS UTC assistance to a receiver. See the description of AssistNow Online for details.
 type MgaGpsUtc struct {
-	Type      byte    // Message type (0x05 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	Reserved1 [2]byte // Reserved
-	UtcA0     int32   // [2^-30 s] First parameter of UTC polynomial
-	UtcA1     int32   // [2^-50 s/s] Second parameter of UTC polynomial
-	UtcDtLS   int8    // [s] Delta time due to current leap seconds
-	UtcTot    byte    // [2^12 s] UTC parameters reference time of week (GPS time)
-	UtcWNt    byte    // [weeks] UTC parameters reference week number (the 8-bit WNt field)
-	UtcWNlsf  byte    // [weeks] Week number at the end of which the future leap second becomes effective (the 8-bit WNLSF field)
-	UtcDn     byte    // [days] Day number at the end of which the future leap second becomes effective
-	UtcDtLSF  int8    // [s] Delta time due to future leap seconds
-	Reserved2 [2]byte // Reserved
+	Type           byte    // Message type (0x05 for this type)
+	Version        byte    // Message version (0x00 for this version)
+	Reserved1      [2]byte // Reserved
+	UtcA0_sl30     int32   // [2^-30 s] First parameter of UTC polynomial
+	UtcA1_s_sl50   int32   // [2^-50 s/s] Second parameter of UTC polynomial
+	UtcDtLS_s      int8    // [s] Delta time due to current leap seconds
+	UtcTot_sr12    byte    // [2^12 s] UTC parameters reference time of week (GPS time)
+	UtcWNt_weeks   byte    // [weeks] UTC parameters reference week number (the 8-bit WNt field)
+	UtcWNlsf_weeks byte    // [weeks] Week number at the end of which the future leap second becomes effective (the 8-bit WNLSF field)
+	UtcDn_days     byte    // [days] Day number at the end of which the future leap second becomes effective
+	UtcDtLSF_s     int8    // [s] Delta time due to future leap seconds
+	Reserved2      [2]byte // Reserved
 }
 
 func (MgaGpsUtc) classID() uint16 { return 0x0013 }
 
 // UBX-MGA-GPS-IONO (Input) GPS ionosphere assistance
-//
+// Class/Id 0x13 0x00 16 bytes
 // This message allows the delivery of GPS ionospheric assistance to a receiver. See the description of AssistNow Online for details.
 type MgaGpsIono struct {
-	Type       byte    // Message type (0x06 for this type)
-	Version    byte    // Message version (0x00 for this version)
-	Reserved1  [2]byte // Reserved
-	IonoAlpha0 int8    // [2^-30 s] Ionospheric parameter alpha0 [s]
-	IonoAlpha1 int8    // [2^-27 s/semi-circle] Ionospheric parameter alpha1 [s/semi- circle]
-	IonoAlpha2 int8    // [2^-24 s/(semi-circle^2)] Ionospheric parameter alpha2 [s/semi- circle^2]
-	IonoAlpha3 int8    // [2^-24 s/(semi-circle^3)] Ionospheric parameter alpha3 [s/semi- circle^3]
-	IonoBeta0  int8    // [2^11 s] Ionospheric parameter beta0 [s]
-	IonoBeta1  int8    // [2^14 s/semi-circle] Ionospheric parameter beta1 [s/semi- circle]
-	IonoBeta2  int8    // [2^16 s/(semi-circle^2)] Ionospheric parameter beta2 [s/semi- circle^2]
-	IonoBeta3  int8    // [2^16 s/(semi-circle^3)] Ionospheric parameter beta3 [s/semi- circle^3]
-	Reserved2  [4]byte // Reserved
+	Type            byte    // Message type (0x06 for this type)
+	Version         byte    // Message version (0x00 for this version)
+	Reserved1       [2]byte // Reserved
+	IonoAlpha0_sl30 int8    // [2^-30 s] Ionospheric parameter alpha0 [s]
+	IonoAlpha1      int8    // [2^-27 s/semi-circle] Ionospheric parameter alpha1 [s/semi- circle]
+	IonoAlpha2      int8    // [2^-24 s/(semi-circle^2)] Ionospheric parameter alpha2 [s/semi- circle^2]
+	IonoAlpha3      int8    // [2^-24 s/(semi-circle^3)] Ionospheric parameter alpha3 [s/semi- circle^3]
+	IonoBeta0_sr11  int8    // [2^11 s] Ionospheric parameter beta0 [s]
+	IonoBeta1       int8    // [2^14 s/semi-circle] Ionospheric parameter beta1 [s/semi- circle]
+	IonoBeta2       int8    // [2^16 s/(semi-circle^2)] Ionospheric parameter beta2 [s/semi- circle^2]
+	IonoBeta3       int8    // [2^16 s/(semi-circle^3)] Ionospheric parameter beta3 [s/semi- circle^3]
+	Reserved2       [4]byte // Reserved
 }
 
 func (MgaGpsIono) classID() uint16 { return 0x0013 }
 
 // UBX-MGA-INI-POS_XYZ (Input) Initial position assistance
-//
+// Class/Id 0x13 0x40 20 bytes
 // Supplying position assistance that is inaccurate by more than the specified position accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of initial position assistance to a receiver in cartesian ECEF coordinates. This message is equivalent to the UBX-MGA-INI- POS_LLH message, except for the coordinate system. See the description of AssistNow Online for details.
 type MgaIniPos_xyz struct {
 	Type      byte    // Message type (0x00 for this type)
 	Version   byte    // Message version (0x00 for this version)
 	Reserved1 [2]byte // Reserved
-	EcefX     int32   // [cm] WGS84 ECEF X coordinate
-	EcefY     int32   // [cm] WGS84 ECEF Y coordinate
-	EcefZ     int32   // [cm] WGS84 ECEF Z coordinate
-	PosAcc    uint32  // [cm] Position accuracy (stddev)
+	EcefX_cm  int32   // [cm] WGS84 ECEF X coordinate
+	EcefY_cm  int32   // [cm] WGS84 ECEF Y coordinate
+	EcefZ_cm  int32   // [cm] WGS84 ECEF Z coordinate
+	PosAcc_cm uint32  // [cm] Position accuracy (stddev)
 }
 
 func (MgaIniPos_xyz) classID() uint16 { return 0x4013 }
 
 // UBX-MGA-INI-POS_LLH (Input) Initial position assistance
-//
+// Class/Id 0x13 0x40 20 bytes
 // Supplying position assistance that is inaccurate by more than the specified position accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of initial position assistance to a receiver in WGS84 lat/long/alt coordinates. This message is equivalent to the UBX-MGA- INI-POS_XYZ message, except for the coordinate system. See the description of AssistNow Online for details.
 type MgaIniPos_llh struct {
 	Type      byte    // Message type (0x01 for this type)
 	Version   byte    // Message version (0x00 for this version)
 	Reserved1 [2]byte // Reserved
-	Lat       int32   // [1e-7 deg] WGS84 Latitude
-	Lon       int32   // [1e-7 deg] WGS84 Longitude
-	Alt       int32   // [cm] WGS84 Altitude
-	PosAcc    uint32  // [cm] Position accuracy (stddev)
+	Lat_dege7 int32   // [1e-7 deg] WGS84 Latitude
+	Lon_dege7 int32   // [1e-7 deg] WGS84 Longitude
+	Alt_cm    int32   // [cm] WGS84 Altitude
+	PosAcc_cm uint32  // [cm] Position accuracy (stddev)
 }
 
 func (MgaIniPos_llh) classID() uint16 { return 0x4013 }
 
 // UBX-MGA-INI-TIME_UTC (Input) Initial time assistance
-//
+// Class/Id 0x13 0x40 24 bytes
 // Supplying time assistance that is inaccurate by more than the specified time accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of UTC time assistance to a receiver. This message is equivalent to the UBX-MGA-INI-TIME_GNSS message, except for the time base. See the description of AssistNow Online for details.
 type MgaIniTime_utc struct {
-	Type      byte              // Message type (0x10 for this type)
-	Version   byte              // Message version (0x00 for this version)
-	Ref       MgaIniTime_utcRef // Reference to be used to set time
-	LeapSecs  int8              // [s] Number of leap seconds since 1980 (or 0x80 = -128 if unknown)
-	Year      uint16            // Year
-	Month     byte              // Month, starting at 1
-	Day       byte              // Day, starting at 1
-	Hour      byte              // Hour, from 0 to 23
-	Minute    byte              // Minute, from 0 to 59
-	Second    byte              // [s] Seconds, from 0 to 59
-	Reserved1 byte              // Reserved
-	Ns        uint32            // [ns] Nanoseconds, from 0 to 999,999,999
-	TAccS     uint16            // [s] Seconds part of time accuracy
-	Reserved2 [2]byte           // Reserved
-	TAccNs    uint32            // [ns] Nanoseconds part of time accuracy, from 0 to 999,999,999
+	Type       byte              // Message type (0x10 for this type)
+	Version    byte              // Message version (0x00 for this version)
+	Ref        MgaIniTime_utcRef // Reference to be used to set time
+	LeapSecs_s int8              // [s] Number of leap seconds since 1980 (or 0x80 = -128 if unknown)
+	Year       uint16            // Year
+	Month      byte              // Month, starting at 1
+	Day        byte              // Day, starting at 1
+	Hour       byte              // Hour, from 0 to 23
+	Minute     byte              // Minute, from 0 to 59
+	Second_s   byte              // [s] Seconds, from 0 to 59
+	Reserved1  byte              // Reserved
+	Ns_ns      uint32            // [ns] Nanoseconds, from 0 to 999,999,999
+	TAccS_s    uint16            // [s] Seconds part of time accuracy
+	Reserved2  [2]byte           // Reserved
+	TAccNs_ns  uint32            // [ns] Nanoseconds part of time accuracy, from 0 to 999,999,999
 }
 
 func (MgaIniTime_utc) classID() uint16 { return 0x4013 }
@@ -2917,7 +2886,7 @@ const (
 )
 
 // UBX-MGA-INI-TIME_GNSS (Input) Initial time assistance
-//
+// Class/Id 0x13 0x40 24 bytes
 // Supplying time assistance that is inaccurate by more than the specified time accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of time assistance to a receiver in a chosen GNSS timebase. This message is equivalent to the UBX-MGA-INI-TIME_UTC message, except for the time base. See the description of AssistNow Online for details.
 type MgaIniTime_gnss struct {
 	Type      byte               // Message type (0x11 for this type)
@@ -2926,11 +2895,11 @@ type MgaIniTime_gnss struct {
 	GnssId    byte               // Source of time information. Currently supported: 0: GPS time 2: Galileo time 3: BeiDou time 6: GLONASS time: week = 834 + ((N4- 1)*1461 + Nt)/7, tow = (((N4-1)*1461 + Nt) % 7) * 86400 + tod
 	Reserved1 [2]byte            // Reserved
 	Week      uint16             // GNSS week number
-	Tow       uint32             // [s] GNSS time of week
-	Ns        uint32             // [ns] GNSS time of week, nanosecond part from 0 to 999,999,999
-	TAccS     uint16             // [s] Seconds part of time accuracy
+	Tow_s     uint32             // [s] GNSS time of week
+	Ns_ns     uint32             // [ns] GNSS time of week, nanosecond part from 0 to 999,999,999
+	TAccS_s   uint16             // [s] Seconds part of time accuracy
 	Reserved2 [2]byte            // Reserved
-	TAccNs    uint32             // [ns] Nanoseconds part of time accuracy, from 0 to 999,999,999
+	TAccNs_ns uint32             // [ns] Nanoseconds part of time accuracy, from 0 to 999,999,999
 }
 
 func (MgaIniTime_gnss) classID() uint16 { return 0x4013 }
@@ -2944,28 +2913,28 @@ const (
 )
 
 // UBX-MGA-INI-CLKD (Input) Initial clock drift assistance
-//
+// Class/Id 0x13 0x40 12 bytes
 // Supplying clock drift assistance that is inaccurate by more than the specified accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of clock drift assistance to a receiver. See the description of AssistNow Online for details.
 type MgaIniClkd struct {
-	Type      byte    // Message type (0x20 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	Reserved1 [2]byte // Reserved
-	ClkD      int32   // [ns/s] Clock drift
-	ClkDAcc   uint32  // [ns/s] Clock drift accuracy
+	Type         byte    // Message type (0x20 for this type)
+	Version      byte    // Message version (0x00 for this version)
+	Reserved1    [2]byte // Reserved
+	ClkD_ns_s    int32   // [ns/s] Clock drift
+	ClkDAcc_ns_s uint32  // [ns/s] Clock drift accuracy
 }
 
 func (MgaIniClkd) classID() uint16 { return 0x4013 }
 
 // UBX-MGA-INI-FREQ (Input) Initial frequency assistance
-//
+// Class/Id 0x13 0x40 12 bytes
 // Supplying external frequency assistance that is inaccurate by more than the specified accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of external frequency assistance to a receiver. See the description of AssistNow Online for details.
 type MgaIniFreq struct {
-	Type      byte            // Message type (0x21 for this type)
-	Version   byte            // Message version (0x00 for this version)
-	Reserved1 byte            // Reserved
-	Flags     MgaIniFreqFlags // Frequency reference
-	Freq      int32           // [1e-2 Hz] Frequency
-	FreqAcc   uint32          // [ppb] Frequency accuracy
+	Type        byte            // Message type (0x21 for this type)
+	Version     byte            // Message version (0x00 for this version)
+	Reserved1   byte            // Reserved
+	Flags       MgaIniFreqFlags // Frequency reference
+	Freq_hze2   int32           // [1e-2 Hz] Frequency
+	FreqAcc_ppb uint32          // [ppb] Frequency accuracy
 }
 
 func (MgaIniFreq) classID() uint16 { return 0x4013 }
@@ -2978,90 +2947,90 @@ const (
 )
 
 // UBX-MGA-INI-EOP (Input) Earth orientation parameters assistance
-//
+// Class/Id 0x13 0x40 72 bytes
 // This message allows the delivery of new earth orientation parameters (EOP) to a receiver to improve AssistNow Autonomous operation.
 type MgaIniEop struct {
-	Type      byte     // Message type (0x30 for this type)
-	Version   byte     // Message version (0x00 for this version)
-	Reserved1 [2]byte  // Reserved
-	D2kRef    uint16   // [d] reference time (days since 1.1.2000 12.00h UTC)
-	D2kMax    uint16   // [d] expiration time (days since 1.1.2000 12.00h UTC)
-	XpP0      int32    // [2^-30 arcsec] x_p t^0 polynomial term (offset)
-	XpP1      int32    // [2^-30 arcsec/d] x_p t^1 polynomial term (drift)
-	YpP0      int32    // [2^-30 arcsec] y_p t^0 polynomial term (offset)
-	YpP1      int32    // [2^-30 arcsec/d] y_p t^1 polynomial term (drift)
-	DUT1      int32    // [2^-25 s] dUT1 t^0 polynomial term (offset)
-	DdUT1     int32    // [2^-30 s/d] dUT1 t^1 polynomial term (drift)
-	Reserved2 [40]byte // Reserved
+	Type             byte     // Message type (0x30 for this type)
+	Version          byte     // Message version (0x00 for this version)
+	Reserved1        [2]byte  // Reserved
+	D2kRef_d         uint16   // [d] reference time (days since 1.1.2000 12.00h UTC)
+	D2kMax_d         uint16   // [d] expiration time (days since 1.1.2000 12.00h UTC)
+	XpP0_arcsecl30   int32    // [2^-30 arcsec] x_p t^0 polynomial term (offset)
+	XpP1_arcsec_dl30 int32    // [2^-30 arcsec/d] x_p t^1 polynomial term (drift)
+	YpP0_arcsecl30   int32    // [2^-30 arcsec] y_p t^0 polynomial term (offset)
+	YpP1_arcsec_dl30 int32    // [2^-30 arcsec/d] y_p t^1 polynomial term (drift)
+	DUT1_sl25        int32    // [2^-25 s] dUT1 t^0 polynomial term (offset)
+	DdUT1_s_dl30     int32    // [2^-30 s/d] dUT1 t^1 polynomial term (drift)
+	Reserved2        [40]byte // Reserved
 }
 
 func (MgaIniEop) classID() uint16 { return 0x4013 }
 
 // UBX-MGA-QZSS-EPH (Input) QZSS ephemeris assistance
-//
+// Class/Id 0x13 0x05 68 bytes
 // This message allows the delivery of QZSS ephemeris assistance to a receiver. See the description of AssistNow Online for details.
 type MgaQzssEph struct {
-	Type        byte    // Message type (0x01 for this type)
-	Version     byte    // Message version (0x00 for this version)
-	SvId        byte    // QZSS Satellite identifier (see Satellite Numbering), Range 1-5
-	Reserved1   byte    // Reserved
-	FitInterval byte    // Fit interval flag
-	UraIndex    byte    // URA index
-	SvHealth    byte    // SV health
-	Tgd         int8    // [2^-31 s] Group delay differential
-	Iodc        uint16  // IODC
-	Toc         uint16  // [2^4 s] Clock data reference time
-	Reserved2   byte    // Reserved
-	Af2         int8    // [2^-55 s/ssquared] Time polynomial coefficient 2
-	Af1         int16   // [2^-43 s/s] Time polynomial coefficient 1
-	Af0         int32   // [2^-31 s] Time polynomial coefficient 0
-	Crs         int16   // [2^-5 m] Crs
-	DeltaN      int16   // [2^-43 semi-circles/s] Mean motion difference from computed value
-	M0          int32   // [2^-31 semi-circles] Mean anomaly at reference time
-	Cuc         int16   // [2^-29 radians] Amp of cosine harmonic corr term to arg of lat
-	Cus         int16   // [2^-29 radians] Amp of sine harmonic corr term to arg of lat
-	E           uint32  // eccentricity
-	SqrtA       uint32  // [2^-19 m^0.5] Square root of the semi-major axis A
-	Toe         uint16  // [2^4 s] Reference time of ephemeris
-	Cic         int16   // [2^-29 radians] Amp of cos harmonic corr term to angle of inclination
-	Omega0      int32   // [2^-31 semi-circles] Long of asc node of orbit plane at weekly epoch
-	Cis         int16   // [2^-29 radians] Amp of sine harmonic corr term to angle of inclination
-	Crc         int16   // [2^-5 m] Amp of cosine harmonic corr term to orbit radius
-	I0          int32   // [2^-31 semi-circles] Inclination angle at reference time
-	Omega       int32   // [2^-31 semi-circles] Argument of perigee
-	OmegaDot    int32   // [2^-43 semi-circles/s] Rate of right ascension
-	Idot        int16   // [2^-43 semi-circles/s] Rate of inclination angle
-	Reserved3   [2]byte // Reserved
+	Type              byte    // Message type (0x01 for this type)
+	Version           byte    // Message version (0x00 for this version)
+	SvId              byte    // QZSS Satellite identifier (see Satellite Numbering), Range 1-5
+	Reserved1         byte    // Reserved
+	FitInterval       byte    // Fit interval flag
+	UraIndex          byte    // URA index
+	SvHealth          byte    // SV health
+	Tgd_sl31          int8    // [2^-31 s] Group delay differential
+	Iodc              uint16  // IODC
+	Toc_sr4           uint16  // [2^4 s] Clock data reference time
+	Reserved2         byte    // Reserved
+	Af2_s_ssquaredl55 int8    // [2^-55 s/ssquared] Time polynomial coefficient 2
+	Af1_s_sl43        int16   // [2^-43 s/s] Time polynomial coefficient 1
+	Af0_sl31          int32   // [2^-31 s] Time polynomial coefficient 0
+	Crs_ml5           int16   // [2^-5 m] Crs
+	DeltaN            int16   // [2^-43 semi-circles/s] Mean motion difference from computed value
+	M0                int32   // [2^-31 semi-circles] Mean anomaly at reference time
+	Cuc_radiansl29    int16   // [2^-29 radians] Amp of cosine harmonic corr term to arg of lat
+	Cus_radiansl29    int16   // [2^-29 radians] Amp of sine harmonic corr term to arg of lat
+	E                 uint32  // eccentricity
+	SqrtA             uint32  // [2^-19 m^0.5] Square root of the semi-major axis A
+	Toe_sr4           uint16  // [2^4 s] Reference time of ephemeris
+	Cic_radiansl29    int16   // [2^-29 radians] Amp of cos harmonic corr term to angle of inclination
+	Omega0            int32   // [2^-31 semi-circles] Long of asc node of orbit plane at weekly epoch
+	Cis_radiansl29    int16   // [2^-29 radians] Amp of sine harmonic corr term to angle of inclination
+	Crc_ml5           int16   // [2^-5 m] Amp of cosine harmonic corr term to orbit radius
+	I0                int32   // [2^-31 semi-circles] Inclination angle at reference time
+	Omega             int32   // [2^-31 semi-circles] Argument of perigee
+	OmegaDot          int32   // [2^-43 semi-circles/s] Rate of right ascension
+	Idot              int16   // [2^-43 semi-circles/s] Rate of inclination angle
+	Reserved3         [2]byte // Reserved
 }
 
 func (MgaQzssEph) classID() uint16 { return 0x0513 }
 
 // UBX-MGA-QZSS-ALM (Input) QZSS almanac assistance
-//
+// Class/Id 0x13 0x05 36 bytes
 // This message allows the delivery of QZSS almanac assistance to a receiver. See the description of AssistNow Online for details.
 type MgaQzssAlm struct {
-	Type      byte    // Message type (0x02 for this type)
-	Version   byte    // Message version (0x00 for this version)
-	SvId      byte    // QZSS Satellite identifier (see Satellite Numbering), Range 1-5
-	SvHealth  byte    // Almanac SV health information
-	E         uint16  // Almanac eccentricity
-	AlmWNa    byte    // [week] Reference week number of almanac (the 8-bit WNa field)
-	Toa       byte    // [2^12 s] Reference time of almanac
-	DeltaI    int16   // [2^-19 semi-circles] Delta inclination angle at reference time
-	OmegaDot  int16   // [2^-38 semi-circles/s] Almanac rate of right ascension
-	SqrtA     uint32  // [2^-11 m^0.5] Almanac square root of the semi-major axis A
-	Omega0    int32   // [2^-23 semi-circles] Almanac long of asc node of orbit plane at weekly
-	Omega     int32   // [2^-23 semi-circles] Almanac argument of perigee
-	M0        int32   // [2^-23 semi-circles] Almanac mean anomaly at reference time
-	Af0       int16   // [2^-20 s] Almanac time polynomial coefficient 0 (8 MSBs)
-	Af1       int16   // [2^-38 s/s] Almanac time polynomial coefficient 1
-	Reserved1 [4]byte // Reserved
+	Type        byte    // Message type (0x02 for this type)
+	Version     byte    // Message version (0x00 for this version)
+	SvId        byte    // QZSS Satellite identifier (see Satellite Numbering), Range 1-5
+	SvHealth    byte    // Almanac SV health information
+	E           uint16  // Almanac eccentricity
+	AlmWNa_week byte    // [week] Reference week number of almanac (the 8-bit WNa field)
+	Toa_sr12    byte    // [2^12 s] Reference time of almanac
+	DeltaI      int16   // [2^-19 semi-circles] Delta inclination angle at reference time
+	OmegaDot    int16   // [2^-38 semi-circles/s] Almanac rate of right ascension
+	SqrtA       uint32  // [2^-11 m^0.5] Almanac square root of the semi-major axis A
+	Omega0      int32   // [2^-23 semi-circles] Almanac long of asc node of orbit plane at weekly
+	Omega       int32   // [2^-23 semi-circles] Almanac argument of perigee
+	M0          int32   // [2^-23 semi-circles] Almanac mean anomaly at reference time
+	Af0_sl20    int16   // [2^-20 s] Almanac time polynomial coefficient 0 (8 MSBs)
+	Af1_s_sl38  int16   // [2^-38 s/s] Almanac time polynomial coefficient 1
+	Reserved1   [4]byte // Reserved
 }
 
 func (MgaQzssAlm) classID() uint16 { return 0x0513 }
 
 // UBX-MGA-QZSS-HEALTH (Input) QZSS health assistance
-//
+// Class/Id 0x13 0x05 12 bytes
 // This message allows the delivery of QZSS health assistance to a receiver. See the description of AssistNow Online for details.
 type MgaQzssHealth struct {
 	Type       byte    // Message type (0x04 for this type)
@@ -3074,7 +3043,7 @@ type MgaQzssHealth struct {
 func (MgaQzssHealth) classID() uint16 { return 0x0513 }
 
 // UBX-MON-BATCH (Polled) Data batching buffer status
-//
+// Class/Id 0x0a 0x32 12 bytes
 // This message contains status information about the batching buffer. It can be polled and it can also be sent by the receiver as a response to a UBX- LOG-RETRIEVEBATCH message before the UBX-LOG-BATCH messages. See Data Batching for more information.
 type MonBatch struct {
 	Version       byte    // Message version (0x00 for this version)
@@ -3088,7 +3057,7 @@ type MonBatch struct {
 func (MonBatch) classID() uint16 { return 0x320a }
 
 // UBX-MON-GNSS (Polled) Information message major GNSS selection
-//
+// Class/Id 0x0a 0x28 8 bytes
 // This message reports major GNSS selection. It does this by means of bit masks in U1 fields. Each bit in a bit mask corresponds to one major GNSS. Augmentation systems are not reported.
 type MonGnss struct {
 	Version      byte               // Message version (0x01for this version)
@@ -3129,7 +3098,7 @@ const (
 )
 
 // UBX-MON-HW2 (Periodic/Polled) Extended hardware status
-//
+// Class/Id 0x0a 0x0b 28 bytes
 // Status of different aspects of the hardware such as Imbalance, Low-Level Configuration and POST Results. The first four parameters of this message represent the complex signal from the RF front end. The following rules of thumb apply:  The smaller the absolute value of the variable ofsI and ofsQ, the better.  Ideally, the magnitude of the I-part (magI) and the Q-part (magQ) of the  complex signal should be the same.
 type MonHw2 struct {
 	OfsI       int8    // Imbalance of I-part of complex signal, scaled (-128 = max. negative imbalance, 127 = max. positive imbalance)
@@ -3147,7 +3116,7 @@ type MonHw2 struct {
 func (MonHw2) classID() uint16 { return 0x0b0a }
 
 // UBX-MON-HW (Periodic/polled) Hardware status
-//
+// Class/Id 0x0a 0x09 60 bytes
 // Status of different aspect of the hardware, such as antenna, PIO/peripheral pins, noise level, automatic gain control (AGC)
 type MonHw struct {
 	PinSel     uint32     // Mask of pins set as peripheral/PIO
@@ -3181,39 +3150,39 @@ const (
 )
 
 // UBX-MON-IO (Periodic/Polled) I/O system status
-//
+// Class/Id 0x0a 0x02 0 + 20*N bytes
 // The size of the message is determined by the number of ports 'N' the receiver supports, i.e. on u-blox 5 the number of ports is 6.
 type MonIo struct {
 	Items []*struct {
-		RxBytes     uint32  // [bytes] Number of bytes ever received
-		TxBytes     uint32  // [bytes] Number of bytes ever sent
-		ParityErrs  uint16  // Number of 100 ms timeslots with parity errors
-		FramingErrs uint16  // Number of 100 ms timeslots with framing errors
-		OverrunErrs uint16  // Number of 100 ms timeslots with overrun errors
-		BreakCond   uint16  // Number of 100 ms timeslots with break conditions
-		Reserved1   [4]byte // Reserved
+		RxBytes_bytes uint32  // [bytes] Number of bytes ever received
+		TxBytes_bytes uint32  // [bytes] Number of bytes ever sent
+		ParityErrs    uint16  // Number of 100 ms timeslots with parity errors
+		FramingErrs   uint16  // Number of 100 ms timeslots with framing errors
+		OverrunErrs   uint16  // Number of 100 ms timeslots with overrun errors
+		BreakCond     uint16  // Number of 100 ms timeslots with break conditions
+		Reserved1     [4]byte // Reserved
 	} // len: N
 }
 
 func (MonIo) classID() uint16 { return 0x020a }
 
 // UBX-MON-MSGPP (Periodic/Polled) Message parse and process status
-//
+// Class/Id 0x0a 0x06 120 bytes
 // -
 type MonMsgpp struct {
-	Msg1    [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port0
-	Msg2    [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port1
-	Msg3    [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port2
-	Msg4    [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port3
-	Msg5    [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port4
-	Msg6    [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port5
-	Skipped [6]uint32 // [bytes] Number skipped bytes for each port
+	Msg1_msgs     [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port0
+	Msg2_msgs     [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port1
+	Msg3_msgs     [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port2
+	Msg4_msgs     [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port3
+	Msg5_msgs     [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port4
+	Msg6_msgs     [8]uint16 // [msgs] Number of successfully parsed messages for each protocol on port5
+	Skipped_bytes [6]uint32 // [bytes] Number skipped bytes for each port
 }
 
 func (MonMsgpp) classID() uint16 { return 0x060a }
 
 // UBX-MON-PATCH (Poll Request) Poll request for installed patches
-//
+// Class/Id 0x0a 0x27 0 bytes
 // -
 type MonPatch struct {
 }
@@ -3221,7 +3190,7 @@ type MonPatch struct {
 func (MonPatch) classID() uint16 { return 0x270a }
 
 // UBX-MON-PATCH (Polled) Installed patches
-//
+// Class/Id 0x0a 0x27 4 + 16*nEntries bytes
 // This message reports information about patches installed and currently enabled on the receiver. It does not report on patches installed and then disabled. An enabled patch is considered active when the receiver executes from the code space where the patch resides on. For example, a ROM patch is reported active only when the system runs from ROM.
 type MonPatch1 struct {
 	Version  uint16 // Message version (0x0001 for this version)
@@ -3244,18 +3213,18 @@ const (
 )
 
 // UBX-MON-RXBUF (Periodic/Polled) Receiver buffer status
-//
+// Class/Id 0x0a 0x07 24 bytes
 // -
 type MonRxbuf struct {
-	Pending   [6]uint16 // [bytes] Number of bytes pending in receiver buffer for each target
-	Usage     [6]byte   // [%] Maximum usage receiver buffer during the last sysmon period for each target
-	PeakUsage [6]byte   // [%] Maximum usage receiver buffer for each target
+	Pending_bytes [6]uint16 // [bytes] Number of bytes pending in receiver buffer for each target
+	Usage         [6]byte   // [%] Maximum usage receiver buffer during the last sysmon period for each target
+	PeakUsage     [6]byte   // [%] Maximum usage receiver buffer for each target
 }
 
 func (MonRxbuf) classID() uint16 { return 0x070a }
 
 // UBX-MON-RXR (Output) Receiver status information
-//
+// Class/Id 0x0a 0x21 1 bytes
 // The receiver ready message is sent when the receiver changes from or to backup mode.
 type MonRxr struct {
 	Flags MonRxrFlags // Receiver status flags
@@ -3270,12 +3239,12 @@ const (
 )
 
 // UBX-MON-SMGR (Periodic/Polled) Synchronization manager status
-//
+// Class/Id 0x0a 0x2e 16 bytes
 // This message reports the status of internal and external oscillators and sources as well as whether GNSS is used for disciplining.
 type MonSmgr struct {
 	Version   byte           // Message version (0x00 for this version)
 	Reserved1 [3]byte        // Reserved
-	ITOW      uint32         // [ms] Time of the week
+	ITOW_ms   uint32         // [ms] Time of the week
 	IntOsc    MonSmgrIntOsc  // A bit mask, indicating the status of the local oscillator
 	ExtOsc    MonSmgrExtOsc  // A bit mask, indicating the status of the external oscillator
 	DiscSrc   byte           // Disciplining source identifier: 0: internal oscillator 1: GNSS 2: EXTINT0 3: EXTINT1 4: internal oscillator measured by the host 5: external oscillator measured by the host
@@ -3325,16 +3294,16 @@ const (
 )
 
 // UBX-MON-TXBUF (Periodic/Polled) Transmitter buffer status
-//
+// Class/Id 0x0a 0x08 28 bytes
 // -
 type MonTxbuf struct {
-	Pending    [6]uint16      // [bytes] Number of bytes pending in transmitter buffer for each target
-	Usage      [6]byte        // [%] Maximum usage transmitter buffer during the last sysmon period for each target
-	PeakUsage  [6]byte        // [%] Maximum usage transmitter buffer for each target
-	TUsage     byte           // [%] Maximum usage of transmitter buffer during the last sysmon period for all targets
-	TPeakusage byte           // [%] Maximum usage of transmitter buffer for all targets
-	Errors     MonTxbufErrors // Error bitmask
-	Reserved1  byte           // Reserved
+	Pending_bytes [6]uint16      // [bytes] Number of bytes pending in transmitter buffer for each target
+	Usage         [6]byte        // [%] Maximum usage transmitter buffer during the last sysmon period for each target
+	PeakUsage     [6]byte        // [%] Maximum usage transmitter buffer for each target
+	TUsage        byte           // [%] Maximum usage of transmitter buffer during the last sysmon period for all targets
+	TPeakusage    byte           // [%] Maximum usage of transmitter buffer for all targets
+	Errors        MonTxbufErrors // Error bitmask
+	Reserved1     byte           // Reserved
 }
 
 func (MonTxbuf) classID() uint16 { return 0x080a }
@@ -3348,7 +3317,7 @@ const (
 )
 
 // UBX-MON-VER (Poll Request) Poll receiver and software version
-//
+// Class/Id 0x0a 0x04 0 bytes
 // -
 type MonVer struct {
 }
@@ -3356,7 +3325,7 @@ type MonVer struct {
 func (MonVer) classID() uint16 { return 0x040a }
 
 // UBX-MON-VER (Polled) Receiver and software version
-//
+// Class/Id 0x0a 0x04 40 + 30*N bytes
 // -
 type MonVer1 struct {
 	SwVersion [30]byte // Nul-terminated software version string.
@@ -3369,10 +3338,10 @@ type MonVer1 struct {
 func (MonVer1) classID() uint16 { return 0x040a }
 
 // UBX-NAV-AOPSTATUS (Periodic/Polled) AssistNow Autonomous status
-//
+// Class/Id 0x01 0x60 16 bytes
 // This message provides information on the status of the AssistNow Autonomous subsystem on the receiver. For example, a host application can determine the optimal time to shut down the receiver by monitoring the status field for a steady 0. See the chapter AssistNow Autonomous in the receiver description for details on this feature.
 type NavAopstatus struct {
-	ITOW      uint32             // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ITOW_ms   uint32             // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	AopCfg    NavAopstatusAopCfg // AssistNow Autonomous configuration
 	Status    byte               // AssistNow Autonomous subsystem is idle (0) or running (not 0)
 	Reserved1 [10]byte           // Reserved
@@ -3387,77 +3356,77 @@ const (
 )
 
 // UBX-NAV-ATT (Periodic/Polled) Attitude solution
-//
+// Class/Id 0x01 0x05 32 bytes
 // This message outputs the attitude solution as roll, pitch and heading angles. More details about vehicle attitude can be found in the Vehicle Attitude Output (ADR) section for ADR products. More details about vehicle attitude can be found in the Vehicle Attitude Output (UDR) section for UDR products.
 type NavAtt struct {
-	ITOW       uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Version    byte    // Message version (0x00 for this version)
-	Reserved1  [3]byte // Reserved
-	Roll       int32   // [1e-5 deg] Vehicle roll.
-	Pitch      int32   // [1e-5 deg] Vehicle pitch.
-	Heading    int32   // [1e-5 deg] Vehicle heading.
-	AccRoll    uint32  // [1e-5 deg] Vehicle roll accuracy (if null, roll angle is not available).
-	AccPitch   uint32  // [1e-5 deg] Vehicle pitch accuracy (if null, pitch angle is not available).
-	AccHeading uint32  // [1e-5 deg] Vehicle heading accuracy (if null, heading angle is not available).
+	ITOW_ms          uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Version          byte    // Message version (0x00 for this version)
+	Reserved1        [3]byte // Reserved
+	Roll_dege5       int32   // [1e-5 deg] Vehicle roll.
+	Pitch_dege5      int32   // [1e-5 deg] Vehicle pitch.
+	Heading_dege5    int32   // [1e-5 deg] Vehicle heading.
+	AccRoll_dege5    uint32  // [1e-5 deg] Vehicle roll accuracy (if null, roll angle is not available).
+	AccPitch_dege5   uint32  // [1e-5 deg] Vehicle pitch accuracy (if null, pitch angle is not available).
+	AccHeading_dege5 uint32  // [1e-5 deg] Vehicle heading accuracy (if null, heading angle is not available).
 }
 
 func (NavAtt) classID() uint16 { return 0x0501 }
 
 // UBX-NAV-CLOCK (Periodic/Polled) Clock solution
-//
+// Class/Id 0x01 0x22 20 bytes
 // -
 type NavClock struct {
-	ITOW uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	ClkB int32  // [ns] Clock bias
-	ClkD int32  // [ns/s] Clock drift
-	TAcc uint32 // [ns] Time accuracy estimate
-	FAcc uint32 // [ps/s] Frequency accuracy estimate
+	ITOW_ms   uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ClkB_ns   int32  // [ns] Clock bias
+	ClkD_ns_s int32  // [ns/s] Clock drift
+	TAcc_ns   uint32 // [ns] Time accuracy estimate
+	FAcc_ps_s uint32 // [ps/s] Frequency accuracy estimate
 }
 
 func (NavClock) classID() uint16 { return 0x2201 }
 
 // UBX-NAV-COV (Periodic/Polled) Covariance matrices
-//
+// Class/Id 0x01 0x36 64 bytes
 // This message outputs the covariance matrices for the position and velocity solutions in the topocentric coordinate system defined as the local-level North (N), East (E), Down (D) frame. As the covariance matrices are symmetric, only the upper triangular part is output.
 type NavCov struct {
-	ITOW        uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Version     byte    // Message version (0x00 for this version)
-	PosCovValid byte    // Position covariance matrix validity flag
-	VelCovValid byte    // Velocity covariance matrix validity flag
-	Reserved1   [9]byte // Reserved
-	PosCovNN    float32 // [m^2] Position covariance matrix value p_NN
-	PosCovNE    float32 // [m^2] Position covariance matrix value p_NE
-	PosCovND    float32 // [m^2] Position covariance matrix value p_ND
-	PosCovEE    float32 // [m^2] Position covariance matrix value p_EE
-	PosCovED    float32 // [m^2] Position covariance matrix value p_ED
-	PosCovDD    float32 // [m^2] Position covariance matrix value p_DD
-	VelCovNN    float32 // [m^2/s^2] Velocity covariance matrix value v_NN
-	VelCovNE    float32 // [m^2/s^2] Velocity covariance matrix value v_NE
-	VelCovND    float32 // [m^2/s^2] Velocity covariance matrix value v_ND
-	VelCovEE    float32 // [m^2/s^2] Velocity covariance matrix value v_EE
-	VelCovED    float32 // [m^2/s^2] Velocity covariance matrix value v_ED
-	VelCovDD    float32 // [m^2/s^2] Velocity covariance matrix value v_DD
+	ITOW_ms        uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Version        byte    // Message version (0x00 for this version)
+	PosCovValid    byte    // Position covariance matrix validity flag
+	VelCovValid    byte    // Velocity covariance matrix validity flag
+	Reserved1      [9]byte // Reserved
+	PosCovNN_m2    float32 // [m^2] Position covariance matrix value p_NN
+	PosCovNE_m2    float32 // [m^2] Position covariance matrix value p_NE
+	PosCovND_m2    float32 // [m^2] Position covariance matrix value p_ND
+	PosCovEE_m2    float32 // [m^2] Position covariance matrix value p_EE
+	PosCovED_m2    float32 // [m^2] Position covariance matrix value p_ED
+	PosCovDD_m2    float32 // [m^2] Position covariance matrix value p_DD
+	VelCovNN_m2_s2 float32 // [m^2/s^2] Velocity covariance matrix value v_NN
+	VelCovNE_m2_s2 float32 // [m^2/s^2] Velocity covariance matrix value v_NE
+	VelCovND_m2_s2 float32 // [m^2/s^2] Velocity covariance matrix value v_ND
+	VelCovEE_m2_s2 float32 // [m^2/s^2] Velocity covariance matrix value v_EE
+	VelCovED_m2_s2 float32 // [m^2/s^2] Velocity covariance matrix value v_ED
+	VelCovDD_m2_s2 float32 // [m^2/s^2] Velocity covariance matrix value v_DD
 }
 
 func (NavCov) classID() uint16 { return 0x3601 }
 
 // UBX-NAV-DGPS (Periodic/Polled) DGPS data used for NAV
-//
+// Class/Id 0x01 0x31 16 + 12*numCh bytes
 // This message outputs the DGPS correction data that has been applied to the current NAV Solution. See also the notes on the RTCM protocol.
 type NavDgps struct {
-	ITOW       uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Age        int32   // [ms] Age of newest correction data
+	ITOW_ms    uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Age_ms     int32   // [ms] Age of newest correction data
 	BaseId     int16   // DGPS base station identifier
 	BaseHealth int16   // DGPS base station health status
 	NumCh      byte    // Number of channels for which correction data is following
 	Status     byte    // DGPS correction type status: 0x00:   none 0x01:  PR+PRR correction
 	Reserved1  [2]byte // Reserved
 	Items      []*struct {
-		Svid  byte         // Satellite ID
-		Flags NavDgpsFlags // Channel number and usage
-		AgeC  uint16       // [ms] Age of latest correction data
-		Prc   float32      // [m] Pseudorange correction
-		Prrc  float32      // [m/s] Pseudorange rate correction
+		Svid     byte         // Satellite ID
+		Flags    NavDgpsFlags // Channel number and usage
+		AgeC_ms  uint16       // [ms] Age of latest correction data
+		Prc_m    float32      // [m] Pseudorange correction
+		Prrc_m_s float32      // [m/s] Pseudorange rate correction
 	} // len: numCh
 }
 
@@ -3471,49 +3440,49 @@ const (
 )
 
 // UBX-NAV-DOP (Periodic/Polled) Dilution of precision
-//
+// Class/Id 0x01 0x04 18 bytes
 //  DOP values are dimensionless.  All DOP values are scaled by a factor of 100. If the unit transmits a value of e.g.  156, the DOP value is 1.56.
 type NavDop struct {
-	ITOW uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	GDOP uint16 // Geometric DOP
-	PDOP uint16 // Position DOP
-	TDOP uint16 // Time DOP
-	VDOP uint16 // Vertical DOP
-	HDOP uint16 // Horizontal DOP
-	NDOP uint16 // Northing DOP
-	EDOP uint16 // Easting DOP
+	ITOW_ms uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	GDOP    uint16 // Geometric DOP
+	PDOP    uint16 // Position DOP
+	TDOP    uint16 // Time DOP
+	VDOP    uint16 // Vertical DOP
+	HDOP    uint16 // Horizontal DOP
+	NDOP    uint16 // Northing DOP
+	EDOP    uint16 // Easting DOP
 }
 
 func (NavDop) classID() uint16 { return 0x0401 }
 
 // UBX-NAV-EELL (Periodic/Polled) Position error ellipse parameters
-//
+// Class/Id 0x01 0x3d 16 bytes
 // This message outputs the error ellipse parameters for the position solutions.
 type NavEell struct {
-	ITOW             uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Version          byte   // Message version (0x00 for this version)
-	Reserved1        byte   // Reserved
-	ErrEllipseOrient uint16 // [1e-2 deg] Orientation of semi-major axis of error ellipse (degrees from true north)
-	ErrEllipseMajor  uint32 // [mm] Semi-major axis of error ellipse
-	ErrEllipseMinor  uint32 // [mm] Semi-minor axis of error ellipse
+	ITOW_ms                uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Version                byte   // Message version (0x00 for this version)
+	Reserved1              byte   // Reserved
+	ErrEllipseOrient_dege2 uint16 // [1e-2 deg] Orientation of semi-major axis of error ellipse (degrees from true north)
+	ErrEllipseMajor_mm     uint32 // [mm] Semi-major axis of error ellipse
+	ErrEllipseMinor_mm     uint32 // [mm] Semi-minor axis of error ellipse
 }
 
 func (NavEell) classID() uint16 { return 0x3d01 }
 
 // UBX-NAV-EOE (Periodic) End of epoch
-//
+// Class/Id 0x01 0x61 4 bytes
 // This message is intended to be used as a marker to collect all navigation messages of an epoch. It is output after all enabled NAV class messages (except UBX-NAV-HNR) and after all enabled NMEA messages.
 type NavEoe struct {
-	ITOW uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ITOW_ms uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 }
 
 func (NavEoe) classID() uint16 { return 0x6101 }
 
 // UBX-NAV-GEOFENCE (Periodic/Polled) Geofencing status
-//
+// Class/Id 0x01 0x39 8 + 2*numFences bytes
 // This message outputs the evaluated states of all configured geofences for the current epoch's position. See the Geofencing description for feature details.
 type NavGeofence struct {
-	ITOW      uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ITOW_ms   uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	Version   byte   // Message version (0x00 for this version)
 	Status    byte   // Geofencing status 0 - Geofencing not available or not reliable 1 - Geofencing active
 	NumFences byte   // Number of geofences
@@ -3527,20 +3496,20 @@ type NavGeofence struct {
 func (NavGeofence) classID() uint16 { return 0x3901 }
 
 // UBX-NAV-HPPOSECEF (Periodic/Polled) High precision position solution in ECEF
-//
+// Class/Id 0x01 0x13 28 bytes
 // See important comments concerning validity of position given in section Navigation Output Filters.
 type NavHpposecef struct {
-	Version   byte              // Message version (0x00 for this version)
-	Reserved1 [3]byte           // Reserved
-	ITOW      uint32            // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	EcefX     int32             // [cm] ECEF X coordinate
-	EcefY     int32             // [cm] ECEF Y coordinate
-	EcefZ     int32             // [cm] ECEF Z coordinate
-	EcefXHp   int8              // [0.1 mm] High precision component of ECEF X coordinate. Must be in the range of -99.. +99. Precise coordinate in cm = ecefX + (ecefXHp * 1e-2).
-	EcefYHp   int8              // [0.1 mm] High precision component of ECEF Y coordinate. Must be in the range of -99.. +99. Precise coordinate in cm = ecefY + (ecefYHp * 1e-2).
-	EcefZHp   int8              // [0.1 mm] High precision component of ECEF Z coordinate. Must be in the range of -99.. +99. Precise coordinate in cm = ecefZ + (ecefZHp * 1e-2).
-	Flags     NavHpposecefFlags // Additional flags
-	PAcc      uint32            // [0.1 mm] Position Accuracy Estimate
+	Version      byte              // Message version (0x00 for this version)
+	Reserved1    [3]byte           // Reserved
+	ITOW_ms      uint32            // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	EcefX_cm     int32             // [cm] ECEF X coordinate
+	EcefY_cm     int32             // [cm] ECEF Y coordinate
+	EcefZ_cm     int32             // [cm] ECEF Z coordinate
+	EcefXHp_mme1 int8              // [1e-1 mm] High precision component of ECEF X coordinate. Must be in the range of -99.. +99. Precise coordinate in cm = ecefX + (ecefXHp * 1e-2).
+	EcefYHp_mme1 int8              // [1e-1 mm] High precision component of ECEF Y coordinate. Must be in the range of -99.. +99. Precise coordinate in cm = ecefY + (ecefYHp * 1e-2).
+	EcefZHp_mme1 int8              // [1e-1 mm] High precision component of ECEF Z coordinate. Must be in the range of -99.. +99. Precise coordinate in cm = ecefZ + (ecefZHp * 1e-2).
+	Flags        NavHpposecefFlags // Additional flags
+	PAcc_mme1    uint32            // [1e-1 mm] Position Accuracy Estimate
 }
 
 func (NavHpposecef) classID() uint16 { return 0x1301 }
@@ -3552,23 +3521,23 @@ const (
 )
 
 // UBX-NAV-HPPOSLLH (Periodic/Polled) High precision geodetic position solution
-//
+// Class/Id 0x01 0x14 36 bytes
 // See important comments concerning validity of position given in section Navigation Output Filters. This message outputs the Geodetic position with high precision in the currently selected ellipsoid. The default is the WGS84 Ellipsoid, but can be changed with the message UBX-CFG-DAT.
 type NavHpposllh struct {
-	Version   byte             // Message version (0x00 for this version)
-	Reserved1 [2]byte          // Reserved
-	Flags     NavHpposllhFlags // Additional flags
-	ITOW      uint32           // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Lon       int32            // [1e-7 deg] Longitude
-	Lat       int32            // [1e-7 deg] Latitude
-	Height    int32            // [mm] Height above ellipsoid.
-	HMSL      int32            // [mm] Height above mean sea level
-	LonHp     int8             // [1e-9 deg] High precision component of longitude. Must be in the range -99..+99. Precise longitude in deg * 1e-7 = lon + (lonHp * 1e- 2).
-	LatHp     int8             // [1e-9 deg] High precision component of latitude. Must be in the range -99..+99. Precise latitude in deg * 1e-7 = lat + (latHp * 1e-2).
-	HeightHp  int8             // [0.1 mm] High precision component of height above ellipsoid. Must be in the range -9..+9. Precise height in mm = height + (heightHp * 0.1).
-	HMSLHp    int8             // [0.1 mm] High precision component of height above mean sea level. Must be in range -9..+9. Precise height in mm = hMSL + (hMSLHp * 0.1)
-	HAcc      uint32           // [0.1 mm] Horizontal accuracy estimate
-	VAcc      uint32           // [0.1 mm] Vertical accuracy estimate
+	Version       byte             // Message version (0x00 for this version)
+	Reserved1     [2]byte          // Reserved
+	Flags         NavHpposllhFlags // Additional flags
+	ITOW_ms       uint32           // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Lon_dege7     int32            // [1e-7 deg] Longitude
+	Lat_dege7     int32            // [1e-7 deg] Latitude
+	Height_mm     int32            // [mm] Height above ellipsoid.
+	HMSL_mm       int32            // [mm] Height above mean sea level
+	LonHp_dege9   int8             // [1e-9 deg] High precision component of longitude. Must be in the range -99..+99. Precise longitude in deg * 1e-7 = lon + (lonHp * 1e- 2).
+	LatHp_dege9   int8             // [1e-9 deg] High precision component of latitude. Must be in the range -99..+99. Precise latitude in deg * 1e-7 = lat + (latHp * 1e-2).
+	HeightHp_mme1 int8             // [1e-1 mm] High precision component of height above ellipsoid. Must be in the range -9..+9. Precise height in mm = height + (heightHp * 0.1).
+	HMSLHp_mme1   int8             // [1e-1 mm] High precision component of height above mean sea level. Must be in range -9..+9. Precise height in mm = hMSL + (hMSLHp * 0.1)
+	HAcc_mme1     uint32           // [1e-1 mm] Horizontal accuracy estimate
+	VAcc_mme1     uint32           // [1e-1 mm] Vertical accuracy estimate
 }
 
 func (NavHpposllh) classID() uint16 { return 0x1401 }
@@ -3580,10 +3549,10 @@ const (
 )
 
 // UBX-NAV-NMI (Periodic/Polled) Navigation message cross-check information
-//
+// Class/Id 0x01 0x28 16 bytes
 // Information about the validity of received satellite navigation payload.
 type NavNmi struct {
-	ITOW        uint32            // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ITOW_ms     uint32            // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	Version     byte              // Message version (0x01 for this version)
 	Reserved1   [4]byte           // Reserved
 	GpsNmiFlags NavNmiGpsNmiFlags // GPS navigation message cross-check information flags.
@@ -3656,24 +3625,24 @@ const (
 )
 
 // UBX-NAV-ODO (Periodic/Polled) Odometer solution
-//
+// Class/Id 0x01 0x09 20 bytes
 // This message outputs the traveled distance since last reset (see UBX-NAV- RESETODO) together with an associated estimated accuracy and the total cumulated ground distance (can only be reset by a cold start of the receiver).
 type NavOdo struct {
-	Version       byte    // Message version (0x00 for this version)
-	Reserved1     [3]byte // Reserved
-	ITOW          uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Distance      uint32  // [m] Ground distance since last reset
-	TotalDistance uint32  // [m] Total cumulative ground distance
-	DistanceStd   uint32  // [m] Ground distance accuracy (1-sigma)
+	Version         byte    // Message version (0x00 for this version)
+	Reserved1       [3]byte // Reserved
+	ITOW_ms         uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Distance_m      uint32  // [m] Ground distance since last reset
+	TotalDistance_m uint32  // [m] Total cumulative ground distance
+	DistanceStd_m   uint32  // [m] Ground distance accuracy (1-sigma)
 }
 
 func (NavOdo) classID() uint16 { return 0x0901 }
 
 // UBX-NAV-ORB (Periodic/Polled) GNSS orbit database info
-//
+// Class/Id 0x01 0x34 8 + 6*numSv bytes
 // Status of the GNSS orbit database knowledge.
 type NavOrb struct {
-	ITOW      uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ITOW_ms   uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	Version   byte    // Message version (0x01 for this version)
 	NumSv     byte    // Number of SVs in the database
 	Reserved1 [2]byte // Reserved
@@ -3718,70 +3687,70 @@ const (
 )
 
 // UBX-NAV-POSECEF (Periodic/Polled) Position solution in ECEF
-//
+// Class/Id 0x01 0x01 20 bytes
 // See important comments concerning validity of position given in section Navigation Output Filters.
 type NavPosecef struct {
-	ITOW  uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	EcefX int32  // [cm] ECEF X coordinate
-	EcefY int32  // [cm] ECEF Y coordinate
-	EcefZ int32  // [cm] ECEF Z coordinate
-	PAcc  uint32 // [cm] Position Accuracy Estimate
+	ITOW_ms  uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	EcefX_cm int32  // [cm] ECEF X coordinate
+	EcefY_cm int32  // [cm] ECEF Y coordinate
+	EcefZ_cm int32  // [cm] ECEF Z coordinate
+	PAcc_cm  uint32 // [cm] Position Accuracy Estimate
 }
 
 func (NavPosecef) classID() uint16 { return 0x0101 }
 
 // UBX-NAV-POSLLH (Periodic/Polled) Geodetic position solution
-//
+// Class/Id 0x01 0x02 28 bytes
 // See important comments concerning validity of position given in section Navigation Output Filters. This message outputs the Geodetic position in the currently selected ellipsoid. The default is the WGS84 Ellipsoid, but can be changed with the message UBX- CFG-DAT.
 type NavPosllh struct {
-	ITOW   uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Lon    int32  // [1e-7 deg] Longitude
-	Lat    int32  // [1e-7 deg] Latitude
-	Height int32  // [mm] Height above ellipsoid
-	HMSL   int32  // [mm] Height above mean sea level
-	HAcc   uint32 // [mm] Horizontal accuracy estimate
-	VAcc   uint32 // [mm] Vertical accuracy estimate
+	ITOW_ms   uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Lon_dege7 int32  // [1e-7 deg] Longitude
+	Lat_dege7 int32  // [1e-7 deg] Latitude
+	Height_mm int32  // [mm] Height above ellipsoid
+	HMSL_mm   int32  // [mm] Height above mean sea level
+	HAcc_mm   uint32 // [mm] Horizontal accuracy estimate
+	VAcc_mm   uint32 // [mm] Vertical accuracy estimate
 }
 
 func (NavPosllh) classID() uint16 { return 0x0201 }
 
 // UBX-NAV-PVT (Periodic/Polled) Navigation position velocity time solution
-//
+// Class/Id 0x01 0x07 92 bytes
 // This message combines position, velocity and time solution, including accuracy figures. Note that during a leap second there may be more or less than 60 seconds in a minute. See the description of leap seconds for details.
 type NavPvt struct {
-	ITOW      uint32       // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Year      uint16       // [y] Year (UTC)
-	Month     byte         // [month] Month, range 1..12 (UTC)
-	Day       byte         // [d] Day of month, range 1..31 (UTC)
-	Hour      byte         // [h] Hour of day, range 0..23 (UTC)
-	Min       byte         // [min] Minute of hour, range 0..59 (UTC)
-	Sec       byte         // [s] Seconds of minute, range 0..60 (UTC)
-	Valid     NavPvtValid  // Validity flags
-	TAcc      uint32       // [ns] Time accuracy estimate (UTC)
-	Nano      int32        // [ns] Fraction of second, range -1e9 .. 1e9 (UTC)
-	FixType   byte         // GNSSfix Type: 0: no fix 1: dead reckoning only 2: 2D-fix 3: 3D-fix 4: GNSS + dead reckoning combined 5: time only fix
-	Flags     NavPvtFlags  // Fix status flags
-	Flags2    NavPvtFlags2 // Additional flags
-	NumSV     byte         // Number of satellites used in Nav Solution
-	Lon       int32        // [1e-7 deg] Longitude
-	Lat       int32        // [1e-7 deg] Latitude
-	Height    int32        // [mm] Height above ellipsoid
-	HMSL      int32        // [mm] Height above mean sea level
-	HAcc      uint32       // [mm] Horizontal accuracy estimate
-	VAcc      uint32       // [mm] Vertical accuracy estimate
-	VelN      int32        // [mm/s] NED north velocity
-	VelE      int32        // [mm/s] NED east velocity
-	VelD      int32        // [mm/s] NED down velocity
-	GSpeed    int32        // [mm/s] Ground Speed (2-D)
-	HeadMot   int32        // [1e-5 deg] Heading of motion (2-D)
-	SAcc      uint32       // [mm/s] Speed accuracy estimate
-	HeadAcc   uint32       // [1e-5 deg] Heading accuracy estimate (both motion and vehicle)
-	PDOP      uint16       // Position DOP
-	Flags3    NavPvtFlags3 // Additional flags
-	Reserved1 [5]byte      // Reserved
-	HeadVeh   int32        // [1e-5 deg] Heading of vehicle (2-D), this is only valid when headVehValid is set, otherwise the output is set to the heading of motion
-	MagDec    int16        // [1e-2 deg] Magnetic declination. Only supported in ADR 4.10 and later.
-	MagAcc    uint16       // [1e-2 deg] Magnetic declination accuracy. Only supported in ADR 4.10 and later.
+	ITOW_ms       uint32       // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Year_y        uint16       // [y] Year (UTC)
+	Month_month   byte         // [month] Month, range 1..12 (UTC)
+	Day_d         byte         // [d] Day of month, range 1..31 (UTC)
+	Hour_h        byte         // [h] Hour of day, range 0..23 (UTC)
+	Min_min       byte         // [min] Minute of hour, range 0..59 (UTC)
+	Sec_s         byte         // [s] Seconds of minute, range 0..60 (UTC)
+	Valid         NavPvtValid  // Validity flags
+	TAcc_ns       uint32       // [ns] Time accuracy estimate (UTC)
+	Nano_ns       int32        // [ns] Fraction of second, range -1e9 .. 1e9 (UTC)
+	FixType       byte         // GNSSfix Type: 0: no fix 1: dead reckoning only 2: 2D-fix 3: 3D-fix 4: GNSS + dead reckoning combined 5: time only fix
+	Flags         NavPvtFlags  // Fix status flags
+	Flags2        NavPvtFlags2 // Additional flags
+	NumSV         byte         // Number of satellites used in Nav Solution
+	Lon_dege7     int32        // [1e-7 deg] Longitude
+	Lat_dege7     int32        // [1e-7 deg] Latitude
+	Height_mm     int32        // [mm] Height above ellipsoid
+	HMSL_mm       int32        // [mm] Height above mean sea level
+	HAcc_mm       uint32       // [mm] Horizontal accuracy estimate
+	VAcc_mm       uint32       // [mm] Vertical accuracy estimate
+	VelN_mm_s     int32        // [mm/s] NED north velocity
+	VelE_mm_s     int32        // [mm/s] NED east velocity
+	VelD_mm_s     int32        // [mm/s] NED down velocity
+	GSpeed_mm_s   int32        // [mm/s] Ground Speed (2-D)
+	HeadMot_dege5 int32        // [1e-5 deg] Heading of motion (2-D)
+	SAcc_mm_s     uint32       // [mm/s] Speed accuracy estimate
+	HeadAcc_dege5 uint32       // [1e-5 deg] Heading accuracy estimate (both motion and vehicle)
+	PDOP          uint16       // Position DOP
+	Flags3        NavPvtFlags3 // Additional flags
+	Reserved1     [5]byte      // Reserved
+	HeadVeh_dege5 int32        // [1e-5 deg] Heading of vehicle (2-D), this is only valid when headVehValid is set, otherwise the output is set to the heading of motion
+	MagDec_dege2  int16        // [1e-2 deg] Magnetic declination. Only supported in ADR 4.10 and later.
+	MagAcc_dege2  uint16       // [1e-2 deg] Magnetic declination accuracy. Only supported in ADR 4.10 and later.
 }
 
 func (NavPvt) classID() uint16 { return 0x0701 }
@@ -3819,24 +3788,24 @@ const (
 )
 
 // UBX-NAV-RELPOSNED (Periodic/Polled) Relative positioning information in NED frame
-//
+// Class/Id 0x01 0x3c 40 bytes
 // The NED frame is defined as the local topological system at the reference station. The relative position vector components in this message, along with their associated accuracies, are given in that local topological system. This message contains the relative position vector from the Reference Station to the Rover, including accuracy figures, in the local topological system defined at the reference station
 type NavRelposned struct {
-	Version      byte              // Message version (0x00 for this version)
-	Reserved1    byte              // Reserved
-	RefStationId uint16            // Reference Station ID. Must be in the range 0..4095
-	ITOW         uint32            // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	RelPosN      int32             // [cm] North component of relative position vector
-	RelPosE      int32             // [cm] East component of relative position vector
-	RelPosD      int32             // [cm] Down component of relative position vector
-	RelPosHPN    int8              // [0.1 mm] High-precision North component of relative position vector. Must be in the range -99 to +99. The full North component of the relative position vector, in units of cm, is given by relPosN + (relPosHPN * 1e-2)
-	RelPosHPE    int8              // [0.1 mm] High-precision East component of relative position vector. Must be in the range -99 to +99. The full East component of the relative position vector, in units of cm, is given by relPosE + (relPosHPE * 1e-2)
-	RelPosHPD    int8              // [0.1 mm] High-precision Down component of relative position vector. Must be in the range -99 to +99. The full Down component of the relative position vector, in units of cm, is given by relPosD + (relPosHPD * 1e-2)
-	Reserved2    byte              // Reserved
-	AccN         uint32            // [0.1 mm] Accuracy of relative position North component
-	AccE         uint32            // [0.1 mm] Accuracy of relative position East component
-	AccD         uint32            // [0.1 mm] Accuracy of relative position Down component
-	Flags        NavRelposnedFlags // Flags
+	Version        byte              // Message version (0x00 for this version)
+	Reserved1      byte              // Reserved
+	RefStationId   uint16            // Reference Station ID. Must be in the range 0..4095
+	ITOW_ms        uint32            // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	RelPosN_cm     int32             // [cm] North component of relative position vector
+	RelPosE_cm     int32             // [cm] East component of relative position vector
+	RelPosD_cm     int32             // [cm] Down component of relative position vector
+	RelPosHPN_mme1 int8              // [1e-1 mm] High-precision North component of relative position vector. Must be in the range -99 to +99. The full North component of the relative position vector, in units of cm, is given by relPosN + (relPosHPN * 1e-2)
+	RelPosHPE_mme1 int8              // [1e-1 mm] High-precision East component of relative position vector. Must be in the range -99 to +99. The full East component of the relative position vector, in units of cm, is given by relPosE + (relPosHPE * 1e-2)
+	RelPosHPD_mme1 int8              // [1e-1 mm] High-precision Down component of relative position vector. Must be in the range -99 to +99. The full Down component of the relative position vector, in units of cm, is given by relPosD + (relPosHPD * 1e-2)
+	Reserved2      byte              // Reserved
+	AccN_mme1      uint32            // [1e-1 mm] Accuracy of relative position North component
+	AccE_mme1      uint32            // [1e-1 mm] Accuracy of relative position East component
+	AccD_mme1      uint32            // [1e-1 mm] Accuracy of relative position Down component
+	Flags          NavRelposnedFlags // Flags
 }
 
 func (NavRelposned) classID() uint16 { return 0x3c01 }
@@ -3854,7 +3823,7 @@ const (
 )
 
 // UBX-NAV-RESETODO (Command) Reset odometer
-//
+// Class/Id 0x01 0x10 0 bytes
 // This message resets the traveled distance computed by the odometer (see UBX- NAV-ODO). UBX-ACK-ACK or UBX-ACK-NAK are returned to indicate success or failure.
 type NavResetodo struct {
 }
@@ -3862,21 +3831,21 @@ type NavResetodo struct {
 func (NavResetodo) classID() uint16 { return 0x1001 }
 
 // UBX-NAV-SAT (Periodic/Polled) Satellite information
-//
+// Class/Id 0x01 0x35 8 + 12*numSvs bytes
 // This message displays information about SVs that are either known to be visible or currently tracked by the receiver. All signal related information corresponds to the subset of signals specified in Signal Identifiers.
 type NavSat struct {
-	ITOW      uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ITOW_ms   uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	Version   byte    // Message version (0x01 for this version)
 	NumSvs    byte    // Number of satellites
 	Reserved1 [2]byte // Reserved
 	Items     []*struct {
-		GnssId byte        // GNSS identifier (see Satellite Numbering) for assignment
-		SvId   byte        // Satellite identifier (see Satellite Numbering) for assignment
-		Cno    byte        // [dBHz] Carrier to noise ratio (signal strength)
-		Elev   int8        // [deg] Elevation (range: +/-90), unknown if out of range
-		Azim   int16       // [deg] Azimuth (range 0-360), unknown if elevation is out of range
-		PrRes  int16       // [0.1 m] Pseudorange residual
-		Flags  NavSatFlags // Bitmask
+		GnssId    byte        // GNSS identifier (see Satellite Numbering) for assignment
+		SvId      byte        // Satellite identifier (see Satellite Numbering) for assignment
+		Cno_dbhz  byte        // [dBHz] Carrier to noise ratio (signal strength)
+		Elev_deg  int8        // [deg] Elevation (range: +/-90), unknown if out of range
+		Azim_deg  int16       // [deg] Azimuth (range 0-360), unknown if elevation is out of range
+		PrRes_me1 int16       // [1e-1 m] Pseudorange residual
+		Flags     NavSatFlags // Bitmask
 	} // len: numSvs
 }
 
@@ -3904,10 +3873,10 @@ const (
 )
 
 // UBX-NAV-SBAS (Periodic/Polled) SBAS status data
-//
+// Class/Id 0x01 0x32 12 + 12*cnt bytes
 // This message outputs the status of the SBAS sub system
 type NavSbas struct {
-	ITOW      uint32         // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ITOW_ms   uint32         // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	Geo       byte           // PRN Number of the GEO where correction and integrity data is used from
 	Mode      byte           // SBAS Mode 0 Disabled 1 Enabled integrity 3 Enabled test mode
 	Sys       int8           // SBAS System (WAAS/EGNOS/...) -1 Unknown 0 WAAS 1 EGNOS 2 MSAS 3 GAGAN 16 GPS
@@ -3921,9 +3890,9 @@ type NavSbas struct {
 		SvSys     byte    // System (WAAS/EGNOS/...) same as SYS
 		SvService byte    // Services available same as SERVICE
 		Reserved2 byte    // Reserved
-		Prc       int16   // [cm] Pseudo Range correction in [cm]
+		Prc_cm    int16   // [cm] Pseudo Range correction in [cm]
 		Reserved3 [2]byte // Reserved
-		Ic        int16   // [cm] Ionosphere correction in [cm]
+		Ic_cm     int16   // [cm] Ionosphere correction in [cm]
 	} // len: cnt
 }
 
@@ -3940,14 +3909,14 @@ const (
 )
 
 // UBX-NAV-SLAS (Periodic/Polled) QZSS L1S SLAS status data
-//
+// Class/Id 0x01 0x42 20 + 8*cnt bytes
 // This message outputs the status of the QZSS L1S SLAS sub system
 type NavSlas struct {
-	ITOW         uint32              // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ITOW_ms      uint32              // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	Version      byte                // Message version (0x00 for this version)
 	Reserved1    [3]byte             // Reserved
-	GmsLon       int32               // [1e-3 deg] Longitude of the used ground monitoring station
-	GmsLat       int32               // [1e-3 deg] Latitude of the used ground monitoring station
+	GmsLon_dege3 int32               // [1e-3 deg] Longitude of the used ground monitoring station
+	GmsLat_dege3 int32               // [1e-3 deg] Latitude of the used ground monitoring station
 	GmsCode      byte                // Code of the used ground monitoring station according to the QZSS SLAS Interface Specification, available from qzss.go.jp/en/
 	QzssSvId     byte                // Satellite identifier of the QZS/GEO whose correction data is used (see Satellite Numbering)
 	ServiceFlags NavSlasServiceFlags // Flags regarding SLAS service
@@ -3957,7 +3926,7 @@ type NavSlas struct {
 		SvId      byte    // Satellite identifier (see Satellite Numbering)
 		Reserved2 byte    // Reserved
 		Reserved3 [3]byte // Reserved
-		Prc       int16   // [cm] Pseudorange correction
+		Prc_cm    int16   // [cm] Pseudorange correction
 	} // len: cnt
 }
 
@@ -3972,26 +3941,26 @@ const (
 )
 
 // UBX-NAV-SOL (Periodic/Polled) Navigation solution information
-//
+// Class/Id 0x01 0x06 52 bytes
 // This message combines position, velocity and time solution in ECEF, including accuracy figures. This message has only been retained for backwards compatibility; users are recommended to use the UBX-NAV-PVT message in preference.
 type NavSol struct {
-	ITOW      uint32      // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	FTOW      int32       // [ns] Fractional part of iTOW (range: +/- 500000). The precise GPS time of week in seconds is: (iTOW    *  1e-3)    +  (fTOW    *  1e-9)
-	Week      int16       // [weeks] GPS week number of the navigation epoch
-	GpsFix    byte        // GPSfix Type, range 0..5 0x00 = No Fix 0x01 = Dead Reckoning only 0x02 = 2D-Fix 0x03 = 3D-Fix 0x04 = GPS + dead reckoning combined 0x05 = Time only fix 0x06..0xff: reserved
-	Flags     NavSolFlags // Fix Status Flags
-	EcefX     int32       // [cm] ECEF X coordinate
-	EcefY     int32       // [cm] ECEF Y coordinate
-	EcefZ     int32       // [cm] ECEF Z coordinate
-	PAcc      uint32      // [cm] 3D Position Accuracy Estimate
-	EcefVX    int32       // [cm/s] ECEF X velocity
-	EcefVY    int32       // [cm/s] ECEF Y velocity
-	EcefVZ    int32       // [cm/s] ECEF Z velocity
-	SAcc      uint32      // [cm/s] Speed Accuracy Estimate
-	PDOP      uint16      // Position DOP
-	Reserved1 byte        // Reserved
-	NumSV     byte        // Number of SVs used in Nav Solution
-	Reserved2 [4]byte     // Reserved
+	ITOW_ms     uint32      // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	FTOW_ns     int32       // [ns] Fractional part of iTOW (range: +/- 500000). The precise GPS time of week in seconds is: (iTOW    *  1e-3)    +  (fTOW    *  1e-9)
+	Week_weeks  int16       // [weeks] GPS week number of the navigation epoch
+	GpsFix      byte        // GPSfix Type, range 0..5 0x00 = No Fix 0x01 = Dead Reckoning only 0x02 = 2D-Fix 0x03 = 3D-Fix 0x04 = GPS + dead reckoning combined 0x05 = Time only fix 0x06..0xff: reserved
+	Flags       NavSolFlags // Fix Status Flags
+	EcefX_cm    int32       // [cm] ECEF X coordinate
+	EcefY_cm    int32       // [cm] ECEF Y coordinate
+	EcefZ_cm    int32       // [cm] ECEF Z coordinate
+	PAcc_cm     uint32      // [cm] 3D Position Accuracy Estimate
+	EcefVX_cm_s int32       // [cm/s] ECEF X velocity
+	EcefVY_cm_s int32       // [cm/s] ECEF Y velocity
+	EcefVZ_cm_s int32       // [cm/s] ECEF Z velocity
+	SAcc_cm_s   uint32      // [cm/s] Speed Accuracy Estimate
+	PDOP        uint16      // Position DOP
+	Reserved1   byte        // Reserved
+	NumSV       byte        // Number of SVs used in Nav Solution
+	Reserved2   [4]byte     // Reserved
 }
 
 func (NavSol) classID() uint16 { return 0x0601 }
@@ -4006,16 +3975,16 @@ const (
 )
 
 // UBX-NAV-STATUS (Periodic/Polled) Receiver navigation status
-//
+// Class/Id 0x01 0x03 16 bytes
 // See important comments concerning validity of position given in section Navigation Output Filters.
 type NavStatus struct {
-	ITOW    uint32           // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ITOW_ms uint32           // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	GpsFix  byte             // GPSfix Type, this value does not qualify a fix as valid and within the limits. See note on flag gpsFixOk below. 0x00 = no fix 0x01 = dead reckoning only 0x02 = 2D-fix 0x03 = 3D-fix 0x04 = GPS + dead reckoning combined 0x05 = Time only fix 0x06..0xff = reserved
 	Flags   NavStatusFlags   // Navigation Status Flags
 	FixStat NavStatusFixStat // Fix Status Information
 	Flags2  NavStatusFlags2  // further information about navigation output
-	Ttff    uint32           // [ms] Time to first fix (millisecond time tag)
-	Msss    uint32           // [ms] Milliseconds since Startup / Reset
+	Ttff_ms uint32           // [ms] Time to first fix (millisecond time tag)
+	Msss_ms uint32           // [ms] Milliseconds since Startup / Reset
 }
 
 func (NavStatus) classID() uint16 { return 0x0301 }
@@ -4046,22 +4015,22 @@ const (
 )
 
 // UBX-NAV-SVINFO (Periodic/Polled) Space vehicle information
-//
+// Class/Id 0x01 0x30 8 + 12*numCh bytes
 // Information about satellites used or visible This message has only been retained for backwards compatibility; users are recommended to use the UBX-NAV-SAT message in preference.
 type NavSvinfo struct {
-	ITOW        uint32               // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	ITOW_ms     uint32               // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	NumCh       byte                 // Number of channels
 	GlobalFlags NavSvinfoGlobalFlags // Bitmask
 	Reserved1   [2]byte              // Reserved
 	Items       []*struct {
-		Chn     byte             // Channel number, 255 for SVs not assigned to a channel
-		Svid    byte             // Satellite ID, see Satellite Numbering for assignment
-		Flags   NavSvinfoFlags   // Bitmask
-		Quality NavSvinfoQuality // Bitfield
-		Cno     byte             // [dBHz] Carrier to Noise Ratio (Signal Strength)
-		Elev    int8             // [deg] Elevation in integer degrees
-		Azim    int16            // [deg] Azimuth in integer degrees
-		PrRes   int32            // [cm] Pseudo range residual in centimeters
+		Chn      byte             // Channel number, 255 for SVs not assigned to a channel
+		Svid     byte             // Satellite ID, see Satellite Numbering for assignment
+		Flags    NavSvinfoFlags   // Bitmask
+		Quality  NavSvinfoQuality // Bitfield
+		Cno_dbhz byte             // [dBHz] Carrier to Noise Ratio (Signal Strength)
+		Elev_deg int8             // [deg] Elevation in integer degrees
+		Azim_deg int16            // [deg] Azimuth in integer degrees
+		PrRes_cm int32            // [cm] Pseudo range residual in centimeters
 	} // len: numCh
 }
 
@@ -4093,16 +4062,16 @@ const (
 )
 
 // UBX-NAV-SVIN (Periodic/Polled) Survey-in data
-//
+// Class/Id 0x01 0x3b 40 bytes
 // This message contains information about survey-in parameters.
 type NavSvin struct {
 	Version   byte    // Message version (0x00 for this version)
 	Reserved1 [3]byte // Reserved
-	ITOW      uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Dur       uint32  // [s] Passed survey-in observation time
-	MeanX     int32   // [cm] Current survey-in mean position ECEF X coordinate
-	MeanY     int32   // [cm] Current survey-in mean position ECEF Y coordinate
-	MeanZ     int32   // [cm] Current survey-in mean position ECEF Z coordinate
+	ITOW_ms   uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Dur_s     uint32  // [s] Passed survey-in observation time
+	MeanX_cm  int32   // [cm] Current survey-in mean position ECEF X coordinate
+	MeanY_cm  int32   // [cm] Current survey-in mean position ECEF Y coordinate
+	MeanZ_cm  int32   // [cm] Current survey-in mean position ECEF Z coordinate
 	MeanXHP   int8    // [0.1_mm] Current high-precision survey-in mean position ECEF X coordinate. Must be in the range -99..+99. The current survey-in mean position ECEF X coordinate, in units of cm, is given by meanX + (0.01 * meanXHP)
 	MeanYHP   int8    // [0.1_mm] Current high-precision survey-in mean position ECEF Y coordinate. Must be in the range -99..+99. The current survey-in mean position ECEF Y coordinate, in units of cm, is given by meanY + (0.01 * meanYHP)
 	MeanZHP   int8    // [0.1_mm] Current high-precision survey-in mean position ECEF Z coordinate. Must be in the range -99..+99. The current survey-in mean position ECEF Z coordinate, in units of cm, is given by meanZ + (0.01 * meanZHP)
@@ -4117,16 +4086,16 @@ type NavSvin struct {
 func (NavSvin) classID() uint16 { return 0x3b01 }
 
 // UBX-NAV-TIMEBDS (Periodic/Polled) BeiDou time solution
-//
+// Class/Id 0x01 0x24 20 bytes
 // This message reports the precise BDS time of the most recent navigation solution including validity flags and an accuracy estimate.
 type NavTimebds struct {
-	ITOW  uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	SOW   uint32          // [s] BDS time of week (rounded to seconds)
-	FSOW  int32           // [ns] Fractional part of SOW (range: +/- 500000000). The precise BDS time of week in seconds is: SOW   +  fSOW    *  1e-9
-	Week  int16           // BDS week number of the navigation epoch
-	LeapS int8            // [s] BDS leap seconds (BDS-UTC)
-	Valid NavTimebdsValid // Validity Flags
-	TAcc  uint32          // [ns] Time Accuracy Estimate
+	ITOW_ms uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	SOW_s   uint32          // [s] BDS time of week (rounded to seconds)
+	FSOW_ns int32           // [ns] Fractional part of SOW (range: +/- 500000000). The precise BDS time of week in seconds is: SOW   +  fSOW    *  1e-9
+	Week    int16           // BDS week number of the navigation epoch
+	LeapS_s int8            // [s] BDS leap seconds (BDS-UTC)
+	Valid   NavTimebdsValid // Validity Flags
+	TAcc_ns uint32          // [ns] Time Accuracy Estimate
 }
 
 func (NavTimebds) classID() uint16 { return 0x2401 }
@@ -4140,16 +4109,16 @@ const (
 )
 
 // UBX-NAV-TIMEGAL (Periodic/Polled) Galileo time solution
-//
+// Class/Id 0x01 0x25 20 bytes
 // This message reports the precise Galileo time of the most recent navigation solution including validity flags and an accuracy estimate.
 type NavTimegal struct {
-	ITOW    uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	GalTow  uint32          // [s] Galileo time of week (rounded to seconds)
-	FGalTow int32           // [ns] Fractional part of the Galileo time of week (range: +/-500000000). The precise Galileo time of week in seconds is: galTow     +  fGalTow     *  1e-9
-	GalWno  int16           // Galileo week number
-	LeapS   int8            // [s] Galileo leap seconds (Galileo-UTC)
-	Valid   NavTimegalValid // Validity Flags
-	TAcc    uint32          // [ns] Time Accuracy Estimate
+	ITOW_ms    uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	GalTow_s   uint32          // [s] Galileo time of week (rounded to seconds)
+	FGalTow_ns int32           // [ns] Fractional part of the Galileo time of week (range: +/-500000000). The precise Galileo time of week in seconds is: galTow     +  fGalTow     *  1e-9
+	GalWno     int16           // Galileo week number
+	LeapS_s    int8            // [s] Galileo leap seconds (Galileo-UTC)
+	Valid      NavTimegalValid // Validity Flags
+	TAcc_ns    uint32          // [ns] Time Accuracy Estimate
 }
 
 func (NavTimegal) classID() uint16 { return 0x2501 }
@@ -4163,16 +4132,16 @@ const (
 )
 
 // UBX-NAV-TIMEGLO (Periodic/Polled) GLONASS time solution
-//
+// Class/Id 0x01 0x23 20 bytes
 // This message reports the precise GLO time of the most recent navigation solution including validity flags and an accuracy estimate.
 type NavTimeglo struct {
-	ITOW  uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	TOD   uint32          // [s] GLONASS time of day (rounded to integer seconds)
-	FTOD  int32           // [ns] Fractional part of TOD (range: +/- 500000000). The precise GLONASS time of day in seconds is: TOD   +  fTOD    *  1e-9
-	Nt    uint16          // [days] Current date (range: 1-1461), starting at 1 from the 1st Jan of the year indicated by N4 and ending at 1461 at the 31st Dec of the third year after that indicated by N4
-	N4    byte            // Four-year interval number starting from 1996 (1=1996, 2=2000, 3=2004...)
-	Valid NavTimegloValid // Validity flags
-	TAcc  uint32          // [ns] Time Accuracy Estimate
+	ITOW_ms uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	TOD_s   uint32          // [s] GLONASS time of day (rounded to integer seconds)
+	FTOD_ns int32           // [ns] Fractional part of TOD (range: +/- 500000000). The precise GLONASS time of day in seconds is: TOD   +  fTOD    *  1e-9
+	Nt_days uint16          // [days] Current date (range: 1-1461), starting at 1 from the 1st Jan of the year indicated by N4 and ending at 1461 at the 31st Dec of the third year after that indicated by N4
+	N4      byte            // Four-year interval number starting from 1996 (1=1996, 2=2000, 3=2004...)
+	Valid   NavTimegloValid // Validity flags
+	TAcc_ns uint32          // [ns] Time Accuracy Estimate
 }
 
 func (NavTimeglo) classID() uint16 { return 0x2301 }
@@ -4185,15 +4154,15 @@ const (
 )
 
 // UBX-NAV-TIMEGPS (Periodic/Polled) GPS time solution
-//
+// Class/Id 0x01 0x20 16 bytes
 // This message reports the precise GPS time of the most recent navigation solution including validity flags and an accuracy estimate.
 type NavTimegps struct {
-	ITOW  uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	FTOW  int32           // [ns] Fractional part of iTOW (range: +/- 500000). The precise GPS time of week in seconds is: (iTOW    *  1e-3)    +  (fTOW    *  1e-9)
-	Week  int16           // GPS week number of the navigation epoch
-	LeapS int8            // [s] GPS leap seconds (GPS-UTC)
-	Valid NavTimegpsValid // Validity Flags
-	TAcc  uint32          // [ns] Time Accuracy Estimate
+	ITOW_ms uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	FTOW_ns int32           // [ns] Fractional part of iTOW (range: +/- 500000). The precise GPS time of week in seconds is: (iTOW    *  1e-3)    +  (fTOW    *  1e-9)
+	Week    int16           // GPS week number of the navigation epoch
+	LeapS_s int8            // [s] GPS leap seconds (GPS-UTC)
+	Valid   NavTimegpsValid // Validity Flags
+	TAcc_ns uint32          // [ns] Time Accuracy Estimate
 }
 
 func (NavTimegps) classID() uint16 { return 0x2001 }
@@ -4207,21 +4176,21 @@ const (
 )
 
 // UBX-NAV-TIMELS (Periodic/Polled) Leap second event information
-//
+// Class/Id 0x01 0x26 24 bytes
 // Information about the upcoming leap second event if one is scheduled.
 type NavTimels struct {
-	ITOW          uint32         // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Version       byte           // Message version (0x00 for this version)
-	Reserved1     [3]byte        // Reserved
-	SrcOfCurrLs   byte           // Information source for the current number of leap seconds. 0: Default (hardcoded in the firmware, can be outdated) 1: Derived from time difference between GPS and GLONASS time 2: GPS 3: SBAS 4: BeiDou 5: Galileo 6: Aided data 7: Configured 255: Unknown
-	CurrLs        int8           // [s] Current number of leap seconds since start of GPS time (Jan 6, 1980). It reflects how much GPS time is ahead of UTC time. Galileo number of leap seconds is the same as GPS. BeiDou number of leap seconds is 14 less than GPS. GLONASS follows UTC time, so no leap seconds.
-	SrcOfLsChange byte           // Information source for the future leap second event. 0: No source 2: GPS 3: SBAS 4: BeiDou 5: Galileo 6: GLONASS
-	LsChange      int8           // [s] Future leap second change if one is scheduled. +1 = positive leap second, -1 = negative leap second, 0 = no future leap second event scheduled or no information available.
-	TimeToLsEvent int32          // [s] Number of seconds until the next leap second event, or from the last leap second event if no future event scheduled. If > 0 event is in the future, = 0 event is now, < 0 event is in the past. Valid only if validTimeToLsEvent = 1.
-	DateOfLsGpsWn uint16         // GPS week number (WN) of the next leap second event or the last one if no future event scheduled. Valid only if validTimeToLsEvent = 1.
-	DateOfLsGpsDn uint16         // GPS day of week number (DN) for the next leap second event or the last one if no future event scheduled. Valid only if validTimeToLsEvent = 1. (GPS and Galileo DN: from 1 = Sun to 7 = Sat. BeiDou DN: from 0 = Sun to 6 = Sat.)
-	Reserved2     [3]byte        // Reserved
-	Valid         NavTimelsValid // Validity flags
+	ITOW_ms         uint32         // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Version         byte           // Message version (0x00 for this version)
+	Reserved1       [3]byte        // Reserved
+	SrcOfCurrLs     byte           // Information source for the current number of leap seconds. 0: Default (hardcoded in the firmware, can be outdated) 1: Derived from time difference between GPS and GLONASS time 2: GPS 3: SBAS 4: BeiDou 5: Galileo 6: Aided data 7: Configured 255: Unknown
+	CurrLs_s        int8           // [s] Current number of leap seconds since start of GPS time (Jan 6, 1980). It reflects how much GPS time is ahead of UTC time. Galileo number of leap seconds is the same as GPS. BeiDou number of leap seconds is 14 less than GPS. GLONASS follows UTC time, so no leap seconds.
+	SrcOfLsChange   byte           // Information source for the future leap second event. 0: No source 2: GPS 3: SBAS 4: BeiDou 5: Galileo 6: GLONASS
+	LsChange_s      int8           // [s] Future leap second change if one is scheduled. +1 = positive leap second, -1 = negative leap second, 0 = no future leap second event scheduled or no information available.
+	TimeToLsEvent_s int32          // [s] Number of seconds until the next leap second event, or from the last leap second event if no future event scheduled. If > 0 event is in the future, = 0 event is now, < 0 event is in the past. Valid only if validTimeToLsEvent = 1.
+	DateOfLsGpsWn   uint16         // GPS week number (WN) of the next leap second event or the last one if no future event scheduled. Valid only if validTimeToLsEvent = 1.
+	DateOfLsGpsDn   uint16         // GPS day of week number (DN) for the next leap second event or the last one if no future event scheduled. Valid only if validTimeToLsEvent = 1. (GPS and Galileo DN: from 1 = Sun to 7 = Sat. BeiDou DN: from 0 = Sun to 6 = Sat.)
+	Reserved2       [3]byte        // Reserved
+	Valid           NavTimelsValid // Validity flags
 }
 
 func (NavTimels) classID() uint16 { return 0x2601 }
@@ -4234,19 +4203,19 @@ const (
 )
 
 // UBX-NAV-TIMEUTC (Periodic/Polled) UTC time solution
-//
+// Class/Id 0x01 0x21 20 bytes
 // Note that during a leap second there may be more or less than 60 seconds in a minute. See the description of leap seconds for details.
 type NavTimeutc struct {
-	ITOW  uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	TAcc  uint32          // [ns] Time accuracy estimate (UTC)
-	Nano  int32           // [ns] Fraction of second, range -1e9 .. 1e9 (UTC)
-	Year  uint16          // [y] Year, range 1999..2099 (UTC)
-	Month byte            // [month] Month, range 1..12 (UTC)
-	Day   byte            // [d] Day of month, range 1..31 (UTC)
-	Hour  byte            // [h] Hour of day, range 0..23 (UTC)
-	Min   byte            // [min] Minute of hour, range 0..59 (UTC)
-	Sec   byte            // [s] Seconds of minute, range 0..60 (UTC)
-	Valid NavTimeutcValid // Validity Flags
+	ITOW_ms     uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	TAcc_ns     uint32          // [ns] Time accuracy estimate (UTC)
+	Nano_ns     int32           // [ns] Fraction of second, range -1e9 .. 1e9 (UTC)
+	Year_y      uint16          // [y] Year, range 1999..2099 (UTC)
+	Month_month byte            // [month] Month, range 1..12 (UTC)
+	Day_d       byte            // [d] Day of month, range 1..31 (UTC)
+	Hour_h      byte            // [h] Hour of day, range 0..23 (UTC)
+	Min_min     byte            // [min] Minute of hour, range 0..59 (UTC)
+	Sec_s       byte            // [s] Seconds of minute, range 0..60 (UTC)
+	Valid       NavTimeutcValid // Validity Flags
 }
 
 func (NavTimeutc) classID() uint16 { return 0x2101 }
@@ -4261,57 +4230,57 @@ const (
 )
 
 // UBX-NAV-VELECEF (Periodic/Polled) Velocity solution in ECEF
-//
+// Class/Id 0x01 0x11 20 bytes
 // See important comments concerning validity of position given in section Navigation Output Filters.
 type NavVelecef struct {
-	ITOW   uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	EcefVX int32  // [cm/s] ECEF X velocity
-	EcefVY int32  // [cm/s] ECEF Y velocity
-	EcefVZ int32  // [cm/s] ECEF Z velocity
-	SAcc   uint32 // [cm/s] Speed accuracy estimate
+	ITOW_ms     uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	EcefVX_cm_s int32  // [cm/s] ECEF X velocity
+	EcefVY_cm_s int32  // [cm/s] ECEF Y velocity
+	EcefVZ_cm_s int32  // [cm/s] ECEF Z velocity
+	SAcc_cm_s   uint32 // [cm/s] Speed accuracy estimate
 }
 
 func (NavVelecef) classID() uint16 { return 0x1101 }
 
 // UBX-NAV-VELNED (Periodic/Polled) Velocity solution in NED frame
-//
+// Class/Id 0x01 0x12 36 bytes
 // See important comments concerning validity of position given in section Navigation Output Filters.
 type NavVelned struct {
-	ITOW    uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	VelN    int32  // [cm/s] North velocity component
-	VelE    int32  // [cm/s] East velocity component
-	VelD    int32  // [cm/s] Down velocity component
-	Speed   uint32 // [cm/s] Speed (3-D)
-	GSpeed  uint32 // [cm/s] Ground speed (2-D)
-	Heading int32  // [1e-5 deg] Heading of motion 2-D
-	SAcc    uint32 // [cm/s] Speed accuracy Estimate
-	CAcc    uint32 // [1e-5 deg] Course / Heading accuracy estimate
+	ITOW_ms       uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	VelN_cm_s     int32  // [cm/s] North velocity component
+	VelE_cm_s     int32  // [cm/s] East velocity component
+	VelD_cm_s     int32  // [cm/s] Down velocity component
+	Speed_cm_s    uint32 // [cm/s] Speed (3-D)
+	GSpeed_cm_s   uint32 // [cm/s] Ground speed (2-D)
+	Heading_dege5 int32  // [1e-5 deg] Heading of motion 2-D
+	SAcc_cm_s     uint32 // [cm/s] Speed accuracy Estimate
+	CAcc_dege5    uint32 // [1e-5 deg] Course / Heading accuracy estimate
 }
 
 func (NavVelned) classID() uint16 { return 0x1201 }
 
 // UBX-RXM-IMES (Periodic/Polled) Indoor Messaging System information
-//
+// Class/Id 0x02 0x61 4 + 44*numTx bytes
 // This message shows the IMES stations the receiver is currently tracking, their data rate, the signal level, the Doppler (with respect to 1575.4282MHz) and what data (without protocol specific overhead) it has received from these stations so far. This message is sent out at the navigation rate the receiver is currently set to. Therefore it allows users to get an overview on the receiver's current state from the IMES perspective.
 type RxmImes struct {
 	NumTx     byte    // Number of transmitters contained in the message
 	Version   byte    // Message version (0x01 for this version)
 	Reserved1 [2]byte // Reserved
 	Items     []*struct {
-		Reserved2    byte                // Reserved
-		TxId         byte                // Transmitter identifier
-		Reserved3    [3]byte             // Reserved
-		Cno          byte                // [dBHz] Carrier to Noise Ratio (Signal Strength)
-		Reserved4    [2]byte             // Reserved
-		Doppler      int32               // [2^-12 Hz] Doppler frequency with respect to 1575. 4282MHz [IIIII.FFF Hz]
-		Position1_1  RxmImesPosition1_1  // Position 1 Frame (part 1/2)
-		Position1_2  RxmImesPosition1_2  // Position 1 Frame (part 2/2)
-		Position2_1  RxmImesPosition2_1  // Position 2 Frame (part 1/3)
-		Lat          int32               // [180*2^-24 deg] Latitude, Position 2 Frame (part 2/3)
-		Lon          int32               // [360*2^-25 deg] Longitude, Position 2 Frame (part 3/3)
-		ShortIdFrame RxmImesShortIdFrame // Short ID Frame
-		MediumIdLSB  uint32              // Medium ID LSB, Medium ID Frame (part 1/2)
-		MediumId_2   RxmImesMediumId_2   // Medium ID Frame (part 2/2)
+		Reserved2     byte                // Reserved
+		TxId          byte                // Transmitter identifier
+		Reserved3     [3]byte             // Reserved
+		Cno_dbhz      byte                // [dBHz] Carrier to Noise Ratio (Signal Strength)
+		Reserved4     [2]byte             // Reserved
+		Doppler_hzl12 int32               // [2^-12 Hz] Doppler frequency with respect to 1575. 4282MHz [IIIII.FFF Hz]
+		Position1_1   RxmImesPosition1_1  // Position 1 Frame (part 1/2)
+		Position1_2   RxmImesPosition1_2  // Position 1 Frame (part 2/2)
+		Position2_1   RxmImesPosition2_1  // Position 2 Frame (part 1/3)
+		Lat_deg       int32               // [180*2^-24 deg] Latitude, Position 2 Frame (part 2/3)
+		Lon_deg       int32               // [360*2^-25 deg] Longitude, Position 2 Frame (part 3/3)
+		ShortIdFrame  RxmImesShortIdFrame // Short ID Frame
+		MediumIdLSB   uint32              // Medium ID LSB, Medium ID Frame (part 1/2)
+		MediumId_2    RxmImesMediumId_2   // Medium ID Frame (part 2/2)
 	} // len: numTx
 }
 
@@ -4357,35 +4326,35 @@ const (
 )
 
 // UBX-RXM-MEASX (Periodic/Polled) Satellite measurements for RRLP
-//
+// Class/Id 0x02 0x14 44 + 24*numSV bytes
 // The message payload data is, where possible and appropriate, according to the Radio Resource LCS (Location Services) Protocol (RRLP) [1]. One exception is the satellite and GNSS IDs, which here are given according to the Satellite Numbering scheme. The correct satellites have to be selected and their satellite ID translated accordingly [1, tab. A.10.14] for use in a RRLP Measure Position Response Component. Similarly, the measurement reference time of week has to be forwarded correctly (modulo 14400000 for the 24 LSB GPS measurements variant, modulo 3600000 for the 22 LSB Galileo and Additional Navigation Satelllite Systems (GANSS) measurements variant) of the RRLP measure position response to the SMLC. Reference: [1] ETSI TS 144 031 V11.0.0 (2012-10), Digital cellular telecommunications system (Phase 2+), Location Services (LCS), Mobile Station (MS) - Serving Mobile Location Centre (SMLC), Radio Resource LCS Protocol (RRLP), (3GPP TS 44.031 version 11.0.0 Release 11).
 type RxmMeasx struct {
-	Version    byte          // Message version, currently 0x01
-	Reserved1  [3]byte       // Reserved
-	GpsTOW     uint32        // [ms] GPS measurement reference time
-	GloTOW     uint32        // [ms] GLONASS measurement reference time
-	BdsTOW     uint32        // [ms] BeiDou measurement reference time
-	Reserved2  [4]byte       // Reserved
-	QzssTOW    uint32        // [ms] QZSS measurement reference time
-	GpsTOWacc  uint16        // [2^-4 ms] GPS measurement reference time accuracy (0xffff = > 4s)
-	GloTOWacc  uint16        // [2^-4 ms] GLONASS measurement reference time accuracy (0xffff = > 4s)
-	BdsTOWacc  uint16        // [2^-4 ms] BeiDou measurement reference time accuracy (0xffff = > 4s)
-	Reserved3  [2]byte       // Reserved
-	QzssTOWacc uint16        // [2^-4 ms] QZSS measurement reference time accuracy (0xffff = > 4s)
-	NumSV      byte          // Number of satellites in repeated block
-	Flags      RxmMeasxFlags // Flags
-	Reserved4  [8]byte       // Reserved
-	Items      []*struct {
+	Version         byte          // Message version, currently 0x01
+	Reserved1       [3]byte       // Reserved
+	GpsTOW_ms       uint32        // [ms] GPS measurement reference time
+	GloTOW_ms       uint32        // [ms] GLONASS measurement reference time
+	BdsTOW_ms       uint32        // [ms] BeiDou measurement reference time
+	Reserved2       [4]byte       // Reserved
+	QzssTOW_ms      uint32        // [ms] QZSS measurement reference time
+	GpsTOWacc_msl4  uint16        // [2^-4 ms] GPS measurement reference time accuracy (0xffff = > 4s)
+	GloTOWacc_msl4  uint16        // [2^-4 ms] GLONASS measurement reference time accuracy (0xffff = > 4s)
+	BdsTOWacc_msl4  uint16        // [2^-4 ms] BeiDou measurement reference time accuracy (0xffff = > 4s)
+	Reserved3       [2]byte       // Reserved
+	QzssTOWacc_msl4 uint16        // [2^-4 ms] QZSS measurement reference time accuracy (0xffff = > 4s)
+	NumSV           byte          // Number of satellites in repeated block
+	Flags           RxmMeasxFlags // Flags
+	Reserved4       [8]byte       // Reserved
+	Items           []*struct {
 		GnssId          byte    // GNSS ID (see Satellite Numbering)
 		SvId            byte    // Satellite ID (see Satellite Numbering)
 		CNo             byte    // carrier noise ratio (0..63)
 		MpathIndic      byte    // multipath index (according to [1]) (0 = not measured, 1 = low, 2 = medium, 3 = high)
-		DopplerMS       int32   // [0.04 m/s] Doppler measurement
-		DopplerHz       int32   // [0.2 Hz] Doppler measurement
+		DopplerMS_m_s   int32   // [0.04 m/s] Doppler measurement
+		DopplerHz_hz    int32   // [0.2 Hz] Doppler measurement
 		WholeChips      uint16  // whole value of the code phase measurement (0..1022 for GPS)
 		FracChips       uint16  // fractional value of the code phase measurement (0..1023)
-		CodePhase       uint32  // [2^-21 ms] Code phase
-		IntCodePhase    byte    // [ms] Integer (part of the) code phase
+		CodePhase_msl21 uint32  // [2^-21 ms] Code phase
+		IntCodePhase_ms byte    // [ms] Integer (part of the) code phase
 		PseuRangeRMSErr byte    // pseudorange RMS error index (according to [1]) (0..63)
 		Reserved5       [2]byte // Reserved
 	} // len: numSV
@@ -4400,11 +4369,11 @@ const (
 )
 
 // UBX-RXM-PMREQ (Command) Power management request
-//
+// Class/Id 0x02 0x41 8 bytes
 // This message requests a power management related task of the receiver.
 type RxmPmreq struct {
-	Duration uint32        // [ms] Duration of the requested task, set to zero for infinite duration. The maximum supported time is 12 days.
-	Flags    RxmPmreqFlags // task flags
+	Duration_ms uint32        // [ms] Duration of the requested task, set to zero for infinite duration. The maximum supported time is 12 days.
+	Flags       RxmPmreqFlags // task flags
 }
 
 func (RxmPmreq) classID() uint16 { return 0x4102 }
@@ -4416,12 +4385,12 @@ const (
 )
 
 // UBX-RXM-PMREQ (Command) Power management request
-//
+// Class/Id 0x02 0x41 16 bytes
 // This message requests a power management related task of the receiver.
 type RxmPmreq1 struct {
 	Version       byte                   // Message version (0x00 for this version)
 	Reserved1     [3]byte                // Reserved
-	Duration      uint32                 // [ms] Duration of the requested task, set to zero for infinite duration. The maximum supported time is 12 days.
+	Duration_ms   uint32                 // [ms] Duration of the requested task, set to zero for infinite duration. The maximum supported time is 12 days.
 	Flags         RxmPmreq1Flags         // task flags
 	WakeupSources RxmPmreq1WakeupSources // Configure pins to wake up the receiver. The receiver wakes up if there is either a falling or a rising edge on one of the configured pins.
 }
@@ -4445,30 +4414,30 @@ const (
 )
 
 // UBX-RXM-RAWX (Periodic/Polled) Multi-GNSS raw measurement data
-//
+// Class/Id 0x02 0x15 16 + 32*numMeas bytes
 // This message contains the information needed to be able to generate a RINEX 3 multi-GNSS observation file (see ftp://ftp.igs.org/pub/data/format/). This message contains pseudorange, Doppler, carrier phase, phase lock and signal quality information for GNSS satellites once signals have been synchronized. This message supports all active GNSS.
 type RxmRawx struct {
-	RcvTow    float64        // [s] Measurement time of week in receiver local time approximately aligned to the GPS time system. The receiver local time of week, week number and leap second information can be used to translate the time to other time systems. More information about the difference in time systems can be found in the RINEX 3 format documentation. For a receiver operating in GLONASS only mode, UTC time can be determined by subtracting the leapS field from GPS time regardless of whether the GPS leap seconds are valid.
-	Week      uint16         // [weeks] GPS week number in receiver local time.
-	LeapS     int8           // [s] GPS leap seconds (GPS-UTC). This field represents the receiver's best knowledge of the leap seconds offset. A flag is given in the recStat bitfield to indicate if the leap seconds are known.
-	NumMeas   byte           // Number of measurements to follow
-	RecStat   RxmRawxRecStat // Receiver tracking status bitfield
-	Reserved1 [3]byte        // Reserved
-	Items     []*struct {
-		PrMes     float64        // [m] Pseudorange measurement [m]. GLONASS inter frequency channel delays are compensated with an internal calibration table.
-		CpMes     float64        // [cycles] Carrier phase measurement [cycles]. The carrier phase initial ambiguity is initialized using an approximate value to make the magnitude of the phase close to the pseudorange measurement. Clock resets are applied to both phase and code measurements in accordance with the RINEX specification.
-		DoMes     float32        // [Hz] Doppler measurement (positive sign for approaching satellites) [Hz]
-		GnssId    byte           // GNSS identifier (see Satellite Numbering for a list of identifiers)
-		SvId      byte           // Satellite identifier (see Satellite Numbering)
-		Reserved2 byte           // Reserved
-		FreqId    byte           // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
-		Locktime  uint16         // [ms] Carrier phase locktime counter (maximum 64500ms)
-		Cno       byte           // [dBHz] Carrier-to-noise density ratio (signal strength) [dB-Hz]
-		PrStdev   RxmRawxPrStdev // [0.01*2^n m] Estimated pseudorange measurement standard deviation
-		CpStdev   RxmRawxCpStdev // [0.004 cycles] Estimated carrier phase measurement standard deviation (note a raw value of 0x0F indicates the value is invalid)
-		DoStdev   RxmRawxDoStdev // [0.002*2^n Hz] Estimated Doppler measurement standard deviation.
-		TrkStat   RxmRawxTrkStat // Tracking status bitfield (see graphic below )
-		Reserved3 byte           // Reserved
+	RcvTow_s   float64        // [s] Measurement time of week in receiver local time approximately aligned to the GPS time system. The receiver local time of week, week number and leap second information can be used to translate the time to other time systems. More information about the difference in time systems can be found in the RINEX 3 format documentation. For a receiver operating in GLONASS only mode, UTC time can be determined by subtracting the leapS field from GPS time regardless of whether the GPS leap seconds are valid.
+	Week_weeks uint16         // [weeks] GPS week number in receiver local time.
+	LeapS_s    int8           // [s] GPS leap seconds (GPS-UTC). This field represents the receiver's best knowledge of the leap seconds offset. A flag is given in the recStat bitfield to indicate if the leap seconds are known.
+	NumMeas    byte           // Number of measurements to follow
+	RecStat    RxmRawxRecStat // Receiver tracking status bitfield
+	Reserved1  [3]byte        // Reserved
+	Items      []*struct {
+		PrMes_m        float64        // [m] Pseudorange measurement [m]. GLONASS inter frequency channel delays are compensated with an internal calibration table.
+		CpMes_cycles   float64        // [cycles] Carrier phase measurement [cycles]. The carrier phase initial ambiguity is initialized using an approximate value to make the magnitude of the phase close to the pseudorange measurement. Clock resets are applied to both phase and code measurements in accordance with the RINEX specification.
+		DoMes_hz       float32        // [Hz] Doppler measurement (positive sign for approaching satellites) [Hz]
+		GnssId         byte           // GNSS identifier (see Satellite Numbering for a list of identifiers)
+		SvId           byte           // Satellite identifier (see Satellite Numbering)
+		Reserved2      byte           // Reserved
+		FreqId         byte           // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
+		Locktime_ms    uint16         // [ms] Carrier phase locktime counter (maximum 64500ms)
+		Cno_dbhz       byte           // [dBHz] Carrier-to-noise density ratio (signal strength) [dB-Hz]
+		PrStdev_m      RxmRawxPrStdev // [0.01*2^n m] Estimated pseudorange measurement standard deviation
+		CpStdev_cycles RxmRawxCpStdev // [0.004 cycles] Estimated carrier phase measurement standard deviation (note a raw value of 0x0F indicates the value is invalid)
+		DoStdev_hz     RxmRawxDoStdev // [0.002*2^n Hz] Estimated Doppler measurement standard deviation.
+		TrkStat        RxmRawxTrkStat // Tracking status bitfield (see graphic below )
+		Reserved3      byte           // Reserved
 	} // len: numMeas
 }
 
@@ -4509,31 +4478,31 @@ const (
 )
 
 // UBX-RXM-RAWX (Periodic/Polled) Multi-GNSS raw measurements
-//
+// Class/Id 0x02 0x15 16 + 32*numMeas bytes
 // This message contains the information needed to be able to generate a RINEX 3 multi-GNSS observation file (see ftp://ftp.igs.org/pub/data/format/). This message contains pseudorange, Doppler, carrier phase, phase lock and signal quality information for GNSS satellites once signals have been synchronized. This message supports all active GNSS. The only difference between this version of the message and the previous version (UBX-RXM-RAWX-DATA0) is the addition of the version field.
 type RxmRawx1 struct {
-	RcvTow    float64         // [s] Measurement time of week in receiver local time approximately aligned to the GPS time system. The receiver local time of week, week number and leap second information can be used to translate the time to other time systems. More information about the difference in time systems can be found in the RINEX 3 format documentation. For a receiver operating in GLONASS only mode, UTC time can be determined by subtracting the leapS field from GPS time regardless of whether the GPS leap seconds are valid.
-	Week      uint16          // [weeks] GPS week number in receiver local time.
-	LeapS     int8            // [s] GPS leap seconds (GPS-UTC). This field represents the receiver's best knowledge of the leap seconds offset. A flag is given in the recStat bitfield to indicate if the leap seconds are known.
-	NumMeas   byte            // Number of measurements to follow
-	RecStat   RxmRawx1RecStat // Receiver tracking status bitfield
-	Version   byte            // Message version (0x01 for this version)
-	Reserved1 [2]byte         // Reserved
-	Items     []*struct {
-		PrMes     float64         // [m] Pseudorange measurement [m]. GLONASS inter frequency channel delays are compensated with an internal calibration table.
-		CpMes     float64         // [cycles] Carrier phase measurement [cycles]. The carrier phase initial ambiguity is initialized using an approximate value to make the magnitude of the phase close to the pseudorange measurement. Clock resets are applied to both phase and code measurements in accordance with the RINEX specification.
-		DoMes     float32         // [Hz] Doppler measurement (positive sign for approaching satellites) [Hz]
-		GnssId    byte            // GNSS identifier (see Satellite Numbering for a list of identifiers)
-		SvId      byte            // Satellite identifier (see Satellite Numbering)
-		SigId     byte            // New style signal identifier (see Signal Identifiers).(not supported in protocol versions less than 27)
-		FreqId    byte            // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
-		Locktime  uint16          // [ms] Carrier phase locktime counter (maximum 64500ms)
-		Cno       byte            // [dBHz] Carrier-to-noise density ratio (signal strength) [dB-Hz]
-		PrStdev   RxmRawx1PrStdev // [0.01*2^n m] Estimated pseudorange measurement standard deviation
-		CpStdev   RxmRawx1CpStdev // [0.004 cycles] Estimated carrier phase measurement standard deviation (note a raw value of 0x0F indicates the value is invalid)
-		DoStdev   RxmRawx1DoStdev // [0.002*2^n Hz] Estimated Doppler measurement standard deviation.
-		TrkStat   RxmRawx1TrkStat // Tracking status bitfield (see graphic below )
-		Reserved2 byte            // Reserved
+	RcvTow_s   float64         // [s] Measurement time of week in receiver local time approximately aligned to the GPS time system. The receiver local time of week, week number and leap second information can be used to translate the time to other time systems. More information about the difference in time systems can be found in the RINEX 3 format documentation. For a receiver operating in GLONASS only mode, UTC time can be determined by subtracting the leapS field from GPS time regardless of whether the GPS leap seconds are valid.
+	Week_weeks uint16          // [weeks] GPS week number in receiver local time.
+	LeapS_s    int8            // [s] GPS leap seconds (GPS-UTC). This field represents the receiver's best knowledge of the leap seconds offset. A flag is given in the recStat bitfield to indicate if the leap seconds are known.
+	NumMeas    byte            // Number of measurements to follow
+	RecStat    RxmRawx1RecStat // Receiver tracking status bitfield
+	Version    byte            // Message version (0x01 for this version)
+	Reserved1  [2]byte         // Reserved
+	Items      []*struct {
+		PrMes_m        float64         // [m] Pseudorange measurement [m]. GLONASS inter frequency channel delays are compensated with an internal calibration table.
+		CpMes_cycles   float64         // [cycles] Carrier phase measurement [cycles]. The carrier phase initial ambiguity is initialized using an approximate value to make the magnitude of the phase close to the pseudorange measurement. Clock resets are applied to both phase and code measurements in accordance with the RINEX specification.
+		DoMes_hz       float32         // [Hz] Doppler measurement (positive sign for approaching satellites) [Hz]
+		GnssId         byte            // GNSS identifier (see Satellite Numbering for a list of identifiers)
+		SvId           byte            // Satellite identifier (see Satellite Numbering)
+		SigId          byte            // New style signal identifier (see Signal Identifiers).(not supported in protocol versions less than 27)
+		FreqId         byte            // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
+		Locktime_ms    uint16          // [ms] Carrier phase locktime counter (maximum 64500ms)
+		Cno_dbhz       byte            // [dBHz] Carrier-to-noise density ratio (signal strength) [dB-Hz]
+		PrStdev_m      RxmRawx1PrStdev // [0.01*2^n m] Estimated pseudorange measurement standard deviation
+		CpStdev_cycles RxmRawx1CpStdev // [0.004 cycles] Estimated carrier phase measurement standard deviation (note a raw value of 0x0F indicates the value is invalid)
+		DoStdev_hz     RxmRawx1DoStdev // [0.002*2^n Hz] Estimated Doppler measurement standard deviation.
+		TrkStat        RxmRawx1TrkStat // Tracking status bitfield (see graphic below )
+		Reserved2      byte            // Reserved
 	} // len: numMeas
 }
 
@@ -4574,7 +4543,7 @@ const (
 )
 
 // UBX-RXM-RLM (Output) Galileo SAR short-RLM report
-//
+// Class/Id 0x02 0x59 16 bytes
 // This message contains the contents of any Galileo Search and Rescue (SAR) Short Return Link Message detected by the receiver.
 type RxmRlm struct {
 	Version   byte    // Message version (0x00 for this version)
@@ -4590,7 +4559,7 @@ type RxmRlm struct {
 func (RxmRlm) classID() uint16 { return 0x5902 }
 
 // UBX-RXM-RLM (Output) Galileo SAR long-RLM report
-//
+// Class/Id 0x02 0x59 28 bytes
 // This message contains the contents of any Galileo Search and Rescue (SAR) Long Return Link Message detected by the receiver.
 type RxmRlm1 struct {
 	Version   byte     // Message version (0x00 for this version)
@@ -4606,7 +4575,7 @@ type RxmRlm1 struct {
 func (RxmRlm1) classID() uint16 { return 0x5902 }
 
 // UBX-RXM-RTCM (Output) RTCM input status
-//
+// Class/Id 0x02 0x32 8 bytes
 // This message shows info on a received RTCM input message. It is output upon successful parsing of an RTCM input message, irrespective of whether the RTCM message is supported or not by the receiver.
 type RxmRtcm struct {
 	Version    byte         // Message version (0x02 for this version)
@@ -4626,7 +4595,7 @@ const (
 )
 
 // UBX-RXM-SFRBX (Output) Broadcast navigation data subframe
-//
+// Class/Id 0x02 0x13 8 + 4*numWords bytes
 // This message reports a complete subframe of broadcast navigation data decoded from a single signal. The number of data words reported in each message depends on the nature of the signal. See the section on Broadcast Navigation Data for further details.
 type RxmSfrbx struct {
 	GnssId    byte // GNSS identifier (see Satellite Numbering)
@@ -4645,7 +4614,7 @@ type RxmSfrbx struct {
 func (RxmSfrbx) classID() uint16 { return 0x1302 }
 
 // UBX-RXM-SFRBX (Output) Broadcast navigation data subframe
-//
+// Class/Id 0x02 0x13 8 + 4*numWords bytes
 // This message reports a complete subframe of broadcast navigation data decoded from a single signal. The number of data words reported in each message depends on the nature of the signal. See the section on Broadcast Navigation Data for further details.
 type RxmSfrbx1 struct {
 	GnssId    byte // GNSS identifier (see Satellite Numbering)
@@ -4664,14 +4633,14 @@ type RxmSfrbx1 struct {
 func (RxmSfrbx1) classID() uint16 { return 0x1302 }
 
 // UBX-RXM-SVSI (Periodic/Polled) SV status info
-//
+// Class/Id 0x02 0x20 8 + 6*numSV bytes
 // Status of the receiver manager knowledge about GPS Orbit Validity This message has only been retained for backwards compatibility; users are recommended to use the UBX-NAV-ORB message in preference.
 type RxmSvsi struct {
-	ITOW   uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Week   int16  // [weeks] GPS week number of the navigation epoch
-	NumVis byte   // Number of visible satellites
-	NumSV  byte   // Number of per-SV data blocks following
-	Items  []*struct {
+	ITOW_ms    uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Week_weeks int16  // [weeks] GPS week number of the navigation epoch
+	NumVis     byte   // Number of visible satellites
+	NumSV      byte   // Number of per-SV data blocks following
+	Items      []*struct {
 		Svid   byte          // Satellite ID
 		SvFlag RxmSvsiSvFlag // Information Flags
 		Azim   int16         // Azimuth
@@ -4700,7 +4669,7 @@ const (
 )
 
 // UBX-SEC-UNIQID (Output) Unique chip ID
-//
+// Class/Id 0x27 0x03 9 bytes
 // This message is used to retrieve a unique chip identifier (40 bits, 5 bytes).
 type SecUniqid struct {
 	Version   byte    // Message version (0x01 for this version)
@@ -4711,7 +4680,7 @@ type SecUniqid struct {
 func (SecUniqid) classID() uint16 { return 0x0327 }
 
 // UBX-TIM-DOSC (Output) Disciplined oscillator control
-//
+// Class/Id 0x0d 0x11 8 bytes
 // The receiver sends this message when it is disciplining an external oscillator and the external oscillator is set up to be controlled via the host.
 type TimDosc struct {
 	Version   byte    // Message version (0x00 for this version)
@@ -4722,24 +4691,24 @@ type TimDosc struct {
 func (TimDosc) classID() uint16 { return 0x110d }
 
 // UBX-TIM-FCHG (Periodic/Polled) Oscillator frequency changed notification
-//
+// Class/Id 0x0d 0x16 32 bytes
 // This message reports frequency changes commanded by the sync manager for the internal and external oscillator. It is output at the configured rate even if the sync manager decides not to command a frequency change.
 type TimFchg struct {
-	Version         byte    // Message version (0x00 for this version)
-	Reserved1       [3]byte // Reserved
-	ITOW            uint32  // [ms] GPS time of week of the navigation epoch from which the sync manager obtains the GNSS specific data. Like for the NAV message, the iTOW can be used to group messages of a single sync manager run together (See the description of iTOW for details)
-	IntDeltaFreq    int32   // [2^-8 ppb] Frequency increment of the internal oscillator
-	IntDeltaFreqUnc uint32  // [2^-8 ppb] Uncertainty of the internal oscillator frequency increment
-	IntRaw          uint32  // Current raw DAC setting commanded to the internal oscillator
-	ExtDeltaFreq    int32   // [2^-8 ppb] Frequency increment of the external oscillator
-	ExtDeltaFreqUnc uint32  // [2^-8 ppb] Uncertainty of the external oscillator frequency increment
-	ExtRaw          uint32  // Current raw DAC setting commanded to the external oscillator
+	Version               byte    // Message version (0x00 for this version)
+	Reserved1             [3]byte // Reserved
+	ITOW_ms               uint32  // [ms] GPS time of week of the navigation epoch from which the sync manager obtains the GNSS specific data. Like for the NAV message, the iTOW can be used to group messages of a single sync manager run together (See the description of iTOW for details)
+	IntDeltaFreq_ppbl8    int32   // [2^-8 ppb] Frequency increment of the internal oscillator
+	IntDeltaFreqUnc_ppbl8 uint32  // [2^-8 ppb] Uncertainty of the internal oscillator frequency increment
+	IntRaw                uint32  // Current raw DAC setting commanded to the internal oscillator
+	ExtDeltaFreq_ppbl8    int32   // [2^-8 ppb] Frequency increment of the external oscillator
+	ExtDeltaFreqUnc_ppbl8 uint32  // [2^-8 ppb] Uncertainty of the external oscillator frequency increment
+	ExtRaw                uint32  // Current raw DAC setting commanded to the external oscillator
 }
 
 func (TimFchg) classID() uint16 { return 0x160d }
 
 // UBX-TIM-HOC (Input) Host oscillator control
-//
+// Class/Id 0x0d 0x17 8 bytes
 // This message can be sent by the host to force the receiver to bypass the disciplining algorithms in the SMGR and carry out the instructed changes to internal or external oscillator frequency. No checks are carried out on the size of the frequency change requested, so normal limits imposed by the SMGR are ignored. It is recommended that the disciplining of that oscillator is disabled before this message is sent (i.e. by clearing the enableInternal or enableExternal flag in the UBX-CFG-SMGR message), otherwise the autonomous disciplining processes may cancel the effect of the direct command. Note that the GNSS subsystem may temporarily lose track of some/all satellite signals if a large change of the internal oscillator is made.
 type TimHoc struct {
 	Version   byte        // Message version (0x00 for this version)
@@ -4759,24 +4728,24 @@ const (
 )
 
 // UBX-TIM-SMEAS (Input/Output) Source measurement
-//
+// Class/Id 0x0d 0x13 12 + 24*numMeas bytes
 // Frequency and/or phase measurement of synchronization sources. The measurements are relative to the nominal frequency and nominal phase. The receiver reports the measurements on its sync sources using this message. Which measurements are reported can be configured using UBX-CFG-SMGR. The host may report offset of the receiver's outputs with this message as well. The receiver has to be configured using UBX-CFG-SMGR to enable the use of the external measurement messages. Otherwise the receiver will ignore them.
 type TimSmeas struct {
 	Version   byte    // Message version (0x00 for this version)
 	NumMeas   byte    // Number of measurements in repeated block
 	Reserved1 [2]byte // Reserved
-	ITOW      uint32  // [ms] Time of the week
+	ITOW_ms   uint32  // [ms] Time of the week
 	Reserved2 [4]byte // Reserved
 	Items     []*struct {
-		SourceId        byte          // Index of source. SMEAS can provide six measurement sources. The first four sourceId values represent measurements made by the receiver and sent to the host. The first of these with a sourceId value of 0 is a measurement of the internal oscillator against the current receiver time-and-frequency estimate. The internal oscillator is being disciplined against that estimate and this result represents the current offset between the actual and desired internal oscillator states. The next three sourceId values represent frequency and time measurements made by the receiver against the internal oscillator. sourceId 1 represents the GNSS-derived frequency and time compared with the internal oscillator frequency and time. sourceId2 give measurements of a signal coming in on EXTINT0. sourceId 3 corresponds to a similar measurement on EXTINT1. The remaining two of these measurements (sourceId 4 and 5) are made by the host and sent to the receiver. A measurement with sourceId 4 is a measurement by the host of the internal oscillator and sourceId 5 indicates a host measurement of the external oscillator.
-		Flags           TimSmeasFlags // Flags
-		PhaseOffsetFrac int8          // [2^-8 ns] Sub-nanosecond phase offset; the total offset is the sum of phaseOffset and phaseOffsetFrac
-		PhaseUncFrac    byte          // [2^-8 ns] Sub-nanosecond phase uncertainty
-		PhaseOffset     int32         // [ns] Phase offset, positive if the source lags accurate phase and negative if the source is early
-		PhaseUnc        uint32        // [ns] Phase uncertainty (one standard deviation)
-		Reserved3       [4]byte       // Reserved
-		FreqOffset      int32         // [2^-8 ppb] Frequency offset, positive if the source frequency is too high, negative if the frequency is too low.
-		FreqUnc         uint32        // [2^-8 ppb] Frequency uncertainty (one standard deviation)
+		SourceId             byte          // Index of source. SMEAS can provide six measurement sources. The first four sourceId values represent measurements made by the receiver and sent to the host. The first of these with a sourceId value of 0 is a measurement of the internal oscillator against the current receiver time-and-frequency estimate. The internal oscillator is being disciplined against that estimate and this result represents the current offset between the actual and desired internal oscillator states. The next three sourceId values represent frequency and time measurements made by the receiver against the internal oscillator. sourceId 1 represents the GNSS-derived frequency and time compared with the internal oscillator frequency and time. sourceId2 give measurements of a signal coming in on EXTINT0. sourceId 3 corresponds to a similar measurement on EXTINT1. The remaining two of these measurements (sourceId 4 and 5) are made by the host and sent to the receiver. A measurement with sourceId 4 is a measurement by the host of the internal oscillator and sourceId 5 indicates a host measurement of the external oscillator.
+		Flags                TimSmeasFlags // Flags
+		PhaseOffsetFrac_nsl8 int8          // [2^-8 ns] Sub-nanosecond phase offset; the total offset is the sum of phaseOffset and phaseOffsetFrac
+		PhaseUncFrac_nsl8    byte          // [2^-8 ns] Sub-nanosecond phase uncertainty
+		PhaseOffset_ns       int32         // [ns] Phase offset, positive if the source lags accurate phase and negative if the source is early
+		PhaseUnc_ns          uint32        // [ns] Phase uncertainty (one standard deviation)
+		Reserved3            [4]byte       // Reserved
+		FreqOffset_ppbl8     int32         // [2^-8 ppb] Frequency offset, positive if the source frequency is too high, negative if the frequency is too low.
+		FreqUnc_ppbl8        uint32        // [2^-8 ppb] Frequency uncertainty (one standard deviation)
 	} // len: numMeas
 }
 
@@ -4790,14 +4759,14 @@ const (
 )
 
 // UBX-TIM-SVIN (Periodic/Polled) Survey-in data
-//
+// Class/Id 0x0d 0x04 28 bytes
 // This message contains information about survey-in parameters. For details about the Time mode see section Time mode configuration.
 type TimSvin struct {
-	Dur       uint32  // [s] Passed survey-in observation time
-	MeanX     int32   // [cm] Current survey-in mean position ECEF X coordinate
-	MeanY     int32   // [cm] Current survey-in mean position ECEF Y coordinate
-	MeanZ     int32   // [cm] Current survey-in mean position ECEF Z coordinate
-	MeanV     uint32  // [mm^2] Current survey-in mean position 3D variance
+	Dur_s     uint32  // [s] Passed survey-in observation time
+	MeanX_cm  int32   // [cm] Current survey-in mean position ECEF X coordinate
+	MeanY_cm  int32   // [cm] Current survey-in mean position ECEF Y coordinate
+	MeanZ_cm  int32   // [cm] Current survey-in mean position ECEF Z coordinate
+	MeanV_mm2 uint32  // [mm^2] Current survey-in mean position 3D variance
 	Obs       uint32  // Number of position observations used during survey-in
 	Valid     byte    // Survey-in position validity flag, 1 = valid, otherwise 0
 	Active    byte    // Survey-in in progress flag, 1 = in-progress, otherwise 0
@@ -4807,19 +4776,19 @@ type TimSvin struct {
 func (TimSvin) classID() uint16 { return 0x040d }
 
 // UBX-TIM-TM2 (Periodic/Polled) Time mark data
-//
+// Class/Id 0x0d 0x03 28 bytes
 // This message contains information for high precision time stamping / pulse counting. The delay figures and timebase given in UBX-CFG-TP5 are also applied to the time results output in this message.
 type TimTm2 struct {
-	Ch        byte        // Channel (i.e. EXTINT) upon which the pulse was measured
-	Flags     TimTm2Flags // Bitmask
-	Count     uint16      // Rising edge counter
-	WnR       uint16      // Week number of last rising edge
-	WnF       uint16      // Week number of last falling edge
-	TowMsR    uint32      // [ms] Tow of rising edge
-	TowSubMsR uint32      // [ns] Millisecond fraction of tow of rising edge in nanoseconds
-	TowMsF    uint32      // [ms] Tow of falling edge
-	TowSubMsF uint32      // [ns] Millisecond fraction of tow of falling edge in nanoseconds
-	AccEst    uint32      // [ns] Accuracy estimate
+	Ch           byte        // Channel (i.e. EXTINT) upon which the pulse was measured
+	Flags        TimTm2Flags // Bitmask
+	Count        uint16      // Rising edge counter
+	WnR          uint16      // Week number of last rising edge
+	WnF          uint16      // Week number of last falling edge
+	TowMsR_ms    uint32      // [ms] Tow of rising edge
+	TowSubMsR_ns uint32      // [ns] Millisecond fraction of tow of rising edge in nanoseconds
+	TowMsF_ms    uint32      // [ms] Tow of falling edge
+	TowSubMsF_ns uint32      // [ns] Millisecond fraction of tow of falling edge in nanoseconds
+	AccEst_ns    uint32      // [ns] Accuracy estimate
 }
 
 func (TimTm2) classID() uint16 { return 0x030d }
@@ -4837,30 +4806,30 @@ const (
 )
 
 // UBX-TIM-TOS (Periodic) Time pulse time and frequency data
-//
+// Class/Id 0x0d 0x12 56 bytes
 // This message contains information about the time pulse that has just happened and the state of the disciplined oscillators(s) at the time of the pulse. It gives the UTC and GNSS times and time uncertainty of the pulse together with frequency and frequency uncertainty of the disciplined oscillators. It also supplies leap second information.
 type TimTos struct {
-	Version           byte        // Message version (0x00 for this version)
-	GnssId            byte        // GNSS system used for reporting GNSS time (see Satellite Numbering)
-	Reserved1         [2]byte     // Reserved
-	Flags             TimTosFlags // Flags
-	Year              uint16      // [y] Year of UTC time
-	Month             byte        // [month] Month of UTC time
-	Day               byte        // [d] Day of UTC time
-	Hour              byte        // [h] Hour of UTC time
-	Minute            byte        // [min] Minute of UTC time
-	Second            byte        // [s] Second of UTC time
-	UtcStandard       byte        // UTC standard identifier: 0: unknown 3: UTC as operated by the U.S. Naval Observatory (USNO) 6: UTC as operated by the former Soviet Union 7: UTC as operated by the National Time Service Center (NTSC), China
-	UtcOffset         int32       // [ns] Time offset between the preceding pulse and UTC top of second
-	UtcUncertainty    uint32      // [ns] Uncertainty of utcOffset
-	Week              uint32      // GNSS week number
-	TOW               uint32      // [s] GNSS time of week
-	GnssOffset        int32       // [ns] Time offset between the preceding pulse and GNSS top of second
-	GnssUncertainty   uint32      // [ns] Uncertainty of gnssOffset
-	IntOscOffset      int32       // [2^-8 ppb] Internal oscillator frequency offset
-	IntOscUncertainty uint32      // [2^-8 ppb] Internal oscillator frequency uncertainty
-	ExtOscOffset      int32       // [2^-8 ppb] External oscillator frequency offset
-	ExtOscUncertainty uint32      // [2^-8 ppb] External oscillator frequency uncertainty
+	Version                 byte        // Message version (0x00 for this version)
+	GnssId                  byte        // GNSS system used for reporting GNSS time (see Satellite Numbering)
+	Reserved1               [2]byte     // Reserved
+	Flags                   TimTosFlags // Flags
+	Year_y                  uint16      // [y] Year of UTC time
+	Month_month             byte        // [month] Month of UTC time
+	Day_d                   byte        // [d] Day of UTC time
+	Hour_h                  byte        // [h] Hour of UTC time
+	Minute_min              byte        // [min] Minute of UTC time
+	Second_s                byte        // [s] Second of UTC time
+	UtcStandard             byte        // UTC standard identifier: 0: unknown 3: UTC as operated by the U.S. Naval Observatory (USNO) 6: UTC as operated by the former Soviet Union 7: UTC as operated by the National Time Service Center (NTSC), China
+	UtcOffset_ns            int32       // [ns] Time offset between the preceding pulse and UTC top of second
+	UtcUncertainty_ns       uint32      // [ns] Uncertainty of utcOffset
+	Week                    uint32      // GNSS week number
+	TOW_s                   uint32      // [s] GNSS time of week
+	GnssOffset_ns           int32       // [ns] Time offset between the preceding pulse and GNSS top of second
+	GnssUncertainty_ns      uint32      // [ns] Uncertainty of gnssOffset
+	IntOscOffset_ppbl8      int32       // [2^-8 ppb] Internal oscillator frequency offset
+	IntOscUncertainty_ppbl8 uint32      // [2^-8 ppb] Internal oscillator frequency uncertainty
+	ExtOscOffset_ppbl8      int32       // [2^-8 ppb] External oscillator frequency offset
+	ExtOscUncertainty_ppbl8 uint32      // [2^-8 ppb] External oscillator frequency uncertainty
 }
 
 func (TimTos) classID() uint16 { return 0x120d }
@@ -4883,15 +4852,15 @@ const (
 )
 
 // UBX-TIM-TP (Periodic/Polled) Time pulse time data
-//
+// Class/Id 0x0d 0x01 16 bytes
 // This message contains information on the timing of the next pulse at the TIMEPULSE0 output. The recommended configuration when using this message is to set both the measurement rate (UBX-CFG-RATE) and the timepulse frequency (UBX-CFG-TP5) to 1 Hz. For more information see section Time pulse. TIMEPULSE0 and this message are not available from DR products using the dedicated I2C sensor interface, including NEO-M8L and NEO-M8U modules
 type TimTp struct {
-	TowMS    uint32       // [ms] Time pulse time of week according to time base
-	TowSubMS uint32       // [2^-32 ms] Submillisecond part of towMS
-	QErr     int32        // [ps] Quantization error of time pulse
-	Week     uint16       // [weeks] Time pulse week number according to time base
-	Flags    TimTpFlags   // Flags
-	RefInfo  TimTpRefInfo // Time reference information
+	TowMS_ms       uint32       // [ms] Time pulse time of week according to time base
+	TowSubMS_msl32 uint32       // [2^-32 ms] Submillisecond part of towMS
+	QErr_ps        int32        // [ps] Quantization error of time pulse
+	Week_weeks     uint16       // [weeks] Time pulse week number according to time base
+	Flags          TimTpFlags   // Flags
+	RefInfo        TimTpRefInfo // Time reference information
 }
 
 func (TimTp) classID() uint16 { return 0x010d }
@@ -4913,7 +4882,7 @@ const (
 )
 
 // UBX-TIM-VCOCAL (Command) Stop calibration
-//
+// Class/Id 0x0d 0x15 1 bytes
 // Stop all ongoing calibration (both oscillators are affected)
 type TimVcocal struct {
 	Type byte // Message type (0 for this message)
@@ -4922,23 +4891,23 @@ type TimVcocal struct {
 func (TimVcocal) classID() uint16 { return 0x150d }
 
 // UBX-TIM-VCOCAL (Command) VCO calibration extended command
-//
+// Class/Id 0x0d 0x15 12 bytes
 // Calibrate (measure) gain of the voltage controlled oscillator. The calibration is performed by varying the raw oscillator control values between the limits specified in raw0 and raw1. maxStepSize is the largest step change that can be used during the calibration process. The "raw values" are either PWM duty cycle values or DAC values depending on how the VCTCXO is connected to the system. The measured gain is the transfer function dRelativeFrequencyChange/dRaw (not dFrequency/dVoltage). The calibration process works as follows: Starting from the current raw output the control value is changed in the direction of raw0 in steps of size at most maxStepSize. Then the frequency is measured and the control value is changed towards raw1, again in steps of maxStepSize. When raw1 is reached, the frequency is again measured and the message version DATA0 is output containing the measured result. Normal operation then resumes. If the control value movement is less than maxStepSize then the transition will happen in one step - this will give fast calibration. Care must be taken when calibrating the internal oscillator against the GNSS source. In that case the changes applied to the oscillator frequency could be severe enough to lose satellite signal tracking, especially when signals are weak. If too many signals are lost, the GNSS system will lose its fix and be unable to measure the oscillator frequency - the calibration will then fail. In this case maxStepSize must be reasonably small. It is also important that only the chosen frequency source is enabled during the calibration process and that it remains stable throughout the calibration period; otherwise incorrect oscillator measurements will be made and this will lead to miscalibration and poor subsequent operation of the receiver.
 type TimVcocal1 struct {
-	Type        byte    // Message type (2 for this message)
-	Version     byte    // Message version (0x00 for this version)
-	OscId       byte    // Oscillator to be calibrated: 0: internal oscillator 1: external oscillator
-	SrcId       byte    // Reference source: 0: internal oscillator 1: GNSS 2: EXTINT0 3: EXTINT1 Option 0 should be used when calibrating the external oscillator. Options 1-3 should be used when calibrating the internal oscillator.
-	Reserved1   [2]byte // Reserved
-	Raw0        uint16  // First value used for calibration
-	Raw1        uint16  // Second value used for calibration
-	MaxStepSize uint16  // [rawvalue/s] Maximum step size to be used
+	Type                   byte    // Message type (2 for this message)
+	Version                byte    // Message version (0x00 for this version)
+	OscId                  byte    // Oscillator to be calibrated: 0: internal oscillator 1: external oscillator
+	SrcId                  byte    // Reference source: 0: internal oscillator 1: GNSS 2: EXTINT0 3: EXTINT1 Option 0 should be used when calibrating the external oscillator. Options 1-3 should be used when calibrating the internal oscillator.
+	Reserved1              [2]byte // Reserved
+	Raw0                   uint16  // First value used for calibration
+	Raw1                   uint16  // Second value used for calibration
+	MaxStepSize_rawvalue_s uint16  // [rawvalue/s] Maximum step size to be used
 }
 
 func (TimVcocal1) classID() uint16 { return 0x150d }
 
 // UBX-TIM-VCOCAL (Periodic/Polled) Results of the calibration
-//
+// Class/Id 0x0d 0x15 12 bytes
 // This message is sent when the oscillator gain calibration process is finished (successful or unsuccessful). It notifies the user of the calibrated oscillator gain. If the oscillator gain calibration process was successful, this message will contain the measured gain (field gainVco) and its uncertainty (field gainUncertainty). The calibration process can however fail. In that case the two fields gainVco and gainUncertainty are set to zero.
 type TimVcocal2 struct {
 	Type            byte    // Message type (3 for this message)
@@ -4952,16 +4921,16 @@ type TimVcocal2 struct {
 func (TimVcocal2) classID() uint16 { return 0x150d }
 
 // UBX-TIM-VRFY (Periodic/Polled) Sourced time verification
-//
+// Class/Id 0x0d 0x06 20 bytes
 // This message contains verification information about previous time received via assistance data or from RTC.
 type TimVrfy struct {
-	Itow      int32        // [ms] integer millisecond tow received by source
-	Frac      int32        // [ns] sub-millisecond part of tow
-	DeltaMs   int32        // [ms] integer milliseconds of delta time (current time minus sourced time)
-	DeltaNs   int32        // [ns] Sub-millisecond part of delta time
-	Wno       uint16       // [week] Week number
-	Flags     TimVrfyFlags // Flags
-	Reserved1 byte         // Reserved
+	Itow_ms    int32        // [ms] integer millisecond tow received by source
+	Frac_ns    int32        // [ns] sub-millisecond part of tow
+	DeltaMs_ms int32        // [ms] integer milliseconds of delta time (current time minus sourced time)
+	DeltaNs_ns int32        // [ns] Sub-millisecond part of delta time
+	Wno_week   uint16       // [week] Week number
+	Flags      TimVrfyFlags // Flags
+	Reserved1  byte         // Reserved
 }
 
 func (TimVrfy) classID() uint16 { return 0x060d }
@@ -4973,7 +4942,7 @@ const (
 )
 
 // UBX-UPD-SOS (Poll Request) Poll backup restore status
-//
+// Class/Id 0x09 0x14 0 bytes
 // Sending this (empty) message to the receiver results in the receiver returning a System restored from backup message as defined below.
 type UpdSos struct {
 }
@@ -4981,7 +4950,7 @@ type UpdSos struct {
 func (UpdSos) classID() uint16 { return 0x1409 }
 
 // UBX-UPD-SOS (Command) Create backup in flash
-//
+// Class/Id 0x09 0x14 4 bytes
 // The host can send this message in order to save part of the battery-backed memory (BBR) in a file in the flash file system. The feature is designed in order to emulate the presence of the backup battery even if it is not present; the host can issue the save on shutdown command before switching off the device supply. It is recommended to issue a GNSS stop command using UBX-CFG-RST before in order to keep the BBR memory content consistent.
 type UpdSos1 struct {
 	Cmd       byte    // Command (must be 0)
@@ -4991,7 +4960,7 @@ type UpdSos1 struct {
 func (UpdSos1) classID() uint16 { return 0x1409 }
 
 // UBX-UPD-SOS (Command) Clear backup in flash
-//
+// Class/Id 0x09 0x14 4 bytes
 // The host can send this message in order to erase the backup file present in flash. It is recommended that the clear operation is issued after the host has received the notification that the memory has been restored after a reset. Alternatively the host can parse the startup string Restored data saved on shutdown or poll the UBX-UPD-SOS message for obtaining the status.
 type UpdSos2 struct {
 	Cmd       byte    // Command (must be 1)
@@ -5001,7 +4970,7 @@ type UpdSos2 struct {
 func (UpdSos2) classID() uint16 { return 0x1409 }
 
 // UBX-UPD-SOS (Output) Backup creation acknowledge
-//
+// Class/Id 0x09 0x14 8 bytes
 // The message is sent from the device as confirmation of creation of a backup file in flash. The host can safely shut down the device after having received this message.
 type UpdSos3 struct {
 	Cmd       byte    // Command (must be 2)
@@ -5013,7 +4982,7 @@ type UpdSos3 struct {
 func (UpdSos3) classID() uint16 { return 0x1409 }
 
 // UBX-UPD-SOS (Output) System restored from backup
-//
+// Class/Id 0x09 0x14 8 bytes
 // The message is sent from the device to notify the host the BBR has been restored from a backup file in the flash file sysetem. The host should clear the backup file after receiving this message. If the UBX-UPD-SOS message is polled, this message will be resent.
 type UpdSos4 struct {
 	Cmd       byte    // Command (must be 3)
@@ -5023,3 +4992,426 @@ type UpdSos4 struct {
 }
 
 func (UpdSos4) classID() uint16 { return 0x1409 }
+
+/*
+TODO: edit the xml so that id, class and lenght are unique
+AckAck 0x0105  2
+TODO: edit the xml so that id, class and lenght are unique
+AckNak 0x0005  2
+TODO: edit the xml so that id, class and lenght are unique
+AidAlm 0x300b  0
+TODO: edit the xml so that id, class and lenght are unique
+AidAlm1 0x300b  1
+TODO: edit the xml so that id, class and lenght are unique
+AidAlm2 0x300b  (8) or (40)
+TODO: edit the xml so that id, class and lenght are unique
+AidAop 0x330b  0
+TODO: edit the xml so that id, class and lenght are unique
+AidAop1 0x330b  1
+TODO: edit the xml so that id, class and lenght are unique
+AidAop2 0x330b  68
+TODO: edit the xml so that id, class and lenght are unique
+AidEph 0x310b  0
+TODO: edit the xml so that id, class and lenght are unique
+AidEph1 0x310b  1
+TODO: edit the xml so that id, class and lenght are unique
+AidEph2 0x310b  (8) or (104)
+TODO: edit the xml so that id, class and lenght are unique
+AidHui 0x020b  0
+TODO: edit the xml so that id, class and lenght are unique
+AidHui1 0x020b  72
+TODO: edit the xml so that id, class and lenght are unique
+AidIni 0x010b  0
+TODO: edit the xml so that id, class and lenght are unique
+AidIni1 0x010b  48
+TODO: edit the xml so that id, class and lenght are unique
+CfgAnt 0x1306  4
+TODO: edit the xml so that id, class and lenght are unique
+CfgBatch 0x9306  8
+TODO: edit the xml so that id, class and lenght are unique
+CfgCfg 0x0906  (12) or (13)
+TODO: edit the xml so that id, class and lenght are unique
+CfgDat 0x0606  44
+TODO: edit the xml so that id, class and lenght are unique
+CfgDat1 0x0606  52
+TODO: edit the xml so that id, class and lenght are unique
+CfgDgnss 0x7006  4
+TODO: edit the xml so that id, class and lenght are unique
+CfgDosc 0x6106  4 + 32*numOsc
+TODO: edit the xml so that id, class and lenght are unique
+CfgEsfalg 0x5606  12
+TODO: edit the xml so that id, class and lenght are unique
+CfgEsfa 0x4c06  20
+TODO: edit the xml so that id, class and lenght are unique
+CfgEsfg 0x4d06  20
+TODO: edit the xml so that id, class and lenght are unique
+CfgEsfwt 0x8206  32
+TODO: edit the xml so that id, class and lenght are unique
+CfgEsrc 0x6006  4 + 36*numSources
+TODO: edit the xml so that id, class and lenght are unique
+CfgGeofence 0x6906  8 + 12*numFences
+TODO: edit the xml so that id, class and lenght are unique
+CfgGnss 0x3e06  4 + 8*numConfigBlocks
+TODO: edit the xml so that id, class and lenght are unique
+CfgHnr 0x5c06  4
+TODO: edit the xml so that id, class and lenght are unique
+CfgInf 0x0206  1
+TODO: edit the xml so that id, class and lenght are unique
+CfgInf1 0x0206  0 + 10*N
+TODO: edit the xml so that id, class and lenght are unique
+CfgItfm 0x3906  8
+TODO: edit the xml so that id, class and lenght are unique
+CfgLogfilter 0x4706  12
+TODO: edit the xml so that id, class and lenght are unique
+CfgMsg 0x0106  2
+TODO: edit the xml so that id, class and lenght are unique
+CfgMsg1 0x0106  8
+TODO: edit the xml so that id, class and lenght are unique
+CfgMsg2 0x0106  3
+TODO: edit the xml so that id, class and lenght are unique
+CfgNav5 0x2406  36
+TODO: edit the xml so that id, class and lenght are unique
+CfgNavx5 0x2306  40
+TODO: edit the xml so that id, class and lenght are unique
+CfgNavx51 0x2306  40
+TODO: edit the xml so that id, class and lenght are unique
+CfgNavx52 0x2306  44
+TODO: edit the xml so that id, class and lenght are unique
+CfgNmea 0x1706  4
+TODO: edit the xml so that id, class and lenght are unique
+CfgNmea1 0x1706  12
+TODO: edit the xml so that id, class and lenght are unique
+CfgNmea2 0x1706  20
+TODO: edit the xml so that id, class and lenght are unique
+CfgOdo 0x1e06  20
+TODO: edit the xml so that id, class and lenght are unique
+CfgPm2 0x3b06  44
+TODO: edit the xml so that id, class and lenght are unique
+CfgPm21 0x3b06  48
+TODO: edit the xml so that id, class and lenght are unique
+CfgPm22 0x3b06  48
+TODO: edit the xml so that id, class and lenght are unique
+CfgPms 0x8606  8
+TODO: edit the xml so that id, class and lenght are unique
+CfgPrt 0x0006  1
+TODO: edit the xml so that id, class and lenght are unique
+CfgPrt1 0x0006  20
+TODO: edit the xml so that id, class and lenght are unique
+CfgPrt2 0x0006  20
+TODO: edit the xml so that id, class and lenght are unique
+CfgPrt3 0x0006  20
+TODO: edit the xml so that id, class and lenght are unique
+CfgPrt4 0x0006  20
+TODO: edit the xml so that id, class and lenght are unique
+CfgPwr 0x5706  8
+TODO: edit the xml so that id, class and lenght are unique
+CfgRate 0x0806  6
+TODO: edit the xml so that id, class and lenght are unique
+CfgRinv 0x3406  1 + 1*N
+TODO: edit the xml so that id, class and lenght are unique
+CfgRst 0x0406  4
+TODO: edit the xml so that id, class and lenght are unique
+CfgRxm 0x1106  2
+TODO: edit the xml so that id, class and lenght are unique
+CfgRxm1 0x1106  2
+TODO: edit the xml so that id, class and lenght are unique
+CfgSbas 0x1606  8
+TODO: edit the xml so that id, class and lenght are unique
+CfgSenif 0x8806  6
+TODO: edit the xml so that id, class and lenght are unique
+CfgSlas 0x8d06  4
+TODO: edit the xml so that id, class and lenght are unique
+CfgSmgr 0x6206  20
+TODO: edit the xml so that id, class and lenght are unique
+CfgSpt 0x6406  12
+TODO: edit the xml so that id, class and lenght are unique
+CfgTmode2 0x3d06  28
+TODO: edit the xml so that id, class and lenght are unique
+CfgTmode3 0x7106  40
+TODO: edit the xml so that id, class and lenght are unique
+CfgTp5 0x3106  0
+TODO: edit the xml so that id, class and lenght are unique
+CfgTp51 0x3106  1
+TODO: edit the xml so that id, class and lenght are unique
+CfgTp52 0x3106  32
+TODO: edit the xml so that id, class and lenght are unique
+CfgTxslot 0x5306  16
+TODO: edit the xml so that id, class and lenght are unique
+CfgUsb 0x1b06  108
+TODO: edit the xml so that id, class and lenght are unique
+EsfAlg 0x1410  16
+TODO: edit the xml so that id, class and lenght are unique
+EsfIns 0x1510  36
+TODO: edit the xml so that id, class and lenght are unique
+EsfMeas 0x0210  (8 + 4*numMeas) or (12 + 4*numMeas)
+TODO: edit the xml so that id, class and lenght are unique
+EsfRaw 0x0310  4 + 8*N
+TODO: edit the xml so that id, class and lenght are unique
+EsfStatus 0x1010  16 + 4*numSens
+TODO: edit the xml so that id, class and lenght are unique
+HnrAtt 0x0128  32
+TODO: edit the xml so that id, class and lenght are unique
+HnrIns 0x0228  36
+TODO: edit the xml so that id, class and lenght are unique
+HnrPvt 0x0028  72
+TODO: edit the xml so that id, class and lenght are unique
+InfDebug 0x0404  0 + 1*N
+TODO: edit the xml so that id, class and lenght are unique
+InfError 0x0004  0 + 1*N
+TODO: edit the xml so that id, class and lenght are unique
+InfNotice 0x0204  0 + 1*N
+TODO: edit the xml so that id, class and lenght are unique
+InfTest 0x0304  0 + 1*N
+TODO: edit the xml so that id, class and lenght are unique
+InfWarning 0x0104  0 + 1*N
+TODO: edit the xml so that id, class and lenght are unique
+LogBatch 0x1121  100
+TODO: edit the xml so that id, class and lenght are unique
+LogCreate 0x0721  8
+TODO: edit the xml so that id, class and lenght are unique
+LogErase 0x0321  0
+TODO: edit the xml so that id, class and lenght are unique
+LogFindtime 0x0e21  12
+TODO: edit the xml so that id, class and lenght are unique
+LogFindtime1 0x0e21  8
+TODO: edit the xml so that id, class and lenght are unique
+LogInfo 0x0821  0
+TODO: edit the xml so that id, class and lenght are unique
+LogInfo1 0x0821  48
+TODO: edit the xml so that id, class and lenght are unique
+LogRetrievebatch 0x1021  4
+TODO: edit the xml so that id, class and lenght are unique
+LogRetrieveposextra 0x0f21  32
+TODO: edit the xml so that id, class and lenght are unique
+LogRetrievepos 0x0b21  40
+TODO: edit the xml so that id, class and lenght are unique
+LogRetrievestring 0x0d21  16 + 1*byteCount
+TODO: edit the xml so that id, class and lenght are unique
+LogRetrieve 0x0921  12
+TODO: edit the xml so that id, class and lenght are unique
+LogString 0x0421  0 + 1*N
+TODO: edit the xml so that id, class and lenght are unique
+MgaAckData0 0x6013  8
+TODO: edit the xml so that id, class and lenght are unique
+MgaAno 0x2013  76
+TODO: edit the xml so that id, class and lenght are unique
+MgaBdsEph 0x0313  88
+TODO: edit the xml so that id, class and lenght are unique
+MgaBdsAlm 0x0313  40
+TODO: edit the xml so that id, class and lenght are unique
+MgaBdsHealth 0x0313  68
+TODO: edit the xml so that id, class and lenght are unique
+MgaBdsUtc 0x0313  20
+TODO: edit the xml so that id, class and lenght are unique
+MgaBdsIono 0x0313  16
+TODO: edit the xml so that id, class and lenght are unique
+MgaDbd 0x8013  0
+TODO: edit the xml so that id, class and lenght are unique
+MgaDbd1 0x8013  12 + 1*N
+TODO: edit the xml so that id, class and lenght are unique
+MgaFlashData 0x2113  6 + 1*size
+TODO: edit the xml so that id, class and lenght are unique
+MgaFlashStop 0x2113  2
+TODO: edit the xml so that id, class and lenght are unique
+MgaFlashAck 0x2113  6
+TODO: edit the xml so that id, class and lenght are unique
+MgaGalEph 0x0213  76
+TODO: edit the xml so that id, class and lenght are unique
+MgaGalAlm 0x0213  32
+TODO: edit the xml so that id, class and lenght are unique
+MgaGalTimeoffset 0x0213  12
+TODO: edit the xml so that id, class and lenght are unique
+MgaGalUtc 0x0213  20
+TODO: edit the xml so that id, class and lenght are unique
+MgaGloEph 0x0613  48
+TODO: edit the xml so that id, class and lenght are unique
+MgaGloAlm 0x0613  36
+TODO: edit the xml so that id, class and lenght are unique
+MgaGloTimeoffset 0x0613  20
+TODO: edit the xml so that id, class and lenght are unique
+MgaGpsEph 0x0013  68
+TODO: edit the xml so that id, class and lenght are unique
+MgaGpsAlm 0x0013  36
+TODO: edit the xml so that id, class and lenght are unique
+MgaGpsHealth 0x0013  40
+TODO: edit the xml so that id, class and lenght are unique
+MgaGpsUtc 0x0013  20
+TODO: edit the xml so that id, class and lenght are unique
+MgaGpsIono 0x0013  16
+TODO: edit the xml so that id, class and lenght are unique
+MgaIniPos_xyz 0x4013  20
+TODO: edit the xml so that id, class and lenght are unique
+MgaIniPos_llh 0x4013  20
+TODO: edit the xml so that id, class and lenght are unique
+MgaIniTime_utc 0x4013  24
+TODO: edit the xml so that id, class and lenght are unique
+MgaIniTime_gnss 0x4013  24
+TODO: edit the xml so that id, class and lenght are unique
+MgaIniClkd 0x4013  12
+TODO: edit the xml so that id, class and lenght are unique
+MgaIniFreq 0x4013  12
+TODO: edit the xml so that id, class and lenght are unique
+MgaIniEop 0x4013  72
+TODO: edit the xml so that id, class and lenght are unique
+MgaQzssEph 0x0513  68
+TODO: edit the xml so that id, class and lenght are unique
+MgaQzssAlm 0x0513  36
+TODO: edit the xml so that id, class and lenght are unique
+MgaQzssHealth 0x0513  12
+TODO: edit the xml so that id, class and lenght are unique
+MonBatch 0x320a  12
+TODO: edit the xml so that id, class and lenght are unique
+MonGnss 0x280a  8
+TODO: edit the xml so that id, class and lenght are unique
+MonHw2 0x0b0a  28
+TODO: edit the xml so that id, class and lenght are unique
+MonHw 0x090a  60
+TODO: edit the xml so that id, class and lenght are unique
+MonIo 0x020a  0 + 20*N
+TODO: edit the xml so that id, class and lenght are unique
+MonMsgpp 0x060a  120
+TODO: edit the xml so that id, class and lenght are unique
+MonPatch 0x270a  0
+TODO: edit the xml so that id, class and lenght are unique
+MonPatch1 0x270a  4 + 16*nEntries
+TODO: edit the xml so that id, class and lenght are unique
+MonRxbuf 0x070a  24
+TODO: edit the xml so that id, class and lenght are unique
+MonRxr 0x210a  1
+TODO: edit the xml so that id, class and lenght are unique
+MonSmgr 0x2e0a  16
+TODO: edit the xml so that id, class and lenght are unique
+MonTxbuf 0x080a  28
+TODO: edit the xml so that id, class and lenght are unique
+MonVer 0x040a  0
+TODO: edit the xml so that id, class and lenght are unique
+MonVer1 0x040a  40 + 30*N
+TODO: edit the xml so that id, class and lenght are unique
+NavAopstatus 0x6001  16
+TODO: edit the xml so that id, class and lenght are unique
+NavAtt 0x0501  32
+TODO: edit the xml so that id, class and lenght are unique
+NavClock 0x2201  20
+TODO: edit the xml so that id, class and lenght are unique
+NavCov 0x3601  64
+TODO: edit the xml so that id, class and lenght are unique
+NavDgps 0x3101  16 + 12*numCh
+TODO: edit the xml so that id, class and lenght are unique
+NavDop 0x0401  18
+TODO: edit the xml so that id, class and lenght are unique
+NavEell 0x3d01  16
+TODO: edit the xml so that id, class and lenght are unique
+NavEoe 0x6101  4
+TODO: edit the xml so that id, class and lenght are unique
+NavGeofence 0x3901  8 + 2*numFences
+TODO: edit the xml so that id, class and lenght are unique
+NavHpposecef 0x1301  28
+TODO: edit the xml so that id, class and lenght are unique
+NavHpposllh 0x1401  36
+TODO: edit the xml so that id, class and lenght are unique
+NavNmi 0x2801  16
+TODO: edit the xml so that id, class and lenght are unique
+NavOdo 0x0901  20
+TODO: edit the xml so that id, class and lenght are unique
+NavOrb 0x3401  8 + 6*numSv
+TODO: edit the xml so that id, class and lenght are unique
+NavPosecef 0x0101  20
+TODO: edit the xml so that id, class and lenght are unique
+NavPosllh 0x0201  28
+TODO: edit the xml so that id, class and lenght are unique
+NavPvt 0x0701  92
+TODO: edit the xml so that id, class and lenght are unique
+NavRelposned 0x3c01  40
+TODO: edit the xml so that id, class and lenght are unique
+NavResetodo 0x1001  0
+TODO: edit the xml so that id, class and lenght are unique
+NavSat 0x3501  8 + 12*numSvs
+TODO: edit the xml so that id, class and lenght are unique
+NavSbas 0x3201  12 + 12*cnt
+TODO: edit the xml so that id, class and lenght are unique
+NavSlas 0x4201  20 + 8*cnt
+TODO: edit the xml so that id, class and lenght are unique
+NavSol 0x0601  52
+TODO: edit the xml so that id, class and lenght are unique
+NavStatus 0x0301  16
+TODO: edit the xml so that id, class and lenght are unique
+NavSvinfo 0x3001  8 + 12*numCh
+TODO: edit the xml so that id, class and lenght are unique
+NavSvin 0x3b01  40
+TODO: edit the xml so that id, class and lenght are unique
+NavTimebds 0x2401  20
+TODO: edit the xml so that id, class and lenght are unique
+NavTimegal 0x2501  20
+TODO: edit the xml so that id, class and lenght are unique
+NavTimeglo 0x2301  20
+TODO: edit the xml so that id, class and lenght are unique
+NavTimegps 0x2001  16
+TODO: edit the xml so that id, class and lenght are unique
+NavTimels 0x2601  24
+TODO: edit the xml so that id, class and lenght are unique
+NavTimeutc 0x2101  20
+TODO: edit the xml so that id, class and lenght are unique
+NavVelecef 0x1101  20
+TODO: edit the xml so that id, class and lenght are unique
+NavVelned 0x1201  36
+TODO: edit the xml so that id, class and lenght are unique
+RxmImes 0x6102  4 + 44*numTx
+TODO: edit the xml so that id, class and lenght are unique
+RxmMeasx 0x1402  44 + 24*numSV
+TODO: edit the xml so that id, class and lenght are unique
+RxmPmreq 0x4102  8
+TODO: edit the xml so that id, class and lenght are unique
+RxmPmreq1 0x4102  16
+TODO: edit the xml so that id, class and lenght are unique
+RxmRawx 0x1502  16 + 32*numMeas
+TODO: edit the xml so that id, class and lenght are unique
+RxmRawx1 0x1502  16 + 32*numMeas
+TODO: edit the xml so that id, class and lenght are unique
+RxmRlm 0x5902  16
+TODO: edit the xml so that id, class and lenght are unique
+RxmRlm1 0x5902  28
+TODO: edit the xml so that id, class and lenght are unique
+RxmRtcm 0x3202  8
+TODO: edit the xml so that id, class and lenght are unique
+RxmSfrbx 0x1302  8 + 4*numWords
+TODO: edit the xml so that id, class and lenght are unique
+RxmSfrbx1 0x1302  8 + 4*numWords
+TODO: edit the xml so that id, class and lenght are unique
+RxmSvsi 0x2002  8 + 6*numSV
+TODO: edit the xml so that id, class and lenght are unique
+SecUniqid 0x0327  9
+TODO: edit the xml so that id, class and lenght are unique
+TimDosc 0x110d  8
+TODO: edit the xml so that id, class and lenght are unique
+TimFchg 0x160d  32
+TODO: edit the xml so that id, class and lenght are unique
+TimHoc 0x170d  8
+TODO: edit the xml so that id, class and lenght are unique
+TimSmeas 0x130d  12 + 24*numMeas
+TODO: edit the xml so that id, class and lenght are unique
+TimSvin 0x040d  28
+TODO: edit the xml so that id, class and lenght are unique
+TimTm2 0x030d  28
+TODO: edit the xml so that id, class and lenght are unique
+TimTos 0x120d  56
+TODO: edit the xml so that id, class and lenght are unique
+TimTp 0x010d  16
+TODO: edit the xml so that id, class and lenght are unique
+TimVcocal 0x150d  1
+TODO: edit the xml so that id, class and lenght are unique
+TimVcocal1 0x150d  12
+TODO: edit the xml so that id, class and lenght are unique
+TimVcocal2 0x150d  12
+TODO: edit the xml so that id, class and lenght are unique
+TimVrfy 0x060d  20
+TODO: edit the xml so that id, class and lenght are unique
+UpdSos 0x1409  0
+TODO: edit the xml so that id, class and lenght are unique
+UpdSos1 0x1409  4
+TODO: edit the xml so that id, class and lenght are unique
+UpdSos2 0x1409  4
+TODO: edit the xml so that id, class and lenght are unique
+UpdSos3 0x1409  8
+TODO: edit the xml so that id, class and lenght are unique
+UpdSos4 0x1409  8
+*/

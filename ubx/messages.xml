@@ -3154,7 +3154,7 @@ protocol versions less than 18)
           <Type>I4</Type>
           <Comment>Fixed altitude (mean sea level) for 2D fix
 mode</Comment>
-          <Scale>0.01</Scale>
+          <Scale>1e-2</Scale>
           <Unit>m</Unit>
         </Block>
         <Block>
@@ -3162,7 +3162,7 @@ mode</Comment>
           <Name>fixedAltVar</Name>
           <Type>U4</Type>
           <Comment>Fixed altitude variance for 2D mode</Comment>
-          <Scale>0.0001</Scale>
+          <Scale>1e-4</Scale>
           <Unit>m^2</Unit>
         </Block>
         <Block>
@@ -3187,7 +3187,7 @@ be used in NAV</Comment>
           <Name>pDop</Name>
           <Type>U2</Type>
           <Comment>Position DOP mask to use</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>-</Unit>
         </Block>
         <Block>
@@ -3195,7 +3195,7 @@ be used in NAV</Comment>
           <Name>tDop</Name>
           <Type>U2</Type>
           <Comment>Time DOP mask to use</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>-</Unit>
         </Block>
         <Block>
@@ -8125,7 +8125,9 @@ TIMEPULSE2)</Comment>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
   </Message>
-  <Message>
+  <!-- 
+TODO(lvd) seems same fields with flags subset of the next one
+  Message>
     <Name>UBX-CFG-TP5</Name>
     <Type>Get/set</Type>
     <Description>Time pulse parameters</Description>
@@ -8297,7 +8299,7 @@ duty cycle</Description>
       </Payload>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
-  </Message>
+  </Message   -->
   <Message>
     <Name>UBX-CFG-TP5</Name>
     <Type>Get/set</Type>
@@ -10359,7 +10361,7 @@ Only valid if extraPvt is set.</Comment>
           <Type>U2</Type>
           <Comment>Position DOP
 Only valid if extraPvt is set.</Comment>
-          <Scale>0.01</Scale>
+          <Scale>1e-2</Scale>
           <Unit>-</Unit>
         </Block>
         <Block>
@@ -11717,7 +11719,7 @@ Numbering)</Comment>
           <Name>TGD1</Name>
           <Type>I2</Type>
           <Comment>Equipment Group Delay Differential</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>ns</Unit>
         </Block>
         <Block>
@@ -17577,7 +17579,7 @@ See the description of iTOW for details.</Comment>
           <Name>gDOP</Name>
           <Type>U2</Type>
           <Comment>Geometric DOP</Comment>
-          <Scale>0.01</Scale>
+          <Scale>1e-2</Scale>
           <Unit>-</Unit>
         </Block>
         <Block>
@@ -17585,7 +17587,7 @@ See the description of iTOW for details.</Comment>
           <Name>pDOP</Name>
           <Type>U2</Type>
           <Comment>Position DOP</Comment>
-          <Scale>0.01</Scale>
+          <Scale>1e-2</Scale>
           <Unit>-</Unit>
         </Block>
         <Block>
@@ -17593,7 +17595,7 @@ See the description of iTOW for details.</Comment>
           <Name>tDOP</Name>
           <Type>U2</Type>
           <Comment>Time DOP</Comment>
-          <Scale>0.01</Scale>
+          <Scale>1e-2</Scale>
           <Unit>-</Unit>
         </Block>
         <Block>
@@ -17601,7 +17603,7 @@ See the description of iTOW for details.</Comment>
           <Name>vDOP</Name>
           <Type>U2</Type>
           <Comment>Vertical DOP</Comment>
-          <Scale>0.01</Scale>
+          <Scale>1e-2</Scale>
           <Unit>-</Unit>
         </Block>
         <Block>
@@ -17609,7 +17611,7 @@ See the description of iTOW for details.</Comment>
           <Name>hDOP</Name>
           <Type>U2</Type>
           <Comment>Horizontal DOP</Comment>
-          <Scale>0.01</Scale>
+          <Scale>1e-2</Scale>
           <Unit>-</Unit>
         </Block>
         <Block>
@@ -17617,7 +17619,7 @@ See the description of iTOW for details.</Comment>
           <Name>nDOP</Name>
           <Type>U2</Type>
           <Comment>Northing DOP</Comment>
-          <Scale>0.01</Scale>
+          <Scale>1e-2</Scale>
           <Unit>-</Unit>
         </Block>
         <Block>
@@ -17625,7 +17627,7 @@ See the description of iTOW for details.</Comment>
           <Name>eDOP</Name>
           <Type>U2</Type>
           <Comment>Easting DOP</Comment>
-          <Scale>0.01</Scale>
+          <Scale>1e-2</Scale>
           <Unit>-</Unit>
         </Block>
       </Payload>
@@ -17876,7 +17878,7 @@ See the description of iTOW for details.</Comment>
 coordinate. Must be in the range of -99..
 +99. Precise coordinate in cm = ecefX +
 (ecefXHp * 1e-2).</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -17887,7 +17889,7 @@ coordinate. Must be in the range of -99..
 coordinate. Must be in the range of -99..
 +99. Precise coordinate in cm = ecefY +
 (ecefYHp * 1e-2).</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -17898,7 +17900,7 @@ coordinate. Must be in the range of -99..
 coordinate. Must be in the range of -99..
 +99. Precise coordinate in cm = ecefZ +
 (ecefZHp * 1e-2).</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -17928,7 +17930,7 @@ coordinate. Must be in the range of -99..
           <Name>pAcc</Name>
           <Type>U4</Type>
           <Comment>Position Accuracy Estimate</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
       </Payload>
@@ -18055,7 +18057,7 @@ latitude in deg * 1e-7 = lat + (latHp * 1e-2).</Comment>
 ellipsoid. Must be in the range -9..+9.
 Precise height in mm = height + (heightHp
 * 0.1).</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -18066,7 +18068,7 @@ Precise height in mm = height + (heightHp
 mean sea level. Must be in range -9..+9.
 Precise height in mm = hMSL + (hMSLHp *
 0.1)</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -18074,7 +18076,7 @@ Precise height in mm = hMSL + (hMSLHp *
           <Name>hAcc</Name>
           <Type>U4</Type>
           <Comment>Horizontal accuracy estimate</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -18082,7 +18084,7 @@ Precise height in mm = hMSL + (hMSLHp *
           <Name>vAcc</Name>
           <Type>U4</Type>
           <Comment>Vertical accuracy estimate</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
       </Payload>
@@ -19104,7 +19106,7 @@ and vehicle)</Comment>
           <Name>pDOP</Name>
           <Type>U2</Type>
           <Comment>Position DOP</Comment>
-          <Scale>0.01</Scale>
+          <Scale>1e-2</Scale>
           <Unit>-</Unit>
         </Block>
         <Block>
@@ -19251,7 +19253,7 @@ Must be in the range -99 to +99.
 The full North component of the relative
 position vector, in units of cm, is given by
 relPosN + (relPosHPN * 1e-2)</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -19264,7 +19266,7 @@ Must be in the range -99 to +99.
 The full East component of the relative
 position vector, in units of cm, is given by
 relPosE + (relPosHPE * 1e-2)</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -19277,7 +19279,7 @@ Must be in the range -99 to +99.
 The full Down component of the relative
 position vector, in units of cm, is given by
 relPosD + (relPosHPD * 1e-2)</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -19294,7 +19296,7 @@ relPosD + (relPosHPD * 1e-2)</Comment>
           <Type>U4</Type>
           <Comment>Accuracy of relative position North
 component</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -19303,7 +19305,7 @@ component</Comment>
           <Type>U4</Type>
           <Comment>Accuracy of relative position East
 component</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -19312,7 +19314,7 @@ component</Comment>
           <Type>U4</Type>
           <Comment>Accuracy of relative position Down
 component</Comment>
-          <Scale>0.1</Scale>
+          <Scale>1e-1</Scale>
           <Unit>mm</Unit>
         </Block>
         <Block>
@@ -19493,7 +19495,7 @@ elevation is out of range</Comment>
             <Name>prRes</Name>
             <Type>I2</Type>
             <Comment>Pseudorange residual</Comment>
-            <Scale>0.1</Scale>
+            <Scale>1e-1</Scale>
             <Unit>m</Unit>
           </Block>
           <Block>
@@ -20171,7 +20173,7 @@ is:
           <Name>pDOP</Name>
           <Type>U2</Type>
           <Comment>Position DOP</Comment>
-          <Scale>0.01</Scale>
+          <Scale>1e-2</Scale>
           <Unit>-</Unit>
         </Block>
         <Block>
