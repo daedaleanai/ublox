@@ -1,8 +1,11 @@
 package ubx
 
-{{range .Message}}
-// {{.Name}} ({{.Type}}) {{.Description | notabs}}
-// Class/Id {{printf "0x%02x 0x%02x" .Class .Id}} {{.Length}} bytes
+{{range $k, $v :=  .}}
+// Message {{$k}} {{if gt (len $v) 1 }}({{len $v}} versions){{end}}
+
+{{range $v}}
+// {{.TypeName}} ({{.Type}}) {{.Description | notabs}}
+// Class/Id {{printf "0x%02x 0x%02x" .Class .Id}} {{.Length}}({{.MinSize}}) bytes
 // {{.Comment | notabs}}
 type {{.TypeName}} struct {
 {{- range .Blocks}}
@@ -51,9 +54,4 @@ const (
 {{- end}}
 {{end}}
 
-/*
-{{- range .Message}}
-TODO: edit the xml so that id, class and lenght are unique 
-{{.TypeName}} {{printf "0x%02x%02x" .Id .Class }}  {{.Length}} 
-{{- end}}
-*/
+{{end}}

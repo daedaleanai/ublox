@@ -15,6 +15,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -62,6 +63,17 @@ type BitDef struct {
 	Description string
 
 	Block *Block `xml:"-"` // link back up
+}
+
+type byNameAndLength []*Message
+
+func (v byNameAndLength) Len() int      { return len(v) }
+func (v byNameAndLength) Swap(i, j int) { v[i], v[j] = v[j], v[i] }
+func (v byNameAndLength) Less(i, j int) bool {
+	if v[i].Name != v[j].Name {
+		return v[i].Name < v[j].Name
+	}
+	return v[i].MinSize() < v[j].MinSize()
 }
 
 // set Block.Message and BitDef.Block pointers
@@ -119,7 +131,7 @@ func (b *Block) FieldType() string {
 	}
 	switch tp {
 	case "RU1_3":
-		return "Float8"
+		return "Float8" // defined in spec but not found in any message
 	case "R4":
 		return "float32"
 	case "R8":
@@ -149,6 +161,40 @@ func (b *Block) ArraySpec() string {
 		return b.Type[i:]
 	}
 	return ""
+}
+
+func (b *Block) FieldSize() int {
+	parts := strings.Split(b.Type, "[")
+	sz := 1
+	if len(parts) == 2 {
+		v, err := strconv.ParseUint(parts[1][:len(parts[1])-1], 10, 8)
+		if err != nil {
+			log.Fatalf("invalid array size %#v", b.Type)
+		}
+		sz = int(v)
+	}
+	switch parts[0] {
+	case "RU1_3", "I1", "U1", "CH", "X1":
+		return sz
+	case "I2", "U2", "X2":
+		return sz * 2
+	case "R4", "I4", "U4", "X4":
+		return sz * 4
+	case "R8", "I8", "U8":
+		return sz * 8
+	}
+	return 0 // probably invalid
+}
+
+func (m *Message) MinSize() int {
+	sz := 0
+	for _, v := range m.Blocks {
+		if v.Cardinality != "" {
+			break
+		}
+		sz += v.FieldSize()
+	}
+	return sz
 }
 
 // numeric fields in any base, not just decimal
@@ -194,21 +240,30 @@ func main() {
 		log.Fatal(err)
 	}
 
+	sort.Stable(byNameAndLength(definitions.Message))
+
 	for _, v := range definitions.Message {
 		for _, b := range v.Blocks {
 			b.Link(v)
 		}
 	}
 
-	dups := map[string]int{}
+	msgs := map[string][]*Message{}
 	for _, v := range definitions.Message {
-		v.version = dups[v.Name]
-		dups[v.Name]++
+		n := len(msgs[v.Name])
+		if n > 0 && msgs[v.Name][n-1].MinSize() == v.MinSize() {
+			log.Printf("Replacing duplicate version of %q with length %q", v.Name, v.Length)
+			v.version = msgs[v.Name][n-1].version
+			msgs[v.Name][n-1] = v
+			continue
+		}
+		v.version = n
+		msgs[v.Name] = append(msgs[v.Name], v)
 	}
 
 	var buf bytes.Buffer
 	fmt.Fprintf(&buf, "// Generated Code -- DO NOT EDIT.\n//go:generate go run msggen.go %s %s %s\n\n", flag.Arg(0), flag.Arg(1), flag.Arg(2))
-	if err := tmpl.Execute(&buf, definitions); err != nil {
+	if err := tmpl.Execute(&buf, msgs); err != nil {
 		log.Fatal(err)
 	}
 	b := buf.Bytes()
@@ -269,6 +324,9 @@ func mask(s string) string {
 	if len(parts) == 2 {
 		hi, _ := strconv.ParseUint(parts[1], 0, 8)
 		lo, _ := strconv.ParseUint(parts[0], 0, 8)
+		if hi <= lo {
+			log.Fatalf("hi<=lo in bit mask %q", s)
+		}
 		return fmt.Sprintf("0x%x", ((1<<(hi+1))-1)^((1<<(lo))-1))
 	}
 	i, _ := strconv.ParseUint(s, 0, 8)
