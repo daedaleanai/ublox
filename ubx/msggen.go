@@ -1,4 +1,7 @@
 // This program generates messages.go from messages.xml
+// TODO generate encoder/decoder depending on fixed, optional and variable size
+// TODO CFGCFG should re-use ClearMask bitfiedl for SaveMask/LoadMask
+// TODO generate string methods for all fields
 
 // +build ignore
 
