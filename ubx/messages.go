@@ -1859,9 +1859,7 @@ const (
 // Class/Id 0x04 0x04 0 + 1*N(0) bytes
 // This message has a variable length payload, representing an ASCII string.
 type InfDebug struct {
-	Items []*struct {
-		Str byte // ASCII Character
-	} // len: N
+	Str string // ASCII Character
 }
 
 func (InfDebug) classID() uint16 { return 0x0404 }
@@ -1872,9 +1870,7 @@ func (InfDebug) classID() uint16 { return 0x0404 }
 // Class/Id 0x04 0x00 0 + 1*N(0) bytes
 // This message has a variable length payload, representing an ASCII string.
 type InfError struct {
-	Items []*struct {
-		Str byte // ASCII Character
-	} // len: N
+	Str string // ASCII Character
 }
 
 func (InfError) classID() uint16 { return 0x0004 }
@@ -1885,9 +1881,7 @@ func (InfError) classID() uint16 { return 0x0004 }
 // Class/Id 0x04 0x02 0 + 1*N(0) bytes
 // This message has a variable length payload, representing an ASCII string.
 type InfNotice struct {
-	Items []*struct {
-		Str byte // ASCII Character
-	} // len: N
+	Str string // ASCII Character
 }
 
 func (InfNotice) classID() uint16 { return 0x0204 }
@@ -1898,9 +1892,7 @@ func (InfNotice) classID() uint16 { return 0x0204 }
 // Class/Id 0x04 0x03 0 + 1*N(0) bytes
 // This message has a variable length payload, representing an ASCII string.
 type InfTest struct {
-	Items []*struct {
-		Str byte // ASCII Character
-	} // len: N
+	Str string // ASCII Character
 }
 
 func (InfTest) classID() uint16 { return 0x0304 }
@@ -1911,9 +1903,7 @@ func (InfTest) classID() uint16 { return 0x0304 }
 // Class/Id 0x04 0x01 0 + 1*N(0) bytes
 // This message has a variable length payload, representing an ASCII string.
 type InfWarning struct {
-	Items []*struct {
-		Str byte // ASCII Character
-	} // len: N
+	Str string // ASCII Character
 }
 
 func (InfWarning) classID() uint16 { return 0x0104 }
