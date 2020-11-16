@@ -1,6 +1,5 @@
 // This program generates messages.go from messages.xml
 // TODO generate encoder/decoder depending on fixed, optional and variable size
-// TODO CFGCFG should re-use ClearMask bitfiedl for SaveMask/LoadMask
 // TODO generate string methods for all fields
 
 // +build ignore
@@ -46,13 +45,14 @@ type Block struct {
 	CountField  string `xml:"name,attr"` // for repeated fields: name of the count field
 
 	// non-repeated, non-optional fields
-	Offset   string
-	Name     string
-	Type     string
-	Comment  string
-	Scale    string
-	Unit     string
-	Bitfield []*BitDef `xml:"Bitfield>Type"`
+	Offset      string
+	Name        string
+	Type        string
+	Comment     string
+	Scale       string
+	Unit        string
+	BitfieldRef string    `xml:"Bitfield>Reference"`
+	Bitfield    []*BitDef `xml:"Bitfield>Type"`
 
 	Nested []*Block `xml:"Block"` // for repeated or optional blocks, this contains the subfields
 

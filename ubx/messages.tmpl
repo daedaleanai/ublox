@@ -10,7 +10,11 @@ package ubx
 type {{.TypeName}} struct {
 {{- range .Blocks}}
 	{{- if eq .Cardinality ""}}
-		{{block "field" .}}{{.FieldName}} {{.ArraySpec}}{{if .Bitfield}}{{.Message.TypeName}}{{.Name | title}}{{else}}{{.FieldType}}{{end}} // {{if ne .Unit "-"}}[{{if ne .Scale "-"}}{{.Scale}} {{end}}{{.Unit}}] {{end}}{{.Comment |notabs -}}{{end}}
+		{{block "field" .}}{{.FieldName}} {{.ArraySpec}}
+			{{- if .BitfieldRef}}{{.Message.TypeName}}{{.BitfieldRef|title}}
+			{{- else if .Bitfield}}{{.Message.TypeName}}{{.Name | title}}
+			{{- else}}{{.FieldType}}
+			{{- end}} // {{if ne .Unit "-"}}[{{if ne .Scale "-"}}{{.Scale}} {{end}}{{.Unit}}] {{end}}{{.Comment |notabs -}}{{end}}
 	{{- else if eq .Cardinality "optional"}}
 		// Optional
 		{{- range .Nested}}

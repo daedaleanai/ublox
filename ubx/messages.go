@@ -284,8 +284,8 @@ const (
 // See Receiver configuration for a detailed description on how receiver configuration should be used. The three masks are made up of individual bits, each bit indicating the sub-section of all configurations on which the corresponding action shall be carried out. The reserved bits in the masks must be set to '0'. For detailed information refer to the Organization of the configuration sections. Note that commands can be combined. The sequence of execution is clear, save, load.
 type CfgCfg struct {
 	ClearMask CfgCfgClearMask // Mask with configuration sub-sections to clear (i.e. load default configurations to permanent configurations in non-volatile memory)
-	SaveMask  uint32          // Mask with configuration sub-sections to save (i.e. save current configurations to non-volatile memory), see ID description of clearMask
-	LoadMask  uint32          // Mask with configuration sub-sections to load (i.e. load permanent configurations from non-volatile memory to current configurations), see ID description of clearMask
+	SaveMask  CfgCfgClearMask // Mask with configuration sub-sections to save (i.e. save current configurations to non-volatile memory), see ID description of clearMask
+	LoadMask  CfgCfgClearMask // Mask with configuration sub-sections to load (i.e. load permanent configurations from non-volatile memory to current configurations), see ID description of clearMask
 	// Optional
 	DeviceMask CfgCfgDeviceMask // Mask which selects the memory devices for this command.
 }
