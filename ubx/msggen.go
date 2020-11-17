@@ -200,6 +200,18 @@ func (m *Message) MinSize() int {
 	return sz
 }
 
+func (m *Message) VarSize() int {
+	sz := 0
+	for _, v := range m.Blocks {
+		if v.Cardinality == "repeated" {
+			for _, vv := range v.Nested {
+				sz += vv.FieldSize()
+			}
+		}
+	}
+	return sz
+}
+
 // numeric fields in any base, not just decimal
 type Number uint64
 

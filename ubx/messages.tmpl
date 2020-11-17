@@ -5,7 +5,7 @@ package ubx
 
 {{range $v}}
 // {{.TypeName}} ({{.Type}}) {{.Description | notabs}}
-// Class/Id {{printf "0x%02x 0x%02x" .Class .Id}} {{.Length}}({{.MinSize}}) bytes
+// Class/Id {{printf "0x%02x 0x%02x" .Class .Id}} {{.Length}} ({{.MinSize}} + N*{{.VarSize}}) bytes
 // {{.Comment | notabs}}
 type {{.TypeName}} struct {
 {{- range .Blocks}}
