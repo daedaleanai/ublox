@@ -288,13 +288,22 @@ func main() {
 	}
 
 	// name repeated and annotate 'count' fields
-	for _, v := range definitions.Message {
-		for _, b := range v.Blocks {
+	for _, msg := range definitions.Message {
+		for _, b := range msg.Blocks {
 			if b.Cardinality == "repeated" {
 				b.Name = "Items"
 				if strings.HasPrefix(strings.ToLower(b.LenField), "num") {
 					b.Name = strings.Title(b.LenField[3:])
 				}
+
+				// link back
+				for _, bb := range msg.Blocks {
+					if bb.Name == b.LenField {
+						bb.LenFor = b.Name
+						break
+					}
+				}
+
 			}
 		}
 	}

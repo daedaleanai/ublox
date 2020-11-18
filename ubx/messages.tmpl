@@ -16,7 +16,7 @@ type {{.TypeName}} struct {
 		{{block "field" .}}{{.FieldName}} {{.ArraySpec}}
 			{{- if .BitfieldRef}}{{.Message.TypeName}}{{.BitfieldRef|title}}
 			{{- else if .Bitfield}}{{.Message.TypeName}}{{.Name | title}}
-			{{- else}}{{.FieldType}}
+			{{- else}}{{.FieldType}} {{- if .LenFor}} `ubx:"len({{.LenFor|title}})"`{{end}}
 			{{- end}} // {{if ne .Unit "-"}}[{{if ne .Scale "-"}}{{.Scale}} {{end}}{{.Unit}}] {{end}}{{.Comment |notabs -}}{{end}}
 	{{- else if eq .Cardinality "optional"}}
 		// Optional

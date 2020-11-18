@@ -395,7 +395,7 @@ func (CfgDgnss) classID() uint16 { return 0x7006 }
 
 type CfgDosc struct {
 	Version   byte    // Message version (0x00 for this version)
-	NumOsc    byte    // Number of oscillators to configure (affects length of this message)
+	NumOsc    byte    `ubx:"len(Osc)"` // Number of oscillators to configure (affects length of this message)
 	Reserved1 [2]byte // Reserved
 	Osc       []*struct {
 		OscId              byte         // Id of oscillator. 0 - internal oscillator 1 - external oscillator
@@ -536,7 +536,7 @@ const (
 
 type CfgEsrc struct {
 	Version    byte    // Message version (0x00 for this version)
-	NumSources byte    // Number of sources (affects length of this message)
+	NumSources byte    `ubx:"len(Sources)"` // Number of sources (affects length of this message)
 	Reserved1  [2]byte // Reserved
 	Sources    []*struct {
 		ExtInt               byte         // EXTINT index of this source (0 for EXTINT0 and 1 for EXTINT1)
@@ -571,7 +571,7 @@ const (
 
 type CfgGeofence struct {
 	Version     byte    // Message version (0x00 for this version)
-	NumFences   byte    // Number of geofences contained in this message. Note that the receiver can only store a limited number of geofences (currently 4).
+	NumFences   byte    `ubx:"len(Fences)"` // Number of geofences contained in this message. Note that the receiver can only store a limited number of geofences (currently 4).
 	ConfLvl     byte    // Required confidence level for state evaluation. This value times the position's standard deviation (sigma) defines the confidence band. 0 = no confidence required 1 = 68% 2 = 95% 3 = 99.7% 4 = 99.99%
 	Reserved1   [1]byte // Reserved
 	PioEnabled  byte    // 1 = Enable PIO combined fence state output, 0 = disable
@@ -597,7 +597,7 @@ type CfgGnss struct {
 	MsgVer          byte // Message version (0x00 for this version)
 	NumTrkChHw      byte // Number of tracking channels available in hardware (read only)
 	NumTrkChUse     byte // (Read only in protocol versions greater than 23) Number of tracking channels to use. Must be > 0, <= numTrkChHw. If 0xFF, then number of tracking channels to use will be set to numTrkChHw.
-	NumConfigBlocks byte // Number of configuration blocks following
+	NumConfigBlocks byte `ubx:"len(ConfigBlocks)"` // Number of configuration blocks following
 	ConfigBlocks    []*struct {
 		GnssId    byte         // System identifier (see Satellite Numbering )
 		ResTrkCh  byte         // (Read only in protocol versions greater than 23) Number of reserved (minimum) tracking channels for this system.
@@ -1784,7 +1784,7 @@ type EsfStatus struct {
 	Reserved1  [7]byte // Reserved
 	FusionMode byte    // Fusion mode: 0: Initialization mode: receiver is initializing some unknown values required for doing sensor fusion 1: Fusion mode: GNSS and sensor data are used for navigation solution computation 2: Suspended fusion mode: sensor fusion is temporarily disabled due to e.g. invalid sensor data or detected ferry 3: Disabled fusion mode: sensor fusion is permanently disabled until receiver reset due e.g. to sensor error More details can be found in the Fusion Modes section.
 	Reserved2  [2]byte // Reserved
-	NumSens    byte    // Number of sensors
+	NumSens    byte    `ubx:"len(Sens)"` // Number of sensors
 	Sens       []*struct {
 		SensStatus1 EsfStatusSensStatus1 // Sensor status, part 1
 		SensStatus2 EsfStatusSensStatus2 // Sensor status, part 2
@@ -2266,7 +2266,7 @@ type LogRetrievestring struct {
 	Minute     byte   // Minute (0-59) of UTC time
 	Second     byte   // Second (0-60) of UTC time
 	Reserved2  byte   // Reserved
-	ByteCount  uint16 // Size of string in bytes
+	ByteCount  uint16 `ubx:"len(Items)"` // Size of string in bytes
 	Items      string
 }
 
@@ -2497,7 +2497,7 @@ type MgaFlashData struct {
 	Type     byte   // Message type (0x01 for this type)
 	Version  byte   // Message version (0x00 for this version)
 	Sequence uint16 // Message sequence number, starting at 0 and increamenting by 1 for each MGA- FLASH-DATA message sent.
-	Size     uint16 // Payload size in bytes.
+	Size     uint16 `ubx:"len(Items)"` // Payload size in bytes.
 	Items    string
 }
 
@@ -3266,7 +3266,7 @@ func (MonPatch) classID() uint16 { return 0x270a }
 
 type MonPatch1 struct {
 	Version  uint16 // Message version (0x0001 for this version)
-	NEntries uint16 // Total number of reported patches
+	NEntries uint16 `ubx:"len(Items)"` // Total number of reported patches
 	Items    []*struct {
 		PatchInfo        MonPatch1PatchInfo // Status information about the reported patch
 		ComparatorNumber uint32             // The number of the comparator
@@ -3521,7 +3521,7 @@ type NavDgps struct {
 	Age_ms     int32   // [ms] Age of newest correction data
 	BaseId     int16   // DGPS base station identifier
 	BaseHealth int16   // DGPS base station health status
-	NumCh      byte    // Number of channels for which correction data is following
+	NumCh      byte    `ubx:"len(Ch)"` // Number of channels for which correction data is following
 	Status     byte    // DGPS correction type status: 0x00:   none 0x01:  PR+PRR correction
 	Reserved1  [2]byte // Reserved
 	Ch         []*struct {
@@ -3600,7 +3600,7 @@ type NavGeofence struct {
 	ITOW_ms   uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	Version   byte   // Message version (0x00 for this version)
 	Status    byte   // Geofencing status 0 - Geofencing not available or not reliable 1 - Geofencing active
-	NumFences byte   // Number of geofences
+	NumFences byte   `ubx:"len(Fences)"` // Number of geofences
 	CombState byte   // Combined (logical OR) state of all geofences 0 - Unknown 1 - Inside 2 - Outside
 	Fences    []*struct {
 		State byte // Geofence state 0 - Unknown 1 - Inside 2 - Outside
@@ -3774,7 +3774,7 @@ func (NavOdo) classID() uint16 { return 0x0901 }
 type NavOrb struct {
 	ITOW_ms   uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	Version   byte    // Message version (0x01 for this version)
-	NumSv     byte    // Number of SVs in the database
+	NumSv     byte    `ubx:"len(Sv)"` // Number of SVs in the database
 	Reserved1 [2]byte // Reserved
 	Sv        []*struct {
 		GnssId   byte           // GNSS ID
@@ -3984,7 +3984,7 @@ func (NavResetodo) classID() uint16 { return 0x1001 }
 type NavSat struct {
 	ITOW_ms   uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	Version   byte    // Message version (0x01 for this version)
-	NumSvs    byte    // Number of satellites
+	NumSvs    byte    `ubx:"len(Svs)"` // Number of satellites
 	Reserved1 [2]byte // Reserved
 	Svs       []*struct {
 		GnssId    byte        // GNSS identifier (see Satellite Numbering) for assignment
@@ -4032,7 +4032,7 @@ type NavSbas struct {
 	Mode      byte           // SBAS Mode 0 Disabled 1 Enabled integrity 3 Enabled test mode
 	Sys       int8           // SBAS System (WAAS/EGNOS/...) -1 Unknown 0 WAAS 1 EGNOS 2 MSAS 3 GAGAN 16 GPS
 	Service   NavSbasService // SBAS Services available
-	Cnt       byte           // Number of SV data following
+	Cnt       byte           `ubx:"len(Items)"` // Number of SV data following
 	Reserved1 [3]byte        // Reserved
 	Items     []*struct {
 		Svid      byte    // SV ID
@@ -4074,7 +4074,7 @@ type NavSlas struct {
 	GmsCode      byte                // Code of the used ground monitoring station according to the QZSS SLAS Interface Specification, available from qzss.go.jp/en/
 	QzssSvId     byte                // Satellite identifier of the QZS/GEO whose correction data is used (see Satellite Numbering)
 	ServiceFlags NavSlasServiceFlags // Flags regarding SLAS service
-	Cnt          byte                // Number of pseudorange corrections following
+	Cnt          byte                `ubx:"len(Items)"` // Number of pseudorange corrections following
 	Items        []*struct {
 		GnssId    byte    // GNSS identifier (see Satellite Numbering)
 		SvId      byte    // Satellite identifier (see Satellite Numbering)
@@ -4209,7 +4209,7 @@ func (NavSvin) classID() uint16 { return 0x3b01 }
 
 type NavSvinfo struct {
 	ITOW_ms     uint32               // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	NumCh       byte                 // Number of channels
+	NumCh       byte                 `ubx:"len(Ch)"` // Number of channels
 	GlobalFlags NavSvinfoGlobalFlags // Bitmask
 	Reserved1   [2]byte              // Reserved
 	Ch          []*struct {
@@ -4456,7 +4456,7 @@ func (NavVelned) classID() uint16 { return 0x1201 }
 // This message shows the IMES stations the receiver is currently tracking, their data rate, the signal level, the Doppler (with respect to 1575.4282MHz) and what data (without protocol specific overhead) it has received from these stations so far. This message is sent out at the navigation rate the receiver is currently set to. Therefore it allows users to get an overview on the receiver's current state from the IMES perspective.
 
 type RxmImes struct {
-	NumTx     byte    // Number of transmitters contained in the message
+	NumTx     byte    `ubx:"len(Tx)"` // Number of transmitters contained in the message
 	Version   byte    // Message version (0x01 for this version)
 	Reserved1 [2]byte // Reserved
 	Tx        []*struct {
@@ -4537,7 +4537,7 @@ type RxmMeasx struct {
 	BdsTOWacc_msl4  uint16        // [2^-4 ms] BeiDou measurement reference time accuracy (0xffff = > 4s)
 	Reserved3       [2]byte       // Reserved
 	QzssTOWacc_msl4 uint16        // [2^-4 ms] QZSS measurement reference time accuracy (0xffff = > 4s)
-	NumSV           byte          // Number of satellites in repeated block
+	NumSV           byte          `ubx:"len(SV)"` // Number of satellites in repeated block
 	Flags           RxmMeasxFlags // Flags
 	Reserved4       [8]byte       // Reserved
 	SV              []*struct {
@@ -4623,7 +4623,7 @@ type RxmRawx struct {
 	RcvTow_s   float64        // [s] Measurement time of week in receiver local time approximately aligned to the GPS time system. The receiver local time of week, week number and leap second information can be used to translate the time to other time systems. More information about the difference in time systems can be found in the RINEX 3 format documentation. For a receiver operating in GLONASS only mode, UTC time can be determined by subtracting the leapS field from GPS time regardless of whether the GPS leap seconds are valid.
 	Week_weeks uint16         // [weeks] GPS week number in receiver local time.
 	LeapS_s    int8           // [s] GPS leap seconds (GPS-UTC). This field represents the receiver's best knowledge of the leap seconds offset. A flag is given in the recStat bitfield to indicate if the leap seconds are known.
-	NumMeas    byte           // Number of measurements to follow
+	NumMeas    byte           `ubx:"len(Meas)"` // Number of measurements to follow
 	RecStat    RxmRawxRecStat // Receiver tracking status bitfield
 	Version    byte           // Message version (0x01 for this version)
 	Reserved1  [2]byte        // Reserved
@@ -4751,7 +4751,7 @@ type RxmSfrbx struct {
 	SvId      byte // Satellite identifier (see Satellite Numbering)
 	Reserved1 byte // Reserved
 	FreqId    byte // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
-	NumWords  byte // The number of data words contained in this message (up to 10, for currently supported signals)
+	NumWords  byte `ubx:"len(Words)"` // The number of data words contained in this message (up to 10, for currently supported signals)
 	Chn       byte // The tracking channel number the message was received on
 	Version   byte // Message version, (0x02 for this version)
 	Reserved2 byte // Reserved
@@ -4772,7 +4772,7 @@ type RxmSvsi struct {
 	ITOW_ms    uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
 	Week_weeks int16  // [weeks] GPS week number of the navigation epoch
 	NumVis     byte   // Number of visible satellites
-	NumSV      byte   // Number of per-SV data blocks following
+	NumSV      byte   `ubx:"len(SV)"` // Number of per-SV data blocks following
 	SV         []*struct {
 		Svid   byte          // Satellite ID
 		SvFlag RxmSvsiSvFlag // Information Flags
@@ -4880,7 +4880,7 @@ const (
 
 type TimSmeas struct {
 	Version   byte    // Message version (0x00 for this version)
-	NumMeas   byte    // Number of measurements in repeated block
+	NumMeas   byte    `ubx:"len(Meas)"` // Number of measurements in repeated block
 	Reserved1 [2]byte // Reserved
 	ITOW_ms   uint32  // [ms] Time of the week
 	Reserved2 [4]byte // Reserved
