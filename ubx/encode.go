@@ -2,30 +2,26 @@ package ubx
 
 import (
 	"bytes"
-	"encoding/binary"
+	"fmt"
 	"io"
+	"math"
+	"reflect"
 )
 
 func Encode(w io.Writer, payload Message) error {
 	var buf bytes.Buffer
 	buf.Write([]byte{0xb5, 0x62, byte(payload.classID()), byte(payload.classID() >> 8), 0, 0})
-	var err error
-	if s, ok := payload.(interface {
-		encode() string
-	}); ok {
-		_, err = buf.WriteString(s.encode())
-	} else {
-		// TODO this will break on variable length messages
-		err = binary.Write(&buf, binary.LittleEndian, payload)
-	}
+
+	err := encode(&buf, payload)
+
 	if err != nil {
 		return err
 	}
 	sz := buf.Len() - 6
-	buf.Bytes()[4] = uint8(sz)
-	buf.Bytes()[5] = uint8(sz >> 8)
+	buf.Bytes()[4] = byte(sz)
+	buf.Bytes()[5] = byte(sz >> 8)
 
-	var a, b uint8
+	var a, b byte
 	for _, v := range buf.Bytes()[2:] {
 		a += v
 		b += a
@@ -33,4 +29,92 @@ func Encode(w io.Writer, payload Message) error {
 	buf.Write([]byte{a, b})
 	_, err = w.Write(buf.Bytes())
 	return err
+}
+
+func encode(w io.Writer, msg interface{}) error {
+	//	log.Printf("Encoding %T %#v", msg, msg)
+	switch v := msg.(type) {
+	case byte:
+		_, err := w.Write([]byte{v})
+		return err
+	case int8:
+		_, err := w.Write([]byte{byte(v)})
+		return err
+	case uint16:
+		_, err := w.Write([]byte{byte(v), byte(v >> 8)})
+		return err
+	case int16:
+		_, err := w.Write([]byte{byte(v), byte(v >> 8)})
+		return err
+	case uint32:
+		_, err := w.Write([]byte{byte(v), byte(v >> 8), byte(v >> 16), byte(v >> 24)})
+		return err
+	case int32:
+		_, err := w.Write([]byte{byte(v), byte(v >> 8), byte(v >> 16), byte(v >> 24)})
+		return err
+	case uint64:
+		_, err := w.Write([]byte{byte(v), byte(v >> 8), byte(v >> 16), byte(v >> 24), byte(v >> 32), byte(v >> 40), byte(v >> 48), byte(v >> 56)})
+		return err
+	case int64:
+		_, err := w.Write([]byte{byte(v), byte(v >> 8), byte(v >> 16), byte(v >> 24), byte(v >> 32), byte(v >> 40), byte(v >> 48), byte(v >> 56)})
+		return err
+	case float32:
+		vv := math.Float32bits(v)
+		_, err := w.Write([]byte{byte(vv), byte(vv >> 8), byte(vv >> 16), byte(vv >> 24)})
+		return err
+	case float64:
+		vv := math.Float64bits(v)
+		_, err := w.Write([]byte{byte(vv), byte(vv >> 8), byte(vv >> 16), byte(vv >> 24), byte(vv >> 32), byte(vv >> 40), byte(vv >> 48), byte(vv >> 56)})
+		return err
+
+	case []byte:
+		_, err := w.Write(v)
+		return err
+	case string:
+		_, err := w.Write([]byte(v))
+		return err
+
+	}
+
+	v := reflect.Indirect(reflect.ValueOf(msg))
+	switch v.Kind() {
+	case reflect.Uint8:
+		encode(w, uint8(v.Uint()))
+	case reflect.Uint16:
+		encode(w, uint16(v.Uint()))
+	case reflect.Uint32:
+		encode(w, uint32(v.Uint()))
+	case reflect.Uint64:
+		encode(w, v.Uint())
+
+	case reflect.Array, reflect.Slice:
+		l := v.Len()
+		for i := 0; i < l; i++ {
+			if err := encode(w, v.Index(i).Interface()); err != nil {
+				return err
+			}
+		}
+		return nil
+
+	case reflect.Struct:
+		t := v.Type()
+		l := v.NumField()
+		for i := 0; i < l; i++ {
+			// if the field is a NumXXX for the XXX []... bit, set it to the lenght here
+			if s := t.Field(i).Tag.Get("len"); s != "" {
+				for ii := l - 1; ii > i; i-- {
+					if t.Field(ii).Name == s {
+						v.Field(i).SetInt(int64(v.Field(ii).Len()))
+						break
+					}
+				}
+			}
+			if err := encode(w, v.Field(i).Interface()); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
+
+	return fmt.Errorf("Cannot encode field of type %T", msg)
 }
