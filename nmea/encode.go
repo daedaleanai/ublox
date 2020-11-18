@@ -1,14 +1,14 @@
 package nmea
 
 import (
+	"bytes"
 	"fmt"
-	"io"
 	"reflect"
 	"strings"
 )
 
 // Encode can serialize a slice of string fields or a struct
-func Encode(w io.Writer, msg interface{}) error {
+func Encode(msg interface{}) (buf []byte, err error) {
 	var fields []string
 	if f, ok := msg.([]string); ok {
 		fields = f
@@ -18,12 +18,12 @@ func Encode(w io.Writer, msg interface{}) error {
 			rmsg = rmsg.Elem()
 		}
 		if rmsg.Kind() != reflect.Struct {
-			return fmt.Errorf("message must be a struct, *struct, or []string, got %T", msg)
+			return nil, fmt.Errorf("message must be a struct, *struct, or []string, got %T", msg)
 		}
 		var err error
 		fields, err = encodeMsg(msg)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
 
@@ -32,8 +32,9 @@ func Encode(w io.Writer, msg interface{}) error {
 	for _, v := range s {
 		x ^= byte(v)
 	}
-	_, err := fmt.Fprintf(w, "$%s*%02X\r\n", s, x)
-	return err
+	var b bytes.Buffer
+	_, err = fmt.Fprintf(&b, "$%s*%02X\r\n", s, x)
+	return b.Bytes(), err
 }
 
 // msg is known to be a struct
