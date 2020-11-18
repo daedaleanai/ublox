@@ -3374,6 +3374,41 @@ const (
 	MonSmgrExtInt1FeedBack MonSmgrExtInt1 = 0x4 // This source is used as feedback of the external oscillator
 )
 
+// Message UBX-MON-SPT
+
+// MonSpt (Polled) Sensor production test
+// Class/Id 0x0a 0x2f 4 + 12*numRes + 4*numSensor (4 + N*16) bytes
+// This message reports the state of, and measurements made during, sensor self- tests. This message can also be used to retrieve information about detected sensor(s) and driver(s) used. This message is only supported if a sensor is directly connected to the u-blox chip. This includes modules that contain IMUs. Note that this message shows the status of the last self-test since sensor startup. The self-test results are not stored in non-volatile memory.
+
+type MonSpt struct {
+	Version   byte // Message version (0x01 for this version)
+	NumSensor byte `ubx:"len(Sensor)"` // number of sensors reported in this message
+	NumRes    byte `ubx:"len(Res)"`    // number of result items reported in this message
+	Reserved1 byte // Reserved
+	Sensor    []*struct {
+		SensorId    byte         // Sensor ID The following IDs are defined, others are reserved: 1: ST LSM6DS0 6-axis IMU with temperature sensor 2: Invensense MPU6500 6-axis IMU with temperature sensor 3: Bosch BMI160 6-axis IMU with temperature sensor 7: ST LSM6DS3 6-axis IMU with temperature sensor 9: Bosch SMI130 6-axis IMU with temperature sensor 12: MPU6515, 6-axis inertial sensor from Invensense 13: ST LSM6DSL 6-axis IMU with temperature sensor 14: SMG130, 3-axis gyroscope with temperature sensor from Bosch 15: SMI230, 6-axis IMU with temperature sensor from Bosch 16: BMI260, 6-axis IMU with temperature sensor from Bosch 17: ICM330DLC, 6-axis IMU with temperature sensor from ST 18: ICM330DHCX, 6-axis IMU with 105 deg temperature sensor from ST Not all sensors are supported in any released firmware. Refer to the release notes to find out which sensor is supported by a certain firmware.
+		DrvVer      MonSptDrvVer // Version information
+		TestState   byte         // State of one sensor's test, it can be 0: test not yet started 1: test started but not yet finished 2: test did not finish due to error during execution 3: test finished normally, test data is available
+		DrvFileName byte         // 0 if the active driver is loaded from image, last character of the file name if it is loaded from separate file.
+	} // len: NumSensor
+	Res []*struct {
+		SensorIdRes uint16  // Sensor ID; eligible values are the same as in sensorIdState field
+		SensorType  uint16  // Sensor type and axis (if applicable) to which the result refers The following values are defined, others are reserved: 5: Gyroscope z axis 12: Gyroscope temperature 13: Gyroscope y axis 14: Gyroscope x axis 16: Accelerometer x axis 17: Accelerometer y axis 18: Accelerometer z axis 19: Barometer 22: Magnetometer x axis 23: Magnetometer y axis 24: Magnetometer z axis 25: Barometer temperature
+		ResType     uint16  // The type of result stored in the value field 1: Measurement without self-test offset (raw and unscaled digital value) 2: Measurement with positive self-test offset (raw and unscaled digital value) 3: Measurement with negative self-test offset (raw and unscaled digital value) 4: Minimum off-to-positive to pass self- test, as deduced from on-chip trimming information 5: Maximum off-to-positive to pass self- test, as deduced from on-chip trimming information 6: Minimum negative-to-positive to pass self-test, as deduced from on-chip trimming information 7: Maximum negative-to-positive to pass self-test, as deduced from on-chip trimming information 8: Self-test passed; test passed if value = 1 and failed if 0. Used if the decision is read out from the sensor itself.
+		Reserved2   [2]byte // Reserved
+		Value       int32   // value of the specific test result
+	} // len: NumRes
+}
+
+func (MonSpt) classID() uint16 { return 0x2f0a }
+
+type MonSptDrvVer byte
+
+const (
+	MonSptDrvVerMaj MonSptDrvVer = 0xf  // Driver major version
+	MonSptDrvVerMin MonSptDrvVer = 0xf0 // Driver minor version
+)
+
 // Message UBX-MON-TXBUF
 
 // MonTxbuf (Periodic/Polled) Transmitter buffer status

@@ -16672,10 +16672,7 @@ external input 1</Comment>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
   </Message>
-  <!-- 
-TODO(lvd) this message type has 2 variable 
-
-  Message>
+  <Message>
     <Name>UBX-MON-SPT</Name>
     <Type>Polled</Type>
     <Description>Sensor production test</Description>
@@ -16889,7 +16886,7 @@ out from the sensor itself.</Comment>
       </Payload>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
-  </Message -->
+  </Message>
   <Message>
     <Name>UBX-MON-TXBUF</Name>
     <Type>Periodic/Polled</Type>
