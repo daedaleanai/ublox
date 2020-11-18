@@ -28,8 +28,7 @@
           <Offset>1</Offset>
           <Name>msgID</Name>
           <Type>U1</Type>
-          <Comment>Message ID of the Acknowledged
-Message</Comment>
+          <Comment>Message ID of the Acknowledged Message</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
         </Block>
@@ -53,8 +52,7 @@ Message</Comment>
           <Offset>0</Offset>
           <Name>clsID</Name>
           <Type>U1</Type>
-          <Comment>Class ID of the Not-Acknowledged
-Message</Comment>
+          <Comment>Class ID of the Not-Acknowledged Message</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
         </Block>
@@ -62,8 +60,7 @@ Message</Comment>
           <Offset>1</Offset>
           <Name>msgID</Name>
           <Type>U1</Type>
-          <Comment>Message ID of the Not-Acknowledged
-Message</Comment>
+          <Comment>Message ID of the Not-Acknowledged Message</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
         </Block>
@@ -8590,17 +8587,30 @@ enabled.</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
         </Block>
-        <Block name="3" type="repeated">
           <Block>
-            <Offset>4 + 4*N</Offset>
-            <Name>end</Name>
+            <Offset>4</Offset>
+            <Name>end1</Name>
             <Type>U4</Type>
-            <Comment>End of timeslot in milliseconds after time
-pulse</Comment>
+            <Comment>End of timeslot in milliseconds after time pulse 1</Comment>
             <Scale>-</Scale>
-            <Unit>-</Unit>
+            <Unit>ms</Unit>
           </Block>
-        </Block>
+          <Block>
+            <Offset>8</Offset>
+            <Name>end2</Name>
+            <Type>U4</Type>
+            <Comment>End of timeslot in milliseconds after time pulse 2</Comment>
+            <Scale>-</Scale>
+            <Unit>ms</Unit>
+          </Block>
+          <Block>
+            <Offset>12</Offset>
+            <Name>end3</Name>
+            <Type>U4</Type>
+            <Comment>End of timeslot in milliseconds after time pulse 3</Comment>
+            <Scale>-</Scale>
+            <Unit>ms</Unit>
+          </Block>
       </Payload>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
@@ -11351,7 +11361,7 @@ time not known</Comment>
           <Block>
             <Offset>16 + 1*N</Offset>
             <Name>bytes</Name>
-            <Type>U1</Type>
+            <Type>CH</Type>
             <Comment>The bytes of the string</Comment>
             <Scale>-</Scale>
             <Unit>-</Unit>
@@ -11436,7 +11446,7 @@ ACK-NAK. The maximum is 256.</Comment>
           <Block>
             <Offset>N*1</Offset>
             <Name>bytes</Name>
-            <Type>U1</Type>
+            <Type>CH</Type>
             <Comment>The string of bytes to be logged
 (maximum 256)</Comment>
             <Scale>-</Scale>

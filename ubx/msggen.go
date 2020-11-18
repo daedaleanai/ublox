@@ -1,6 +1,6 @@
 // This program generates messages.go from messages.xml
 // TODO generate encoder/decoder depending on fixed, optional and variable size
-// TODO generate string methods for all fields
+// TODO generate string methods for all bitfield types
 
 // +build ignore
 
@@ -42,11 +42,11 @@ type Message struct {
 
 type Block struct {
 	Cardinality string `xml:"type,attr"` // repeated or optional, in which case 'nested' is non nil
-	CountField  string `xml:"name,attr"` // for repeated fields: name of the count field
+	LenField    string `xml:"name,attr"` // for repeated fields: name of the count field
+	Name        string
 
 	// non-repeated, non-optional fields
 	Offset      string
-	Name        string
 	Type        string
 	Comment     string
 	Scale       string
@@ -57,6 +57,8 @@ type Block struct {
 	Nested []*Block `xml:"Block"` // for repeated or optional blocks, this contains the subfields
 
 	Message *Message `xml:"-"` // link back up
+	LenFor  string   `xml:"-"` // for fields that are the CountField of a repeated field, name of the repeated field
+
 }
 
 type BitDef struct {
@@ -200,6 +202,7 @@ func (m *Message) MinSize() int {
 	return sz
 }
 
+// size of the (hopefulluy single)
 func (m *Message) VarSize() int {
 	sz := 0
 	for _, v := range m.Blocks {
@@ -210,6 +213,27 @@ func (m *Message) VarSize() int {
 		}
 	}
 	return sz
+}
+
+// the UBX-INF-xxx messages are really just strings
+func (m *Message) IsString() bool {
+	if len(m.Blocks) != 1 {
+		return false
+	}
+	return m.Blocks[0].IsString()
+}
+
+func (b *Block) IsString() bool {
+	if b.Cardinality != "repeated" {
+		return false
+	}
+	if len(b.Nested) != 1 {
+		return false
+	}
+	if b.Nested[0].Type != "CH" && b.Nested[0].Type != "U1" {
+		return false
+	}
+	return true
 }
 
 // numeric fields in any base, not just decimal
@@ -263,6 +287,19 @@ func main() {
 		}
 	}
 
+	// name repeated and annotate 'count' fields
+	for _, v := range definitions.Message {
+		for _, b := range v.Blocks {
+			if b.Cardinality == "repeated" {
+				b.Name = "Items"
+				if strings.HasPrefix(strings.ToLower(b.LenField), "num") {
+					b.Name = strings.Title(b.LenField[3:])
+				}
+			}
+		}
+	}
+
+	// sort by class/id, and lenght options, eliminate duplicates
 	msgs := map[string][]*Message{}
 	for _, v := range definitions.Message {
 		n := len(msgs[v.Name])

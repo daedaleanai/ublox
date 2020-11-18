@@ -7,6 +7,9 @@ package ubx
 // {{.TypeName}} ({{.Type}}) {{.Description | notabs}}
 // Class/Id {{printf "0x%02x 0x%02x" .Class .Id}} {{.Length}} ({{.MinSize}} + N*{{.VarSize}}) bytes
 // {{.Comment | notabs}}
+{{if .IsString}}
+type {{.TypeName}} string
+{{else}}
 type {{.TypeName}} struct {
 {{- range .Blocks}}
 	{{- if eq .Cardinality ""}}
@@ -21,18 +24,19 @@ type {{.TypeName}} struct {
 		{{template "field" .}}
 		{{- end}}
 	{{- else if eq .Cardinality "repeated"}}
-		{{- if eq (index .Nested 0).Type "CH"}}
-			{{(index .Nested 0).FieldName}} string // {{(index .Nested 0).Comment |notabs -}}
+		{{- if .IsString}}
+		{{.FieldName}} string
 		{{- else}}
-		Items []*struct{
+		{{.FieldName}} []*struct{
 		{{- range .Nested}}
 			{{template "field" .}}
 		{{- end}}
-		} // len: {{.CountField}}
+		} // len: {{.LenField|title}}
 		{{- end}}
 	{{- end}}
 {{- end}}
 }
+{{- end}}
 
 func ({{.TypeName}}) classID() uint16 { return {{printf "0x%02x%02x" .Id .Class }} }
 
