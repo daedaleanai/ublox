@@ -7,9 +7,9 @@ package ubx
 // {{.TypeName}} ({{.Type}}) {{.Description | notabs}}
 // Class/Id {{printf "0x%02x 0x%02x" .Class .Id}} {{.Length}} ({{.MinSize}} + N*{{.VarSize}}) bytes
 // {{.Comment | notabs}}
-{{if .IsString}}
+{{- if .IsString}}
 type {{.TypeName}} string
-{{else}}
+{{- else}}
 type {{.TypeName}} struct {
 {{- range .Blocks}}
 	{{- if eq .Cardinality ""}}
