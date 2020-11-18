@@ -70,6 +70,20 @@ type BitDef struct {
 	Block *Block `xml:"-"` // link back up
 }
 
+func (b *BitDef) Mask() string {
+	parts := strings.Split(b.Index, ":")
+	if len(parts) == 2 {
+		hi, _ := strconv.ParseUint(parts[1], 0, 8)
+		lo, _ := strconv.ParseUint(parts[0], 0, 8)
+		if hi <= lo {
+			log.Fatalf("hi<=lo in bit mask %q", b.Index)
+		}
+		return fmt.Sprintf("0x%x", ((1<<(hi+1))-1)^((1<<(lo))-1))
+	}
+	i, _ := strconv.ParseUint(b.Index, 0, 8)
+	return fmt.Sprintf("0x%x", 1<<i)
+}
+
 type byNameAndLength []*Message
 
 func (v byNameAndLength) Len() int      { return len(v) }
@@ -365,31 +379,8 @@ var tmplfuncs = template.FuncMap{
 	"upper":  strings.ToUpper,
 	"title":  strings.Title,
 	"notabs": notabs,
-	"mask":   mask,
 }
 
 var wstospace = strings.NewReplacer("\t", " ", "\n", " ")
 
 func notabs(s string) string { return wstospace.Replace(s) }
-
-func msgtypename(s string) string {
-	parts := strings.Split(strings.ToLower(s), "-")
-	for i, v := range parts {
-		parts[i] = strings.Title(v)
-	}
-	return strings.Join(parts[1:], "")
-}
-
-func mask(s string) string {
-	parts := strings.Split(s, ":")
-	if len(parts) == 2 {
-		hi, _ := strconv.ParseUint(parts[1], 0, 8)
-		lo, _ := strconv.ParseUint(parts[0], 0, 8)
-		if hi <= lo {
-			log.Fatalf("hi<=lo in bit mask %q", s)
-		}
-		return fmt.Sprintf("0x%x", ((1<<(hi+1))-1)^((1<<(lo))-1))
-	}
-	i, _ := strconv.ParseUint(s, 0, 8)
-	return fmt.Sprintf("0x%x", 1<<i)
-}

@@ -3,6 +3,7 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	. "github.com/daedaleanai/ublox/ubx"
@@ -11,20 +12,26 @@ import (
 func main() {
 
 	// disable all NMEA on all ports
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0x0}) // GGA
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0x1}) // GLL
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0x2}) // GSA
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0x3}) // GSV
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0x4}) // RMC
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0x5}) // VTG
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0x6}) // GRS
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0x7}) // GST
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0x8}) // ZDA
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0x9}) // GBS
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0xD}) // GNS
-	Encode(os.Stdout, CfgMsg2{MsgClass: 0xF0, MsgID: 0xF}) // VLW
-
-	Encode(os.Stdout, CfgRate{MeasRate_ms: 62, NavRate_cycles: 1}) // 62ms (16Hz) measurement
-
-	Encode(os.Stdout, CfgMsg1{MsgClass: 0x1, MsgID: 0x7, Rate: 1}) // NAV-PVT
+	for _, msg := range []Message{
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0x0},         // GGA
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0x1},         // GLL
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0x2},         // GSA
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0x3},         // GSV
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0x4},         // RMC
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0x5},         // VTG
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0x6},         // GRS
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0x7},         // GST
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0x8},         // ZDA
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0x9},         // GBS
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0xD},         // GNS
+		CfgMsg2{MsgClass: 0xF0, MsgID: 0xF},         // VLW
+		CfgRate{MeasRate_ms: 62, NavRate_cycles: 1}, // 62ms (16Hz) measurement
+		CfgMsg1{MsgClass: 0x1, MsgID: 0x7, Rate: 1}, // NAV-PVT
+	} {
+		b, err := Encode(msg)
+		if err != nil {
+			log.Fatal(err)
+		}
+		os.Stdout.Write(b)
+	}
 }

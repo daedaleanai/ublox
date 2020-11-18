@@ -55,29 +55,10 @@ func Decode(frame []byte) (msg Message, err error) {
 		return nil, errInvalidChkSum
 	}
 
-	switch header.ClassID {
-	case (AckAck{}).classID():
-		msg = &AckAck{}
-	case (AckNak{}).classID():
-		msg = &AckNak{}
-	case (CfgCfg{}).classID():
-		msg = &CfgCfg{}
-	case (CfgHnr{}).classID():
-		msg = &CfgHnr{}
-	case (CfgMsg{}).classID():
-		msg = &CfgMsg{}
-	case (CfgMsg1{}).classID():
-		msg = &CfgMsg1{}
-	case (CfgMsg2{}).classID():
-		msg = &CfgMsg2{}
-	case (CfgRate{}).classID():
-		msg = &CfgRate{}
-	case (NavPvt{}).classID():
-		msg = &NavPvt{}
-	default:
-	}
+	msg = mkMsg(header.ClassID, header.Length)
+
 	if msg != nil {
-		err = binary.Read(buf, binary.LittleEndian, msg)
+		err = decode(bytes.NewReader(frame[6:len(frame)-2]), msg)
 	} else {
 		msg = &RawMessage{ClassID: header.ClassID, Data: append([]byte(nil), frame[6:len(frame)-2]...)}
 	}
@@ -85,3 +66,9 @@ func Decode(frame []byte) (msg Message, err error) {
 	return msg, err
 
 }
+
+func mkMsg(classId, sz uint16) Message {
+	return nil
+}
+
+func decode(r io.Reader, v interface{}) error { return nil }

@@ -8,27 +8,26 @@ import (
 	"reflect"
 )
 
-func Encode(w io.Writer, payload Message) error {
-	var buf bytes.Buffer
-	buf.Write([]byte{0xb5, 0x62, byte(payload.classID()), byte(payload.classID() >> 8), 0, 0})
+// Encode can serialize a message into a buffer
+func Encode(payload Message) (buf []byte, err error) {
+	var b bytes.Buffer
+	b.Write([]byte{0xb5, 0x62, byte(payload.classID()), byte(payload.classID() >> 8), 0, 0})
 
-	err := encode(&buf, payload)
-
-	if err != nil {
-		return err
+	if err := encode(&b, payload); err != nil {
+		return nil, err
 	}
-	sz := buf.Len() - 6
-	buf.Bytes()[4] = byte(sz)
-	buf.Bytes()[5] = byte(sz >> 8)
 
-	var a, b byte
-	for _, v := range buf.Bytes()[2:] {
-		a += v
-		b += a
+	sz := b.Len() - 6
+	b.Bytes()[4] = byte(sz)
+	b.Bytes()[5] = byte(sz >> 8)
+
+	var x, y byte
+	for _, v := range b.Bytes()[2:] {
+		x += v
+		y += x
 	}
-	buf.Write([]byte{a, b})
-	_, err = w.Write(buf.Bytes())
-	return err
+	b.Write([]byte{x, y})
+	return b.Bytes(), nil
 }
 
 func encode(w io.Writer, msg interface{}) error {

@@ -48,7 +48,7 @@ type {{.Message.TypeName}}{{.Name | title}} {{.FieldType}}
 const (
 {{- range .Bitfield}}
 {{- if .Name}}
-	{{.Block.Message.TypeName}}{{.Name | title}} {{.Block.Message.TypeName}}{{.Block.Name | title}}  = {{.Index | mask}} // {{.Description | notabs}}
+	{{.Block.Message.TypeName}}{{.Name | title}} {{.Block.Message.TypeName}}{{.Block.Name | title}}  = {{.Mask}} // {{.Description | notabs}}
 {{- end}}
 {{- end}}
 )
