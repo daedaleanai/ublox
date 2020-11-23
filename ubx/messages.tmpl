@@ -64,6 +64,20 @@ const (
 		{{- end}}
 	{{- end}}
 {{- end}}
-{{end}}
+{{- end}}
+{{- end}}
+
+func mkMsg(classId, sz uint16) Message {
+	switch classId {
+{{range $k, $v :=  .}}
+	case {{with (index $v 0)}}{{printf "0x%02x%02x" .Id .Class }}{{end}}:
+	{{- range $v}}
+		return &{{.TypeName}}{}
+	{{- end}}
 
 {{end}}
+	}
+	return nil
+}
+
+

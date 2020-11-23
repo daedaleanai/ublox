@@ -67,8 +67,4 @@ func Decode(frame []byte) (msg Message, err error) {
 
 }
 
-func mkMsg(classId, sz uint16) Message {
-	return nil
-}
-
 func decode(r io.Reader, v interface{}) error { return nil }

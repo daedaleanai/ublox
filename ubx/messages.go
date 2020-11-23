@@ -4961,3 +4961,552 @@ type UpdSos2 struct {
 }
 
 func (UpdSos2) classID() uint16 { return 0x1409 }
+
+func mkMsg(classId, sz uint16) Message {
+	switch classId {
+
+	case 0x0105:
+		return &AckAck{}
+
+	case 0x0005:
+		return &AckNak{}
+
+	case 0x300b:
+		return &AidAlm{}
+		return &AidAlm1{}
+		return &AidAlm2{}
+
+	case 0x330b:
+		return &AidAop{}
+		return &AidAop1{}
+		return &AidAop2{}
+
+	case 0x310b:
+		return &AidEph{}
+		return &AidEph1{}
+		return &AidEph2{}
+
+	case 0x020b:
+		return &AidHui{}
+		return &AidHui1{}
+
+	case 0x010b:
+		return &AidIni{}
+		return &AidIni1{}
+
+	case 0x1306:
+		return &CfgAnt{}
+
+	case 0x9306:
+		return &CfgBatch{}
+
+	case 0x0906:
+		return &CfgCfg{}
+
+	case 0x0606:
+		return &CfgDat{}
+		return &CfgDat1{}
+
+	case 0x7006:
+		return &CfgDgnss{}
+
+	case 0x6106:
+		return &CfgDosc{}
+
+	case 0x4c06:
+		return &CfgEsfa{}
+
+	case 0x5606:
+		return &CfgEsfalg{}
+
+	case 0x4d06:
+		return &CfgEsfg{}
+
+	case 0x8206:
+		return &CfgEsfwt{}
+
+	case 0x6006:
+		return &CfgEsrc{}
+
+	case 0x6906:
+		return &CfgGeofence{}
+
+	case 0x3e06:
+		return &CfgGnss{}
+
+	case 0x5c06:
+		return &CfgHnr{}
+
+	case 0x0206:
+		return &CfgInf{}
+		return &CfgInf1{}
+
+	case 0x3906:
+		return &CfgItfm{}
+
+	case 0x4706:
+		return &CfgLogfilter{}
+
+	case 0x0106:
+		return &CfgMsg{}
+		return &CfgMsg1{}
+		return &CfgMsg2{}
+
+	case 0x2406:
+		return &CfgNav5{}
+
+	case 0x2306:
+		return &CfgNavx5{}
+		return &CfgNavx51{}
+
+	case 0x1706:
+		return &CfgNmea{}
+		return &CfgNmea1{}
+		return &CfgNmea2{}
+
+	case 0x1e06:
+		return &CfgOdo{}
+
+	case 0x3b06:
+		return &CfgPm2{}
+		return &CfgPm21{}
+
+	case 0x8606:
+		return &CfgPms{}
+
+	case 0x0006:
+		return &CfgPrt{}
+		return &CfgPrt1{}
+
+	case 0x5706:
+		return &CfgPwr{}
+
+	case 0x0806:
+		return &CfgRate{}
+
+	case 0x3406:
+		return &CfgRinv{}
+
+	case 0x0406:
+		return &CfgRst{}
+
+	case 0x1106:
+		return &CfgRxm{}
+
+	case 0x1606:
+		return &CfgSbas{}
+
+	case 0x8806:
+		return &CfgSenif{}
+
+	case 0x8d06:
+		return &CfgSlas{}
+
+	case 0x6206:
+		return &CfgSmgr{}
+
+	case 0x6406:
+		return &CfgSpt{}
+
+	case 0x3d06:
+		return &CfgTmode2{}
+
+	case 0x7106:
+		return &CfgTmode3{}
+
+	case 0x3106:
+		return &CfgTp5{}
+		return &CfgTp51{}
+		return &CfgTp52{}
+
+	case 0x5306:
+		return &CfgTxslot{}
+
+	case 0x1b06:
+		return &CfgUsb{}
+
+	case 0x1410:
+		return &EsfAlg{}
+
+	case 0x1510:
+		return &EsfIns{}
+
+	case 0x0210:
+		return &EsfMeas{}
+
+	case 0x0310:
+		return &EsfRaw{}
+
+	case 0x1010:
+		return &EsfStatus{}
+
+	case 0x0128:
+		return &HnrAtt{}
+
+	case 0x0228:
+		return &HnrIns{}
+
+	case 0x0028:
+		return &HnrPvt{}
+
+	case 0x0404:
+		return &InfDebug{}
+
+	case 0x0004:
+		return &InfError{}
+
+	case 0x0204:
+		return &InfNotice{}
+
+	case 0x0304:
+		return &InfTest{}
+
+	case 0x0104:
+		return &InfWarning{}
+
+	case 0x1121:
+		return &LogBatch{}
+
+	case 0x0721:
+		return &LogCreate{}
+
+	case 0x0321:
+		return &LogErase{}
+
+	case 0x0e21:
+		return &LogFindtime{}
+		return &LogFindtime1{}
+
+	case 0x0821:
+		return &LogInfo{}
+		return &LogInfo1{}
+
+	case 0x0921:
+		return &LogRetrieve{}
+
+	case 0x1021:
+		return &LogRetrievebatch{}
+
+	case 0x0b21:
+		return &LogRetrievepos{}
+
+	case 0x0f21:
+		return &LogRetrieveposextra{}
+
+	case 0x0d21:
+		return &LogRetrievestring{}
+
+	case 0x0421:
+		return &LogString{}
+
+	case 0x6013:
+		return &MgaAckData0{}
+
+	case 0x2013:
+		return &MgaAno{}
+
+	case 0x0313:
+		return &MgaBdsAlm{}
+
+	case 0x0313:
+		return &MgaBdsEph{}
+
+	case 0x0313:
+		return &MgaBdsHealth{}
+
+	case 0x0313:
+		return &MgaBdsIono{}
+
+	case 0x0313:
+		return &MgaBdsUtc{}
+
+	case 0x8013:
+		return &MgaDbd{}
+		return &MgaDbd1{}
+
+	case 0x2113:
+		return &MgaFlashAck{}
+
+	case 0x2113:
+		return &MgaFlashData{}
+
+	case 0x2113:
+		return &MgaFlashStop{}
+
+	case 0x0213:
+		return &MgaGalAlm{}
+
+	case 0x0213:
+		return &MgaGalEph{}
+
+	case 0x0213:
+		return &MgaGalTimeoffset{}
+
+	case 0x0213:
+		return &MgaGalUtc{}
+
+	case 0x0613:
+		return &MgaGloAlm{}
+
+	case 0x0613:
+		return &MgaGloEph{}
+
+	case 0x0613:
+		return &MgaGloTimeoffset{}
+
+	case 0x0013:
+		return &MgaGpsAlm{}
+
+	case 0x0013:
+		return &MgaGpsEph{}
+
+	case 0x0013:
+		return &MgaGpsHealth{}
+
+	case 0x0013:
+		return &MgaGpsIono{}
+
+	case 0x0013:
+		return &MgaGpsUtc{}
+
+	case 0x4013:
+		return &MgaIniClkd{}
+
+	case 0x4013:
+		return &MgaIniEop{}
+
+	case 0x4013:
+		return &MgaIniFreq{}
+
+	case 0x4013:
+		return &MgaIniPos_llh{}
+
+	case 0x4013:
+		return &MgaIniPos_xyz{}
+
+	case 0x4013:
+		return &MgaIniTime_gnss{}
+
+	case 0x4013:
+		return &MgaIniTime_utc{}
+
+	case 0x0513:
+		return &MgaQzssAlm{}
+
+	case 0x0513:
+		return &MgaQzssEph{}
+
+	case 0x0513:
+		return &MgaQzssHealth{}
+
+	case 0x320a:
+		return &MonBatch{}
+
+	case 0x280a:
+		return &MonGnss{}
+
+	case 0x090a:
+		return &MonHw{}
+
+	case 0x0b0a:
+		return &MonHw2{}
+
+	case 0x020a:
+		return &MonIo{}
+
+	case 0x060a:
+		return &MonMsgpp{}
+
+	case 0x270a:
+		return &MonPatch{}
+		return &MonPatch1{}
+
+	case 0x070a:
+		return &MonRxbuf{}
+
+	case 0x210a:
+		return &MonRxr{}
+
+	case 0x2e0a:
+		return &MonSmgr{}
+
+	case 0x2f0a:
+		return &MonSpt{}
+
+	case 0x080a:
+		return &MonTxbuf{}
+
+	case 0x040a:
+		return &MonVer{}
+		return &MonVer1{}
+
+	case 0x6001:
+		return &NavAopstatus{}
+
+	case 0x0501:
+		return &NavAtt{}
+
+	case 0x2201:
+		return &NavClock{}
+
+	case 0x3601:
+		return &NavCov{}
+
+	case 0x3101:
+		return &NavDgps{}
+
+	case 0x0401:
+		return &NavDop{}
+
+	case 0x3d01:
+		return &NavEell{}
+
+	case 0x6101:
+		return &NavEoe{}
+
+	case 0x3901:
+		return &NavGeofence{}
+
+	case 0x1301:
+		return &NavHpposecef{}
+
+	case 0x1401:
+		return &NavHpposllh{}
+
+	case 0x2801:
+		return &NavNmi{}
+
+	case 0x0901:
+		return &NavOdo{}
+
+	case 0x3401:
+		return &NavOrb{}
+
+	case 0x0101:
+		return &NavPosecef{}
+
+	case 0x0201:
+		return &NavPosllh{}
+
+	case 0x0701:
+		return &NavPvt{}
+
+	case 0x3c01:
+		return &NavRelposned{}
+
+	case 0x1001:
+		return &NavResetodo{}
+
+	case 0x3501:
+		return &NavSat{}
+
+	case 0x3201:
+		return &NavSbas{}
+
+	case 0x4201:
+		return &NavSlas{}
+
+	case 0x0601:
+		return &NavSol{}
+
+	case 0x0301:
+		return &NavStatus{}
+
+	case 0x3b01:
+		return &NavSvin{}
+
+	case 0x3001:
+		return &NavSvinfo{}
+
+	case 0x2401:
+		return &NavTimebds{}
+
+	case 0x2501:
+		return &NavTimegal{}
+
+	case 0x2301:
+		return &NavTimeglo{}
+
+	case 0x2001:
+		return &NavTimegps{}
+
+	case 0x2601:
+		return &NavTimels{}
+
+	case 0x2101:
+		return &NavTimeutc{}
+
+	case 0x1101:
+		return &NavVelecef{}
+
+	case 0x1201:
+		return &NavVelned{}
+
+	case 0x6102:
+		return &RxmImes{}
+
+	case 0x1402:
+		return &RxmMeasx{}
+
+	case 0x4102:
+		return &RxmPmreq{}
+		return &RxmPmreq1{}
+
+	case 0x1502:
+		return &RxmRawx{}
+
+	case 0x5902:
+		return &RxmRlm{}
+		return &RxmRlm1{}
+
+	case 0x3202:
+		return &RxmRtcm{}
+
+	case 0x1302:
+		return &RxmSfrbx{}
+
+	case 0x2002:
+		return &RxmSvsi{}
+
+	case 0x0327:
+		return &SecUniqid{}
+
+	case 0x110d:
+		return &TimDosc{}
+
+	case 0x160d:
+		return &TimFchg{}
+
+	case 0x170d:
+		return &TimHoc{}
+
+	case 0x130d:
+		return &TimSmeas{}
+
+	case 0x040d:
+		return &TimSvin{}
+
+	case 0x030d:
+		return &TimTm2{}
+
+	case 0x120d:
+		return &TimTos{}
+
+	case 0x010d:
+		return &TimTp{}
+
+	case 0x150d:
+		return &TimVcocal{}
+		return &TimVcocal1{}
+
+	case 0x060d:
+		return &TimVrfy{}
+
+	case 0x1409:
+		return &UpdSos{}
+		return &UpdSos1{}
+		return &UpdSos2{}
+
+	}
+	return nil
+}
