@@ -205,6 +205,7 @@ func (b *Block) FieldSize() int {
 	return 0 // probably invalid
 }
 
+// the non optional non repeated fields at the begining
 func (m *Message) MinSize() int {
 	sz := 0
 	for _, v := range m.Blocks {
@@ -216,7 +217,24 @@ func (m *Message) MinSize() int {
 	return sz
 }
 
-// size of the (hopefulluy single)
+// minsize + the optional bit
+func (m *Message) MaxFixSize() int {
+	sz := 0
+	for _, v := range m.Blocks {
+		switch v.Cardinality {
+		case "":
+			sz += v.FieldSize()
+		case "optional":
+			for _, vv := range v.Nested {
+				sz += vv.FieldSize()
+			}
+		case "repeated":
+		}
+	}
+	return sz
+}
+
+// size of the (hopefulluy single) variable block
 func (m *Message) VarSize() int {
 	sz := 0
 	for _, v := range m.Blocks {
@@ -322,17 +340,10 @@ func main() {
 		}
 	}
 
-	// sort by class/id, and lenght options, eliminate duplicates
+	// sort by class/id, and length options
 	msgs := map[string][]*Message{}
 	for _, v := range definitions.Message {
-		n := len(msgs[v.Name])
-		if n > 0 && msgs[v.Name][n-1].MinSize() == v.MinSize() {
-			log.Printf("Replacing duplicate version of %q with length %q", v.Name, v.Length)
-			v.version = msgs[v.Name][n-1].version
-			msgs[v.Name][n-1] = v
-			continue
-		}
-		v.version = n
+		v.version = len(msgs[v.Name])
 		msgs[v.Name] = append(msgs[v.Name], v)
 	}
 

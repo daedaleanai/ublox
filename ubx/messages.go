@@ -764,35 +764,32 @@ const (
 	CfgNav5Utc            CfgNav5Mask = 0x400 // Apply UTC settings (not supported in protocol versions less than 16).
 )
 
-// Message UBX-CFG-NAVX5 (2 versions)
+// Message UBX-CFG-NAVX5 (3 versions)
 
 // CfgNavx5 (Get/set) Navigation engine expert settings
 // Class/Id 0x06 0x23 40 (40 + N*0) bytes
-// (Polling will send back a version 3 message in protocol versions 19.2).
+// -
 type CfgNavx5 struct {
-	Version               uint16         // Message version (0x0002 for this version)
-	Mask1                 CfgNavx5Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Mask2                 CfgNavx5Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Reserved1             [2]byte        // Reserved
-	MinSVs                byte           // [#SVs] Minimum number of satellites for navigation
-	MaxSVs                byte           // [#SVs] Maximum number of satellites for navigation
-	MinCNO_dbhz           byte           // [dBHz] Minimum satellite signal level for navigation
-	Reserved2             byte           // Reserved
-	IniFix3D              byte           // 1 = initial fix must be 3D
-	Reserved3             [2]byte        // Reserved
-	AckAiding             byte           // 1 = issue acknowledgements for assistance message input
-	WknRollover           uint16         // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
-	SigAttenCompMode_dbhz byte           // [dBHz] Only supported on certain products Permanently attenuated signal compensation (0 = disabled, 255 = automatic, 1..63 = maximum expected C/N0 value)
-	Reserved4             byte           // Reserved
-	Reserved5             [2]byte        // Reserved
-	Reserved6             [2]byte        // Reserved
-	UsePPP                byte           // 1 = use Precise Point Positioning (only available with the PPP product variant)
-	AopCfg                CfgNavx5AopCfg // AssistNow Autonomous configuration
-	Reserved7             [2]byte        // Reserved
-	AopOrbMaxErr_m        uint16         // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
-	Reserved8             [4]byte        // Reserved
-	Reserved9             [3]byte        // Reserved
-	UseAdr                byte           // Only supported on certain products Enable/disable ADR/UDR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
+	Version        uint16         // Message version (0x0000 for this version)
+	Mask1          CfgNavx5Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Mask2          CfgNavx5Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Reserved1      [2]byte        // Reserved
+	MinSVs         byte           // [#SVs] Minimum number of satellites for navigation
+	MaxSVs         byte           // [#SVs] Maximum number of satellites for navigation
+	MinCNO_dbhz    byte           // [dBHz] Minimum satellite signal level for navigation
+	Reserved2      byte           // Reserved
+	IniFix3D       byte           // 1 = initial fix must be 3D
+	Reserved3      [2]byte        // Reserved
+	AckAiding      byte           // 1 = issue acknowledgements for assistance message input
+	WknRollover    uint16         // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
+	Reserved4      [6]byte        // Reserved
+	UsePPP         byte           // 1 = use Precise Point Positioning (only available with the PPP product variant)
+	AopCfg         CfgNavx5AopCfg // AssistNow Autonomous configuration
+	Reserved5      [2]byte        // Reserved
+	AopOrbMaxErr_m uint16         // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
+	Reserved6      [4]byte        // Reserved
+	Reserved7      [3]byte        // Reserved
+	UseAdr         byte           // Only supported on certain products Enable/disable ADR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
 }
 
 func (CfgNavx5) classID() uint16 { return 0x2306 }
@@ -812,8 +809,7 @@ const (
 type CfgNavx5Mask2 uint32
 
 const (
-	CfgNavx5Adr          CfgNavx5Mask2 = 0x40 // Apply ADR/UDR sensor fusion on/off setting (useAdr flag)
-	CfgNavx5SigAttenComp CfgNavx5Mask2 = 0x80 // Only supported on certain products Apply signal attenuation compensation feature settings
+	CfgNavx5Adr CfgNavx5Mask2 = 0x40 // Apply ADR sensor fusion on/off setting (useAdr flag)
 )
 
 type CfgNavx5AopCfg byte
@@ -823,10 +819,10 @@ const (
 )
 
 // CfgNavx51 (Get/set) Navigation engine expert settings
-// Class/Id 0x06 0x23 44 (44 + N*0) bytes
-// -
+// Class/Id 0x06 0x23 40 (40 + N*0) bytes
+// (Polling will send back a version 3 message in protocol versions 19.2).
 type CfgNavx51 struct {
-	Version               uint16          // Message version (0x0003 for this version)
+	Version               uint16          // Message version (0x0002 for this version)
 	Mask1                 CfgNavx51Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
 	Mask2                 CfgNavx51Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
 	Reserved1             [2]byte         // Reserved
@@ -849,8 +845,6 @@ type CfgNavx51 struct {
 	Reserved8             [4]byte         // Reserved
 	Reserved9             [3]byte         // Reserved
 	UseAdr                byte            // Only supported on certain products Enable/disable ADR/UDR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
-	Reserved10            [2]byte         // Reserved
-	Reserved11            [2]byte         // Reserved
 }
 
 func (CfgNavx51) classID() uint16 { return 0x2306 }
@@ -878,6 +872,64 @@ type CfgNavx51AopCfg byte
 
 const (
 	CfgNavx51UseAOP CfgNavx51AopCfg = 0x1 // 1 = enable AssistNow Autonomous
+)
+
+// CfgNavx52 (Get/set) Navigation engine expert settings
+// Class/Id 0x06 0x23 44 (44 + N*0) bytes
+// -
+type CfgNavx52 struct {
+	Version               uint16          // Message version (0x0003 for this version)
+	Mask1                 CfgNavx52Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Mask2                 CfgNavx52Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Reserved1             [2]byte         // Reserved
+	MinSVs                byte            // [#SVs] Minimum number of satellites for navigation
+	MaxSVs                byte            // [#SVs] Maximum number of satellites for navigation
+	MinCNO_dbhz           byte            // [dBHz] Minimum satellite signal level for navigation
+	Reserved2             byte            // Reserved
+	IniFix3D              byte            // 1 = initial fix must be 3D
+	Reserved3             [2]byte         // Reserved
+	AckAiding             byte            // 1 = issue acknowledgements for assistance message input
+	WknRollover           uint16          // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
+	SigAttenCompMode_dbhz byte            // [dBHz] Only supported on certain products Permanently attenuated signal compensation (0 = disabled, 255 = automatic, 1..63 = maximum expected C/N0 value)
+	Reserved4             byte            // Reserved
+	Reserved5             [2]byte         // Reserved
+	Reserved6             [2]byte         // Reserved
+	UsePPP                byte            // 1 = use Precise Point Positioning (only available with the PPP product variant)
+	AopCfg                CfgNavx52AopCfg // AssistNow Autonomous configuration
+	Reserved7             [2]byte         // Reserved
+	AopOrbMaxErr_m        uint16          // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
+	Reserved8             [4]byte         // Reserved
+	Reserved9             [3]byte         // Reserved
+	UseAdr                byte            // Only supported on certain products Enable/disable ADR/UDR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
+	Reserved10            [2]byte         // Reserved
+	Reserved11            [2]byte         // Reserved
+}
+
+func (CfgNavx52) classID() uint16 { return 0x2306 }
+
+type CfgNavx52Mask1 uint16
+
+const (
+	CfgNavx52MinMax       CfgNavx52Mask1 = 0x4    // 1 = apply min/max SVs settings
+	CfgNavx52MinCno       CfgNavx52Mask1 = 0x8    // 1 = apply minimum C/N0 setting
+	CfgNavx52Initial3dfix CfgNavx52Mask1 = 0x40   // 1 = apply initial 3D fix settings
+	CfgNavx52WknRoll      CfgNavx52Mask1 = 0x200  // 1 = apply GPS weeknumber rollover settings
+	CfgNavx52AckAid       CfgNavx52Mask1 = 0x400  // 1 = apply assistance acknowledgement settings
+	CfgNavx52Ppp          CfgNavx52Mask1 = 0x2000 // 1 = apply usePPP flag
+	CfgNavx52Aop          CfgNavx52Mask1 = 0x4000 // 1 = apply aopCfg (useAOP flag) and aopOrbMaxErr settings (AssistNow Autonomous)
+)
+
+type CfgNavx52Mask2 uint32
+
+const (
+	CfgNavx52Adr          CfgNavx52Mask2 = 0x40 // Apply ADR/UDR sensor fusion on/off setting (useAdr flag)
+	CfgNavx52SigAttenComp CfgNavx52Mask2 = 0x80 // Only supported on certain products Apply signal attenuation compensation feature settings
+)
+
+type CfgNavx52AopCfg byte
+
+const (
+	CfgNavx52UseAOP CfgNavx52AopCfg = 0x1 // 1 = enable AssistNow Autonomous
 )
 
 // Message UBX-CFG-NMEA (3 versions)
@@ -1044,7 +1096,7 @@ const (
 	CfgOdoProfile CfgOdoOdoCfg = 0x7 // Profile type (0=running, 1=cycling, 2=swimming, 3=car, 4=custom)
 )
 
-// Message UBX-CFG-PM2 (2 versions)
+// Message UBX-CFG-PM2 (3 versions)
 
 // CfgPm2 (Get/set) Extended power management configuration
 // Class/Id 0x06 0x3b 44 (44 + N*0) bytes
@@ -1083,16 +1135,16 @@ const (
 // Class/Id 0x06 0x3b 48 (48 + N*0) bytes
 // This feature is not supported for either the ADR or FTS products. -
 type CfgPm21 struct {
-	Version               byte         // Message version (0x02 for this version) Note: the message version number is the same as for protocol versions 18 up to 22; please select correct message version based on the protocol version supported by your firmware.
+	Version               byte         // Message version (0x02 for this version) Note: the message version number is the same as for protocol version 23.01; please select correct message version based on the protocol version supported by your firmware.
 	Reserved1             byte         // Reserved
-	MaxStartupStateDur_s  byte         // [s] Maximum time to spend in Acquisition state. If 0: bound disabled. (see maxStartupStateDur) (not supported in protocol versions 23 to 23.01).
+	MaxStartupStateDur_s  byte         // [s] Maximum time to spend in Acquisition state. If 0: bound disabled (see maxStartupStateDur) (not supported in protocol versions less than 17).
 	Reserved2             byte         // Reserved
 	Flags                 CfgPm21Flags // PSM configuration flags
-	UpdatePeriod_ms       uint32       // [ms] Position update period. If set to 0, the receiver will never retry a fix and it will wait for external events .
-	SearchPeriod_ms       uint32       // [ms] Acquisition retry period if previously failed. If set to 0, the receiver will never retry a startup. (not supported in protocol versions 23 to 23.01).
-	GridOffset_ms         uint32       // [ms] Grid offset relative to GPS start of week (not supported in protocol versions 23 to 23.01).
-	OnTime_s              uint16       // [s] Time to stay in Tracking state (not supported in protocol versions 23 to 23.01).
-	MinAcqTime_s          uint16       // [s] Minimal search time
+	UpdatePeriod_ms       uint32       // [ms] Position update period. If set to 0, the receiver will never retry a fix and it will wait for external events
+	SearchPeriod_ms       uint32       // [ms] Acquisition retry period if previously failed. If set to 0, the receiver will never retry a startup
+	GridOffset_ms         uint32       // [ms] Grid offset relative to GPS start of week
+	OnTime_s              uint16       // [s] Time to stay in Tracking state
+	MinAcqTime_s          uint16       // [s] minimal search time
 	Reserved3             [20]byte     // Reserved
 	ExtintInactivityMs_ms uint32       // [ms] inactivity time out on EXTINT pin if enabled
 }
@@ -1102,17 +1154,52 @@ func (CfgPm21) classID() uint16 { return 0x3b06 }
 type CfgPm21Flags uint32
 
 const (
-	CfgPm21OptTarget      CfgPm21Flags = 0xe     // Optimization target 000 performance (default) 001 power save 010 reserved 011 reserved 100 reserved 101 reserved 110 reserved 111 reserved
 	CfgPm21ExtintSel      CfgPm21Flags = 0x10    // EXTINT pin select 0 EXTINT0 1 EXTINT1
-	CfgPm21ExtintWake     CfgPm21Flags = 0x20    // EXTINT pin control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
-	CfgPm21ExtintBackup   CfgPm21Flags = 0x40    // EXTINT pin control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
-	CfgPm21ExtintInactive CfgPm21Flags = 0x80    // EXTINT pin control 0 disabled 1 enabled, force backup in case EXTINT pin is inactive for time longer than extintIncactivityMs
-	CfgPm21LimitPeakCurr  CfgPm21Flags = 0x300   // Limit peak current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
-	CfgPm21WaitTimeFix    CfgPm21Flags = 0x400   // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time (not supported in protocol versions 23 to 23.01).
-	CfgPm21UpdateRTC      CfgPm21Flags = 0x800   // Update real time clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC. (not supported in protocol versions 23 to 23.01, and 32+).
-	CfgPm21UpdateEPH      CfgPm21Flags = 0x1000  // Update ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data.
-	CfgPm21DoNotEnterOff  CfgPm21Flags = 0x10000 // Behavior of receiver in case of no fix Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters (Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead (not supported in protocol versions 23 to 23.01).
-	CfgPm21Mode           CfgPm21Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) (not supported in protocol versions 23 to 23.01) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
+	CfgPm21ExtintWake     CfgPm21Flags = 0x20    // EXTINT Pin Control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
+	CfgPm21ExtintBackup   CfgPm21Flags = 0x40    // EXTINT Pin Control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
+	CfgPm21ExtintInactive CfgPm21Flags = 0x80    // EXTINT Pin Control 0 disabled 1 enabled, force backup in case EXTINT pin is inactive for time longer than extintIncactivityMs
+	CfgPm21LimitPeakCurr  CfgPm21Flags = 0x300   // Limit Peak Current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
+	CfgPm21WaitTimeFix    CfgPm21Flags = 0x400   // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time
+	CfgPm21UpdateRTC      CfgPm21Flags = 0x800   // Update Real Time Clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC.
+	CfgPm21UpdateEPH      CfgPm21Flags = 0x1000  // Update Ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data
+	CfgPm21DoNotEnterOff  CfgPm21Flags = 0x10000 // Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters (Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead
+	CfgPm21Mode           CfgPm21Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
+)
+
+// CfgPm22 (Get/set) Extended power management configuration
+// Class/Id 0x06 0x3b 48 (48 + N*0) bytes
+// This feature is not supported for either the ADR or FTS products. -
+type CfgPm22 struct {
+	Version               byte         // Message version (0x02 for this version) Note: the message version number is the same as for protocol versions 18 up to 22; please select correct message version based on the protocol version supported by your firmware.
+	Reserved1             byte         // Reserved
+	MaxStartupStateDur_s  byte         // [s] Maximum time to spend in Acquisition state. If 0: bound disabled. (see maxStartupStateDur) (not supported in protocol versions 23 to 23.01).
+	Reserved2             byte         // Reserved
+	Flags                 CfgPm22Flags // PSM configuration flags
+	UpdatePeriod_ms       uint32       // [ms] Position update period. If set to 0, the receiver will never retry a fix and it will wait for external events .
+	SearchPeriod_ms       uint32       // [ms] Acquisition retry period if previously failed. If set to 0, the receiver will never retry a startup. (not supported in protocol versions 23 to 23.01).
+	GridOffset_ms         uint32       // [ms] Grid offset relative to GPS start of week (not supported in protocol versions 23 to 23.01).
+	OnTime_s              uint16       // [s] Time to stay in Tracking state (not supported in protocol versions 23 to 23.01).
+	MinAcqTime_s          uint16       // [s] Minimal search time
+	Reserved3             [20]byte     // Reserved
+	ExtintInactivityMs_ms uint32       // [ms] inactivity time out on EXTINT pin if enabled
+}
+
+func (CfgPm22) classID() uint16 { return 0x3b06 }
+
+type CfgPm22Flags uint32
+
+const (
+	CfgPm22OptTarget      CfgPm22Flags = 0xe     // Optimization target 000 performance (default) 001 power save 010 reserved 011 reserved 100 reserved 101 reserved 110 reserved 111 reserved
+	CfgPm22ExtintSel      CfgPm22Flags = 0x10    // EXTINT pin select 0 EXTINT0 1 EXTINT1
+	CfgPm22ExtintWake     CfgPm22Flags = 0x20    // EXTINT pin control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
+	CfgPm22ExtintBackup   CfgPm22Flags = 0x40    // EXTINT pin control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
+	CfgPm22ExtintInactive CfgPm22Flags = 0x80    // EXTINT pin control 0 disabled 1 enabled, force backup in case EXTINT pin is inactive for time longer than extintIncactivityMs
+	CfgPm22LimitPeakCurr  CfgPm22Flags = 0x300   // Limit peak current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
+	CfgPm22WaitTimeFix    CfgPm22Flags = 0x400   // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time (not supported in protocol versions 23 to 23.01).
+	CfgPm22UpdateRTC      CfgPm22Flags = 0x800   // Update real time clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC. (not supported in protocol versions 23 to 23.01, and 32+).
+	CfgPm22UpdateEPH      CfgPm22Flags = 0x1000  // Update ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data.
+	CfgPm22DoNotEnterOff  CfgPm22Flags = 0x10000 // Behavior of receiver in case of no fix Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters (Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead (not supported in protocol versions 23 to 23.01).
+	CfgPm22Mode           CfgPm22Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) (not supported in protocol versions 23 to 23.01) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
 )
 
 // Message UBX-CFG-PMS
@@ -1130,7 +1217,7 @@ type CfgPms struct {
 
 func (CfgPms) classID() uint16 { return 0x8606 }
 
-// Message UBX-CFG-PRT (2 versions)
+// Message UBX-CFG-PRT (5 versions)
 
 // CfgPrt (Poll Request) Polls the configuration for one I/O port
 // Class/Id 0x06 0x00 1 (1 + N*0) bytes
@@ -1141,19 +1228,19 @@ type CfgPrt struct {
 
 func (CfgPrt) classID() uint16 { return 0x0006 }
 
-// CfgPrt1 (Get/set) Port configuration for I2C (DDC) port
+// CfgPrt1 (Get/set) Port configuration for UART ports
 // Class/Id 0x06 0x00 20 (20 + N*0) bytes
-// Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit.
+// Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit. Note that this message can affect baud rate and other transmission parameters. Because there may be messages queued for transmission there may be uncertainty about which protocol applies to such messages. In addition a message currently in transmission may be corrupted by a protocol change. Host data reception parameters may have to be changed to be able to receive future messages, including the acknowledge message resulting from the CFG-PRT message.
 type CfgPrt1 struct {
-	PortID       byte                // Port identifier number (= 0 for I2C (DDC) port)
-	Reserved1    byte                // Reserved
-	TxReady      CfgPrt1TxReady      // TX ready PIN configuration
-	Mode         CfgPrt1Mode         // I2C (DDC) Mode Flags
-	Reserved2    [4]byte             // Reserved
-	InProtoMask  CfgPrt1InProtoMask  // A mask describing which input protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port. (The bitfield inRtcm3 is not supported in protocol versions less than 20)
-	OutProtoMask CfgPrt1OutProtoMask // A mask describing which output protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port. (The bitfield outRtcm3 is not supported in protocol versions less than 20)
-	Flags        CfgPrt1Flags        // Flags bit mask
-	Reserved3    [2]byte             // Reserved
+	PortID          byte                // Port identifier number (see Integration manual for valid UART port IDs)
+	Reserved1       byte                // Reserved
+	TxReady         CfgPrt1TxReady      // TX ready PIN configuration
+	Mode            CfgPrt1Mode         // A bit mask describing the UART mode
+	BaudRate_bits_s uint32              // [Bits/s] Baud rate in bits/second
+	InProtoMask     CfgPrt1InProtoMask  // A mask describing which input protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port.
+	OutProtoMask    CfgPrt1OutProtoMask // A mask describing which output protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port.
+	Flags           CfgPrt1Flags        // Flags bit mask
+	Reserved2       [2]byte             // Reserved
 }
 
 func (CfgPrt1) classID() uint16 { return 0x0006 }
@@ -1170,7 +1257,9 @@ const (
 type CfgPrt1Mode uint32
 
 const (
-	CfgPrt1SlaveAddr CfgPrt1Mode = 0xfe // Slave address Range: 0x07 < slaveAddr < 0x78. Bit 0 must be 0
+	CfgPrt1CharLen   CfgPrt1Mode = 0xc0   // Character length 00 5bit (not supported) 01 6bit (not supported) 10 7bit (supported only with parity) 11 8bit
+	CfgPrt1Parity    CfgPrt1Mode = 0xe00  // 000 Even parity 001 Odd parity 10X No parity X1X Reserved
+	CfgPrt1NStopBits CfgPrt1Mode = 0x3000 // Number of Stop bits 00 1 Stop bit 01 1.5 Stop bit 10 2 Stop bit 11 0.5 Stop bit
 )
 
 type CfgPrt1InProtoMask uint16
@@ -1193,7 +1282,160 @@ const (
 type CfgPrt1Flags uint16
 
 const (
-	CfgPrt1ExtendedTxTimeout CfgPrt1Flags = 0x2 // Extended TX timeout: if set, the port will time out if allocated TX memory >=4 kB and no activity for 1. 5s.
+	CfgPrt1ExtendedTxTimeout CfgPrt1Flags = 0x2 // Extended TX timeout: if set, the port will time out if allocated TX memory >=4 kB and no activity for 1. 5 s. If not set the port will time out if no activity for 1.5 s regardless on the amount of allocated TX memory .
+)
+
+// CfgPrt2 (Get/set) Port configuration for USB port
+// Class/Id 0x06 0x00 20 (20 + N*0) bytes
+// Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit.
+type CfgPrt2 struct {
+	PortID       byte                // Port identifier number (= 3 for USB port)
+	Reserved1    byte                // Reserved
+	TxReady      CfgPrt2TxReady      // TX ready PIN configuration
+	Reserved2    [8]byte             // Reserved
+	InProtoMask  CfgPrt2InProtoMask  // A mask describing which input protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port.
+	OutProtoMask CfgPrt2OutProtoMask // A mask describing which output protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port.
+	Reserved3    [2]byte             // Reserved
+	Reserved4    [2]byte             // Reserved
+}
+
+func (CfgPrt2) classID() uint16 { return 0x0006 }
+
+type CfgPrt2TxReady uint16
+
+const (
+	CfgPrt2En    CfgPrt2TxReady = 0x1    // Enable TX ready feature for this port
+	CfgPrt2Pol   CfgPrt2TxReady = 0x2    // Polarity 0 High-active 1 Low-active
+	CfgPrt2Pin   CfgPrt2TxReady = 0x7c   // PIO to be used (must not be in use by another function)
+	CfgPrt2Thres CfgPrt2TxReady = 0xff80 // Threshold The given threshold is multiplied by 8 bytes. The TX ready PIN goes active after >= thres*8 bytes are pending for the port and going inactive after the last pending bytes have been written to hardware (0-4 bytes before end of stream). 0x000 no threshold 0x001 8byte 0x002 16byte ... 0x1FE 4080byte 0x1FF 4088byte
+)
+
+type CfgPrt2InProtoMask uint16
+
+const (
+	CfgPrt2InUbx   CfgPrt2InProtoMask = 0x1  // UBX protocol
+	CfgPrt2InNmea  CfgPrt2InProtoMask = 0x2  // NMEA protocol
+	CfgPrt2InRtcm  CfgPrt2InProtoMask = 0x4  // RTCM2 protocol
+	CfgPrt2InRtcm3 CfgPrt2InProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
+)
+
+type CfgPrt2OutProtoMask uint16
+
+const (
+	CfgPrt2OutUbx   CfgPrt2OutProtoMask = 0x1  // UBX protocol
+	CfgPrt2OutNmea  CfgPrt2OutProtoMask = 0x2  // NMEA protocol
+	CfgPrt2OutRtcm3 CfgPrt2OutProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
+)
+
+// CfgPrt3 (Get/set) Port configuration for SPI port
+// Class/Id 0x06 0x00 20 (20 + N*0) bytes
+// Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length. Output messages from the module contain only one configuration unit.
+type CfgPrt3 struct {
+	PortID       byte                // Port identifier number (= 4 for SPI port)
+	Reserved1    byte                // Reserved
+	TxReady      CfgPrt3TxReady      // TX ready PIN configuration
+	Mode         CfgPrt3Mode         // SPI Mode Flags
+	Reserved2    [4]byte             // Reserved
+	InProtoMask  CfgPrt3InProtoMask  // A mask describing which input protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port. (The bitfield inRtcm3 is not supported in protocol versions less than 20)
+	OutProtoMask CfgPrt3OutProtoMask // A mask describing which output protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port. (The bitfield outRtcm3 is not supported in protocol versions less than 20)
+	Flags        CfgPrt3Flags        // Flags bit mask
+	Reserved3    [2]byte             // Reserved
+}
+
+func (CfgPrt3) classID() uint16 { return 0x0006 }
+
+type CfgPrt3TxReady uint16
+
+const (
+	CfgPrt3En    CfgPrt3TxReady = 0x1    // Enable TX ready feature for this port
+	CfgPrt3Pol   CfgPrt3TxReady = 0x2    // Polarity 0 High-active 1 Low-active
+	CfgPrt3Pin   CfgPrt3TxReady = 0x7c   // PIO to be used (must not be in use by another function)
+	CfgPrt3Thres CfgPrt3TxReady = 0xff80 // Threshold The given threshold is multiplied by 8 bytes. The TX ready PIN goes active after >= thres*8 bytes are pending for the port and going inactive after the last pending bytes have been written to hardware (0-4 bytes before end of stream). 0x000 no threshold 0x001 8byte 0x002 16byte ... 0x1FE 4080byte 0x1FF 4088byte
+)
+
+type CfgPrt3Mode uint32
+
+const (
+	CfgPrt3SpiMode CfgPrt3Mode = 0x6    // 00 SPI Mode 0: CPOL = 0, CPHA = 0 01 SPI Mode 1: CPOL = 0, CPHA = 1 10 SPI Mode 2: CPOL = 1, CPHA = 0 11 SPI Mode 3: CPOL = 1, CPHA = 1
+	CfgPrt3FfCnt   CfgPrt3Mode = 0x3f00 // Number of bytes containing 0xFF to receive before switching off reception. Range: 0 (mechanism off) - 63
+)
+
+type CfgPrt3InProtoMask uint16
+
+const (
+	CfgPrt3InUbx   CfgPrt3InProtoMask = 0x1  // UBX protocol
+	CfgPrt3InNmea  CfgPrt3InProtoMask = 0x2  // NMEA protocol
+	CfgPrt3InRtcm  CfgPrt3InProtoMask = 0x4  // RTCM2 protocol
+	CfgPrt3InRtcm3 CfgPrt3InProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
+)
+
+type CfgPrt3OutProtoMask uint16
+
+const (
+	CfgPrt3OutUbx   CfgPrt3OutProtoMask = 0x1  // UBX protocol
+	CfgPrt3OutNmea  CfgPrt3OutProtoMask = 0x2  // NMEA protocol
+	CfgPrt3OutRtcm3 CfgPrt3OutProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
+)
+
+type CfgPrt3Flags uint16
+
+const (
+	CfgPrt3ExtendedTxTimeout CfgPrt3Flags = 0x2 // Extended TX timeout: if set, the port will time out if allocated TX memory >=4 kB and no activity for 1. 5 s.
+)
+
+// CfgPrt4 (Get/set) Port configuration for I2C (DDC) port
+// Class/Id 0x06 0x00 20 (20 + N*0) bytes
+// Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit.
+type CfgPrt4 struct {
+	PortID       byte                // Port identifier number (= 0 for I2C (DDC) port)
+	Reserved1    byte                // Reserved
+	TxReady      CfgPrt4TxReady      // TX ready PIN configuration
+	Mode         CfgPrt4Mode         // I2C (DDC) Mode Flags
+	Reserved2    [4]byte             // Reserved
+	InProtoMask  CfgPrt4InProtoMask  // A mask describing which input protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port. (The bitfield inRtcm3 is not supported in protocol versions less than 20)
+	OutProtoMask CfgPrt4OutProtoMask // A mask describing which output protocols are active. Each bit of this mask is used for a protocol. Through that, multiple protocols can be defined on a single port. (The bitfield outRtcm3 is not supported in protocol versions less than 20)
+	Flags        CfgPrt4Flags        // Flags bit mask
+	Reserved3    [2]byte             // Reserved
+}
+
+func (CfgPrt4) classID() uint16 { return 0x0006 }
+
+type CfgPrt4TxReady uint16
+
+const (
+	CfgPrt4En    CfgPrt4TxReady = 0x1    // Enable TX ready feature for this port
+	CfgPrt4Pol   CfgPrt4TxReady = 0x2    // Polarity 0 High-active 1 Low-active
+	CfgPrt4Pin   CfgPrt4TxReady = 0x7c   // PIO to be used (must not be in use by another function)
+	CfgPrt4Thres CfgPrt4TxReady = 0xff80 // Threshold The given threshold is multiplied by 8 bytes. The TX ready PIN goes active after >= thres*8 bytes are pending for the port and going inactive after the last pending bytes have been written to hardware (0-4 bytes before end of stream). 0x000 no threshold 0x001 8byte 0x002 16byte ... 0x1FE 4080byte 0x1FF 4088byte
+)
+
+type CfgPrt4Mode uint32
+
+const (
+	CfgPrt4SlaveAddr CfgPrt4Mode = 0xfe // Slave address Range: 0x07 < slaveAddr < 0x78. Bit 0 must be 0
+)
+
+type CfgPrt4InProtoMask uint16
+
+const (
+	CfgPrt4InUbx   CfgPrt4InProtoMask = 0x1  // UBX protocol
+	CfgPrt4InNmea  CfgPrt4InProtoMask = 0x2  // NMEA protocol
+	CfgPrt4InRtcm  CfgPrt4InProtoMask = 0x4  // RTCM2 protocol
+	CfgPrt4InRtcm3 CfgPrt4InProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
+)
+
+type CfgPrt4OutProtoMask uint16
+
+const (
+	CfgPrt4OutUbx   CfgPrt4OutProtoMask = 0x1  // UBX protocol
+	CfgPrt4OutNmea  CfgPrt4OutProtoMask = 0x2  // NMEA protocol
+	CfgPrt4OutRtcm3 CfgPrt4OutProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
+)
+
+type CfgPrt4Flags uint16
+
+const (
+	CfgPrt4ExtendedTxTimeout CfgPrt4Flags = 0x2 // Extended TX timeout: if set, the port will time out if allocated TX memory >=4 kB and no activity for 1. 5s.
 )
 
 // Message UBX-CFG-PWR
@@ -1269,17 +1511,27 @@ const (
 	CfgRstAop    CfgRstNavBbrMask = 0x8000 // Autonomous orbit parameters
 )
 
-// Message UBX-CFG-RXM
+// Message UBX-CFG-RXM (2 versions)
 
 // CfgRxm (Get/set) RXM configuration
 // Class/Id 0x06 0x11 2 (2 + N*0) bytes
-// For a detailed description see section Power Management.
+// For a detailed description see section Power management in Integration manual Note that Power save mode cannot be selected when the receiver is configured to process GLONASS signals (using UBX-CFG-GNSS).
 type CfgRxm struct {
+	Reserved1 byte // Reserved
+	LpMode    byte // Low power mode 0: Continuous mode 1: Power save mode 4: Continuous mode Note that for receivers with protocol versions larger or equal to 14, both Low power mode settings 0 and 4 configure the receiver to Continuous mode.
+}
+
+func (CfgRxm) classID() uint16 { return 0x1106 }
+
+// CfgRxm1 (Get/set) RXM configuration
+// Class/Id 0x06 0x11 2 (2 + N*0) bytes
+// For a detailed description see section Power Management.
+type CfgRxm1 struct {
 	Reserved1 byte // Reserved
 	LpMode    byte // Low power mode 0: Continuous mode 1: Power save mode 4: Continuous mode
 }
 
-func (CfgRxm) classID() uint16 { return 0x1106 }
+func (CfgRxm1) classID() uint16 { return 0x1106 }
 
 // Message UBX-CFG-SBAS
 
@@ -4469,26 +4721,25 @@ const (
 	RxmPmreq1Spics   RxmPmreq1WakeupSources = 0x80 // Wake up the receiver if there is an edge on the SPI CS pin
 )
 
-// Message UBX-RXM-RAWX
+// Message UBX-RXM-RAWX (2 versions)
 
-// RxmRawx (Periodic/Polled) Multi-GNSS raw measurements
+// RxmRawx (Periodic/Polled) Multi-GNSS raw measurement data
 // Class/Id 0x02 0x15 16 + 32*numMeas (16 + N*32) bytes
-// This message contains the information needed to be able to generate a RINEX 3 multi-GNSS observation file (see ftp://ftp.igs.org/pub/data/format/). This message contains pseudorange, Doppler, carrier phase, phase lock and signal quality information for GNSS satellites once signals have been synchronized. This message supports all active GNSS. The only difference between this version of the message and the previous version (UBX-RXM-RAWX-DATA0) is the addition of the version field.
+// This message contains the information needed to be able to generate a RINEX 3 multi-GNSS observation file (see ftp://ftp.igs.org/pub/data/format/). This message contains pseudorange, Doppler, carrier phase, phase lock and signal quality information for GNSS satellites once signals have been synchronized. This message supports all active GNSS.
 type RxmRawx struct {
 	RcvTow_s   float64        // [s] Measurement time of week in receiver local time approximately aligned to the GPS time system. The receiver local time of week, week number and leap second information can be used to translate the time to other time systems. More information about the difference in time systems can be found in the RINEX 3 format documentation. For a receiver operating in GLONASS only mode, UTC time can be determined by subtracting the leapS field from GPS time regardless of whether the GPS leap seconds are valid.
 	Week_weeks uint16         // [weeks] GPS week number in receiver local time.
 	LeapS_s    int8           // [s] GPS leap seconds (GPS-UTC). This field represents the receiver's best knowledge of the leap seconds offset. A flag is given in the recStat bitfield to indicate if the leap seconds are known.
 	NumMeas    byte           `len:"Meas"` // Number of measurements to follow
 	RecStat    RxmRawxRecStat // Receiver tracking status bitfield
-	Version    byte           // Message version (0x01 for this version)
-	Reserved1  [2]byte        // Reserved
+	Reserved1  [3]byte        // Reserved
 	Meas       []*struct {
 		PrMes_m        float64        // [m] Pseudorange measurement [m]. GLONASS inter frequency channel delays are compensated with an internal calibration table.
 		CpMes_cycles   float64        // [cycles] Carrier phase measurement [cycles]. The carrier phase initial ambiguity is initialized using an approximate value to make the magnitude of the phase close to the pseudorange measurement. Clock resets are applied to both phase and code measurements in accordance with the RINEX specification.
 		DoMes_hz       float32        // [Hz] Doppler measurement (positive sign for approaching satellites) [Hz]
 		GnssId         byte           // GNSS identifier (see Satellite Numbering for a list of identifiers)
 		SvId           byte           // Satellite identifier (see Satellite Numbering)
-		SigId          byte           // New style signal identifier (see Signal Identifiers).(not supported in protocol versions less than 27)
+		Reserved2      byte           // Reserved
 		FreqId         byte           // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
 		Locktime_ms    uint16         // [ms] Carrier phase locktime counter (maximum 64500ms)
 		Cno_dbhz       byte           // [dBHz] Carrier-to-noise density ratio (signal strength) [dB-Hz]
@@ -4496,7 +4747,7 @@ type RxmRawx struct {
 		CpStdev_cycles RxmRawxCpStdev // [0.004 cycles] Estimated carrier phase measurement standard deviation (note a raw value of 0x0F indicates the value is invalid)
 		DoStdev_hz     RxmRawxDoStdev // [0.002*2^n Hz] Estimated Doppler measurement standard deviation.
 		TrkStat        RxmRawxTrkStat // Tracking status bitfield (see graphic below )
-		Reserved2      byte           // Reserved
+		Reserved3      byte           // Reserved
 	} // len: NumMeas
 }
 
@@ -4534,6 +4785,71 @@ const (
 	RxmRawxCpValid    RxmRawxTrkStat = 0x2 // Carrier phase valid
 	RxmRawxHalfCyc    RxmRawxTrkStat = 0x4 // Half cycle valid
 	RxmRawxSubHalfCyc RxmRawxTrkStat = 0x8 // Half cycle subtracted from phase
+)
+
+// RxmRawx1 (Periodic/Polled) Multi-GNSS raw measurements
+// Class/Id 0x02 0x15 16 + 32*numMeas (16 + N*32) bytes
+// This message contains the information needed to be able to generate a RINEX 3 multi-GNSS observation file (see ftp://ftp.igs.org/pub/data/format/). This message contains pseudorange, Doppler, carrier phase, phase lock and signal quality information for GNSS satellites once signals have been synchronized. This message supports all active GNSS. The only difference between this version of the message and the previous version (UBX-RXM-RAWX-DATA0) is the addition of the version field.
+type RxmRawx1 struct {
+	RcvTow_s   float64         // [s] Measurement time of week in receiver local time approximately aligned to the GPS time system. The receiver local time of week, week number and leap second information can be used to translate the time to other time systems. More information about the difference in time systems can be found in the RINEX 3 format documentation. For a receiver operating in GLONASS only mode, UTC time can be determined by subtracting the leapS field from GPS time regardless of whether the GPS leap seconds are valid.
+	Week_weeks uint16          // [weeks] GPS week number in receiver local time.
+	LeapS_s    int8            // [s] GPS leap seconds (GPS-UTC). This field represents the receiver's best knowledge of the leap seconds offset. A flag is given in the recStat bitfield to indicate if the leap seconds are known.
+	NumMeas    byte            `len:"Meas"` // Number of measurements to follow
+	RecStat    RxmRawx1RecStat // Receiver tracking status bitfield
+	Version    byte            // Message version (0x01 for this version)
+	Reserved1  [2]byte         // Reserved
+	Meas       []*struct {
+		PrMes_m        float64         // [m] Pseudorange measurement [m]. GLONASS inter frequency channel delays are compensated with an internal calibration table.
+		CpMes_cycles   float64         // [cycles] Carrier phase measurement [cycles]. The carrier phase initial ambiguity is initialized using an approximate value to make the magnitude of the phase close to the pseudorange measurement. Clock resets are applied to both phase and code measurements in accordance with the RINEX specification.
+		DoMes_hz       float32         // [Hz] Doppler measurement (positive sign for approaching satellites) [Hz]
+		GnssId         byte            // GNSS identifier (see Satellite Numbering for a list of identifiers)
+		SvId           byte            // Satellite identifier (see Satellite Numbering)
+		SigId          byte            // New style signal identifier (see Signal Identifiers).(not supported in protocol versions less than 27)
+		FreqId         byte            // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
+		Locktime_ms    uint16          // [ms] Carrier phase locktime counter (maximum 64500ms)
+		Cno_dbhz       byte            // [dBHz] Carrier-to-noise density ratio (signal strength) [dB-Hz]
+		PrStdev_m      RxmRawx1PrStdev // [0.01*2^n m] Estimated pseudorange measurement standard deviation
+		CpStdev_cycles RxmRawx1CpStdev // [0.004 cycles] Estimated carrier phase measurement standard deviation (note a raw value of 0x0F indicates the value is invalid)
+		DoStdev_hz     RxmRawx1DoStdev // [0.002*2^n Hz] Estimated Doppler measurement standard deviation.
+		TrkStat        RxmRawx1TrkStat // Tracking status bitfield (see graphic below )
+		Reserved2      byte            // Reserved
+	} // len: NumMeas
+}
+
+func (RxmRawx1) classID() uint16 { return 0x1502 }
+
+type RxmRawx1RecStat byte
+
+const (
+	RxmRawx1LeapSec  RxmRawx1RecStat = 0x1 // Leap seconds have been determined
+	RxmRawx1ClkReset RxmRawx1RecStat = 0x2 // Clock reset applied. Typically the receiver clock is changed in increments of integer milliseconds.
+)
+
+type RxmRawx1PrStdev byte
+
+const (
+	RxmRawx1PrStd RxmRawx1PrStdev = 0xf // Estimated pseudorange standard deviation
+)
+
+type RxmRawx1CpStdev byte
+
+const (
+	RxmRawx1CpStd RxmRawx1CpStdev = 0xf // Estimated carrier phase standard deviation
+)
+
+type RxmRawx1DoStdev byte
+
+const (
+	RxmRawx1DoStd RxmRawx1DoStdev = 0xf // Estimated Doppler standard deviation
+)
+
+type RxmRawx1TrkStat byte
+
+const (
+	RxmRawx1PrValid    RxmRawx1TrkStat = 0x1 // Pseudorange valid
+	RxmRawx1CpValid    RxmRawx1TrkStat = 0x2 // Carrier phase valid
+	RxmRawx1HalfCyc    RxmRawx1TrkStat = 0x4 // Half cycle valid
+	RxmRawx1SubHalfCyc RxmRawx1TrkStat = 0x8 // Half cycle subtracted from phase
 )
 
 // Message UBX-RXM-RLM (2 versions)
@@ -4592,12 +4908,31 @@ const (
 	RxmRtcmMsgUsed   RxmRtcmFlags = 0x6 // 2 = RTCM message used successfully by the receiver, 1 = not used, 0 = do not know
 )
 
-// Message UBX-RXM-SFRBX
+// Message UBX-RXM-SFRBX (2 versions)
 
 // RxmSfrbx (Output) Broadcast navigation data subframe
 // Class/Id 0x02 0x13 8 + 4*numWords (8 + N*4) bytes
 // This message reports a complete subframe of broadcast navigation data decoded from a single signal. The number of data words reported in each message depends on the nature of the signal. See the section on Broadcast Navigation Data for further details.
 type RxmSfrbx struct {
+	GnssId    byte // GNSS identifier (see Satellite Numbering)
+	SvId      byte // Satellite identifier (see Satellite Numbering)
+	Reserved1 byte // Reserved
+	FreqId    byte // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
+	NumWords  byte `len:"Words"` // The number of data words contained in this message (0..16)
+	Reserved2 byte // Reserved
+	Version   byte // Message version (0x01 for this version)
+	Reserved3 byte // Reserved
+	Words     []*struct {
+		Dwrd uint32 // The data words
+	} // len: NumWords
+}
+
+func (RxmSfrbx) classID() uint16 { return 0x1302 }
+
+// RxmSfrbx1 (Output) Broadcast navigation data subframe
+// Class/Id 0x02 0x13 8 + 4*numWords (8 + N*4) bytes
+// This message reports a complete subframe of broadcast navigation data decoded from a single signal. The number of data words reported in each message depends on the nature of the signal. See the section on Broadcast Navigation Data for further details.
+type RxmSfrbx1 struct {
 	GnssId    byte // GNSS identifier (see Satellite Numbering)
 	SvId      byte // Satellite identifier (see Satellite Numbering)
 	Reserved1 byte // Reserved
@@ -4611,7 +4946,7 @@ type RxmSfrbx struct {
 	} // len: NumWords
 }
 
-func (RxmSfrbx) classID() uint16 { return 0x1302 }
+func (RxmSfrbx1) classID() uint16 { return 0x1302 }
 
 // Message UBX-RXM-SVSI
 
@@ -4882,7 +5217,7 @@ const (
 	TimTpUtcStandard TimTpRefInfo = 0xf0 // UTC standard identifier. Only valid if time base is UTC (timeBase=1). 0 = Information not available 1 = Communications Research Laboratory (CRL), Tokyo, Japan 2 = National Institute of Standards and Technology (NIST) 3 = U.S. Naval Observatory (USNO) 4 = International Bureau of Weights and Measures (BIPM) 5 = European laboratories 6 = Former Soviet Union (SU) 7 = National Time Service Center (NTSC), China 15 = Unknown
 )
 
-// Message UBX-TIM-VCOCAL (2 versions)
+// Message UBX-TIM-VCOCAL (3 versions)
 
 // TimVcocal (Command) Stop calibration
 // Class/Id 0x0d 0x15 1 (1 + N*0) bytes
@@ -4893,10 +5228,26 @@ type TimVcocal struct {
 
 func (TimVcocal) classID() uint16 { return 0x150d }
 
-// TimVcocal1 (Periodic/Polled) Results of the calibration
+// TimVcocal1 (Command) VCO calibration extended command
+// Class/Id 0x0d 0x15 12 (12 + N*0) bytes
+// Calibrate (measure) gain of the voltage controlled oscillator. The calibration is performed by varying the raw oscillator control values between the limits specified in raw0 and raw1. maxStepSize is the largest step change that can be used during the calibration process. The "raw values" are either PWM duty cycle values or DAC values depending on how the VCTCXO is connected to the system. The measured gain is the transfer function dRelativeFrequencyChange/dRaw (not dFrequency/dVoltage). The calibration process works as follows: Starting from the current raw output the control value is changed in the direction of raw0 in steps of size at most maxStepSize. Then the frequency is measured and the control value is changed towards raw1, again in steps of maxStepSize. When raw1 is reached, the frequency is again measured and the message version DATA0 is output containing the measured result. Normal operation then resumes. If the control value movement is less than maxStepSize then the transition will happen in one step - this will give fast calibration. Care must be taken when calibrating the internal oscillator against the GNSS source. In that case the changes applied to the oscillator frequency could be severe enough to lose satellite signal tracking, especially when signals are weak. If too many signals are lost, the GNSS system will lose its fix and be unable to measure the oscillator frequency - the calibration will then fail. In this case maxStepSize must be reasonably small. It is also important that only the chosen frequency source is enabled during the calibration process and that it remains stable throughout the calibration period; otherwise incorrect oscillator measurements will be made and this will lead to miscalibration and poor subsequent operation of the receiver.
+type TimVcocal1 struct {
+	Type                   byte    // Message type (2 for this message)
+	Version                byte    // Message version (0x00 for this version)
+	OscId                  byte    // Oscillator to be calibrated: 0: internal oscillator 1: external oscillator
+	SrcId                  byte    // Reference source: 0: internal oscillator 1: GNSS 2: EXTINT0 3: EXTINT1 Option 0 should be used when calibrating the external oscillator. Options 1-3 should be used when calibrating the internal oscillator.
+	Reserved1              [2]byte // Reserved
+	Raw0                   uint16  // First value used for calibration
+	Raw1                   uint16  // Second value used for calibration
+	MaxStepSize_rawvalue_s uint16  // [rawvalue/s] Maximum step size to be used
+}
+
+func (TimVcocal1) classID() uint16 { return 0x150d }
+
+// TimVcocal2 (Periodic/Polled) Results of the calibration
 // Class/Id 0x0d 0x15 12 (12 + N*0) bytes
 // This message is sent when the oscillator gain calibration process is finished (successful or unsuccessful). It notifies the user of the calibrated oscillator gain. If the oscillator gain calibration process was successful, this message will contain the measured gain (field gainVco) and its uncertainty (field gainUncertainty). The calibration process can however fail. In that case the two fields gainVco and gainUncertainty are set to zero.
-type TimVcocal1 struct {
+type TimVcocal2 struct {
 	Type            byte    // Message type (3 for this message)
 	Version         byte    // Message version (0x00 for this version)
 	OscId           byte    // Id of oscillator: 0: internal oscillator 1: external oscillator
@@ -4905,7 +5256,7 @@ type TimVcocal1 struct {
 	GainVco         int32   // [2^-16 ppb/raw LSB] Calibrated gain or 0 if calibration failed
 }
 
-func (TimVcocal1) classID() uint16 { return 0x150d }
+func (TimVcocal2) classID() uint16 { return 0x150d }
 
 // Message UBX-TIM-VRFY
 
@@ -4930,7 +5281,7 @@ const (
 	TimVrfySrc TimVrfyFlags = 0x7 // Aiding time source 0 = no time aiding done 2 = source was RTC 3 = source was assistance data
 )
 
-// Message UBX-UPD-SOS (3 versions)
+// Message UBX-UPD-SOS (5 versions)
 
 // UpdSos (Poll Request) Poll backup restore status
 // Class/Id 0x09 0x14 0 (0 + N*0) bytes
@@ -4940,573 +5291,261 @@ type UpdSos struct {
 
 func (UpdSos) classID() uint16 { return 0x1409 }
 
-// UpdSos1 (Command) Clear backup in flash
+// UpdSos1 (Command) Create backup in flash
 // Class/Id 0x09 0x14 4 (4 + N*0) bytes
-// The host can send this message in order to erase the backup file present in flash. It is recommended that the clear operation is issued after the host has received the notification that the memory has been restored after a reset. Alternatively the host can parse the startup string Restored data saved on shutdown or poll the UBX-UPD-SOS message for obtaining the status.
+// The host can send this message in order to save part of the battery-backed memory (BBR) in a file in the flash file system. The feature is designed in order to emulate the presence of the backup battery even if it is not present; the host can issue the save on shutdown command before switching off the device supply. It is recommended to issue a GNSS stop command using UBX-CFG-RST before in order to keep the BBR memory content consistent.
 type UpdSos1 struct {
-	Cmd       byte    // Command (must be 1)
+	Cmd       byte    // Command (must be 0)
 	Reserved1 [3]byte // Reserved
 }
 
 func (UpdSos1) classID() uint16 { return 0x1409 }
 
-// UpdSos2 (Output) System restored from backup
+// UpdSos2 (Command) Clear backup in flash
+// Class/Id 0x09 0x14 4 (4 + N*0) bytes
+// The host can send this message in order to erase the backup file present in flash. It is recommended that the clear operation is issued after the host has received the notification that the memory has been restored after a reset. Alternatively the host can parse the startup string Restored data saved on shutdown or poll the UBX-UPD-SOS message for obtaining the status.
+type UpdSos2 struct {
+	Cmd       byte    // Command (must be 1)
+	Reserved1 [3]byte // Reserved
+}
+
+func (UpdSos2) classID() uint16 { return 0x1409 }
+
+// UpdSos3 (Output) Backup creation acknowledge
+// Class/Id 0x09 0x14 8 (8 + N*0) bytes
+// The message is sent from the device as confirmation of creation of a backup file in flash. The host can safely shut down the device after having received this message.
+type UpdSos3 struct {
+	Cmd       byte    // Command (must be 2)
+	Reserved1 [3]byte // Reserved
+	Response  byte    // 0 = Not acknowledged 1 = Acknowledged
+	Reserved2 [3]byte // Reserved
+}
+
+func (UpdSos3) classID() uint16 { return 0x1409 }
+
+// UpdSos4 (Output) System restored from backup
 // Class/Id 0x09 0x14 8 (8 + N*0) bytes
 // The message is sent from the device to notify the host the BBR has been restored from a backup file in the flash file sysetem. The host should clear the backup file after receiving this message. If the UBX-UPD-SOS message is polled, this message will be resent.
-type UpdSos2 struct {
+type UpdSos4 struct {
 	Cmd       byte    // Command (must be 3)
 	Reserved1 [3]byte // Reserved
 	Response  byte    // 0 = Unknown 1 = Failed restoring from backup 2 = Restored from backup 3 = Not restored (no backup)
 	Reserved2 [3]byte // Reserved
 }
 
-func (UpdSos2) classID() uint16 { return 0x1409 }
-
-func mkMsg(classId, sz uint16) Message {
-	switch classId {
-
-	case 0x0105:
-		return &AckAck{}
-
-	case 0x0005:
-		return &AckNak{}
-
-	case 0x300b:
-		return &AidAlm{}
-		return &AidAlm1{}
-		return &AidAlm2{}
-
-	case 0x330b:
-		return &AidAop{}
-		return &AidAop1{}
-		return &AidAop2{}
-
-	case 0x310b:
-		return &AidEph{}
-		return &AidEph1{}
-		return &AidEph2{}
-
-	case 0x020b:
-		return &AidHui{}
-		return &AidHui1{}
-
-	case 0x010b:
-		return &AidIni{}
-		return &AidIni1{}
-
-	case 0x1306:
-		return &CfgAnt{}
-
-	case 0x9306:
-		return &CfgBatch{}
-
-	case 0x0906:
-		return &CfgCfg{}
-
-	case 0x0606:
-		return &CfgDat{}
-		return &CfgDat1{}
-
-	case 0x7006:
-		return &CfgDgnss{}
-
-	case 0x6106:
-		return &CfgDosc{}
-
-	case 0x4c06:
-		return &CfgEsfa{}
-
-	case 0x5606:
-		return &CfgEsfalg{}
-
-	case 0x4d06:
-		return &CfgEsfg{}
-
-	case 0x8206:
-		return &CfgEsfwt{}
-
-	case 0x6006:
-		return &CfgEsrc{}
-
-	case 0x6906:
-		return &CfgGeofence{}
-
-	case 0x3e06:
-		return &CfgGnss{}
-
-	case 0x5c06:
-		return &CfgHnr{}
-
-	case 0x0206:
-		return &CfgInf{}
-		return &CfgInf1{}
-
-	case 0x3906:
-		return &CfgItfm{}
-
-	case 0x4706:
-		return &CfgLogfilter{}
-
-	case 0x0106:
-		return &CfgMsg{}
-		return &CfgMsg1{}
-		return &CfgMsg2{}
-
-	case 0x2406:
-		return &CfgNav5{}
-
-	case 0x2306:
-		return &CfgNavx5{}
-		return &CfgNavx51{}
-
-	case 0x1706:
-		return &CfgNmea{}
-		return &CfgNmea1{}
-		return &CfgNmea2{}
-
-	case 0x1e06:
-		return &CfgOdo{}
-
-	case 0x3b06:
-		return &CfgPm2{}
-		return &CfgPm21{}
-
-	case 0x8606:
-		return &CfgPms{}
-
-	case 0x0006:
-		return &CfgPrt{}
-		return &CfgPrt1{}
-
-	case 0x5706:
-		return &CfgPwr{}
-
-	case 0x0806:
-		return &CfgRate{}
-
-	case 0x3406:
-		return &CfgRinv{}
-
-	case 0x0406:
-		return &CfgRst{}
-
-	case 0x1106:
-		return &CfgRxm{}
-
-	case 0x1606:
-		return &CfgSbas{}
-
-	case 0x8806:
-		return &CfgSenif{}
-
-	case 0x8d06:
-		return &CfgSlas{}
-
-	case 0x6206:
-		return &CfgSmgr{}
-
-	case 0x6406:
-		return &CfgSpt{}
-
-	case 0x3d06:
-		return &CfgTmode2{}
-
-	case 0x7106:
-		return &CfgTmode3{}
-
-	case 0x3106:
-		return &CfgTp5{}
-		return &CfgTp51{}
-		return &CfgTp52{}
-
-	case 0x5306:
-		return &CfgTxslot{}
-
-	case 0x1b06:
-		return &CfgUsb{}
-
-	case 0x1410:
-		return &EsfAlg{}
-
-	case 0x1510:
-		return &EsfIns{}
-
-	case 0x0210:
-		return &EsfMeas{}
-
-	case 0x0310:
-		return &EsfRaw{}
-
-	case 0x1010:
-		return &EsfStatus{}
-
-	case 0x0128:
-		return &HnrAtt{}
-
-	case 0x0228:
-		return &HnrIns{}
-
-	case 0x0028:
-		return &HnrPvt{}
-
-	case 0x0404:
-		return &InfDebug{}
-
-	case 0x0004:
-		return &InfError{}
-
-	case 0x0204:
-		return &InfNotice{}
-
-	case 0x0304:
-		return &InfTest{}
-
-	case 0x0104:
-		return &InfWarning{}
-
-	case 0x1121:
-		return &LogBatch{}
-
-	case 0x0721:
-		return &LogCreate{}
-
-	case 0x0321:
-		return &LogErase{}
-
-	case 0x0e21:
-		return &LogFindtime{}
-		return &LogFindtime1{}
-
-	case 0x0821:
-		return &LogInfo{}
-		return &LogInfo1{}
-
-	case 0x0921:
-		return &LogRetrieve{}
-
-	case 0x1021:
-		return &LogRetrievebatch{}
-
-	case 0x0b21:
-		return &LogRetrievepos{}
-
-	case 0x0f21:
-		return &LogRetrieveposextra{}
-
-	case 0x0d21:
-		return &LogRetrievestring{}
-
-	case 0x0421:
-		return &LogString{}
-
-	case 0x6013:
-		return &MgaAckData0{}
-
-	case 0x2013:
-		return &MgaAno{}
-
-	case 0x0313:
-		return &MgaBdsAlm{}
-
-	case 0x0313:
-		return &MgaBdsEph{}
-
-	case 0x0313:
-		return &MgaBdsHealth{}
-
-	case 0x0313:
-		return &MgaBdsIono{}
-
-	case 0x0313:
-		return &MgaBdsUtc{}
-
-	case 0x8013:
-		return &MgaDbd{}
-		return &MgaDbd1{}
-
-	case 0x2113:
-		return &MgaFlashAck{}
-
-	case 0x2113:
-		return &MgaFlashData{}
-
-	case 0x2113:
-		return &MgaFlashStop{}
-
-	case 0x0213:
-		return &MgaGalAlm{}
-
-	case 0x0213:
-		return &MgaGalEph{}
-
-	case 0x0213:
-		return &MgaGalTimeoffset{}
-
-	case 0x0213:
-		return &MgaGalUtc{}
-
-	case 0x0613:
-		return &MgaGloAlm{}
-
-	case 0x0613:
-		return &MgaGloEph{}
-
-	case 0x0613:
-		return &MgaGloTimeoffset{}
-
-	case 0x0013:
-		return &MgaGpsAlm{}
-
-	case 0x0013:
-		return &MgaGpsEph{}
-
-	case 0x0013:
-		return &MgaGpsHealth{}
-
-	case 0x0013:
-		return &MgaGpsIono{}
-
-	case 0x0013:
-		return &MgaGpsUtc{}
-
-	case 0x4013:
-		return &MgaIniClkd{}
-
-	case 0x4013:
-		return &MgaIniEop{}
-
-	case 0x4013:
-		return &MgaIniFreq{}
-
-	case 0x4013:
-		return &MgaIniPos_llh{}
-
-	case 0x4013:
-		return &MgaIniPos_xyz{}
-
-	case 0x4013:
-		return &MgaIniTime_gnss{}
-
-	case 0x4013:
-		return &MgaIniTime_utc{}
-
-	case 0x0513:
-		return &MgaQzssAlm{}
-
-	case 0x0513:
-		return &MgaQzssEph{}
-
-	case 0x0513:
-		return &MgaQzssHealth{}
-
-	case 0x320a:
-		return &MonBatch{}
-
-	case 0x280a:
-		return &MonGnss{}
-
-	case 0x090a:
-		return &MonHw{}
-
-	case 0x0b0a:
-		return &MonHw2{}
-
-	case 0x020a:
-		return &MonIo{}
-
-	case 0x060a:
-		return &MonMsgpp{}
-
-	case 0x270a:
-		return &MonPatch{}
-		return &MonPatch1{}
-
-	case 0x070a:
-		return &MonRxbuf{}
-
-	case 0x210a:
-		return &MonRxr{}
-
-	case 0x2e0a:
-		return &MonSmgr{}
-
-	case 0x2f0a:
-		return &MonSpt{}
-
-	case 0x080a:
-		return &MonTxbuf{}
-
-	case 0x040a:
-		return &MonVer{}
-		return &MonVer1{}
-
-	case 0x6001:
-		return &NavAopstatus{}
-
-	case 0x0501:
-		return &NavAtt{}
-
-	case 0x2201:
-		return &NavClock{}
-
-	case 0x3601:
-		return &NavCov{}
-
-	case 0x3101:
-		return &NavDgps{}
-
-	case 0x0401:
-		return &NavDop{}
-
-	case 0x3d01:
-		return &NavEell{}
-
-	case 0x6101:
-		return &NavEoe{}
-
-	case 0x3901:
-		return &NavGeofence{}
-
-	case 0x1301:
-		return &NavHpposecef{}
-
-	case 0x1401:
-		return &NavHpposllh{}
-
-	case 0x2801:
-		return &NavNmi{}
-
-	case 0x0901:
-		return &NavOdo{}
-
-	case 0x3401:
-		return &NavOrb{}
-
-	case 0x0101:
-		return &NavPosecef{}
-
-	case 0x0201:
-		return &NavPosllh{}
-
-	case 0x0701:
-		return &NavPvt{}
-
-	case 0x3c01:
-		return &NavRelposned{}
-
-	case 0x1001:
-		return &NavResetodo{}
-
-	case 0x3501:
-		return &NavSat{}
-
-	case 0x3201:
-		return &NavSbas{}
-
-	case 0x4201:
-		return &NavSlas{}
-
-	case 0x0601:
-		return &NavSol{}
-
-	case 0x0301:
-		return &NavStatus{}
-
-	case 0x3b01:
-		return &NavSvin{}
-
-	case 0x3001:
-		return &NavSvinfo{}
-
-	case 0x2401:
-		return &NavTimebds{}
-
-	case 0x2501:
-		return &NavTimegal{}
-
-	case 0x2301:
-		return &NavTimeglo{}
-
-	case 0x2001:
-		return &NavTimegps{}
-
-	case 0x2601:
-		return &NavTimels{}
-
-	case 0x2101:
-		return &NavTimeutc{}
-
-	case 0x1101:
-		return &NavVelecef{}
-
-	case 0x1201:
-		return &NavVelned{}
-
-	case 0x6102:
-		return &RxmImes{}
-
-	case 0x1402:
-		return &RxmMeasx{}
-
-	case 0x4102:
-		return &RxmPmreq{}
-		return &RxmPmreq1{}
-
-	case 0x1502:
-		return &RxmRawx{}
-
-	case 0x5902:
-		return &RxmRlm{}
-		return &RxmRlm1{}
-
-	case 0x3202:
-		return &RxmRtcm{}
-
-	case 0x1302:
-		return &RxmSfrbx{}
-
-	case 0x2002:
-		return &RxmSvsi{}
-
-	case 0x0327:
-		return &SecUniqid{}
-
-	case 0x110d:
-		return &TimDosc{}
-
-	case 0x160d:
-		return &TimFchg{}
-
-	case 0x170d:
-		return &TimHoc{}
-
-	case 0x130d:
-		return &TimSmeas{}
-
-	case 0x040d:
-		return &TimSvin{}
-
-	case 0x030d:
-		return &TimTm2{}
-
-	case 0x120d:
-		return &TimTos{}
-
-	case 0x010d:
-		return &TimTp{}
-
-	case 0x150d:
-		return &TimVcocal{}
-		return &TimVcocal1{}
-
-	case 0x060d:
-		return &TimVrfy{}
-
-	case 0x1409:
-		return &UpdSos{}
-		return &UpdSos1{}
-		return &UpdSos2{}
-
-	}
-	return nil
-}
+func (UpdSos4) classID() uint16 { return 0x1409 }
+
+/*
+
+0x01 05   2   2   0 AckAck
+0x00 05   2   2   0 AckNak
+0x30 0b   0   0   0 AidAlm
+0x30 0b   1   1   0 AidAlm1
+0x30 0b   8  40   0 AidAlm2
+0x33 0b   0   0   0 AidAop
+0x33 0b   1   1   0 AidAop1
+0x33 0b  68  68   0 AidAop2
+0x31 0b   0   0   0 AidEph
+0x31 0b   1   1   0 AidEph1
+0x31 0b   8 104   0 AidEph2
+0x02 0b   0   0   0 AidHui
+0x02 0b  72  72   0 AidHui1
+0x01 0b   0   0   0 AidIni
+0x01 0b  48  48   0 AidIni1
+0x13 06   4   4   0 CfgAnt
+0x93 06   8   8   0 CfgBatch
+0x09 06  12  13   0 CfgCfg
+0x06 06  44  44   0 CfgDat
+0x06 06  52  52   0 CfgDat1
+0x70 06   4   4   0 CfgDgnss
+0x61 06   4   4  32 CfgDosc
+0x4c 06  20  20   0 CfgEsfa
+0x56 06  12  12   0 CfgEsfalg
+0x4d 06  20  20   0 CfgEsfg
+0x82 06  32  32   0 CfgEsfwt
+0x60 06   4   4  36 CfgEsrc
+0x69 06   8   8  12 CfgGeofence
+0x3e 06   4   4   8 CfgGnss
+0x5c 06   4   4   0 CfgHnr
+0x02 06   0   0  10 CfgInf
+0x02 06   1   1   0 CfgInf1
+0x39 06   8   8   0 CfgItfm
+0x47 06  12  12   0 CfgLogfilter
+0x01 06   2   2   0 CfgMsg
+0x01 06   3   3   0 CfgMsg1
+0x01 06   8   8   0 CfgMsg2
+0x24 06  36  36   0 CfgNav5
+0x23 06  40  40   0 CfgNavx5
+0x23 06  40  40   0 CfgNavx51
+0x23 06  44  44   0 CfgNavx52
+0x17 06   4   4   0 CfgNmea
+0x17 06  12  12   0 CfgNmea1
+0x17 06  20  20   0 CfgNmea2
+0x1e 06  20  20   0 CfgOdo
+0x3b 06  44  44   0 CfgPm2
+0x3b 06  48  48   0 CfgPm21
+0x3b 06  48  48   0 CfgPm22
+0x86 06   8   8   0 CfgPms
+0x00 06   1   1   0 CfgPrt
+0x00 06  20  20   0 CfgPrt1
+0x00 06  20  20   0 CfgPrt2
+0x00 06  20  20   0 CfgPrt3
+0x00 06  20  20   0 CfgPrt4
+0x57 06   8   8   0 CfgPwr
+0x08 06   6   6   0 CfgRate
+0x34 06   1   1   1 CfgRinv
+0x04 06   4   4   0 CfgRst
+0x11 06   2   2   0 CfgRxm
+0x11 06   2   2   0 CfgRxm1
+0x16 06   8   8   0 CfgSbas
+0x88 06   6   6   0 CfgSenif
+0x8d 06   4   4   0 CfgSlas
+0x62 06  20  20   0 CfgSmgr
+0x64 06  12  12   0 CfgSpt
+0x3d 06  28  28   0 CfgTmode2
+0x71 06  40  40   0 CfgTmode3
+0x31 06   0   0   0 CfgTp5
+0x31 06   1   1   0 CfgTp51
+0x31 06  32  32   0 CfgTp52
+0x53 06  16  16   0 CfgTxslot
+0x1b 06 108 108   0 CfgUsb
+0x14 10  16  16   0 EsfAlg
+0x15 10  36  36   0 EsfIns
+0x02 10   8  12   4 EsfMeas
+0x03 10   4   4   8 EsfRaw
+0x10 10  16  16   4 EsfStatus
+0x01 28  32  32   0 HnrAtt
+0x02 28  36  36   0 HnrIns
+0x00 28  72  72   0 HnrPvt
+0x04 04   0   0   1 InfDebug
+0x00 04   0   0   1 InfError
+0x02 04   0   0   1 InfNotice
+0x03 04   0   0   1 InfTest
+0x01 04   0   0   1 InfWarning
+0x11 21 100 100   0 LogBatch
+0x07 21   8   8   0 LogCreate
+0x03 21   0   0   0 LogErase
+0x0e 21   8   8   0 LogFindtime
+0x0e 21  12  12   0 LogFindtime1
+0x08 21   0   0   0 LogInfo
+0x08 21  48  48   0 LogInfo1
+0x09 21  12  12   0 LogRetrieve
+0x10 21   4   4   0 LogRetrievebatch
+0x0b 21  40  40   0 LogRetrievepos
+0x0f 21  32  32   0 LogRetrieveposextra
+0x0d 21  16  16   1 LogRetrievestring
+0x04 21   0   0   1 LogString
+0x60 13   8   8   0 MgaAckData0
+0x20 13  76  76   0 MgaAno
+0x03 13  40  40   0 MgaBdsAlm
+0x03 13  88  88   0 MgaBdsEph
+0x03 13  68  68   0 MgaBdsHealth
+0x03 13  16  16   0 MgaBdsIono
+0x03 13  20  20   0 MgaBdsUtc
+0x80 13   0   0   0 MgaDbd
+0x80 13  12  12   1 MgaDbd1
+0x21 13   6   6   0 MgaFlashAck
+0x21 13   6   6   1 MgaFlashData
+0x21 13   2   2   0 MgaFlashStop
+0x02 13  32  32   0 MgaGalAlm
+0x02 13  76  76   0 MgaGalEph
+0x02 13  12  12   0 MgaGalTimeoffset
+0x02 13  20  20   0 MgaGalUtc
+0x06 13  36  36   0 MgaGloAlm
+0x06 13  48  48   0 MgaGloEph
+0x06 13  20  20   0 MgaGloTimeoffset
+0x00 13  36  36   0 MgaGpsAlm
+0x00 13  68  68   0 MgaGpsEph
+0x00 13  40  40   0 MgaGpsHealth
+0x00 13  16  16   0 MgaGpsIono
+0x00 13  20  20   0 MgaGpsUtc
+0x40 13  12  12   0 MgaIniClkd
+0x40 13  72  72   0 MgaIniEop
+0x40 13  12  12   0 MgaIniFreq
+0x40 13  20  20   0 MgaIniPos_llh
+0x40 13  20  20   0 MgaIniPos_xyz
+0x40 13  24  24   0 MgaIniTime_gnss
+0x40 13  24  24   0 MgaIniTime_utc
+0x05 13  36  36   0 MgaQzssAlm
+0x05 13  68  68   0 MgaQzssEph
+0x05 13  12  12   0 MgaQzssHealth
+0x32 0a  12  12   0 MonBatch
+0x28 0a   8   8   0 MonGnss
+0x09 0a  60  60   0 MonHw
+0x0b 0a  28  28   0 MonHw2
+0x02 0a   0   0  20 MonIo
+0x06 0a 120 120   0 MonMsgpp
+0x27 0a   0   0   0 MonPatch
+0x27 0a   4   4  16 MonPatch1
+0x07 0a  24  24   0 MonRxbuf
+0x21 0a   1   1   0 MonRxr
+0x2e 0a  16  16   0 MonSmgr
+0x2f 0a   4   4  16 MonSpt
+0x08 0a  28  28   0 MonTxbuf
+0x04 0a   0   0   0 MonVer
+0x04 0a  40  40  30 MonVer1
+0x60 01  16  16   0 NavAopstatus
+0x05 01  32  32   0 NavAtt
+0x22 01  20  20   0 NavClock
+0x36 01  64  64   0 NavCov
+0x31 01  16  16  12 NavDgps
+0x04 01  18  18   0 NavDop
+0x3d 01  16  16   0 NavEell
+0x61 01   4   4   0 NavEoe
+0x39 01   8   8   2 NavGeofence
+0x13 01  28  28   0 NavHpposecef
+0x14 01  36  36   0 NavHpposllh
+0x28 01  16  16   0 NavNmi
+0x09 01  20  20   0 NavOdo
+0x34 01   8   8   6 NavOrb
+0x01 01  20  20   0 NavPosecef
+0x02 01  28  28   0 NavPosllh
+0x07 01  92  92   0 NavPvt
+0x3c 01  40  40   0 NavRelposned
+0x10 01   0   0   0 NavResetodo
+0x35 01   8   8  12 NavSat
+0x32 01  12  12  12 NavSbas
+0x42 01  20  20   8 NavSlas
+0x06 01  52  52   0 NavSol
+0x03 01  16  16   0 NavStatus
+0x3b 01  40  40   0 NavSvin
+0x30 01   8   8  12 NavSvinfo
+0x24 01  20  20   0 NavTimebds
+0x25 01  20  20   0 NavTimegal
+0x23 01  20  20   0 NavTimeglo
+0x20 01  16  16   0 NavTimegps
+0x26 01  24  24   0 NavTimels
+0x21 01  20  20   0 NavTimeutc
+0x11 01  20  20   0 NavVelecef
+0x12 01  36  36   0 NavVelned
+0x61 02   4   4  44 RxmImes
+0x14 02  44  44  24 RxmMeasx
+0x41 02   8   8   0 RxmPmreq
+0x41 02  16  16   0 RxmPmreq1
+0x15 02  16  16  32 RxmRawx
+0x15 02  16  16  32 RxmRawx1
+0x59 02  16  16   0 RxmRlm
+0x59 02  28  28   0 RxmRlm1
+0x32 02   8   8   0 RxmRtcm
+0x13 02   8   8   4 RxmSfrbx
+0x13 02   8   8   4 RxmSfrbx1
+0x20 02   8   8   6 RxmSvsi
+0x03 27   9   9   0 SecUniqid
+0x11 0d   8   8   0 TimDosc
+0x16 0d  32  32   0 TimFchg
+0x17 0d   8   8   0 TimHoc
+0x13 0d  12  12  24 TimSmeas
+0x04 0d  28  28   0 TimSvin
+0x03 0d  28  28   0 TimTm2
+0x12 0d  56  56   0 TimTos
+0x01 0d  16  16   0 TimTp
+0x15 0d   1   1   0 TimVcocal
+0x15 0d  12  12   0 TimVcocal1
+0x15 0d  12  12   0 TimVcocal2
+0x06 0d  20  20   0 TimVrfy
+0x14 09   0   0   0 UpdSos
+0x14 09   4   4   0 UpdSos1
+0x14 09   4   4   0 UpdSos2
+0x14 09   8   8   0 UpdSos3
+0x14 09   8   8   0 UpdSos4
+*/
