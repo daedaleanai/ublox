@@ -1,0 +1,5 @@
+{{range $k, $v :=  .}}
+{{- range $v}}
+{{printf "%02x %02x %3d %3d %3d" .Class .Id .MinSize .MaxFixSize .VarSize}} {{.TypeName}}	
+{{- end}}
+{{- end}}
