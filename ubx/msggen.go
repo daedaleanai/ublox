@@ -106,6 +106,14 @@ func (b *Block) Link(m *Message) {
 	}
 }
 
+func (m *Message) ClassIDName() string {
+	parts := strings.Split(strings.ToLower(m.Name), "-")
+	if len(parts) > 3 {
+		parts = parts[:3]
+	}
+	return strings.Join(parts, "-")
+}
+
 func (m *Message) TypeName() string {
 	parts := strings.Split(strings.ToLower(m.Name), "-")
 	for i, v := range parts {
@@ -343,8 +351,36 @@ func main() {
 	// sort by class/id, and length options
 	msgs := map[string][]*Message{}
 	for _, v := range definitions.Message {
-		v.version = len(msgs[v.Name])
-		msgs[v.Name] = append(msgs[v.Name], v)
+		n := v.ClassIDName()
+		v.version = len(msgs[n])
+		msgs[n] = append(msgs[n], v)
+	}
+
+	// figure out if we can figure out the type from just class, id and size
+	for k, v := range msgs {
+		m := map[int]int{}
+		for _, vv := range v {
+			m[vv.MinSize()]++
+			if vv.MaxFixSize() != vv.MinSize() {
+				m[vv.MaxFixSize()]++
+			}
+		}
+		for _, vv := range v {
+			if sz := vv.VarSize(); sz != 0 {
+				for kk, _ := range m {
+					if (kk-vv.MinSize())%sz == 0 {
+						m[vv.MinSize()]++
+					}
+				}
+			}
+		}
+		for _, cnt := range m {
+			if len(v) > 1 && cnt > 1 {
+				log.Println("Ambiguous type", k, m)
+				isambiguous[k] = true
+				break
+			}
+		}
 	}
 
 	var buf bytes.Buffer
@@ -386,12 +422,17 @@ func main() {
 
 // Helper functions for in the template
 var tmplfuncs = template.FuncMap{
-	"lower":  strings.ToLower,
-	"upper":  strings.ToUpper,
-	"title":  strings.Title,
-	"notabs": notabs,
+	"lower":       strings.ToLower,
+	"upper":       strings.ToUpper,
+	"title":       strings.Title,
+	"notabs":      notabs,
+	"isambiguous": isAmbiguous,
 }
 
 var wstospace = strings.NewReplacer("\t", " ", "\n", " ")
 
 func notabs(s string) string { return wstospace.Replace(s) }
+
+var isambiguous = map[string]bool{}
+
+func isAmbiguous(classid string) bool { return isambiguous[classid] }

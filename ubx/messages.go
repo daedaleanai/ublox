@@ -3,7 +3,7 @@
 
 package ubx
 
-// Message UBX-ACK-ACK
+// Message ubx-ack-ack
 
 // AckAck (Output) Message acknowledged
 // Class/Id 0x05 0x01 2 (2 + N*0) bytes
@@ -15,7 +15,7 @@ type AckAck struct {
 
 func (AckAck) classID() uint16 { return 0x0105 }
 
-// Message UBX-ACK-NAK
+// Message ubx-ack-nak
 
 // AckNak (Output) Message not acknowledged
 // Class/Id 0x05 0x00 2 (2 + N*0) bytes
@@ -27,7 +27,7 @@ type AckNak struct {
 
 func (AckNak) classID() uint16 { return 0x0005 }
 
-// Message UBX-AID-ALM (3 versions)
+// Message ubx-aid-alm (3 versions)
 
 // AidAlm (Poll Request) Poll GPS aiding almanac data
 // Class/Id 0x0b 0x30 0 (0 + N*0) bytes
@@ -58,7 +58,7 @@ type AidAlm2 struct {
 
 func (AidAlm2) classID() uint16 { return 0x300b }
 
-// Message UBX-AID-AOP (3 versions)
+// Message ubx-aid-aop (3 versions)
 
 // AidAop (Poll Request) Poll AssistNow Autonomous data, all satellites
 // Class/Id 0x0b 0x33 0 (0 + N*0) bytes
@@ -89,7 +89,7 @@ type AidAop2 struct {
 
 func (AidAop2) classID() uint16 { return 0x330b }
 
-// Message UBX-AID-EPH (3 versions)
+// Message ubx-aid-eph (3 versions)
 
 // AidEph (Poll Request) Poll GPS aiding ephemeris data
 // Class/Id 0x0b 0x31 0 (0 + N*0) bytes
@@ -122,7 +122,7 @@ type AidEph2 struct {
 
 func (AidEph2) classID() uint16 { return 0x310b }
 
-// Message UBX-AID-HUI (2 versions)
+// Message ubx-aid-hui (2 versions)
 
 // AidHui (Poll Request) Poll GPS health, UTC, ionosphere parameters
 // Class/Id 0x0b 0x02 0 (0 + N*0) bytes
@@ -167,7 +167,7 @@ const (
 	AidHui1KlobValid   AidHui1Flags = 0x4 // Klobuchar parameter fields in this message are valid
 )
 
-// Message UBX-AID-INI (2 versions)
+// Message ubx-aid-ini (2 versions)
 
 // AidIni (Poll Request) Poll GPS initial aiding data
 // Class/Id 0x0b 0x01 0 (0 + N*0) bytes
@@ -220,7 +220,7 @@ const (
 	AidIni1Utc    AidIni1Flags = 0x400 // Time is given as UTC date/time (default is GPS wno/tow)
 )
 
-// Message UBX-CFG-ANT
+// Message ubx-cfg-ant
 
 // CfgAnt (Get/set) Antenna control settings
 // Class/Id 0x06 0x13 4 (4 + N*0) bytes
@@ -251,7 +251,7 @@ const (
 	CfgAntReconfig  CfgAntPins = 0x8000 // if set to one, and this command is sent to the receiver, the receiver will reconfigure the pins as specified.
 )
 
-// Message UBX-CFG-BATCH
+// Message ubx-cfg-batch
 
 // CfgBatch (Get/set) Get/set data batching configuration
 // Class/Id 0x06 0x93 8 (8 + N*0) bytes
@@ -277,7 +277,7 @@ const (
 	CfgBatchPioActiveLow CfgBatchFlags = 0x40 // PIO is active low
 )
 
-// Message UBX-CFG-CFG
+// Message ubx-cfg-cfg
 
 // CfgCfg (Command) Clear, save and load configurations
 // Class/Id 0x06 0x09 (12) or (13) (12 + N*0) bytes
@@ -316,7 +316,7 @@ const (
 	CfgCfgDevSpiFlash CfgCfgDeviceMask = 0x10 // SPI Flash
 )
 
-// Message UBX-CFG-DAT (2 versions)
+// Message ubx-cfg-dat (2 versions)
 
 // CfgDat (Set) Set user-defined datum
 // Class/Id 0x06 0x06 44 (44 + N*0) bytes
@@ -354,7 +354,7 @@ type CfgDat1 struct {
 
 func (CfgDat1) classID() uint16 { return 0x0606 }
 
-// Message UBX-CFG-DGNSS
+// Message ubx-cfg-dgnss
 
 // CfgDgnss (Get/set) DGNSS configuration
 // Class/Id 0x06 0x70 4 (4 + N*0) bytes
@@ -366,7 +366,7 @@ type CfgDgnss struct {
 
 func (CfgDgnss) classID() uint16 { return 0x7006 }
 
-// Message UBX-CFG-DOSC
+// Message ubx-cfg-dosc
 
 // CfgDosc (Get/set) Disciplined oscillator configuration
 // Class/Id 0x06 0x61 4 + 32*numOsc (4 + N*32) bytes
@@ -400,7 +400,7 @@ const (
 	CfgDoscControlIf    CfgDoscFlags = 0x1e // Communication interface for oscillator control: 0: Custom DAC attached to receiver's I2C 1: Microchip MCP4726 (12 bit DAC) attached to receiver's I2C 2: TI DAC8571 (16 bit DAC) attached to receiver's I2C 13: 12 bit DAC attached to host 14: 14 bit DAC attached to host 15: 16 bit DAC attached to host Note that for DACs attached to the host, the host must monitor UBX-TIM-DOSC messages and pass the supplied raw values on to the DAC.
 )
 
-// Message UBX-CFG-ESFA
+// Message ubx-cfg-esfa
 
 // CfgEsfa (Get/set) Get/set the Accelerometer (A) sensor configuration
 // Class/Id 0x06 0x4c 20 (20 + N*0) bytes
@@ -417,7 +417,7 @@ type CfgEsfa struct {
 
 func (CfgEsfa) classID() uint16 { return 0x4c06 }
 
-// Message UBX-CFG-ESFALG
+// Message ubx-cfg-esfalg
 
 // CfgEsfalg (Get/set) Get/set IMU-mount misalignment configuration
 // Class/Id 0x06 0x56 12 (12 + N*0) bytes
@@ -438,7 +438,7 @@ const (
 	CfgEsfalgDoAutoMntAlg CfgEsfalgBitfield = 0x100 // Only supported on certain products. Enable/disable automatic IMU-mount alignment (0: Disabled, 1: Enabled). This flag can only be used with modules containing an internal IMU.
 )
 
-// Message UBX-CFG-ESFG
+// Message ubx-cfg-esfg
 
 // CfgEsfg (Get/set) Get/set the Gyroscope (G) sensor configuration
 // Class/Id 0x06 0x4d 20 (20 + N*0) bytes
@@ -456,7 +456,7 @@ type CfgEsfg struct {
 
 func (CfgEsfg) classID() uint16 { return 0x4d06 }
 
-// Message UBX-CFG-ESFWT
+// Message ubx-cfg-esfwt
 
 // CfgEsfwt (Get/set) Get/set wheel-tick configuration
 // Class/Id 0x06 0x82 32 (32 + N*0) bytes
@@ -502,7 +502,7 @@ const (
 	CfgEsfwtCntBothEdges CfgEsfwtFlags3 = 0x10 // Only supported on certain products. Count both rising and falling edges on wheel-tick signal (only relevant if wheel-tick is measured by the u-blox receiver). Only turn on this feature if the wheel-tick signal has 50 % duty cycle. Turning on this feature with fixed-width pulses can lead to severe degradation of performance. Use wheel-tick pin for speed measurement. This field can only be used with modules supporting analog wheel-tick signals.
 )
 
-// Message UBX-CFG-ESRC
+// Message ubx-cfg-esrc
 
 // CfgEsrc (Get/set) External synchronization source configuration
 // Class/Id 0x06 0x60 4 + 36*numSources (4 + N*36) bytes
@@ -536,7 +536,7 @@ const (
 	CfgEsrcGnssUtc  CfgEsrcFlags = 0x2 // Time base of timing signal: 0: GNSS - as specified in CFG-TP5 (or GPS if CFG-TP5 indicates UTC) 1: UTC Only used if sourceType is 2.
 )
 
-// Message UBX-CFG-GEOFENCE
+// Message ubx-cfg-geofence
 
 // CfgGeofence (Get/set) Geofencing configuration
 // Class/Id 0x06 0x69 8 + 12*numFences (8 + N*12) bytes
@@ -559,7 +559,7 @@ type CfgGeofence struct {
 
 func (CfgGeofence) classID() uint16 { return 0x6906 }
 
-// Message UBX-CFG-GNSS
+// Message ubx-cfg-gnss
 
 // CfgGnss (Get/set) GNSS system configuration
 // Class/Id 0x06 0x3e 4 + 8*numConfigBlocks (4 + N*8) bytes
@@ -587,7 +587,7 @@ const (
 	CfgGnssSigCfgMask CfgGnssFlags = 0xff0000 // Signal configuration mask When gnssId is 0 (GPS) 0x01 = GPS L1C/A 0x10 = GPS L2C 0x20 = GPS L5 When gnssId is 1 (SBAS) 0x01 = SBAS L1C/A When gnssId is 2 (Galileo) 0x01 = Galileo E1 (not supported in protocol versions less than 18) 0x10 = Galileo E5a 0x20 = Galileo E5b When gnssId is 3 (BeiDou) 0x01 = BeiDou B1I 0x10 = BeiDou B2I 0x80 = BeiDou B2A When gnssId is 4 (IMES) 0x01 = IMES L1 When gnssId is 5 (QZSS) 0x01 = QZSS L1C/A 0x04 = QZSS L1S 0x10 = QZSS L2C 0x20 = QZSS L5 When gnssId is 6 (GLONASS) 0x01 = GLONASS L1 0x10 = GLONASS L2
 )
 
-// Message UBX-CFG-HNR
+// Message ubx-cfg-hnr
 
 // CfgHnr (Get/set) High navigation rate settings
 // Class/Id 0x06 0x5c 4 (4 + N*0) bytes
@@ -599,7 +599,7 @@ type CfgHnr struct {
 
 func (CfgHnr) classID() uint16 { return 0x5c06 }
 
-// Message UBX-CFG-INF (2 versions)
+// Message ubx-cfg-inf (2 versions)
 
 // CfgInf (Get/set) Information message configuration
 // Class/Id 0x06 0x02 0 + 10*N (0 + N*10) bytes
@@ -633,7 +633,7 @@ type CfgInf1 struct {
 
 func (CfgInf1) classID() uint16 { return 0x0206 }
 
-// Message UBX-CFG-ITFM
+// Message ubx-cfg-itfm
 
 // CfgItfm (Get/set) Jamming/interference monitor configuration
 // Class/Id 0x06 0x39 8 (8 + N*0) bytes
@@ -662,7 +662,7 @@ const (
 	CfgItfmEnable2     CfgItfmConfig2 = 0x4000 // Set to 1 to scan auxiliary bands (u-blox 8 / u-blox M8 only, otherwise ignored)
 )
 
-// Message UBX-CFG-LOGFILTER
+// Message ubx-cfg-logfilter
 
 // CfgLogfilter (Get/set) Data logger configuration
 // Class/Id 0x06 0x47 12 (12 + N*0) bytes
@@ -686,7 +686,7 @@ const (
 	CfgLogfilterApplyAllFilterSettings CfgLogfilterFlags = 0x4 // 1 = apply all filter settings, 0 = only apply recordEnabled
 )
 
-// Message UBX-CFG-MSG (3 versions)
+// Message ubx-cfg-msg (3 versions)
 
 // CfgMsg (Poll Request) Poll a message configuration
 // Class/Id 0x06 0x01 2 (2 + N*0) bytes
@@ -720,7 +720,7 @@ type CfgMsg2 struct {
 
 func (CfgMsg2) classID() uint16 { return 0x0106 }
 
-// Message UBX-CFG-NAV5
+// Message ubx-cfg-nav5
 
 // CfgNav5 (Get/set) Navigation engine settings
 // Class/Id 0x06 0x24 36 (36 + N*0) bytes
@@ -764,7 +764,7 @@ const (
 	CfgNav5Utc            CfgNav5Mask = 0x400 // Apply UTC settings (not supported in protocol versions less than 16).
 )
 
-// Message UBX-CFG-NAVX5 (3 versions)
+// Message ubx-cfg-navx5 (3 versions)
 
 // CfgNavx5 (Get/set) Navigation engine expert settings
 // Class/Id 0x06 0x23 40 (40 + N*0) bytes
@@ -932,7 +932,7 @@ const (
 	CfgNavx52UseAOP CfgNavx52AopCfg = 0x1 // 1 = enable AssistNow Autonomous
 )
 
-// Message UBX-CFG-NMEA (3 versions)
+// Message ubx-cfg-nmea (3 versions)
 
 // CfgNmea (Get/set) NMEA protocol configuration (deprecated)
 // Class/Id 0x06 0x17 4 (4 + N*0) bytes
@@ -1060,7 +1060,7 @@ const (
 	CfgNmea2Beidou  CfgNmea2GnssToFilter = 0x40 // Disable reporting of BeiDou satellites
 )
 
-// Message UBX-CFG-ODO
+// Message ubx-cfg-odo
 
 // CfgOdo (Get/set) Odometer, low-speed COG engine settings
 // Class/Id 0x06 0x1e 20 (20 + N*0) bytes
@@ -1096,7 +1096,7 @@ const (
 	CfgOdoProfile CfgOdoOdoCfg = 0x7 // Profile type (0=running, 1=cycling, 2=swimming, 3=car, 4=custom)
 )
 
-// Message UBX-CFG-PM2 (3 versions)
+// Message ubx-cfg-pm2 (3 versions)
 
 // CfgPm2 (Get/set) Extended power management configuration
 // Class/Id 0x06 0x3b 44 (44 + N*0) bytes
@@ -1202,7 +1202,7 @@ const (
 	CfgPm22Mode           CfgPm22Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) (not supported in protocol versions 23 to 23.01) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
 )
 
-// Message UBX-CFG-PMS
+// Message ubx-cfg-pms
 
 // CfgPms (Get/set) Power mode setup
 // Class/Id 0x06 0x86 8 (8 + N*0) bytes
@@ -1217,7 +1217,7 @@ type CfgPms struct {
 
 func (CfgPms) classID() uint16 { return 0x8606 }
 
-// Message UBX-CFG-PRT (5 versions)
+// Message ubx-cfg-prt (5 versions)
 
 // CfgPrt (Poll Request) Polls the configuration for one I/O port
 // Class/Id 0x06 0x00 1 (1 + N*0) bytes
@@ -1438,7 +1438,7 @@ const (
 	CfgPrt4ExtendedTxTimeout CfgPrt4Flags = 0x2 // Extended TX timeout: if set, the port will time out if allocated TX memory >=4 kB and no activity for 1. 5s.
 )
 
-// Message UBX-CFG-PWR
+// Message ubx-cfg-pwr
 
 // CfgPwr (Set) Put receiver in a defined power state
 // Class/Id 0x06 0x57 8 (8 + N*0) bytes
@@ -1451,7 +1451,7 @@ type CfgPwr struct {
 
 func (CfgPwr) classID() uint16 { return 0x5706 }
 
-// Message UBX-CFG-RATE
+// Message ubx-cfg-rate
 
 // CfgRate (Get/set) Navigation/measurement rate settings
 // Class/Id 0x06 0x08 6 (6 + N*0) bytes
@@ -1464,7 +1464,7 @@ type CfgRate struct {
 
 func (CfgRate) classID() uint16 { return 0x0806 }
 
-// Message UBX-CFG-RINV
+// Message ubx-cfg-rinv
 
 // CfgRinv (Get/set) Contents of remote inventory
 // Class/Id 0x06 0x34 1 + 1*N (1 + N*1) bytes
@@ -1483,7 +1483,7 @@ const (
 	CfgRinvBinary CfgRinvFlags = 0x2 // Data is binary.
 )
 
-// Message UBX-CFG-RST
+// Message ubx-cfg-rst
 
 // CfgRst (Command) Reset receiver / Clear backup data structures
 // Class/Id 0x06 0x04 4 (4 + N*0) bytes
@@ -1511,7 +1511,7 @@ const (
 	CfgRstAop    CfgRstNavBbrMask = 0x8000 // Autonomous orbit parameters
 )
 
-// Message UBX-CFG-RXM (2 versions)
+// Message ubx-cfg-rxm (2 versions)
 
 // CfgRxm (Get/set) RXM configuration
 // Class/Id 0x06 0x11 2 (2 + N*0) bytes
@@ -1533,7 +1533,7 @@ type CfgRxm1 struct {
 
 func (CfgRxm1) classID() uint16 { return 0x1106 }
 
-// Message UBX-CFG-SBAS
+// Message ubx-cfg-sbas
 
 // CfgSbas (Get/set) SBAS configuration
 // Class/Id 0x06 0x16 8 (8 + N*0) bytes
@@ -1563,7 +1563,7 @@ const (
 	CfgSbasIntegrity CfgSbasUsage = 0x4 // Use SBAS integrity information. If enabled, the receiver will only use GPS satellites for which integrity information is available.
 )
 
-// Message UBX-CFG-SENIF
+// Message ubx-cfg-senif
 
 // CfgSenif (Get/set) I2C sensor interface configuration
 // Class/Id 0x06 0x88 6 (6 + N*0) bytes
@@ -1590,7 +1590,7 @@ const (
 	CfgSenifI2cSclPio CfgSenifPioConf = 0x3e0 // PIO of the I2C SCL line Supported options:
 )
 
-// Message UBX-CFG-SLAS
+// Message ubx-cfg-slas
 
 // CfgSlas (Get/set) SLAS configuration
 // Class/Id 0x06 0x8d 4 (4 + N*0) bytes
@@ -1610,7 +1610,7 @@ const (
 	CfgSlasRaim    CfgSlasMode = 0x4 // Raim out measurements that are not corrected by QZSS SLAS, if at least 5 measurements are corrected: Enabled (1) / Disabled (0)
 )
 
-// Message UBX-CFG-SMGR
+// Message ubx-cfg-smgr
 
 // CfgSmgr (Get/set) Synchronization manager configuration
 // Class/Id 0x06 0x62 20 (20 + N*0) bytes
@@ -1658,7 +1658,7 @@ const (
 	CfgSmgrDisableOffset      CfgSmgrFlags = 0x10000 // 1 = disable automatic storage of oscillator offset
 )
 
-// Message UBX-CFG-SPT
+// Message ubx-cfg-spt
 
 // CfgSpt (Get/set) Configure and start a sensor production test
 // Class/Id 0x06 0x64 12 (12 + N*0) bytes
@@ -1672,7 +1672,7 @@ type CfgSpt struct {
 
 func (CfgSpt) classID() uint16 { return 0x6406 }
 
-// Message UBX-CFG-TMODE2
+// Message ubx-cfg-tmode2
 
 // CfgTmode2 (Get/set) Time mode settings 2
 // Class/Id 0x06 0x3d 28 (28 + N*0) bytes
@@ -1698,7 +1698,7 @@ const (
 	CfgTmode2AltInv CfgTmode2Flags = 0x2 // Altitude is not valid, in case lla was set
 )
 
-// Message UBX-CFG-TMODE3
+// Message ubx-cfg-tmode3
 
 // CfgTmode3 (Get/set) Time mode settings 3
 // Class/Id 0x06 0x71 40 (40 + N*0) bytes
@@ -1729,7 +1729,7 @@ const (
 	CfgTmode3Lla  CfgTmode3Flags = 0x100 // Position is given in LAT/LON/ALT (default is ECEF)
 )
 
-// Message UBX-CFG-TP5 (3 versions)
+// Message ubx-cfg-tp5 (3 versions)
 
 // CfgTp5 (Poll Request) Poll time pulse parameters for time pulse 0
 // Class/Id 0x06 0x31 0 (0 + N*0) bytes
@@ -1781,7 +1781,7 @@ const (
 	CfgTp52SyncMode       CfgTp52Flags = 0x3800 // Sync Manager lock mode to use: 0: switch to 'freqPeriodLock' and 'pulseLenRatioLock' as soon as Sync Manager has an accurate time, never switch back to 'freqPeriod' and 'pulseLenRatio' 1: switch to 'freqPeriodLock' and 'pulseLenRatioLock' as soon as Sync Manager has an accurate time, and switch back to 'freqPeriod' and 'pulseLenRatio' as soon as time gets inaccurate This field is only relevant for the FTS product variant. This field is only relevant if the flag 'lockedOtherSet' is set.
 )
 
-// Message UBX-CFG-TXSLOT
+// Message ubx-cfg-txslot
 
 // CfgTxslot (Set) TX buffer time slots configuration
 // Class/Id 0x06 0x53 16 (16 + N*0) bytes
@@ -1808,7 +1808,7 @@ const (
 	CfgTxslotSPI   CfgTxslotEnable = 0x10 // SPI
 )
 
-// Message UBX-CFG-USB
+// Message ubx-cfg-usb
 
 // CfgUsb (Get/set) USB configuration
 // Class/Id 0x06 0x1b 108 (108 + N*0) bytes
@@ -1834,7 +1834,7 @@ const (
 	CfgUsbPowerMode CfgUsbFlags = 0x2 // self-powered (1), bus-powered (0)
 )
 
-// Message UBX-ESF-ALG
+// Message ubx-esf-alg
 
 // EsfAlg (Periodic/Polled) IMU alignment information
 // Class/Id 0x10 0x14 16 (16 + N*0) bytes
@@ -1867,7 +1867,7 @@ const (
 	EsfAlgAngleError   EsfAlgError = 0x4 // IMU-mount misalignment Euler angle singularity error (0: no error, 1: error). If this error bit is set, the IMU-mount roll and IMU-mount yaw angles cannot uniquely be defined due to the singularity issue happening with installations mounted with a +/- 90 degrees misalignment around pitch axis. This is also known as the 'gimbal-lock' problem affecting rotations described by Euler angles.
 )
 
-// Message UBX-ESF-INS
+// Message ubx-esf-ins
 
 // EsfIns (Periodic/Polled) Vehicle dynamics information
 // Class/Id 0x10 0x15 36 (36 + N*0) bytes
@@ -1898,7 +1898,7 @@ const (
 	EsfInsZAccelValid   EsfInsBitfield0 = 0x2000 // Compensated z-axis acceleration data validity flag (0: not valid, 1: valid).
 )
 
-// Message UBX-ESF-MEAS
+// Message ubx-esf-meas
 
 // EsfMeas (Input/Output) External sensor fusion measurements
 // Class/Id 0x10 0x02 (8 + 4*numMeas) or (12 + 4*numMeas) (8 + N*4) bytes
@@ -1932,7 +1932,7 @@ const (
 	EsfMeasDataType  EsfMeasData = 0x3f000000 // Type of data (0 = no data; 1..63 = data type)
 )
 
-// Message UBX-ESF-RAW
+// Message ubx-esf-raw
 
 // EsfRaw (Output) Raw sensor measurements
 // Class/Id 0x10 0x03 4 + 8*N (4 + N*8) bytes
@@ -1954,7 +1954,7 @@ const (
 	EsfRawDataType  EsfRawData = 0xff000000 // type of data (0 = no data; 1..255 = data type)
 )
 
-// Message UBX-ESF-STATUS
+// Message ubx-esf-status
 
 // EsfStatus (Periodic/Polled) External sensor fusion status
 // Class/Id 0x10 0x10 16 + 4*numSens (16 + N*4) bytes
@@ -2000,7 +2000,7 @@ const (
 	EsfStatusNoisyMeas   EsfStatusFaults = 0x8 // High measurement noise-level detected
 )
 
-// Message UBX-HNR-ATT
+// Message ubx-hnr-att
 
 // HnrAtt (Periodic/Polled) Attitude solution
 // Class/Id 0x28 0x01 32 (32 + N*0) bytes
@@ -2019,7 +2019,7 @@ type HnrAtt struct {
 
 func (HnrAtt) classID() uint16 { return 0x0128 }
 
-// Message UBX-HNR-INS
+// Message ubx-hnr-ins
 
 // HnrIns (Periodic/Polled) Vehicle dynamics information
 // Class/Id 0x28 0x02 36 (36 + N*0) bytes
@@ -2050,7 +2050,7 @@ const (
 	HnrInsZAccelValid   HnrInsBitfield0 = 0x2000 // Compensated z-axis acceleration data validity flag (0: not valid, 1: valid).
 )
 
-// Message UBX-HNR-PVT
+// Message ubx-hnr-pvt
 
 // HnrPvt (Periodic/Polled) High rate output of PVT solution
 // Class/Id 0x28 0x00 72 (72 + N*0) bytes
@@ -2103,7 +2103,7 @@ const (
 	HnrPvtHeadVehValid HnrPvtFlags = 0x10 // 1= Heading of vehicle is valid
 )
 
-// Message UBX-INF-DEBUG
+// Message ubx-inf-debug
 
 // InfDebug (Output) ASCII output with debug contents
 // Class/Id 0x04 0x04 0 + 1*N (0 + N*1) bytes
@@ -2112,7 +2112,7 @@ type InfDebug string
 
 func (InfDebug) classID() uint16 { return 0x0404 }
 
-// Message UBX-INF-ERROR
+// Message ubx-inf-error
 
 // InfError (Output) ASCII output with error contents
 // Class/Id 0x04 0x00 0 + 1*N (0 + N*1) bytes
@@ -2121,7 +2121,7 @@ type InfError string
 
 func (InfError) classID() uint16 { return 0x0004 }
 
-// Message UBX-INF-NOTICE
+// Message ubx-inf-notice
 
 // InfNotice (Output) ASCII output with informational contents
 // Class/Id 0x04 0x02 0 + 1*N (0 + N*1) bytes
@@ -2130,7 +2130,7 @@ type InfNotice string
 
 func (InfNotice) classID() uint16 { return 0x0204 }
 
-// Message UBX-INF-TEST
+// Message ubx-inf-test
 
 // InfTest (Output) ASCII output with test contents
 // Class/Id 0x04 0x03 0 + 1*N (0 + N*1) bytes
@@ -2139,7 +2139,7 @@ type InfTest string
 
 func (InfTest) classID() uint16 { return 0x0304 }
 
-// Message UBX-INF-WARNING
+// Message ubx-inf-warning
 
 // InfWarning (Output) ASCII output with warning contents
 // Class/Id 0x04 0x01 0 + 1*N (0 + N*1) bytes
@@ -2148,7 +2148,7 @@ type InfWarning string
 
 func (InfWarning) classID() uint16 { return 0x0104 }
 
-// Message UBX-LOG-BATCH
+// Message ubx-log-batch
 
 // LogBatch (Polled) Batched data
 // Class/Id 0x21 0x11 100 (100 + N*0) bytes
@@ -2216,7 +2216,7 @@ const (
 	LogBatchPsmState  LogBatchFlags = 0x1c // Power save mode state (see Power Management) 0: PSM is not active 1: Enabled (an intermediate state before Acquisition state) 2: Acquisition 3: Tracking 4: Power optimized tracking 5: Inactive
 )
 
-// Message UBX-LOG-CREATE
+// Message ubx-log-create
 
 // LogCreate (Command) Create log file
 // Class/Id 0x21 0x07 8 (8 + N*0) bytes
@@ -2237,7 +2237,7 @@ const (
 	LogCreateCircular LogCreateLogCfg = 0x1 // Log is circular (new entries overwrite old ones in a full log) if this bit set
 )
 
-// Message UBX-LOG-ERASE
+// Message ubx-log-erase
 
 // LogErase (Command) Erase logged data
 // Class/Id 0x21 0x03 0 (0 + N*0) bytes
@@ -2247,7 +2247,7 @@ type LogErase struct {
 
 func (LogErase) classID() uint16 { return 0x0321 }
 
-// Message UBX-LOG-FINDTIME (2 versions)
+// Message ubx-log-findtime (2 versions)
 
 // LogFindtime (Output) Response to FINDTIME request
 // Class/Id 0x21 0x0e 8 (8 + N*0) bytes
@@ -2279,7 +2279,7 @@ type LogFindtime1 struct {
 
 func (LogFindtime1) classID() uint16 { return 0x0e21 }
 
-// Message UBX-LOG-INFO (2 versions)
+// Message ubx-log-info (2 versions)
 
 // LogInfo (Poll Request) Poll for log information
 // Class/Id 0x21 0x08 0 (0 + N*0) bytes
@@ -2328,7 +2328,7 @@ const (
 	LogInfo1Circular  LogInfo1Status = 0x20 // The current log is circular
 )
 
-// Message UBX-LOG-RETRIEVE
+// Message ubx-log-retrieve
 
 // LogRetrieve (Command) Request log data
 // Class/Id 0x21 0x09 12 (12 + N*0) bytes
@@ -2342,7 +2342,7 @@ type LogRetrieve struct {
 
 func (LogRetrieve) classID() uint16 { return 0x0921 }
 
-// Message UBX-LOG-RETRIEVEBATCH
+// Message ubx-log-retrievebatch
 
 // LogRetrievebatch (Command) Request batch data
 // Class/Id 0x21 0x10 4 (4 + N*0) bytes
@@ -2361,7 +2361,7 @@ const (
 	LogRetrievebatchSendMonFirst LogRetrievebatchFlags = 0x1 // Send UBX-MON-BATCH message before sending the UBX-LOG-BATCH message(s).
 )
 
-// Message UBX-LOG-RETRIEVEPOS
+// Message ubx-log-retrievepos
 
 // LogRetrievepos (Output) Position fix log entry
 // Class/Id 0x21 0x0b 40 (40 + N*0) bytes
@@ -2389,7 +2389,7 @@ type LogRetrievepos struct {
 
 func (LogRetrievepos) classID() uint16 { return 0x0b21 }
 
-// Message UBX-LOG-RETRIEVEPOSEXTRA
+// Message ubx-log-retrieveposextra
 
 // LogRetrieveposextra (Output) Odometer log entry
 // Class/Id 0x21 0x0f 32 (32 + N*0) bytes
@@ -2411,7 +2411,7 @@ type LogRetrieveposextra struct {
 
 func (LogRetrieveposextra) classID() uint16 { return 0x0f21 }
 
-// Message UBX-LOG-RETRIEVESTRING
+// Message ubx-log-retrievestring
 
 // LogRetrievestring (Output) Byte string log entry
 // Class/Id 0x21 0x0d 16 + 1*byteCount (16 + N*1) bytes
@@ -2433,7 +2433,7 @@ type LogRetrievestring struct {
 
 func (LogRetrievestring) classID() uint16 { return 0x0d21 }
 
-// Message UBX-LOG-STRING
+// Message ubx-log-string
 
 // LogString (Command) Store arbitrary string in on-board flash
 // Class/Id 0x21 0x04 0 + 1*N (0 + N*1) bytes
@@ -2442,7 +2442,7 @@ type LogString string
 
 func (LogString) classID() uint16 { return 0x0421 }
 
-// Message UBX-MGA-ACK-DATA0
+// Message ubx-mga-ack
 
 // MgaAckData0 (Output) Multiple GNSS acknowledge message
 // Class/Id 0x13 0x60 8 (8 + N*0) bytes
@@ -2457,7 +2457,7 @@ type MgaAckData0 struct {
 
 func (MgaAckData0) classID() uint16 { return 0x6013 }
 
-// Message UBX-MGA-ANO
+// Message ubx-mga-ano
 
 // MgaAno (Input) Multiple GNSS AssistNow Offline assistance
 // Class/Id 0x13 0x20 76 (76 + N*0) bytes
@@ -2477,7 +2477,7 @@ type MgaAno struct {
 
 func (MgaAno) classID() uint16 { return 0x2013 }
 
-// Message UBX-MGA-BDS-ALM
+// Message ubx-mga-bds (5 versions)
 
 // MgaBdsAlm (Input) BeiDou almanac assistance
 // Class/Id 0x13 0x03 40 (40 + N*0) bytes
@@ -2503,12 +2503,10 @@ type MgaBdsAlm struct {
 
 func (MgaBdsAlm) classID() uint16 { return 0x0313 }
 
-// Message UBX-MGA-BDS-EPH
-
-// MgaBdsEph (Input) BeiDou ephemeris assistance
+// MgaBdsEph1 (Input) BeiDou ephemeris assistance
 // Class/Id 0x13 0x03 88 (88 + N*0) bytes
 // This message allows the delivery of BeiDou ephemeris assistance to a receiver. See the description of AssistNow Online for details.
-type MgaBdsEph struct {
+type MgaBdsEph1 struct {
 	Type       byte    // Message type (0x01 for this type)
 	Version    byte    // Message version (0x00 for this version)
 	SvId       byte    // BeiDou satellite identifier (see Satellite Numbering)
@@ -2541,14 +2539,12 @@ type MgaBdsEph struct {
 	Reserved2  [4]byte // Reserved
 }
 
-func (MgaBdsEph) classID() uint16 { return 0x0313 }
+func (MgaBdsEph1) classID() uint16 { return 0x0313 }
 
-// Message UBX-MGA-BDS-HEALTH
-
-// MgaBdsHealth (Input) BeiDou health assistance
+// MgaBdsHealth2 (Input) BeiDou health assistance
 // Class/Id 0x13 0x03 68 (68 + N*0) bytes
 // This message allows the delivery of BeiDou health assistance to a receiver. See the description of AssistNow Online for details.
-type MgaBdsHealth struct {
+type MgaBdsHealth2 struct {
 	Type       byte       // Message type (0x04 for this type)
 	Version    byte       // Message version (0x00 for this version)
 	Reserved1  [2]byte    // Reserved
@@ -2556,14 +2552,12 @@ type MgaBdsHealth struct {
 	Reserved2  [4]byte    // Reserved
 }
 
-func (MgaBdsHealth) classID() uint16 { return 0x0313 }
+func (MgaBdsHealth2) classID() uint16 { return 0x0313 }
 
-// Message UBX-MGA-BDS-IONO
-
-// MgaBdsIono (Input) BeiDou ionosphere assistance
+// MgaBdsIono3 (Input) BeiDou ionosphere assistance
 // Class/Id 0x13 0x03 16 (16 + N*0) bytes
 // This message allows the delivery of BeiDou ionospheric assistance to a receiver. See the description of AssistNow Online for details.
-type MgaBdsIono struct {
+type MgaBdsIono3 struct {
 	Type            byte    // Message type (0x06 for this type)
 	Version         byte    // Message version (0x00 for this version)
 	Reserved1       [2]byte // Reserved
@@ -2578,14 +2572,12 @@ type MgaBdsIono struct {
 	Reserved2       [4]byte // Reserved
 }
 
-func (MgaBdsIono) classID() uint16 { return 0x0313 }
+func (MgaBdsIono3) classID() uint16 { return 0x0313 }
 
-// Message UBX-MGA-BDS-UTC
-
-// MgaBdsUtc (Input) BeiDou UTC assistance
+// MgaBdsUtc4 (Input) BeiDou UTC assistance
 // Class/Id 0x13 0x03 20 (20 + N*0) bytes
 // This message allows the delivery of BeiDou UTC assistance to a receiver. See the description of AssistNow Online for details.
-type MgaBdsUtc struct {
+type MgaBdsUtc4 struct {
 	Type         byte    // Message type (0x05 for this type)
 	Version      byte    // Message version (0x00 for this version)
 	Reserved1    [2]byte // Reserved
@@ -2600,9 +2592,9 @@ type MgaBdsUtc struct {
 	Reserved3    [2]byte // Reserved
 }
 
-func (MgaBdsUtc) classID() uint16 { return 0x0313 }
+func (MgaBdsUtc4) classID() uint16 { return 0x0313 }
 
-// Message UBX-MGA-DBD (2 versions)
+// Message ubx-mga-dbd (2 versions)
 
 // MgaDbd (Poll Request) Poll the navigation database
 // Class/Id 0x13 0x80 0 (0 + N*0) bytes
@@ -2622,7 +2614,7 @@ type MgaDbd1 struct {
 
 func (MgaDbd1) classID() uint16 { return 0x8013 }
 
-// Message UBX-MGA-FLASH-ACK
+// Message ubx-mga-flash (3 versions)
 
 // MgaFlashAck (Output) Acknowledge last FLASH-DATA or -STOP
 // Class/Id 0x13 0x21 6 (6 + N*0) bytes
@@ -2637,12 +2629,10 @@ type MgaFlashAck struct {
 
 func (MgaFlashAck) classID() uint16 { return 0x2113 }
 
-// Message UBX-MGA-FLASH-DATA
-
-// MgaFlashData (Input) Transfer MGA-ANO data block to flash
+// MgaFlashData1 (Input) Transfer MGA-ANO data block to flash
 // Class/Id 0x13 0x21 6 + 1*size (6 + N*1) bytes
 // This message is used to transfer a block of MGA-ANO data from host to the receiver. Upon reception of this message, the receiver will write the payload data to its internal non-volatile memory (flash). Also, on reception of the first MGA- FLASH-DATA message, the receiver will erase the flash allocated to storing any existing MGA-ANO data. The payload can be up to 512 bytes. Payloads larger than this would exceed the receiver's internal buffering capabilities. The receiver will ACK/NACK this message using the message alternatives given below. The host shall wait for an acknowledge message before sending the next data block. See Flash-based AssistNow Offline for details.
-type MgaFlashData struct {
+type MgaFlashData1 struct {
 	Type     byte   // Message type (0x01 for this type)
 	Version  byte   // Message version (0x00 for this version)
 	Sequence uint16 // Message sequence number, starting at 0 and increamenting by 1 for each MGA- FLASH-DATA message sent.
@@ -2650,21 +2640,19 @@ type MgaFlashData struct {
 	Items    string
 }
 
-func (MgaFlashData) classID() uint16 { return 0x2113 }
+func (MgaFlashData1) classID() uint16 { return 0x2113 }
 
-// Message UBX-MGA-FLASH-STOP
-
-// MgaFlashStop (Input) Finish flashing MGA-ANO data
+// MgaFlashStop2 (Input) Finish flashing MGA-ANO data
 // Class/Id 0x13 0x21 2 (2 + N*0) bytes
 // This message is used to tell the receiver that there are no more MGA-FLASH type 1 messages coming, and that it can do any final internal operations needed to commit the data to flash as a background activity. A UBX-MGA-ACK message will be sent at the end of this process. Note that there may be a delay of several seconds before the UBX-MGA-ACK for this message is sent because of the time taken for this processing. See Flash-based AssistNow Offline for details.
-type MgaFlashStop struct {
+type MgaFlashStop2 struct {
 	Type    byte // Message type (0x02 for this type)
 	Version byte // Message version (0x00 for this version)
 }
 
-func (MgaFlashStop) classID() uint16 { return 0x2113 }
+func (MgaFlashStop2) classID() uint16 { return 0x2113 }
 
-// Message UBX-MGA-GAL-ALM
+// Message ubx-mga-gal (4 versions)
 
 // MgaGalAlm (Input) Galileo almanac assistance
 // Class/Id 0x13 0x02 32 (32 + N*0) bytes
@@ -2693,12 +2681,10 @@ type MgaGalAlm struct {
 
 func (MgaGalAlm) classID() uint16 { return 0x0213 }
 
-// Message UBX-MGA-GAL-EPH
-
-// MgaGalEph (Input) Galileo ephemeris assistance
+// MgaGalEph1 (Input) Galileo ephemeris assistance
 // Class/Id 0x13 0x02 76 (76 + N*0) bytes
 // This message allows the delivery of Galileo ephemeris assistance to a receiver. See the description of AssistNow Online for details.
-type MgaGalEph struct {
+type MgaGalEph1 struct {
 	Type              byte    // Message type (0x01 for this type)
 	Version           byte    // Message version (0x00 for this version)
 	SvId              byte    // Galileo Satellite identifier (see Satellite Numbering)
@@ -2734,14 +2720,12 @@ type MgaGalEph struct {
 	Reserved3         [4]byte // Reserved
 }
 
-func (MgaGalEph) classID() uint16 { return 0x0213 }
+func (MgaGalEph1) classID() uint16 { return 0x0213 }
 
-// Message UBX-MGA-GAL-TIMEOFFSET
-
-// MgaGalTimeoffset (Input) Galileo GPS time offset assistance
+// MgaGalTimeoffset2 (Input) Galileo GPS time offset assistance
 // Class/Id 0x13 0x02 12 (12 + N*0) bytes
 // This message allows the delivery of Galileo time to GPS time offset. See the description of AssistNow Online for details.
-type MgaGalTimeoffset struct {
+type MgaGalTimeoffset2 struct {
 	Type       byte    // Message type (0x03 for this type)
 	Version    byte    // Message version (0x00 for this version)
 	Reserved1  [2]byte // Reserved
@@ -2752,14 +2736,12 @@ type MgaGalTimeoffset struct {
 	Reserved2  [2]byte // Reserved
 }
 
-func (MgaGalTimeoffset) classID() uint16 { return 0x0213 }
+func (MgaGalTimeoffset2) classID() uint16 { return 0x0213 }
 
-// Message UBX-MGA-GAL-UTC
-
-// MgaGalUtc (Input) Galileo UTC assistance
+// MgaGalUtc3 (Input) Galileo UTC assistance
 // Class/Id 0x13 0x02 20 (20 + N*0) bytes
 // This message allows the delivery of Galileo UTC assistance to a receiver. See the description of AssistNow Online for details.
-type MgaGalUtc struct {
+type MgaGalUtc3 struct {
 	Type        byte    // Message type (0x05 for this type)
 	Version     byte    // Message version (0x00 for this version)
 	Reserved1   [2]byte // Reserved
@@ -2774,9 +2756,9 @@ type MgaGalUtc struct {
 	Reserved2   [2]byte // Reserved
 }
 
-func (MgaGalUtc) classID() uint16 { return 0x0213 }
+func (MgaGalUtc3) classID() uint16 { return 0x0213 }
 
-// Message UBX-MGA-GLO-ALM
+// Message ubx-mga-glo (3 versions)
 
 // MgaGloAlm (Input) GLONASS almanac assistance
 // Class/Id 0x13 0x06 36 (36 + N*0) bytes
@@ -2803,12 +2785,10 @@ type MgaGloAlm struct {
 
 func (MgaGloAlm) classID() uint16 { return 0x0613 }
 
-// Message UBX-MGA-GLO-EPH
-
-// MgaGloEph (Input) GLONASS ephemeris assistance
+// MgaGloEph1 (Input) GLONASS ephemeris assistance
 // Class/Id 0x13 0x06 48 (48 + N*0) bytes
 // This message allows the delivery of GLONASS ephemeris assistance to a receiver. See the description of AssistNow Online for details.
-type MgaGloEph struct {
+type MgaGloEph1 struct {
 	Type          byte    // Message type (0x01 for this type)
 	Version       byte    // Message version (0x00 for this version)
 	SvId          byte    // GLONASS Satellite identifier (see Satellite Numbering)
@@ -2834,14 +2814,12 @@ type MgaGloEph struct {
 	Reserved2     [4]byte // Reserved
 }
 
-func (MgaGloEph) classID() uint16 { return 0x0613 }
+func (MgaGloEph1) classID() uint16 { return 0x0613 }
 
-// Message UBX-MGA-GLO-TIMEOFFSET
-
-// MgaGloTimeoffset (Input) GLONASS auxiliary time offset assistance
+// MgaGloTimeoffset2 (Input) GLONASS auxiliary time offset assistance
 // Class/Id 0x13 0x06 20 (20 + N*0) bytes
 // This message allows the delivery of auxiliary GLONASS assistance (including the GLONASS time offsets to other GNSS systems) to a receiver. See the description of AssistNow Online for details.
-type MgaGloTimeoffset struct {
+type MgaGloTimeoffset2 struct {
 	Type        byte    // Message type (0x03 for this type)
 	Version     byte    // Message version (0x00 for this version)
 	N_days      uint16  // [days] Reference calendar day number within the four-year period of almanac (from string 5)
@@ -2852,9 +2830,9 @@ type MgaGloTimeoffset struct {
 	Reserved1   [4]byte // Reserved
 }
 
-func (MgaGloTimeoffset) classID() uint16 { return 0x0613 }
+func (MgaGloTimeoffset2) classID() uint16 { return 0x0613 }
 
-// Message UBX-MGA-GPS-ALM
+// Message ubx-mga-gps (5 versions)
 
 // MgaGpsAlm (Input) GPS almanac assistance
 // Class/Id 0x13 0x00 36 (36 + N*0) bytes
@@ -2880,12 +2858,10 @@ type MgaGpsAlm struct {
 
 func (MgaGpsAlm) classID() uint16 { return 0x0013 }
 
-// Message UBX-MGA-GPS-EPH
-
-// MgaGpsEph (Input) GPS ephemeris assistance
+// MgaGpsEph1 (Input) GPS ephemeris assistance
 // Class/Id 0x13 0x00 68 (68 + N*0) bytes
 // This message allows the delivery of GPS ephemeris assistance to a receiver. See the description of AssistNow Online for details.
-type MgaGpsEph struct {
+type MgaGpsEph1 struct {
 	Type              byte    // Message type (0x01 for this type)
 	Version           byte    // Message version (0x00 for this version)
 	SvId              byte    // GPS Satellite identifier (see Satellite Numbering)
@@ -2919,14 +2895,12 @@ type MgaGpsEph struct {
 	Reserved3         [2]byte // Reserved
 }
 
-func (MgaGpsEph) classID() uint16 { return 0x0013 }
+func (MgaGpsEph1) classID() uint16 { return 0x0013 }
 
-// Message UBX-MGA-GPS-HEALTH
-
-// MgaGpsHealth (Input) GPS health assistance
+// MgaGpsHealth2 (Input) GPS health assistance
 // Class/Id 0x13 0x00 40 (40 + N*0) bytes
 // This message allows the delivery of GPS health assistance to a receiver. See the description of AssistNow Online for details.
-type MgaGpsHealth struct {
+type MgaGpsHealth2 struct {
 	Type       byte     // Message type (0x04 for this type)
 	Version    byte     // Message version (0x00 for this version)
 	Reserved1  [2]byte  // Reserved
@@ -2934,14 +2908,12 @@ type MgaGpsHealth struct {
 	Reserved2  [4]byte  // Reserved
 }
 
-func (MgaGpsHealth) classID() uint16 { return 0x0013 }
+func (MgaGpsHealth2) classID() uint16 { return 0x0013 }
 
-// Message UBX-MGA-GPS-IONO
-
-// MgaGpsIono (Input) GPS ionosphere assistance
+// MgaGpsIono3 (Input) GPS ionosphere assistance
 // Class/Id 0x13 0x00 16 (16 + N*0) bytes
 // This message allows the delivery of GPS ionospheric assistance to a receiver. See the description of AssistNow Online for details.
-type MgaGpsIono struct {
+type MgaGpsIono3 struct {
 	Type            byte    // Message type (0x06 for this type)
 	Version         byte    // Message version (0x00 for this version)
 	Reserved1       [2]byte // Reserved
@@ -2956,14 +2928,12 @@ type MgaGpsIono struct {
 	Reserved2       [4]byte // Reserved
 }
 
-func (MgaGpsIono) classID() uint16 { return 0x0013 }
+func (MgaGpsIono3) classID() uint16 { return 0x0013 }
 
-// Message UBX-MGA-GPS-UTC
-
-// MgaGpsUtc (Input) GPS UTC assistance
+// MgaGpsUtc4 (Input) GPS UTC assistance
 // Class/Id 0x13 0x00 20 (20 + N*0) bytes
 // This message allows the delivery of GPS UTC assistance to a receiver. See the description of AssistNow Online for details.
-type MgaGpsUtc struct {
+type MgaGpsUtc4 struct {
 	Type           byte    // Message type (0x05 for this type)
 	Version        byte    // Message version (0x00 for this version)
 	Reserved1      [2]byte // Reserved
@@ -2978,9 +2948,9 @@ type MgaGpsUtc struct {
 	Reserved2      [2]byte // Reserved
 }
 
-func (MgaGpsUtc) classID() uint16 { return 0x0013 }
+func (MgaGpsUtc4) classID() uint16 { return 0x0013 }
 
-// Message UBX-MGA-INI-CLKD
+// Message ubx-mga-ini (7 versions)
 
 // MgaIniClkd (Input) Initial clock drift assistance
 // Class/Id 0x13 0x40 12 (12 + N*0) bytes
@@ -2995,12 +2965,10 @@ type MgaIniClkd struct {
 
 func (MgaIniClkd) classID() uint16 { return 0x4013 }
 
-// Message UBX-MGA-INI-EOP
-
-// MgaIniEop (Input) Earth orientation parameters assistance
+// MgaIniEop1 (Input) Earth orientation parameters assistance
 // Class/Id 0x13 0x40 72 (72 + N*0) bytes
 // This message allows the delivery of new earth orientation parameters (EOP) to a receiver to improve AssistNow Autonomous operation.
-type MgaIniEop struct {
+type MgaIniEop1 struct {
 	Type             byte     // Message type (0x30 for this type)
 	Version          byte     // Message version (0x00 for this version)
 	Reserved1        [2]byte  // Reserved
@@ -3015,37 +2983,33 @@ type MgaIniEop struct {
 	Reserved2        [40]byte // Reserved
 }
 
-func (MgaIniEop) classID() uint16 { return 0x4013 }
+func (MgaIniEop1) classID() uint16 { return 0x4013 }
 
-// Message UBX-MGA-INI-FREQ
-
-// MgaIniFreq (Input) Initial frequency assistance
+// MgaIniFreq2 (Input) Initial frequency assistance
 // Class/Id 0x13 0x40 12 (12 + N*0) bytes
 // Supplying external frequency assistance that is inaccurate by more than the specified accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of external frequency assistance to a receiver. See the description of AssistNow Online for details.
-type MgaIniFreq struct {
-	Type        byte            // Message type (0x21 for this type)
-	Version     byte            // Message version (0x00 for this version)
-	Reserved1   byte            // Reserved
-	Flags       MgaIniFreqFlags // Frequency reference
-	Freq_hze2   int32           // [1e-2 Hz] Frequency
-	FreqAcc_ppb uint32          // [ppb] Frequency accuracy
+type MgaIniFreq2 struct {
+	Type        byte             // Message type (0x21 for this type)
+	Version     byte             // Message version (0x00 for this version)
+	Reserved1   byte             // Reserved
+	Flags       MgaIniFreq2Flags // Frequency reference
+	Freq_hze2   int32            // [1e-2 Hz] Frequency
+	FreqAcc_ppb uint32           // [ppb] Frequency accuracy
 }
 
-func (MgaIniFreq) classID() uint16 { return 0x4013 }
+func (MgaIniFreq2) classID() uint16 { return 0x4013 }
 
-type MgaIniFreqFlags byte
+type MgaIniFreq2Flags byte
 
 const (
-	MgaIniFreqSource MgaIniFreqFlags = 0xf  // 0: frequency available on EXTINT0 1: frequency available on EXTINT1 2-15: reserved
-	MgaIniFreqFall   MgaIniFreqFlags = 0x10 // use falling edge of EXTINT pulse (default rising)
+	MgaIniFreq2Source MgaIniFreq2Flags = 0xf  // 0: frequency available on EXTINT0 1: frequency available on EXTINT1 2-15: reserved
+	MgaIniFreq2Fall   MgaIniFreq2Flags = 0x10 // use falling edge of EXTINT pulse (default rising)
 )
 
-// Message UBX-MGA-INI-POS_LLH
-
-// MgaIniPos_llh (Input) Initial position assistance
+// MgaIniPos_llh3 (Input) Initial position assistance
 // Class/Id 0x13 0x40 20 (20 + N*0) bytes
 // Supplying position assistance that is inaccurate by more than the specified position accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of initial position assistance to a receiver in WGS84 lat/long/alt coordinates. This message is equivalent to the UBX-MGA- INI-POS_XYZ message, except for the coordinate system. See the description of AssistNow Online for details.
-type MgaIniPos_llh struct {
+type MgaIniPos_llh3 struct {
 	Type      byte    // Message type (0x01 for this type)
 	Version   byte    // Message version (0x00 for this version)
 	Reserved1 [2]byte // Reserved
@@ -3055,14 +3019,12 @@ type MgaIniPos_llh struct {
 	PosAcc_cm uint32  // [cm] Position accuracy (stddev)
 }
 
-func (MgaIniPos_llh) classID() uint16 { return 0x4013 }
+func (MgaIniPos_llh3) classID() uint16 { return 0x4013 }
 
-// Message UBX-MGA-INI-POS_XYZ
-
-// MgaIniPos_xyz (Input) Initial position assistance
+// MgaIniPos_xyz4 (Input) Initial position assistance
 // Class/Id 0x13 0x40 20 (20 + N*0) bytes
 // Supplying position assistance that is inaccurate by more than the specified position accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of initial position assistance to a receiver in cartesian ECEF coordinates. This message is equivalent to the UBX-MGA-INI- POS_LLH message, except for the coordinate system. See the description of AssistNow Online for details.
-type MgaIniPos_xyz struct {
+type MgaIniPos_xyz4 struct {
 	Type      byte    // Message type (0x00 for this type)
 	Version   byte    // Message version (0x00 for this version)
 	Reserved1 [2]byte // Reserved
@@ -3072,71 +3034,67 @@ type MgaIniPos_xyz struct {
 	PosAcc_cm uint32  // [cm] Position accuracy (stddev)
 }
 
-func (MgaIniPos_xyz) classID() uint16 { return 0x4013 }
+func (MgaIniPos_xyz4) classID() uint16 { return 0x4013 }
 
-// Message UBX-MGA-INI-TIME_GNSS
-
-// MgaIniTime_gnss (Input) Initial time assistance
+// MgaIniTime_gnss5 (Input) Initial time assistance
 // Class/Id 0x13 0x40 24 (24 + N*0) bytes
 // Supplying time assistance that is inaccurate by more than the specified time accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of time assistance to a receiver in a chosen GNSS timebase. This message is equivalent to the UBX-MGA-INI-TIME_UTC message, except for the time base. See the description of AssistNow Online for details.
-type MgaIniTime_gnss struct {
-	Type      byte               // Message type (0x11 for this type)
-	Version   byte               // Message version (0x00 for this version)
-	Ref       MgaIniTime_gnssRef // Reference to be used to set time
-	GnssId    byte               // Source of time information. Currently supported: 0: GPS time 2: Galileo time 3: BeiDou time 6: GLONASS time: week = 834 + ((N4- 1)*1461 + Nt)/7, tow = (((N4-1)*1461 + Nt) % 7) * 86400 + tod
-	Reserved1 [2]byte            // Reserved
-	Week      uint16             // GNSS week number
-	Tow_s     uint32             // [s] GNSS time of week
-	Ns_ns     uint32             // [ns] GNSS time of week, nanosecond part from 0 to 999,999,999
-	TAccS_s   uint16             // [s] Seconds part of time accuracy
-	Reserved2 [2]byte            // Reserved
-	TAccNs_ns uint32             // [ns] Nanoseconds part of time accuracy, from 0 to 999,999,999
+type MgaIniTime_gnss5 struct {
+	Type      byte                // Message type (0x11 for this type)
+	Version   byte                // Message version (0x00 for this version)
+	Ref       MgaIniTime_gnss5Ref // Reference to be used to set time
+	GnssId    byte                // Source of time information. Currently supported: 0: GPS time 2: Galileo time 3: BeiDou time 6: GLONASS time: week = 834 + ((N4- 1)*1461 + Nt)/7, tow = (((N4-1)*1461 + Nt) % 7) * 86400 + tod
+	Reserved1 [2]byte             // Reserved
+	Week      uint16              // GNSS week number
+	Tow_s     uint32              // [s] GNSS time of week
+	Ns_ns     uint32              // [ns] GNSS time of week, nanosecond part from 0 to 999,999,999
+	TAccS_s   uint16              // [s] Seconds part of time accuracy
+	Reserved2 [2]byte             // Reserved
+	TAccNs_ns uint32              // [ns] Nanoseconds part of time accuracy, from 0 to 999,999,999
 }
 
-func (MgaIniTime_gnss) classID() uint16 { return 0x4013 }
+func (MgaIniTime_gnss5) classID() uint16 { return 0x4013 }
 
-type MgaIniTime_gnssRef byte
+type MgaIniTime_gnss5Ref byte
 
 const (
-	MgaIniTime_gnssSource MgaIniTime_gnssRef = 0xf  // 0: none, i.e. on receipt of message (will be inaccurate!) 1: relative to pulse sent to EXTINT0 2: relative to pulse sent to EXTINT1 3-15: reserved
-	MgaIniTime_gnssFall   MgaIniTime_gnssRef = 0x10 // use falling edge of EXTINT pulse (default rising) - only if source is EXTINT
-	MgaIniTime_gnssLast   MgaIniTime_gnssRef = 0x20 // use last EXTINT pulse (default next pulse) - only if source is EXTINT
+	MgaIniTime_gnss5Source MgaIniTime_gnss5Ref = 0xf  // 0: none, i.e. on receipt of message (will be inaccurate!) 1: relative to pulse sent to EXTINT0 2: relative to pulse sent to EXTINT1 3-15: reserved
+	MgaIniTime_gnss5Fall   MgaIniTime_gnss5Ref = 0x10 // use falling edge of EXTINT pulse (default rising) - only if source is EXTINT
+	MgaIniTime_gnss5Last   MgaIniTime_gnss5Ref = 0x20 // use last EXTINT pulse (default next pulse) - only if source is EXTINT
 )
 
-// Message UBX-MGA-INI-TIME_UTC
-
-// MgaIniTime_utc (Input) Initial time assistance
+// MgaIniTime_utc6 (Input) Initial time assistance
 // Class/Id 0x13 0x40 24 (24 + N*0) bytes
 // Supplying time assistance that is inaccurate by more than the specified time accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of UTC time assistance to a receiver. This message is equivalent to the UBX-MGA-INI-TIME_GNSS message, except for the time base. See the description of AssistNow Online for details.
-type MgaIniTime_utc struct {
-	Type       byte              // Message type (0x10 for this type)
-	Version    byte              // Message version (0x00 for this version)
-	Ref        MgaIniTime_utcRef // Reference to be used to set time
-	LeapSecs_s int8              // [s] Number of leap seconds since 1980 (or 0x80 = -128 if unknown)
-	Year       uint16            // Year
-	Month      byte              // Month, starting at 1
-	Day        byte              // Day, starting at 1
-	Hour       byte              // Hour, from 0 to 23
-	Minute     byte              // Minute, from 0 to 59
-	Second_s   byte              // [s] Seconds, from 0 to 59
-	Reserved1  byte              // Reserved
-	Ns_ns      uint32            // [ns] Nanoseconds, from 0 to 999,999,999
-	TAccS_s    uint16            // [s] Seconds part of time accuracy
-	Reserved2  [2]byte           // Reserved
-	TAccNs_ns  uint32            // [ns] Nanoseconds part of time accuracy, from 0 to 999,999,999
+type MgaIniTime_utc6 struct {
+	Type       byte               // Message type (0x10 for this type)
+	Version    byte               // Message version (0x00 for this version)
+	Ref        MgaIniTime_utc6Ref // Reference to be used to set time
+	LeapSecs_s int8               // [s] Number of leap seconds since 1980 (or 0x80 = -128 if unknown)
+	Year       uint16             // Year
+	Month      byte               // Month, starting at 1
+	Day        byte               // Day, starting at 1
+	Hour       byte               // Hour, from 0 to 23
+	Minute     byte               // Minute, from 0 to 59
+	Second_s   byte               // [s] Seconds, from 0 to 59
+	Reserved1  byte               // Reserved
+	Ns_ns      uint32             // [ns] Nanoseconds, from 0 to 999,999,999
+	TAccS_s    uint16             // [s] Seconds part of time accuracy
+	Reserved2  [2]byte            // Reserved
+	TAccNs_ns  uint32             // [ns] Nanoseconds part of time accuracy, from 0 to 999,999,999
 }
 
-func (MgaIniTime_utc) classID() uint16 { return 0x4013 }
+func (MgaIniTime_utc6) classID() uint16 { return 0x4013 }
 
-type MgaIniTime_utcRef byte
+type MgaIniTime_utc6Ref byte
 
 const (
-	MgaIniTime_utcSource MgaIniTime_utcRef = 0xf  // 0: none, i.e. on receipt of message (will be inaccurate!) 1: relative to pulse sent to EXTINT0 2: relative to pulse sent to EXTINT1 3-15: reserved
-	MgaIniTime_utcFall   MgaIniTime_utcRef = 0x10 // use falling edge of EXTINT pulse (default rising) - only if source is EXTINT
-	MgaIniTime_utcLast   MgaIniTime_utcRef = 0x20 // use last EXTINT pulse (default next pulse) - only if source is EXTINT
+	MgaIniTime_utc6Source MgaIniTime_utc6Ref = 0xf  // 0: none, i.e. on receipt of message (will be inaccurate!) 1: relative to pulse sent to EXTINT0 2: relative to pulse sent to EXTINT1 3-15: reserved
+	MgaIniTime_utc6Fall   MgaIniTime_utc6Ref = 0x10 // use falling edge of EXTINT pulse (default rising) - only if source is EXTINT
+	MgaIniTime_utc6Last   MgaIniTime_utc6Ref = 0x20 // use last EXTINT pulse (default next pulse) - only if source is EXTINT
 )
 
-// Message UBX-MGA-QZSS-ALM
+// Message ubx-mga-qzss (3 versions)
 
 // MgaQzssAlm (Input) QZSS almanac assistance
 // Class/Id 0x13 0x05 36 (36 + N*0) bytes
@@ -3162,12 +3120,10 @@ type MgaQzssAlm struct {
 
 func (MgaQzssAlm) classID() uint16 { return 0x0513 }
 
-// Message UBX-MGA-QZSS-EPH
-
-// MgaQzssEph (Input) QZSS ephemeris assistance
+// MgaQzssEph1 (Input) QZSS ephemeris assistance
 // Class/Id 0x13 0x05 68 (68 + N*0) bytes
 // This message allows the delivery of QZSS ephemeris assistance to a receiver. See the description of AssistNow Online for details.
-type MgaQzssEph struct {
+type MgaQzssEph1 struct {
 	Type              byte    // Message type (0x01 for this type)
 	Version           byte    // Message version (0x00 for this version)
 	SvId              byte    // QZSS Satellite identifier (see Satellite Numbering), Range 1-5
@@ -3201,14 +3157,12 @@ type MgaQzssEph struct {
 	Reserved3         [2]byte // Reserved
 }
 
-func (MgaQzssEph) classID() uint16 { return 0x0513 }
+func (MgaQzssEph1) classID() uint16 { return 0x0513 }
 
-// Message UBX-MGA-QZSS-HEALTH
-
-// MgaQzssHealth (Input) QZSS health assistance
+// MgaQzssHealth2 (Input) QZSS health assistance
 // Class/Id 0x13 0x05 12 (12 + N*0) bytes
 // This message allows the delivery of QZSS health assistance to a receiver. See the description of AssistNow Online for details.
-type MgaQzssHealth struct {
+type MgaQzssHealth2 struct {
 	Type       byte    // Message type (0x04 for this type)
 	Version    byte    // Message version (0x00 for this version)
 	Reserved1  [2]byte // Reserved
@@ -3216,9 +3170,9 @@ type MgaQzssHealth struct {
 	Reserved2  [3]byte // Reserved
 }
 
-func (MgaQzssHealth) classID() uint16 { return 0x0513 }
+func (MgaQzssHealth2) classID() uint16 { return 0x0513 }
 
-// Message UBX-MON-BATCH
+// Message ubx-mon-batch
 
 // MonBatch (Polled) Data batching buffer status
 // Class/Id 0x0a 0x32 12 (12 + N*0) bytes
@@ -3234,7 +3188,7 @@ type MonBatch struct {
 
 func (MonBatch) classID() uint16 { return 0x320a }
 
-// Message UBX-MON-GNSS
+// Message ubx-mon-gnss
 
 // MonGnss (Polled) Information message major GNSS selection
 // Class/Id 0x0a 0x28 8 (8 + N*0) bytes
@@ -3277,7 +3231,7 @@ const (
 	MonGnssGalileoEna MonGnssEnabled = 0x8 // Galileo is enabled
 )
 
-// Message UBX-MON-HW
+// Message ubx-mon-hw
 
 // MonHw (Periodic/polled) Hardware status
 // Class/Id 0x0a 0x09 60 (60 + N*0) bytes
@@ -3313,7 +3267,7 @@ const (
 	MonHwXtalAbsent   MonHwFlags = 0x10 // RTC xtal has been determined to be absent (not supported in protocol versions less than 18)
 )
 
-// Message UBX-MON-HW2
+// Message ubx-mon-hw2
 
 // MonHw2 (Periodic/Polled) Extended hardware status
 // Class/Id 0x0a 0x0b 28 (28 + N*0) bytes
@@ -3333,7 +3287,7 @@ type MonHw2 struct {
 
 func (MonHw2) classID() uint16 { return 0x0b0a }
 
-// Message UBX-MON-IO
+// Message ubx-mon-io
 
 // MonIo (Periodic/Polled) I/O system status
 // Class/Id 0x0a 0x02 0 + 20*N (0 + N*20) bytes
@@ -3352,7 +3306,7 @@ type MonIo struct {
 
 func (MonIo) classID() uint16 { return 0x020a }
 
-// Message UBX-MON-MSGPP
+// Message ubx-mon-msgpp
 
 // MonMsgpp (Periodic/Polled) Message parse and process status
 // Class/Id 0x0a 0x06 120 (120 + N*0) bytes
@@ -3369,7 +3323,7 @@ type MonMsgpp struct {
 
 func (MonMsgpp) classID() uint16 { return 0x060a }
 
-// Message UBX-MON-PATCH (2 versions)
+// Message ubx-mon-patch (2 versions)
 
 // MonPatch (Poll Request) Poll request for installed patches
 // Class/Id 0x0a 0x27 0 (0 + N*0) bytes
@@ -3402,7 +3356,7 @@ const (
 	MonPatch1Location  MonPatch1PatchInfo = 0x6 // Indicates where the patch is stored. 0: eFuse, 1: ROM, 2: BBR, 3: file system
 )
 
-// Message UBX-MON-RXBUF
+// Message ubx-mon-rxbuf
 
 // MonRxbuf (Periodic/Polled) Receiver buffer status
 // Class/Id 0x0a 0x07 24 (24 + N*0) bytes
@@ -3415,7 +3369,7 @@ type MonRxbuf struct {
 
 func (MonRxbuf) classID() uint16 { return 0x070a }
 
-// Message UBX-MON-RXR
+// Message ubx-mon-rxr
 
 // MonRxr (Output) Receiver status information
 // Class/Id 0x0a 0x21 1 (1 + N*0) bytes
@@ -3432,7 +3386,7 @@ const (
 	MonRxrAwake MonRxrFlags = 0x1 // not in backup mode
 )
 
-// Message UBX-MON-SMGR
+// Message ubx-mon-smgr
 
 // MonSmgr (Periodic/Polled) Synchronization manager status
 // Class/Id 0x0a 0x2e 16 (16 + N*0) bytes
@@ -3489,7 +3443,7 @@ const (
 	MonSmgrExtInt1FeedBack MonSmgrExtInt1 = 0x4 // This source is used as feedback of the external oscillator
 )
 
-// Message UBX-MON-SPT
+// Message ubx-mon-spt
 
 // MonSpt (Polled) Sensor production test
 // Class/Id 0x0a 0x2f 4 + 12*numRes + 4*numSensor (4 + N*16) bytes
@@ -3523,7 +3477,7 @@ const (
 	MonSptDrvVerMin MonSptDrvVer = 0xf0 // Driver minor version
 )
 
-// Message UBX-MON-TXBUF
+// Message ubx-mon-txbuf
 
 // MonTxbuf (Periodic/Polled) Transmitter buffer status
 // Class/Id 0x0a 0x08 28 (28 + N*0) bytes
@@ -3548,7 +3502,7 @@ const (
 	MonTxbufAlloc MonTxbufErrors = 0x80 // Allocation error (TX buffer full)
 )
 
-// Message UBX-MON-VER (2 versions)
+// Message ubx-mon-ver (2 versions)
 
 // MonVer (Poll Request) Poll receiver and software version
 // Class/Id 0x0a 0x04 0 (0 + N*0) bytes
@@ -3571,7 +3525,7 @@ type MonVer1 struct {
 
 func (MonVer1) classID() uint16 { return 0x040a }
 
-// Message UBX-NAV-AOPSTATUS
+// Message ubx-nav-aopstatus
 
 // NavAopstatus (Periodic/Polled) AssistNow Autonomous status
 // Class/Id 0x01 0x60 16 (16 + N*0) bytes
@@ -3591,7 +3545,7 @@ const (
 	NavAopstatusUseAOP NavAopstatusAopCfg = 0x1 // AOP enabled flag
 )
 
-// Message UBX-NAV-ATT
+// Message ubx-nav-att
 
 // NavAtt (Periodic/Polled) Attitude solution
 // Class/Id 0x01 0x05 32 (32 + N*0) bytes
@@ -3610,7 +3564,7 @@ type NavAtt struct {
 
 func (NavAtt) classID() uint16 { return 0x0501 }
 
-// Message UBX-NAV-CLOCK
+// Message ubx-nav-clock
 
 // NavClock (Periodic/Polled) Clock solution
 // Class/Id 0x01 0x22 20 (20 + N*0) bytes
@@ -3625,7 +3579,7 @@ type NavClock struct {
 
 func (NavClock) classID() uint16 { return 0x2201 }
 
-// Message UBX-NAV-COV
+// Message ubx-nav-cov
 
 // NavCov (Periodic/Polled) Covariance matrices
 // Class/Id 0x01 0x36 64 (64 + N*0) bytes
@@ -3652,7 +3606,7 @@ type NavCov struct {
 
 func (NavCov) classID() uint16 { return 0x3601 }
 
-// Message UBX-NAV-DGPS
+// Message ubx-nav-dgps
 
 // NavDgps (Periodic/Polled) DGPS data used for NAV
 // Class/Id 0x01 0x31 16 + 12*numCh (16 + N*12) bytes
@@ -3683,7 +3637,7 @@ const (
 	NavDgpsDgpsUsed NavDgpsFlags = 0x10 // 1 = DGPS used for this SV
 )
 
-// Message UBX-NAV-DOP
+// Message ubx-nav-dop
 
 // NavDop (Periodic/Polled) Dilution of precision
 // Class/Id 0x01 0x04 18 (18 + N*0) bytes
@@ -3701,7 +3655,7 @@ type NavDop struct {
 
 func (NavDop) classID() uint16 { return 0x0401 }
 
-// Message UBX-NAV-EELL
+// Message ubx-nav-eell
 
 // NavEell (Periodic/Polled) Position error ellipse parameters
 // Class/Id 0x01 0x3d 16 (16 + N*0) bytes
@@ -3717,7 +3671,7 @@ type NavEell struct {
 
 func (NavEell) classID() uint16 { return 0x3d01 }
 
-// Message UBX-NAV-EOE
+// Message ubx-nav-eoe
 
 // NavEoe (Periodic) End of epoch
 // Class/Id 0x01 0x61 4 (4 + N*0) bytes
@@ -3728,7 +3682,7 @@ type NavEoe struct {
 
 func (NavEoe) classID() uint16 { return 0x6101 }
 
-// Message UBX-NAV-GEOFENCE
+// Message ubx-nav-geofence
 
 // NavGeofence (Periodic/Polled) Geofencing status
 // Class/Id 0x01 0x39 8 + 2*numFences (8 + N*2) bytes
@@ -3747,7 +3701,7 @@ type NavGeofence struct {
 
 func (NavGeofence) classID() uint16 { return 0x3901 }
 
-// Message UBX-NAV-HPPOSECEF
+// Message ubx-nav-hpposecef
 
 // NavHpposecef (Periodic/Polled) High precision position solution in ECEF
 // Class/Id 0x01 0x13 28 (28 + N*0) bytes
@@ -3774,7 +3728,7 @@ const (
 	NavHpposecefInvalidEcef NavHpposecefFlags = 0x1 // 1 = Invalid ecefX, ecefY, ecefZ, ecefXHp, ecefYHp and ecefZHp
 )
 
-// Message UBX-NAV-HPPOSLLH
+// Message ubx-nav-hpposllh
 
 // NavHpposllh (Periodic/Polled) High precision geodetic position solution
 // Class/Id 0x01 0x14 36 (36 + N*0) bytes
@@ -3804,7 +3758,7 @@ const (
 	NavHpposllhInvalidLlh NavHpposllhFlags = 0x1 // 1 = Invalid lon, lat, height, hMSL, lonHp, latHp, heightHp and hMSLHp
 )
 
-// Message UBX-NAV-NMI
+// Message ubx-nav-nmi
 
 // NavNmi (Periodic/Polled) Navigation message cross-check information
 // Class/Id 0x01 0x28 16 (16 + N*0) bytes
@@ -3882,7 +3836,7 @@ const (
 	NavNmiWnoInvalidGLO NavNmiGloNmiFlags = 0x2 // 1 = week number invalid.
 )
 
-// Message UBX-NAV-ODO
+// Message ubx-nav-odo
 
 // NavOdo (Periodic/Polled) Odometer solution
 // Class/Id 0x01 0x09 20 (20 + N*0) bytes
@@ -3898,7 +3852,7 @@ type NavOdo struct {
 
 func (NavOdo) classID() uint16 { return 0x0901 }
 
-// Message UBX-NAV-ORB
+// Message ubx-nav-orb
 
 // NavOrb (Periodic/Polled) GNSS orbit database info
 // Class/Id 0x01 0x34 8 + 6*numSv (8 + N*6) bytes
@@ -3948,7 +3902,7 @@ const (
 	NavOrbType            NavOrbOtherOrb = 0xe0 // Type of orbit data: 0: No orbit data available 1: AssistNow Offline data 2: AssistNow Autonomous data 3-7: Other orbit data
 )
 
-// Message UBX-NAV-POSECEF
+// Message ubx-nav-posecef
 
 // NavPosecef (Periodic/Polled) Position solution in ECEF
 // Class/Id 0x01 0x01 20 (20 + N*0) bytes
@@ -3963,7 +3917,7 @@ type NavPosecef struct {
 
 func (NavPosecef) classID() uint16 { return 0x0101 }
 
-// Message UBX-NAV-POSLLH
+// Message ubx-nav-posllh
 
 // NavPosllh (Periodic/Polled) Geodetic position solution
 // Class/Id 0x01 0x02 28 (28 + N*0) bytes
@@ -3980,7 +3934,7 @@ type NavPosllh struct {
 
 func (NavPosllh) classID() uint16 { return 0x0201 }
 
-// Message UBX-NAV-PVT
+// Message ubx-nav-pvt
 
 // NavPvt (Periodic/Polled) Navigation position velocity time solution
 // Class/Id 0x01 0x07 92 (92 + N*0) bytes
@@ -4055,7 +4009,7 @@ const (
 	NavPvtInvalidLlh NavPvtFlags3 = 0x1 // 1 = Invalid lon, lat, height and hMSL
 )
 
-// Message UBX-NAV-RELPOSNED
+// Message ubx-nav-relposned
 
 // NavRelposned (Periodic/Polled) Relative positioning information in NED frame
 // Class/Id 0x01 0x3c 40 (40 + N*0) bytes
@@ -4092,7 +4046,7 @@ const (
 	NavRelposnedRefObsMiss  NavRelposnedFlags = 0x80 // 1 if extrapolated reference observations were used to compute moving baseline solution this epoch (not supported in protocol versions less than 20.3)
 )
 
-// Message UBX-NAV-RESETODO
+// Message ubx-nav-resetodo
 
 // NavResetodo (Command) Reset odometer
 // Class/Id 0x01 0x10 0 (0 + N*0) bytes
@@ -4102,7 +4056,7 @@ type NavResetodo struct {
 
 func (NavResetodo) classID() uint16 { return 0x1001 }
 
-// Message UBX-NAV-SAT
+// Message ubx-nav-sat
 
 // NavSat (Periodic/Polled) Satellite information
 // Class/Id 0x01 0x35 8 + 12*numSvs (8 + N*12) bytes
@@ -4146,7 +4100,7 @@ const (
 	NavSatDoCorrUsed   NavSatFlags = 0x400000 // 1 = Range rate (Doppler) corrections have been used for a signal in the subset specified in Signal Identifiers
 )
 
-// Message UBX-NAV-SBAS
+// Message ubx-nav-sbas
 
 // NavSbas (Periodic/Polled) SBAS status data
 // Class/Id 0x01 0x32 12 + 12*cnt (12 + N*12) bytes
@@ -4184,7 +4138,7 @@ const (
 	NavSbasBad         NavSbasService = 0x10 // Problem with signal or broadcast data indicated
 )
 
-// Message UBX-NAV-SLAS
+// Message ubx-nav-slas
 
 // NavSlas (Periodic/Polled) QZSS L1S SLAS status data
 // Class/Id 0x01 0x42 20 + 8*cnt (20 + N*8) bytes
@@ -4218,7 +4172,7 @@ const (
 	NavSlasTestMode        NavSlasServiceFlags = 0x4 // 1 = Currently used QZSS SV in test mode
 )
 
-// Message UBX-NAV-SOL
+// Message ubx-nav-sol
 
 // NavSol (Periodic/Polled) Navigation solution information
 // Class/Id 0x01 0x06 52 (52 + N*0) bytes
@@ -4254,7 +4208,7 @@ const (
 	NavSolTOWSET   NavSolFlags = 0x8 // 1 = Valid GPS time of week (iTOW & fTOW, see Time Validity section for details)
 )
 
-// Message UBX-NAV-STATUS
+// Message ubx-nav-status
 
 // NavStatus (Periodic/Polled) Receiver navigation status
 // Class/Id 0x01 0x03 16 (16 + N*0) bytes
@@ -4296,7 +4250,7 @@ const (
 	NavStatusCarrSoln      NavStatusFlags2 = 0xc0 // Carrier phase range solution status: 0: no carrier phase range solution 1: carrier phase range solution with floating ambiguities 2: carrier phase range solution with fixed ambiguities
 )
 
-// Message UBX-NAV-SVIN
+// Message ubx-nav-svin
 
 // NavSvin (Periodic/Polled) Survey-in data
 // Class/Id 0x01 0x3b 40 (40 + N*0) bytes
@@ -4322,7 +4276,7 @@ type NavSvin struct {
 
 func (NavSvin) classID() uint16 { return 0x3b01 }
 
-// Message UBX-NAV-SVINFO
+// Message ubx-nav-svinfo
 
 // NavSvinfo (Periodic/Polled) Space vehicle information
 // Class/Id 0x01 0x30 8 + 12*numCh (8 + N*12) bytes
@@ -4371,7 +4325,7 @@ const (
 	NavSvinfoQualityInd NavSvinfoQuality = 0xf // Signal Quality indicator (range 0..7). The following list shows the meaning of the different QI values: 0: no signal 1: searching signal 2: signal acquired 3: signal detected but unusable 4: code locked and time synchronized 5, 6, 7: code and carrier locked and time synchronized Note: Since IMES signals are not time synchronized, a channel tracking an IMES signal can never reach a quality indicator value of higher than 3.
 )
 
-// Message UBX-NAV-TIMEBDS
+// Message ubx-nav-timebds
 
 // NavTimebds (Periodic/Polled) BeiDou time solution
 // Class/Id 0x01 0x24 20 (20 + N*0) bytes
@@ -4396,7 +4350,7 @@ const (
 	NavTimebdsLeapSValid NavTimebdsValid = 0x4 // 1 = Valid leap second
 )
 
-// Message UBX-NAV-TIMEGAL
+// Message ubx-nav-timegal
 
 // NavTimegal (Periodic/Polled) Galileo time solution
 // Class/Id 0x01 0x25 20 (20 + N*0) bytes
@@ -4421,7 +4375,7 @@ const (
 	NavTimegalLeapSValid  NavTimegalValid = 0x4 // 1 = Valid leapS
 )
 
-// Message UBX-NAV-TIMEGLO
+// Message ubx-nav-timeglo
 
 // NavTimeglo (Periodic/Polled) GLONASS time solution
 // Class/Id 0x01 0x23 20 (20 + N*0) bytes
@@ -4445,7 +4399,7 @@ const (
 	NavTimegloDateValid NavTimegloValid = 0x2 // 1 = Valid N4 and Nt (see Time Validity section for details)
 )
 
-// Message UBX-NAV-TIMEGPS
+// Message ubx-nav-timegps
 
 // NavTimegps (Periodic/Polled) GPS time solution
 // Class/Id 0x01 0x20 16 (16 + N*0) bytes
@@ -4469,7 +4423,7 @@ const (
 	NavTimegpsLeapSValid NavTimegpsValid = 0x4 // 1 = Valid GPS leap seconds
 )
 
-// Message UBX-NAV-TIMELS
+// Message ubx-nav-timels
 
 // NavTimels (Periodic/Polled) Leap second event information
 // Class/Id 0x01 0x26 24 (24 + N*0) bytes
@@ -4498,7 +4452,7 @@ const (
 	NavTimelsValidTimeToLsEvent NavTimelsValid = 0x2 // 1 = Valid time to next leap second event or from the last leap second event if no future event scheduled.
 )
 
-// Message UBX-NAV-TIMEUTC
+// Message ubx-nav-timeutc
 
 // NavTimeutc (Periodic/Polled) UTC time solution
 // Class/Id 0x01 0x21 20 (20 + N*0) bytes
@@ -4527,7 +4481,7 @@ const (
 	NavTimeutcUtcStandard NavTimeutcValid = 0xf0 // UTC standard identifier. 0: Information not available 1: Communications Research Labratory (CRL), Tokyo, Japan 2: National Institute of Standards and Technology (NIST) 3: U.S. Naval Observatory (USNO) 4: International Bureau of Weights and Measures (BIPM) 5: European laboratories 6: Former Soviet Union (SU) 7: National Time Service Center (NTSC), China 15: Unknown
 )
 
-// Message UBX-NAV-VELECEF
+// Message ubx-nav-velecef
 
 // NavVelecef (Periodic/Polled) Velocity solution in ECEF
 // Class/Id 0x01 0x11 20 (20 + N*0) bytes
@@ -4542,7 +4496,7 @@ type NavVelecef struct {
 
 func (NavVelecef) classID() uint16 { return 0x1101 }
 
-// Message UBX-NAV-VELNED
+// Message ubx-nav-velned
 
 // NavVelned (Periodic/Polled) Velocity solution in NED frame
 // Class/Id 0x01 0x12 36 (36 + N*0) bytes
@@ -4561,7 +4515,7 @@ type NavVelned struct {
 
 func (NavVelned) classID() uint16 { return 0x1201 }
 
-// Message UBX-RXM-IMES
+// Message ubx-rxm-imes
 
 // RxmImes (Periodic/Polled) Indoor Messaging System information
 // Class/Id 0x02 0x61 4 + 44*numTx (4 + N*44) bytes
@@ -4629,7 +4583,7 @@ const (
 	RxmImesMediumboundary RxmImesMediumId_2 = 0x4 // Boundary Bit
 )
 
-// Message UBX-RXM-MEASX
+// Message ubx-rxm-measx
 
 // RxmMeasx (Periodic/Polled) Satellite measurements for RRLP
 // Class/Id 0x02 0x14 44 + 24*numSV (44 + N*24) bytes
@@ -4674,7 +4628,7 @@ const (
 	RxmMeasxTowSet RxmMeasxFlags = 0x3 // TOW set (0 = no, 1 or 2 = yes)
 )
 
-// Message UBX-RXM-PMREQ (2 versions)
+// Message ubx-rxm-pmreq (2 versions)
 
 // RxmPmreq (Command) Power management request
 // Class/Id 0x02 0x41 8 (8 + N*0) bytes
@@ -4721,7 +4675,7 @@ const (
 	RxmPmreq1Spics   RxmPmreq1WakeupSources = 0x80 // Wake up the receiver if there is an edge on the SPI CS pin
 )
 
-// Message UBX-RXM-RAWX (2 versions)
+// Message ubx-rxm-rawx (2 versions)
 
 // RxmRawx (Periodic/Polled) Multi-GNSS raw measurement data
 // Class/Id 0x02 0x15 16 + 32*numMeas (16 + N*32) bytes
@@ -4852,7 +4806,7 @@ const (
 	RxmRawx1SubHalfCyc RxmRawx1TrkStat = 0x8 // Half cycle subtracted from phase
 )
 
-// Message UBX-RXM-RLM (2 versions)
+// Message ubx-rxm-rlm (2 versions)
 
 // RxmRlm (Output) Galileo SAR short-RLM report
 // Class/Id 0x02 0x59 16 (16 + N*0) bytes
@@ -4886,7 +4840,7 @@ type RxmRlm1 struct {
 
 func (RxmRlm1) classID() uint16 { return 0x5902 }
 
-// Message UBX-RXM-RTCM
+// Message ubx-rxm-rtcm
 
 // RxmRtcm (Output) RTCM input status
 // Class/Id 0x02 0x32 8 (8 + N*0) bytes
@@ -4908,7 +4862,7 @@ const (
 	RxmRtcmMsgUsed   RxmRtcmFlags = 0x6 // 2 = RTCM message used successfully by the receiver, 1 = not used, 0 = do not know
 )
 
-// Message UBX-RXM-SFRBX (2 versions)
+// Message ubx-rxm-sfrbx (2 versions)
 
 // RxmSfrbx (Output) Broadcast navigation data subframe
 // Class/Id 0x02 0x13 8 + 4*numWords (8 + N*4) bytes
@@ -4948,7 +4902,7 @@ type RxmSfrbx1 struct {
 
 func (RxmSfrbx1) classID() uint16 { return 0x1302 }
 
-// Message UBX-RXM-SVSI
+// Message ubx-rxm-svsi
 
 // RxmSvsi (Periodic/Polled) SV status info
 // Class/Id 0x02 0x20 8 + 6*numSV (8 + N*6) bytes
@@ -4986,7 +4940,7 @@ const (
 	RxmSvsiEphAge RxmSvsiAge = 0xf0 // Age of EPH in hours offset by 4. i.e. the reference time may be in the future: ageOfEph = ((age & 0xf0) >> 4) - 4
 )
 
-// Message UBX-SEC-UNIQID
+// Message ubx-sec-uniqid
 
 // SecUniqid (Output) Unique chip ID
 // Class/Id 0x27 0x03 9 (9 + N*0) bytes
@@ -4999,7 +4953,7 @@ type SecUniqid struct {
 
 func (SecUniqid) classID() uint16 { return 0x0327 }
 
-// Message UBX-TIM-DOSC
+// Message ubx-tim-dosc
 
 // TimDosc (Output) Disciplined oscillator control
 // Class/Id 0x0d 0x11 8 (8 + N*0) bytes
@@ -5012,7 +4966,7 @@ type TimDosc struct {
 
 func (TimDosc) classID() uint16 { return 0x110d }
 
-// Message UBX-TIM-FCHG
+// Message ubx-tim-fchg
 
 // TimFchg (Periodic/Polled) Oscillator frequency changed notification
 // Class/Id 0x0d 0x16 32 (32 + N*0) bytes
@@ -5031,7 +4985,7 @@ type TimFchg struct {
 
 func (TimFchg) classID() uint16 { return 0x160d }
 
-// Message UBX-TIM-HOC
+// Message ubx-tim-hoc
 
 // TimHoc (Input) Host oscillator control
 // Class/Id 0x0d 0x17 8 (8 + N*0) bytes
@@ -5053,7 +5007,7 @@ const (
 	TimHocDifference TimHocFlags = 0x2 // Nature of value: 0: absolute (i.e. relative to 0) 1: relative to current setting
 )
 
-// Message UBX-TIM-SMEAS
+// Message ubx-tim-smeas
 
 // TimSmeas (Input/Output) Source measurement
 // Class/Id 0x0d 0x13 12 + 24*numMeas (12 + N*24) bytes
@@ -5086,7 +5040,7 @@ const (
 	TimSmeasPhaseValid TimSmeasFlags = 0x2 // 1 = phase measurement is valid
 )
 
-// Message UBX-TIM-SVIN
+// Message ubx-tim-svin
 
 // TimSvin (Periodic/Polled) Survey-in data
 // Class/Id 0x0d 0x04 28 (28 + N*0) bytes
@@ -5105,7 +5059,7 @@ type TimSvin struct {
 
 func (TimSvin) classID() uint16 { return 0x040d }
 
-// Message UBX-TIM-TM2
+// Message ubx-tim-tm2
 
 // TimTm2 (Periodic/Polled) Time mark data
 // Class/Id 0x0d 0x03 28 (28 + N*0) bytes
@@ -5137,7 +5091,7 @@ const (
 	TimTm2NewRisingEdge  TimTm2Flags = 0x80 // New rising edge detected
 )
 
-// Message UBX-TIM-TOS
+// Message ubx-tim-tos
 
 // TimTos (Periodic) Time pulse time and frequency data
 // Class/Id 0x0d 0x12 56 (56 + N*0) bytes
@@ -5185,7 +5139,7 @@ const (
 	TimTosLockedPulse   TimTosFlags = 0x2000 // 1 = time pulse is locked
 )
 
-// Message UBX-TIM-TP
+// Message ubx-tim-tp
 
 // TimTp (Periodic/Polled) Time pulse time data
 // Class/Id 0x0d 0x01 16 (16 + N*0) bytes
@@ -5217,7 +5171,7 @@ const (
 	TimTpUtcStandard TimTpRefInfo = 0xf0 // UTC standard identifier. Only valid if time base is UTC (timeBase=1). 0 = Information not available 1 = Communications Research Laboratory (CRL), Tokyo, Japan 2 = National Institute of Standards and Technology (NIST) 3 = U.S. Naval Observatory (USNO) 4 = International Bureau of Weights and Measures (BIPM) 5 = European laboratories 6 = Former Soviet Union (SU) 7 = National Time Service Center (NTSC), China 15 = Unknown
 )
 
-// Message UBX-TIM-VCOCAL (3 versions)
+// Message ubx-tim-vcocal (3 versions)
 
 // TimVcocal (Command) Stop calibration
 // Class/Id 0x0d 0x15 1 (1 + N*0) bytes
@@ -5258,7 +5212,7 @@ type TimVcocal2 struct {
 
 func (TimVcocal2) classID() uint16 { return 0x150d }
 
-// Message UBX-TIM-VRFY
+// Message ubx-tim-vrfy
 
 // TimVrfy (Periodic/Polled) Sourced time verification
 // Class/Id 0x0d 0x06 20 (20 + N*0) bytes
@@ -5281,7 +5235,7 @@ const (
 	TimVrfySrc TimVrfyFlags = 0x7 // Aiding time source 0 = no time aiding done 2 = source was RTC 3 = source was assistance data
 )
 
-// Message UBX-UPD-SOS (5 versions)
+// Message ubx-upd-sos (5 versions)
 
 // UpdSos (Poll Request) Poll backup restore status
 // Class/Id 0x09 0x14 0 (0 + N*0) bytes
@@ -5335,217 +5289,559 @@ type UpdSos4 struct {
 
 func (UpdSos4) classID() uint16 { return 0x1409 }
 
-/*
+func mkMsg(classId, sz uint16, frame []byte) Message {
+	switch classId {
 
-0x01 05   2   2   0 AckAck
-0x00 05   2   2   0 AckNak
-0x30 0b   0   0   0 AidAlm
-0x30 0b   1   1   0 AidAlm1
-0x30 0b   8  40   0 AidAlm2
-0x33 0b   0   0   0 AidAop
-0x33 0b   1   1   0 AidAop1
-0x33 0b  68  68   0 AidAop2
-0x31 0b   0   0   0 AidEph
-0x31 0b   1   1   0 AidEph1
-0x31 0b   8 104   0 AidEph2
-0x02 0b   0   0   0 AidHui
-0x02 0b  72  72   0 AidHui1
-0x01 0b   0   0   0 AidIni
-0x01 0b  48  48   0 AidIni1
-0x13 06   4   4   0 CfgAnt
-0x93 06   8   8   0 CfgBatch
-0x09 06  12  13   0 CfgCfg
-0x06 06  44  44   0 CfgDat
-0x06 06  52  52   0 CfgDat1
-0x70 06   4   4   0 CfgDgnss
-0x61 06   4   4  32 CfgDosc
-0x4c 06  20  20   0 CfgEsfa
-0x56 06  12  12   0 CfgEsfalg
-0x4d 06  20  20   0 CfgEsfg
-0x82 06  32  32   0 CfgEsfwt
-0x60 06   4   4  36 CfgEsrc
-0x69 06   8   8  12 CfgGeofence
-0x3e 06   4   4   8 CfgGnss
-0x5c 06   4   4   0 CfgHnr
-0x02 06   0   0  10 CfgInf
-0x02 06   1   1   0 CfgInf1
-0x39 06   8   8   0 CfgItfm
-0x47 06  12  12   0 CfgLogfilter
-0x01 06   2   2   0 CfgMsg
-0x01 06   3   3   0 CfgMsg1
-0x01 06   8   8   0 CfgMsg2
-0x24 06  36  36   0 CfgNav5
-0x23 06  40  40   0 CfgNavx5
-0x23 06  40  40   0 CfgNavx51
-0x23 06  44  44   0 CfgNavx52
-0x17 06   4   4   0 CfgNmea
-0x17 06  12  12   0 CfgNmea1
-0x17 06  20  20   0 CfgNmea2
-0x1e 06  20  20   0 CfgOdo
-0x3b 06  44  44   0 CfgPm2
-0x3b 06  48  48   0 CfgPm21
-0x3b 06  48  48   0 CfgPm22
-0x86 06   8   8   0 CfgPms
-0x00 06   1   1   0 CfgPrt
-0x00 06  20  20   0 CfgPrt1
-0x00 06  20  20   0 CfgPrt2
-0x00 06  20  20   0 CfgPrt3
-0x00 06  20  20   0 CfgPrt4
-0x57 06   8   8   0 CfgPwr
-0x08 06   6   6   0 CfgRate
-0x34 06   1   1   1 CfgRinv
-0x04 06   4   4   0 CfgRst
-0x11 06   2   2   0 CfgRxm
-0x11 06   2   2   0 CfgRxm1
-0x16 06   8   8   0 CfgSbas
-0x88 06   6   6   0 CfgSenif
-0x8d 06   4   4   0 CfgSlas
-0x62 06  20  20   0 CfgSmgr
-0x64 06  12  12   0 CfgSpt
-0x3d 06  28  28   0 CfgTmode2
-0x71 06  40  40   0 CfgTmode3
-0x31 06   0   0   0 CfgTp5
-0x31 06   1   1   0 CfgTp51
-0x31 06  32  32   0 CfgTp52
-0x53 06  16  16   0 CfgTxslot
-0x1b 06 108 108   0 CfgUsb
-0x14 10  16  16   0 EsfAlg
-0x15 10  36  36   0 EsfIns
-0x02 10   8  12   4 EsfMeas
-0x03 10   4   4   8 EsfRaw
-0x10 10  16  16   4 EsfStatus
-0x01 28  32  32   0 HnrAtt
-0x02 28  36  36   0 HnrIns
-0x00 28  72  72   0 HnrPvt
-0x04 04   0   0   1 InfDebug
-0x00 04   0   0   1 InfError
-0x02 04   0   0   1 InfNotice
-0x03 04   0   0   1 InfTest
-0x01 04   0   0   1 InfWarning
-0x11 21 100 100   0 LogBatch
-0x07 21   8   8   0 LogCreate
-0x03 21   0   0   0 LogErase
-0x0e 21   8   8   0 LogFindtime
-0x0e 21  12  12   0 LogFindtime1
-0x08 21   0   0   0 LogInfo
-0x08 21  48  48   0 LogInfo1
-0x09 21  12  12   0 LogRetrieve
-0x10 21   4   4   0 LogRetrievebatch
-0x0b 21  40  40   0 LogRetrievepos
-0x0f 21  32  32   0 LogRetrieveposextra
-0x0d 21  16  16   1 LogRetrievestring
-0x04 21   0   0   1 LogString
-0x60 13   8   8   0 MgaAckData0
-0x20 13  76  76   0 MgaAno
-0x03 13  40  40   0 MgaBdsAlm
-0x03 13  88  88   0 MgaBdsEph
-0x03 13  68  68   0 MgaBdsHealth
-0x03 13  16  16   0 MgaBdsIono
-0x03 13  20  20   0 MgaBdsUtc
-0x80 13   0   0   0 MgaDbd
-0x80 13  12  12   1 MgaDbd1
-0x21 13   6   6   0 MgaFlashAck
-0x21 13   6   6   1 MgaFlashData
-0x21 13   2   2   0 MgaFlashStop
-0x02 13  32  32   0 MgaGalAlm
-0x02 13  76  76   0 MgaGalEph
-0x02 13  12  12   0 MgaGalTimeoffset
-0x02 13  20  20   0 MgaGalUtc
-0x06 13  36  36   0 MgaGloAlm
-0x06 13  48  48   0 MgaGloEph
-0x06 13  20  20   0 MgaGloTimeoffset
-0x00 13  36  36   0 MgaGpsAlm
-0x00 13  68  68   0 MgaGpsEph
-0x00 13  40  40   0 MgaGpsHealth
-0x00 13  16  16   0 MgaGpsIono
-0x00 13  20  20   0 MgaGpsUtc
-0x40 13  12  12   0 MgaIniClkd
-0x40 13  72  72   0 MgaIniEop
-0x40 13  12  12   0 MgaIniFreq
-0x40 13  20  20   0 MgaIniPos_llh
-0x40 13  20  20   0 MgaIniPos_xyz
-0x40 13  24  24   0 MgaIniTime_gnss
-0x40 13  24  24   0 MgaIniTime_utc
-0x05 13  36  36   0 MgaQzssAlm
-0x05 13  68  68   0 MgaQzssEph
-0x05 13  12  12   0 MgaQzssHealth
-0x32 0a  12  12   0 MonBatch
-0x28 0a   8   8   0 MonGnss
-0x09 0a  60  60   0 MonHw
-0x0b 0a  28  28   0 MonHw2
-0x02 0a   0   0  20 MonIo
-0x06 0a 120 120   0 MonMsgpp
-0x27 0a   0   0   0 MonPatch
-0x27 0a   4   4  16 MonPatch1
-0x07 0a  24  24   0 MonRxbuf
-0x21 0a   1   1   0 MonRxr
-0x2e 0a  16  16   0 MonSmgr
-0x2f 0a   4   4  16 MonSpt
-0x08 0a  28  28   0 MonTxbuf
-0x04 0a   0   0   0 MonVer
-0x04 0a  40  40  30 MonVer1
-0x60 01  16  16   0 NavAopstatus
-0x05 01  32  32   0 NavAtt
-0x22 01  20  20   0 NavClock
-0x36 01  64  64   0 NavCov
-0x31 01  16  16  12 NavDgps
-0x04 01  18  18   0 NavDop
-0x3d 01  16  16   0 NavEell
-0x61 01   4   4   0 NavEoe
-0x39 01   8   8   2 NavGeofence
-0x13 01  28  28   0 NavHpposecef
-0x14 01  36  36   0 NavHpposllh
-0x28 01  16  16   0 NavNmi
-0x09 01  20  20   0 NavOdo
-0x34 01   8   8   6 NavOrb
-0x01 01  20  20   0 NavPosecef
-0x02 01  28  28   0 NavPosllh
-0x07 01  92  92   0 NavPvt
-0x3c 01  40  40   0 NavRelposned
-0x10 01   0   0   0 NavResetodo
-0x35 01   8   8  12 NavSat
-0x32 01  12  12  12 NavSbas
-0x42 01  20  20   8 NavSlas
-0x06 01  52  52   0 NavSol
-0x03 01  16  16   0 NavStatus
-0x3b 01  40  40   0 NavSvin
-0x30 01   8   8  12 NavSvinfo
-0x24 01  20  20   0 NavTimebds
-0x25 01  20  20   0 NavTimegal
-0x23 01  20  20   0 NavTimeglo
-0x20 01  16  16   0 NavTimegps
-0x26 01  24  24   0 NavTimels
-0x21 01  20  20   0 NavTimeutc
-0x11 01  20  20   0 NavVelecef
-0x12 01  36  36   0 NavVelned
-0x61 02   4   4  44 RxmImes
-0x14 02  44  44  24 RxmMeasx
-0x41 02   8   8   0 RxmPmreq
-0x41 02  16  16   0 RxmPmreq1
-0x15 02  16  16  32 RxmRawx
-0x15 02  16  16  32 RxmRawx1
-0x59 02  16  16   0 RxmRlm
-0x59 02  28  28   0 RxmRlm1
-0x32 02   8   8   0 RxmRtcm
-0x13 02   8   8   4 RxmSfrbx
-0x13 02   8   8   4 RxmSfrbx1
-0x20 02   8   8   6 RxmSvsi
-0x03 27   9   9   0 SecUniqid
-0x11 0d   8   8   0 TimDosc
-0x16 0d  32  32   0 TimFchg
-0x17 0d   8   8   0 TimHoc
-0x13 0d  12  12  24 TimSmeas
-0x04 0d  28  28   0 TimSvin
-0x03 0d  28  28   0 TimTm2
-0x12 0d  56  56   0 TimTos
-0x01 0d  16  16   0 TimTp
-0x15 0d   1   1   0 TimVcocal
-0x15 0d  12  12   0 TimVcocal1
-0x15 0d  12  12   0 TimVcocal2
-0x06 0d  20  20   0 TimVrfy
-0x14 09   0   0   0 UpdSos
-0x14 09   4   4   0 UpdSos1
-0x14 09   4   4   0 UpdSos2
-0x14 09   8   8   0 UpdSos3
-0x14 09   8   8   0 UpdSos4
-*/
+	case 0x0105:
+		return &AckAck{} // 2 .. 2   [0]
+
+	case 0x0005:
+		return &AckNak{} // 2 .. 2   [0]
+
+	case 0x300b:
+		return &AidAlm{}  // 0 .. 0   [0]
+		return &AidAlm1{} // 1 .. 1   [0]
+		return &AidAlm2{} // 8 .. 40   [0]
+
+	case 0x330b:
+		return &AidAop{}  // 0 .. 0   [0]
+		return &AidAop1{} // 1 .. 1   [0]
+		return &AidAop2{} // 68 .. 68   [0]
+
+	case 0x310b:
+		return &AidEph{}  // 0 .. 0   [0]
+		return &AidEph1{} // 1 .. 1   [0]
+		return &AidEph2{} // 8 .. 104   [0]
+
+	case 0x020b:
+		return &AidHui{}  // 0 .. 0   [0]
+		return &AidHui1{} // 72 .. 72   [0]
+
+	case 0x010b:
+		return &AidIni{}  // 0 .. 0   [0]
+		return &AidIni1{} // 48 .. 48   [0]
+
+	case 0x1306:
+		return &CfgAnt{} // 4 .. 4   [0]
+
+	case 0x9306:
+		return &CfgBatch{} // 8 .. 8   [0]
+
+	case 0x0906:
+		return &CfgCfg{} // 12 .. 13   [0]
+
+	case 0x0606:
+		return &CfgDat{}  // 44 .. 44   [0]
+		return &CfgDat1{} // 52 .. 52   [0]
+
+	case 0x7006:
+		return &CfgDgnss{} // 4 .. 4   [0]
+
+	case 0x6106:
+		return &CfgDosc{} // 4 .. 4   [32]
+
+	case 0x4c06:
+		return &CfgEsfa{} // 20 .. 20   [0]
+
+	case 0x5606:
+		return &CfgEsfalg{} // 12 .. 12   [0]
+
+	case 0x4d06:
+		return &CfgEsfg{} // 20 .. 20   [0]
+
+	case 0x8206:
+		return &CfgEsfwt{} // 32 .. 32   [0]
+
+	case 0x6006:
+		return &CfgEsrc{} // 4 .. 4   [36]
+
+	case 0x6906:
+		return &CfgGeofence{} // 8 .. 8   [12]
+
+	case 0x3e06:
+		return &CfgGnss{} // 4 .. 4   [8]
+
+	case 0x5c06:
+		return &CfgHnr{} // 4 .. 4   [0]
+
+	case 0x0206:
+		return mkCfgInf(sz, frame)
+
+	case 0x3906:
+		return &CfgItfm{} // 8 .. 8   [0]
+
+	case 0x4706:
+		return &CfgLogfilter{} // 12 .. 12   [0]
+
+	case 0x0106:
+		return &CfgMsg{}  // 2 .. 2   [0]
+		return &CfgMsg1{} // 3 .. 3   [0]
+		return &CfgMsg2{} // 8 .. 8   [0]
+
+	case 0x2406:
+		return &CfgNav5{} // 36 .. 36   [0]
+
+	case 0x2306:
+		return mkCfgNavx5(sz, frame)
+
+	case 0x1706:
+		return &CfgNmea{}  // 4 .. 4   [0]
+		return &CfgNmea1{} // 12 .. 12   [0]
+		return &CfgNmea2{} // 20 .. 20   [0]
+
+	case 0x1e06:
+		return &CfgOdo{} // 20 .. 20   [0]
+
+	case 0x3b06:
+		return mkCfgPm2(sz, frame)
+
+	case 0x8606:
+		return &CfgPms{} // 8 .. 8   [0]
+
+	case 0x0006:
+		return mkCfgPrt(sz, frame)
+
+	case 0x5706:
+		return &CfgPwr{} // 8 .. 8   [0]
+
+	case 0x0806:
+		return &CfgRate{} // 6 .. 6   [0]
+
+	case 0x3406:
+		return &CfgRinv{} // 1 .. 1   [1]
+
+	case 0x0406:
+		return &CfgRst{} // 4 .. 4   [0]
+
+	case 0x1106:
+		return mkCfgRxm(sz, frame)
+
+	case 0x1606:
+		return &CfgSbas{} // 8 .. 8   [0]
+
+	case 0x8806:
+		return &CfgSenif{} // 6 .. 6   [0]
+
+	case 0x8d06:
+		return &CfgSlas{} // 4 .. 4   [0]
+
+	case 0x6206:
+		return &CfgSmgr{} // 20 .. 20   [0]
+
+	case 0x6406:
+		return &CfgSpt{} // 12 .. 12   [0]
+
+	case 0x3d06:
+		return &CfgTmode2{} // 28 .. 28   [0]
+
+	case 0x7106:
+		return &CfgTmode3{} // 40 .. 40   [0]
+
+	case 0x3106:
+		return &CfgTp5{}  // 0 .. 0   [0]
+		return &CfgTp51{} // 1 .. 1   [0]
+		return &CfgTp52{} // 32 .. 32   [0]
+
+	case 0x5306:
+		return &CfgTxslot{} // 16 .. 16   [0]
+
+	case 0x1b06:
+		return &CfgUsb{} // 108 .. 108   [0]
+
+	case 0x1410:
+		return &EsfAlg{} // 16 .. 16   [0]
+
+	case 0x1510:
+		return &EsfIns{} // 36 .. 36   [0]
+
+	case 0x0210:
+		return &EsfMeas{} // 8 .. 12   [4]
+
+	case 0x0310:
+		return &EsfRaw{} // 4 .. 4   [8]
+
+	case 0x1010:
+		return &EsfStatus{} // 16 .. 16   [4]
+
+	case 0x0128:
+		return &HnrAtt{} // 32 .. 32   [0]
+
+	case 0x0228:
+		return &HnrIns{} // 36 .. 36   [0]
+
+	case 0x0028:
+		return &HnrPvt{} // 72 .. 72   [0]
+
+	case 0x0404:
+		return &InfDebug{} // 0 .. 0   [1]
+
+	case 0x0004:
+		return &InfError{} // 0 .. 0   [1]
+
+	case 0x0204:
+		return &InfNotice{} // 0 .. 0   [1]
+
+	case 0x0304:
+		return &InfTest{} // 0 .. 0   [1]
+
+	case 0x0104:
+		return &InfWarning{} // 0 .. 0   [1]
+
+	case 0x1121:
+		return &LogBatch{} // 100 .. 100   [0]
+
+	case 0x0721:
+		return &LogCreate{} // 8 .. 8   [0]
+
+	case 0x0321:
+		return &LogErase{} // 0 .. 0   [0]
+
+	case 0x0e21:
+		return &LogFindtime{}  // 8 .. 8   [0]
+		return &LogFindtime1{} // 12 .. 12   [0]
+
+	case 0x0821:
+		return &LogInfo{}  // 0 .. 0   [0]
+		return &LogInfo1{} // 48 .. 48   [0]
+
+	case 0x0921:
+		return &LogRetrieve{} // 12 .. 12   [0]
+
+	case 0x1021:
+		return &LogRetrievebatch{} // 4 .. 4   [0]
+
+	case 0x0b21:
+		return &LogRetrievepos{} // 40 .. 40   [0]
+
+	case 0x0f21:
+		return &LogRetrieveposextra{} // 32 .. 32   [0]
+
+	case 0x0d21:
+		return &LogRetrievestring{} // 16 .. 16   [1]
+
+	case 0x0421:
+		return &LogString{} // 0 .. 0   [1]
+
+	case 0x6013:
+		return &MgaAckData0{} // 8 .. 8   [0]
+
+	case 0x2013:
+		return &MgaAno{} // 76 .. 76   [0]
+
+	case 0x0313:
+		return &MgaBdsAlm{}     // 40 .. 40   [0]
+		return &MgaBdsEph1{}    // 88 .. 88   [0]
+		return &MgaBdsHealth2{} // 68 .. 68   [0]
+		return &MgaBdsIono3{}   // 16 .. 16   [0]
+		return &MgaBdsUtc4{}    // 20 .. 20   [0]
+
+	case 0x8013:
+		return mkMgaDbd(sz, frame)
+
+	case 0x2113:
+		return mkMgaFlashAck(sz, frame)
+
+	case 0x0213:
+		return &MgaGalAlm{}         // 32 .. 32   [0]
+		return &MgaGalEph1{}        // 76 .. 76   [0]
+		return &MgaGalTimeoffset2{} // 12 .. 12   [0]
+		return &MgaGalUtc3{}        // 20 .. 20   [0]
+
+	case 0x0613:
+		return &MgaGloAlm{}         // 36 .. 36   [0]
+		return &MgaGloEph1{}        // 48 .. 48   [0]
+		return &MgaGloTimeoffset2{} // 20 .. 20   [0]
+
+	case 0x0013:
+		return &MgaGpsAlm{}     // 36 .. 36   [0]
+		return &MgaGpsEph1{}    // 68 .. 68   [0]
+		return &MgaGpsHealth2{} // 40 .. 40   [0]
+		return &MgaGpsIono3{}   // 16 .. 16   [0]
+		return &MgaGpsUtc4{}    // 20 .. 20   [0]
+
+	case 0x4013:
+		return mkMgaIniClkd(sz, frame)
+
+	case 0x0513:
+		return &MgaQzssAlm{}     // 36 .. 36   [0]
+		return &MgaQzssEph1{}    // 68 .. 68   [0]
+		return &MgaQzssHealth2{} // 12 .. 12   [0]
+
+	case 0x320a:
+		return &MonBatch{} // 12 .. 12   [0]
+
+	case 0x280a:
+		return &MonGnss{} // 8 .. 8   [0]
+
+	case 0x090a:
+		return &MonHw{} // 60 .. 60   [0]
+
+	case 0x0b0a:
+		return &MonHw2{} // 28 .. 28   [0]
+
+	case 0x020a:
+		return &MonIo{} // 0 .. 0   [20]
+
+	case 0x060a:
+		return &MonMsgpp{} // 120 .. 120   [0]
+
+	case 0x270a:
+		return mkMonPatch(sz, frame)
+
+	case 0x070a:
+		return &MonRxbuf{} // 24 .. 24   [0]
+
+	case 0x210a:
+		return &MonRxr{} // 1 .. 1   [0]
+
+	case 0x2e0a:
+		return &MonSmgr{} // 16 .. 16   [0]
+
+	case 0x2f0a:
+		return &MonSpt{} // 4 .. 4   [16]
+
+	case 0x080a:
+		return &MonTxbuf{} // 28 .. 28   [0]
+
+	case 0x040a:
+		return mkMonVer(sz, frame)
+
+	case 0x6001:
+		return &NavAopstatus{} // 16 .. 16   [0]
+
+	case 0x0501:
+		return &NavAtt{} // 32 .. 32   [0]
+
+	case 0x2201:
+		return &NavClock{} // 20 .. 20   [0]
+
+	case 0x3601:
+		return &NavCov{} // 64 .. 64   [0]
+
+	case 0x3101:
+		return &NavDgps{} // 16 .. 16   [12]
+
+	case 0x0401:
+		return &NavDop{} // 18 .. 18   [0]
+
+	case 0x3d01:
+		return &NavEell{} // 16 .. 16   [0]
+
+	case 0x6101:
+		return &NavEoe{} // 4 .. 4   [0]
+
+	case 0x3901:
+		return &NavGeofence{} // 8 .. 8   [2]
+
+	case 0x1301:
+		return &NavHpposecef{} // 28 .. 28   [0]
+
+	case 0x1401:
+		return &NavHpposllh{} // 36 .. 36   [0]
+
+	case 0x2801:
+		return &NavNmi{} // 16 .. 16   [0]
+
+	case 0x0901:
+		return &NavOdo{} // 20 .. 20   [0]
+
+	case 0x3401:
+		return &NavOrb{} // 8 .. 8   [6]
+
+	case 0x0101:
+		return &NavPosecef{} // 20 .. 20   [0]
+
+	case 0x0201:
+		return &NavPosllh{} // 28 .. 28   [0]
+
+	case 0x0701:
+		return &NavPvt{} // 92 .. 92   [0]
+
+	case 0x3c01:
+		return &NavRelposned{} // 40 .. 40   [0]
+
+	case 0x1001:
+		return &NavResetodo{} // 0 .. 0   [0]
+
+	case 0x3501:
+		return &NavSat{} // 8 .. 8   [12]
+
+	case 0x3201:
+		return &NavSbas{} // 12 .. 12   [12]
+
+	case 0x4201:
+		return &NavSlas{} // 20 .. 20   [8]
+
+	case 0x0601:
+		return &NavSol{} // 52 .. 52   [0]
+
+	case 0x0301:
+		return &NavStatus{} // 16 .. 16   [0]
+
+	case 0x3b01:
+		return &NavSvin{} // 40 .. 40   [0]
+
+	case 0x3001:
+		return &NavSvinfo{} // 8 .. 8   [12]
+
+	case 0x2401:
+		return &NavTimebds{} // 20 .. 20   [0]
+
+	case 0x2501:
+		return &NavTimegal{} // 20 .. 20   [0]
+
+	case 0x2301:
+		return &NavTimeglo{} // 20 .. 20   [0]
+
+	case 0x2001:
+		return &NavTimegps{} // 16 .. 16   [0]
+
+	case 0x2601:
+		return &NavTimels{} // 24 .. 24   [0]
+
+	case 0x2101:
+		return &NavTimeutc{} // 20 .. 20   [0]
+
+	case 0x1101:
+		return &NavVelecef{} // 20 .. 20   [0]
+
+	case 0x1201:
+		return &NavVelned{} // 36 .. 36   [0]
+
+	case 0x6102:
+		return &RxmImes{} // 4 .. 4   [44]
+
+	case 0x1402:
+		return &RxmMeasx{} // 44 .. 44   [24]
+
+	case 0x4102:
+		return &RxmPmreq{}  // 8 .. 8   [0]
+		return &RxmPmreq1{} // 16 .. 16   [0]
+
+	case 0x1502:
+		return mkRxmRawx(sz, frame)
+
+	case 0x5902:
+		return &RxmRlm{}  // 16 .. 16   [0]
+		return &RxmRlm1{} // 28 .. 28   [0]
+
+	case 0x3202:
+		return &RxmRtcm{} // 8 .. 8   [0]
+
+	case 0x1302:
+		return mkRxmSfrbx(sz, frame)
+
+	case 0x2002:
+		return &RxmSvsi{} // 8 .. 8   [6]
+
+	case 0x0327:
+		return &SecUniqid{} // 9 .. 9   [0]
+
+	case 0x110d:
+		return &TimDosc{} // 8 .. 8   [0]
+
+	case 0x160d:
+		return &TimFchg{} // 32 .. 32   [0]
+
+	case 0x170d:
+		return &TimHoc{} // 8 .. 8   [0]
+
+	case 0x130d:
+		return &TimSmeas{} // 12 .. 12   [24]
+
+	case 0x040d:
+		return &TimSvin{} // 28 .. 28   [0]
+
+	case 0x030d:
+		return &TimTm2{} // 28 .. 28   [0]
+
+	case 0x120d:
+		return &TimTos{} // 56 .. 56   [0]
+
+	case 0x010d:
+		return &TimTp{} // 16 .. 16   [0]
+
+	case 0x150d:
+		return mkTimVcocal(sz, frame)
+
+	case 0x060d:
+		return &TimVrfy{} // 20 .. 20   [0]
+
+	case 0x1409:
+		return mkUpdSos(sz, frame)
+
+	}
+	return nil
+}
+
+func mkCfgInf(sz uint16, frame []byte) {
+	return &CfgInf{}  // 0 .. 0   [10]
+	return &CfgInf1{} // 1 .. 1   [0]
+}
+func mkCfgNavx5(sz uint16, frame []byte) {
+	return &CfgNavx5{}  // 40 .. 40   [0]
+	return &CfgNavx51{} // 40 .. 40   [0]
+	return &CfgNavx52{} // 44 .. 44   [0]
+}
+func mkCfgPm2(sz uint16, frame []byte) {
+	return &CfgPm2{}  // 44 .. 44   [0]
+	return &CfgPm21{} // 48 .. 48   [0]
+	return &CfgPm22{} // 48 .. 48   [0]
+}
+func mkCfgPrt(sz uint16, frame []byte) {
+	return &CfgPrt{}  // 1 .. 1   [0]
+	return &CfgPrt1{} // 20 .. 20   [0]
+	return &CfgPrt2{} // 20 .. 20   [0]
+	return &CfgPrt3{} // 20 .. 20   [0]
+	return &CfgPrt4{} // 20 .. 20   [0]
+}
+func mkCfgRxm(sz uint16, frame []byte) {
+	return &CfgRxm{}  // 2 .. 2   [0]
+	return &CfgRxm1{} // 2 .. 2   [0]
+}
+func mkMgaDbd(sz uint16, frame []byte) {
+	return &MgaDbd{}  // 0 .. 0   [0]
+	return &MgaDbd1{} // 12 .. 12   [1]
+}
+func mkMgaFlashAck(sz uint16, frame []byte) {
+	return &MgaFlashAck{}   // 6 .. 6   [0]
+	return &MgaFlashData1{} // 6 .. 6   [1]
+	return &MgaFlashStop2{} // 2 .. 2   [0]
+}
+func mkMgaIniClkd(sz uint16, frame []byte) {
+	return &MgaIniClkd{}       // 12 .. 12   [0]
+	return &MgaIniEop1{}       // 72 .. 72   [0]
+	return &MgaIniFreq2{}      // 12 .. 12   [0]
+	return &MgaIniPos_llh3{}   // 20 .. 20   [0]
+	return &MgaIniPos_xyz4{}   // 20 .. 20   [0]
+	return &MgaIniTime_gnss5{} // 24 .. 24   [0]
+	return &MgaIniTime_utc6{}  // 24 .. 24   [0]
+}
+func mkMonPatch(sz uint16, frame []byte) {
+	return &MonPatch{}  // 0 .. 0   [0]
+	return &MonPatch1{} // 4 .. 4   [16]
+}
+func mkMonVer(sz uint16, frame []byte) {
+	return &MonVer{}  // 0 .. 0   [0]
+	return &MonVer1{} // 40 .. 40   [30]
+}
+func mkRxmRawx(sz uint16, frame []byte) {
+	return &RxmRawx{}  // 16 .. 16   [32]
+	return &RxmRawx1{} // 16 .. 16   [32]
+}
+func mkRxmSfrbx(sz uint16, frame []byte) {
+	return &RxmSfrbx{}  // 8 .. 8   [4]
+	return &RxmSfrbx1{} // 8 .. 8   [4]
+}
+func mkTimVcocal(sz uint16, frame []byte) {
+	return &TimVcocal{}  // 1 .. 1   [0]
+	return &TimVcocal1{} // 12 .. 12   [0]
+	return &TimVcocal2{} // 12 .. 12   [0]
+}
+func mkUpdSos(sz uint16, frame []byte) {
+	return &UpdSos{}  // 0 .. 0   [0]
+	return &UpdSos1{} // 4 .. 4   [0]
+	return &UpdSos2{} // 4 .. 4   [0]
+	return &UpdSos3{} // 8 .. 8   [0]
+	return &UpdSos4{} // 8 .. 8   [0]
+}

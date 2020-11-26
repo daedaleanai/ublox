@@ -68,10 +68,30 @@ const (
 {{- end}}
 
 
-func mkMsg(classId, Length uint16) Message {
 
-	return nil
+func mkMsg(classId, sz uint16, frame []byte) Message {
+       switch classId {
+{{range $k, $v :=  .}}
+       case {{with (index $v 0)}}{{printf "0x%02x%02x" .Id .Class }}{{end}}:
+       {{- if isambiguous (index $v 0).ClassIDName}}
+       		return mk{{(index $v 0).TypeName}}(sz, frame)
+       {{- else}}
+       {{- range $v}}
+            return &{{.TypeName}}{}   // {{.MinSize}} .. {{.MaxFixSize}}   [{{.VarSize}}]
+       {{- end}}
+       {{- end}}
+{{end}}
+       }
+       return nil
 }
 
-
+{{range $k, $v :=  .}}
+{{- if isambiguous (index $v 0).ClassIDName}}
+func mk{{(index $v 0).TypeName}}(sz uint16, frame []byte) {
+       {{- range $v}}
+            return &{{.TypeName}}{}   // {{.MinSize}} .. {{.MaxFixSize}}   [{{.VarSize}}]
+       {{- end}}	
+}
+{{- end}}
+{{- end}}
 
