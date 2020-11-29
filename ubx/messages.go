@@ -3,6 +3,11 @@
 
 package ubx
 
+import (
+	"fmt"
+	"strings"
+)
+
 // Message ubx-ack-ack
 
 // AckAck (Output) Message acknowledged
@@ -167,6 +172,26 @@ const (
 	AidHui1KlobValid   AidHui1Flags = 0x4 // Klobuchar parameter fields in this message are valid
 )
 
+func (v AidHui1Flags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "HealthValid")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "UtcValid")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "KlobValid")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-aid-ini (2 versions)
 
 // AidIni (Poll Request) Poll GPS initial aiding data
@@ -220,6 +245,70 @@ const (
 	AidIni1Utc    AidIni1Flags = 0x400 // Time is given as UTC date/time (default is GPS wno/tow)
 )
 
+func (v AidIni1TmCfg) String() string {
+	var b []string
+	if v&0x2 != 0 {
+		b = append(b, "FEdge")
+	}
+	v &^= 0x2
+	if v&0x10 != 0 {
+		b = append(b, "Tm1")
+	}
+	v &^= 0x10
+	if v&0x40 != 0 {
+		b = append(b, "F1")
+	}
+	v &^= 0x40
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v AidIni1Flags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Pos")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Time")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "ClockD")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "Tp")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "ClockF")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "Lla")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "AltInv")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "PrevTm")
+	}
+	v &^= 0x80
+	if v&0x400 != 0 {
+		b = append(b, "Utc")
+	}
+	v &^= 0x400
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-ant
 
 // CfgAnt (Get/set) Antenna control settings
@@ -251,6 +340,58 @@ const (
 	CfgAntReconfig  CfgAntPins = 0x8000 // if set to one, and this command is sent to the receiver, the receiver will reconfigure the pins as specified.
 )
 
+func (v CfgAntFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Svcs")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Scd")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "Ocd")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "PdwnOnSCD")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "Recovery")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgAntPins) String() string {
+	var b []string
+	if v&0x1f != 0 {
+		b = append(b, fmt.Sprintf("PinSwitch<%b>", (v&0x1f)>>0))
+	}
+	v &^= 0x1f
+	if v&0x3e0 != 0 {
+		b = append(b, fmt.Sprintf("PinSCD<%b>", (v&0x3e0)>>5))
+	}
+	v &^= 0x3e0
+	if v&0x7c00 != 0 {
+		b = append(b, fmt.Sprintf("PinOCD<%b>", (v&0x7c00)>>10))
+	}
+	v &^= 0x7c00
+	if v&0x8000 != 0 {
+		b = append(b, "Reconfig")
+	}
+	v &^= 0x8000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-batch
 
 // CfgBatch (Get/set) Get/set data batching configuration
@@ -276,6 +417,34 @@ const (
 	CfgBatchPioEnable    CfgBatchFlags = 0x20 // Enable PIO notification
 	CfgBatchPioActiveLow CfgBatchFlags = 0x40 // PIO is active low
 )
+
+func (v CfgBatchFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Enable")
+	}
+	v &^= 0x1
+	if v&0x4 != 0 {
+		b = append(b, "ExtraPvt")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "ExtraOdo")
+	}
+	v &^= 0x8
+	if v&0x20 != 0 {
+		b = append(b, "PioEnable")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "PioActiveLow")
+	}
+	v &^= 0x40
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-cfg-cfg
 
@@ -315,6 +484,78 @@ const (
 	CfgCfgDevEEPROM   CfgCfgDeviceMask = 0x4  // EEPROM
 	CfgCfgDevSpiFlash CfgCfgDeviceMask = 0x10 // SPI Flash
 )
+
+func (v CfgCfgClearMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "IoPort")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "MsgConf")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "InfMsg")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "NavConf")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "RxmConf")
+	}
+	v &^= 0x10
+	if v&0x100 != 0 {
+		b = append(b, "SenConf")
+	}
+	v &^= 0x100
+	if v&0x200 != 0 {
+		b = append(b, "RinvConf")
+	}
+	v &^= 0x200
+	if v&0x400 != 0 {
+		b = append(b, "AntConf")
+	}
+	v &^= 0x400
+	if v&0x800 != 0 {
+		b = append(b, "LogConf")
+	}
+	v &^= 0x800
+	if v&0x1000 != 0 {
+		b = append(b, "FtsConf")
+	}
+	v &^= 0x1000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgCfgDeviceMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "DevBBR")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DevFlash")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "DevEEPROM")
+	}
+	v &^= 0x4
+	if v&0x10 != 0 {
+		b = append(b, "DevSpiFlash")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-cfg-dat (2 versions)
 
@@ -372,26 +613,28 @@ func (CfgDgnss) classID() uint16 { return 0x7006 }
 // Class/Id 0x06 0x61 (4 + N*32 bytes)
 // This message allows the characteristics of the internal or external oscillator to be described to the receiver. The gainVco and gainUncertainty parameters are normally set using the calibration process initiated using UBX-TIM-VCOCAL. The behavior of the system can be badly affected by setting the wrong values, so customers are advised to only change these parameters with care.
 type CfgDosc struct {
-	Version   byte    // Message version (0x00 for this version)
-	NumOsc    byte    `len:"Osc"` // Number of oscillators to configure (affects length of this message)
-	Reserved1 [2]byte // Reserved
-	Osc       []*struct {
-		OscId              byte         // Id of oscillator. 0 - internal oscillator 1 - external oscillator
-		Reserved2          byte         // Reserved
-		Flags              CfgDoscFlags // flags
-		Freq_hzl2          uint32       // [2^-2 Hz] Nominal frequency of source
-		PhaseOffset_ps     int32        // [ps] Intended phase offset of the oscillator relative to the leading edge of the time pulse
-		WithTemp_ppbl8     uint32       // [2^-8 ppb] Oscillator stability limit over operating temperature range (must be > 0)
-		WithAge_ppb_yearl8 uint32       // [2^-8 ppb/year] Oscillator stability with age (must be > 0)
-		TimeToTemp_s       uint16       // [s] The minimum time that it could take for a temperature variation to move the oscillator frequency by 'withTemp' (must be > 0)
-		Reserved3          [2]byte      // Reserved
-		GainVco            int32        // [2^-16 ppb/raw LSB] Oscillator control gain/slope; change of frequency per unit change in raw control change
-		GainUncertainty    byte         // Relative uncertainty (1 standard deviation) of oscillator control gain/slope
-		Reserved4          [3]byte      // Reserved
-	} // len: NumOsc
+	Version   byte              // Message version (0x00 for this version)
+	NumOsc    byte              `len:"Osc"` // Number of oscillators to configure (affects length of this message)
+	Reserved1 [2]byte           // Reserved
+	Osc       []*CfgDoscOscType // len: NumOsc
 }
 
 func (CfgDosc) classID() uint16 { return 0x6106 }
+
+type CfgDoscOscType struct {
+	OscId              byte         // Id of oscillator. 0 - internal oscillator 1 - external oscillator
+	Reserved2          byte         // Reserved
+	Flags              CfgDoscFlags // flags
+	Freq_hzl2          uint32       // [2^-2 Hz] Nominal frequency of source
+	PhaseOffset_ps     int32        // [ps] Intended phase offset of the oscillator relative to the leading edge of the time pulse
+	WithTemp_ppbl8     uint32       // [2^-8 ppb] Oscillator stability limit over operating temperature range (must be > 0)
+	WithAge_ppb_yearl8 uint32       // [2^-8 ppb/year] Oscillator stability with age (must be > 0)
+	TimeToTemp_s       uint16       // [s] The minimum time that it could take for a temperature variation to move the oscillator frequency by 'withTemp' (must be > 0)
+	Reserved3          [2]byte      // Reserved
+	GainVco            int32        // [2^-16 ppb/raw LSB] Oscillator control gain/slope; change of frequency per unit change in raw control change
+	GainUncertainty    byte         // Relative uncertainty (1 standard deviation) of oscillator control gain/slope
+	Reserved4          [3]byte      // Reserved
+}
 
 type CfgDoscFlags uint16
 
@@ -399,6 +642,22 @@ const (
 	CfgDoscIsCalibrated CfgDoscFlags = 0x1  // 1 if the oscillator gain is calibrated, 0 if not
 	CfgDoscControlIf    CfgDoscFlags = 0x1e // Communication interface for oscillator control: 0: Custom DAC attached to receiver's I2C 1: Microchip MCP4726 (12 bit DAC) attached to receiver's I2C 2: TI DAC8571 (16 bit DAC) attached to receiver's I2C 13: 12 bit DAC attached to host 14: 14 bit DAC attached to host 15: 16 bit DAC attached to host Note that for DACs attached to the host, the host must monitor UBX-TIM-DOSC messages and pass the supplied raw values on to the DAC.
 )
+
+func (v CfgDoscFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "IsCalibrated")
+	}
+	v &^= 0x1
+	if v&0x1e != 0 {
+		b = append(b, fmt.Sprintf("ControlIf<%b>", (v&0x1e)>>1))
+	}
+	v &^= 0x1e
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-cfg-esfa
 
@@ -437,6 +696,22 @@ const (
 	CfgEsfalgVersion      CfgEsfalgBitfield = 0xff  // Message version (0x00 for this version)
 	CfgEsfalgDoAutoMntAlg CfgEsfalgBitfield = 0x100 // Only supported on certain products. Enable/disable automatic IMU-mount alignment (0: Disabled, 1: Enabled). This flag can only be used with modules containing an internal IMU.
 )
+
+func (v CfgEsfalgBitfield) String() string {
+	var b []string
+	if v&0xff != 0 {
+		b = append(b, fmt.Sprintf("Version<%b>", (v&0xff)>>0))
+	}
+	v &^= 0xff
+	if v&0x100 != 0 {
+		b = append(b, "DoAutoMntAlg")
+	}
+	v &^= 0x100
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-cfg-esfg
 
@@ -502,32 +777,94 @@ const (
 	CfgEsfwtCntBothEdges CfgEsfwtFlags3 = 0x10 // Only supported on certain products. Count both rising and falling edges on wheel-tick signal (only relevant if wheel-tick is measured by the u-blox receiver). Only turn on this feature if the wheel-tick signal has 50 % duty cycle. Turning on this feature with fixed-width pulses can lead to severe degradation of performance. Use wheel-tick pin for speed measurement. This field can only be used with modules supporting analog wheel-tick signals.
 )
 
+func (v CfgEsfwtFlags1) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "CombineTicks")
+	}
+	v &^= 0x1
+	if v&0x10 != 0 {
+		b = append(b, "UseWtSpeed")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "DirPinPol")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "UseWtPin")
+	}
+	v &^= 0x40
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgEsfwtFlags2) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "AutoWtCountMaxOff")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "AutoDirPinPolOff")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "AutoSoftwareWtOff")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "AutoUseWtSpeedOff")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgEsfwtFlags3) String() string {
+	var b []string
+	if v&0x10 != 0 {
+		b = append(b, "CntBothEdges")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-esrc
 
 // CfgEsrc (Get/set) External synchronization source configuration
 // Class/Id 0x06 0x60 (4 + N*36 bytes)
 // External time or frequency source configuration. The stability of time and frequency sources is described using different fields, see sourceType field documentation.
 type CfgEsrc struct {
-	Version    byte    // Message version (0x00 for this version)
-	NumSources byte    `len:"Sources"` // Number of sources (affects length of this message)
-	Reserved1  [2]byte // Reserved
-	Sources    []*struct {
-		ExtInt               byte         // EXTINT index of this source (0 for EXTINT0 and 1 for EXTINT1)
-		SourceType           byte         // Source type: 0:  none 1: frequency source; use withTemp, withAge, timeToTemp and maxDevLifeTime to describe the stability of the source 2:  time source; use offset, offsetUncertainty and jitter fields to describe the stability of the source 3:  feedback from external oscillator; stability data is taken from the external oscillator's configuration
-		Flags                CfgEsrcFlags // Flags
-		Freq_hzl2            uint32       // [2^-2 Hz] Nominal frequency of source
-		Reserved2            [4]byte      // Reserved
-		WithTemp_ppbl8       uint32       // [2^-8 ppb] Oscillator stability limit over operating temperature range (must be > 0) Only used if sourceType is 1.
-		WithAge_ppb_yearl8   uint32       // [2^-8 ppb/year] Oscillator stability with age (must be > 0) Only used if sourceType is 1.
-		TimeToTemp_s         uint16       // [s] The minimum time that it could take for a temperature variation to move the oscillator frequency by 'withTemp' (must be > 0) Only used if sourceType is 1.
-		MaxDevLifeTime_ppb   uint16       // [ppb] Maximum frequency deviation during lifetime (must be > 0) Only used if sourceType is 1.
-		Offset_ns            int32        // [ns] Phase offset of signal Only used if sourceType is 2.
-		OffsetUncertainty_ns uint32       // [ns] Uncertainty of phase offset (one standard deviation) Only used if sourceType is 2.
-		Jitter_ns_s          uint32       // [ns/s] Phase jitter (must be > 0) Only used if sourceType is 2.
-	} // len: NumSources
+	Version    byte                  // Message version (0x00 for this version)
+	NumSources byte                  `len:"Sources"` // Number of sources (affects length of this message)
+	Reserved1  [2]byte               // Reserved
+	Sources    []*CfgEsrcSourcesType // len: NumSources
 }
 
 func (CfgEsrc) classID() uint16 { return 0x6006 }
+
+type CfgEsrcSourcesType struct {
+	ExtInt               byte         // EXTINT index of this source (0 for EXTINT0 and 1 for EXTINT1)
+	SourceType           byte         // Source type: 0:  none 1: frequency source; use withTemp, withAge, timeToTemp and maxDevLifeTime to describe the stability of the source 2:  time source; use offset, offsetUncertainty and jitter fields to describe the stability of the source 3:  feedback from external oscillator; stability data is taken from the external oscillator's configuration
+	Flags                CfgEsrcFlags // Flags
+	Freq_hzl2            uint32       // [2^-2 Hz] Nominal frequency of source
+	Reserved2            [4]byte      // Reserved
+	WithTemp_ppbl8       uint32       // [2^-8 ppb] Oscillator stability limit over operating temperature range (must be > 0) Only used if sourceType is 1.
+	WithAge_ppb_yearl8   uint32       // [2^-8 ppb/year] Oscillator stability with age (must be > 0) Only used if sourceType is 1.
+	TimeToTemp_s         uint16       // [s] The minimum time that it could take for a temperature variation to move the oscillator frequency by 'withTemp' (must be > 0) Only used if sourceType is 1.
+	MaxDevLifeTime_ppb   uint16       // [ppb] Maximum frequency deviation during lifetime (must be > 0) Only used if sourceType is 1.
+	Offset_ns            int32        // [ns] Phase offset of signal Only used if sourceType is 2.
+	OffsetUncertainty_ns uint32       // [ns] Uncertainty of phase offset (one standard deviation) Only used if sourceType is 2.
+	Jitter_ns_s          uint32       // [ns/s] Phase jitter (must be > 0) Only used if sourceType is 2.
+}
 
 type CfgEsrcFlags uint16
 
@@ -536,28 +873,46 @@ const (
 	CfgEsrcGnssUtc  CfgEsrcFlags = 0x2 // Time base of timing signal: 0: GNSS - as specified in CFG-TP5 (or GPS if CFG-TP5 indicates UTC) 1: UTC Only used if sourceType is 2.
 )
 
+func (v CfgEsrcFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Polarity")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "GnssUtc")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-geofence
 
 // CfgGeofence (Get/set) Geofencing configuration
 // Class/Id 0x06 0x69 (8 + N*12 bytes)
 // Gets or sets the geofencing configuration. See the Geofencing description for feature details. If the receiver is sent a valid new configuration, it will respond with a UBX-ACK- ACK message and immediately change to the new configuration. Otherwise the receiver will reject the request, by issuing a UBX-ACK-NAK and continuing operation with the previous configuration. Note that the acknowledge message does not indicate whether the PIO configuration has been successfully applied (pin assigned), it only indicates the successful configuration of the feature. The configured PIO must be previously unoccupied for successful assignment.
 type CfgGeofence struct {
-	Version     byte    // Message version (0x00 for this version)
-	NumFences   byte    `len:"Fences"` // Number of geofences contained in this message. Note that the receiver can only store a limited number of geofences (currently 4).
-	ConfLvl     byte    // Required confidence level for state evaluation. This value times the position's standard deviation (sigma) defines the confidence band. 0 = no confidence required 1 = 68% 2 = 95% 3 = 99.7% 4 = 99.99%
-	Reserved1   [1]byte // Reserved
-	PioEnabled  byte    // 1 = Enable PIO combined fence state output, 0 = disable
-	PinPolarity byte    // PIO pin polarity. 0 = Low means inside, 1 = Low means outside. Unknown state is always high.
-	Pin         byte    // PIO pin number
-	Reserved2   [1]byte // Reserved
-	Fences      []*struct {
-		Lat_dege7  int32  // [1e-7 deg] Latitude of the geofence circle center
-		Lon_dege7  int32  // [1e-7 deg] Longitude of the geofence circle center
-		Radius_me2 uint32 // [1e-2 m] Radius of the geofence circle
-	} // len: NumFences
+	Version     byte                     // Message version (0x00 for this version)
+	NumFences   byte                     `len:"Fences"` // Number of geofences contained in this message. Note that the receiver can only store a limited number of geofences (currently 4).
+	ConfLvl     byte                     // Required confidence level for state evaluation. This value times the position's standard deviation (sigma) defines the confidence band. 0 = no confidence required 1 = 68% 2 = 95% 3 = 99.7% 4 = 99.99%
+	Reserved1   [1]byte                  // Reserved
+	PioEnabled  byte                     // 1 = Enable PIO combined fence state output, 0 = disable
+	PinPolarity byte                     // PIO pin polarity. 0 = Low means inside, 1 = Low means outside. Unknown state is always high.
+	Pin         byte                     // PIO pin number
+	Reserved2   [1]byte                  // Reserved
+	Fences      []*CfgGeofenceFencesType // len: NumFences
 }
 
 func (CfgGeofence) classID() uint16 { return 0x6906 }
+
+type CfgGeofenceFencesType struct {
+	Lat_dege7  int32  // [1e-7 deg] Latitude of the geofence circle center
+	Lon_dege7  int32  // [1e-7 deg] Longitude of the geofence circle center
+	Radius_me2 uint32 // [1e-2 m] Radius of the geofence circle
+}
 
 // Message ubx-cfg-gnss
 
@@ -565,20 +920,22 @@ func (CfgGeofence) classID() uint16 { return 0x6906 }
 // Class/Id 0x06 0x3e (4 + N*8 bytes)
 // Gets or sets the GNSS system channel sharing configuration. If the receiver is sent a valid new configuration, it will respond with a UBX-ACK- ACK message and immediately change to the new configuration. Otherwise the receiver will reject the request, by issuing a UBX-ACK-NAK and continuing operation with the previous configuration. Configuration requirements:  It is necessary for at least one major GNSS to be enabled, after applying the  new configuration to the current one.  It is also required that at least 4 tracking channels are available to each  enabled major GNSS, i.e. maxTrkCh must have a minimum value of 4 for each  enabled major GNSS.  The number of tracking channels in use must not exceed the number of  tracking channels available in hardware, and the sum of all reserved tracking  channels needs to be less than or equal to the number of tracking channels in  use. Notes:  To avoid cross-correlation issues, it is recommended that GPS and QZSS are  always both enabled or both disabled.  Polling this message returns the configuration of all supported GNSS, whether  enabled or not; it may also include GNSS unsupported by the particular  product, but in such cases the enable flag will always be unset.  See section GNSS Configuration for a discussion of the use of this message.  See section Satellite Numbering for a description of the GNSS IDs available.  Configuration specific to the GNSS system can be done via other messages (e.  g. UBX-CFG-SBAS).
 type CfgGnss struct {
-	MsgVer          byte // Message version (0x00 for this version)
-	NumTrkChHw      byte // Number of tracking channels available in hardware (read only)
-	NumTrkChUse     byte // (Read only in protocol versions greater than 23) Number of tracking channels to use. Must be > 0, <= numTrkChHw. If 0xFF, then number of tracking channels to use will be set to numTrkChHw.
-	NumConfigBlocks byte `len:"ConfigBlocks"` // Number of configuration blocks following
-	ConfigBlocks    []*struct {
-		GnssId    byte         // System identifier (see Satellite Numbering )
-		ResTrkCh  byte         // (Read only in protocol versions greater than 23) Number of reserved (minimum) tracking channels for this system.
-		MaxTrkCh  byte         // (Read only in protocol versions greater than 23) Maximum number of tracking channels used for this system. Must be > 0, >= resTrkChn, <= numTrkChUse and <= maximum number of tracking channels supported for this system.
-		Reserved1 byte         // Reserved
-		Flags     CfgGnssFlags // Bitfield of flags. At least one signal must be configured in every enabled system.
-	} // len: NumConfigBlocks
+	MsgVer          byte                       // Message version (0x00 for this version)
+	NumTrkChHw      byte                       // Number of tracking channels available in hardware (read only)
+	NumTrkChUse     byte                       // (Read only in protocol versions greater than 23) Number of tracking channels to use. Must be > 0, <= numTrkChHw. If 0xFF, then number of tracking channels to use will be set to numTrkChHw.
+	NumConfigBlocks byte                       `len:"ConfigBlocks"` // Number of configuration blocks following
+	ConfigBlocks    []*CfgGnssConfigBlocksType // len: NumConfigBlocks
 }
 
 func (CfgGnss) classID() uint16 { return 0x3e06 }
+
+type CfgGnssConfigBlocksType struct {
+	GnssId    byte         // System identifier (see Satellite Numbering )
+	ResTrkCh  byte         // (Read only in protocol versions greater than 23) Number of reserved (minimum) tracking channels for this system.
+	MaxTrkCh  byte         // (Read only in protocol versions greater than 23) Maximum number of tracking channels used for this system. Must be > 0, >= resTrkChn, <= numTrkChUse and <= maximum number of tracking channels supported for this system.
+	Reserved1 byte         // Reserved
+	Flags     CfgGnssFlags // Bitfield of flags. At least one signal must be configured in every enabled system.
+}
 
 type CfgGnssFlags uint32
 
@@ -586,6 +943,22 @@ const (
 	CfgGnssEnable     CfgGnssFlags = 0x1      // Enable this system
 	CfgGnssSigCfgMask CfgGnssFlags = 0xff0000 // Signal configuration mask When gnssId is 0 (GPS) 0x01 = GPS L1C/A 0x10 = GPS L2C 0x20 = GPS L5 When gnssId is 1 (SBAS) 0x01 = SBAS L1C/A When gnssId is 2 (Galileo) 0x01 = Galileo E1 (not supported in protocol versions less than 18) 0x10 = Galileo E5a 0x20 = Galileo E5b When gnssId is 3 (BeiDou) 0x01 = BeiDou B1I 0x10 = BeiDou B2I 0x80 = BeiDou B2A When gnssId is 4 (IMES) 0x01 = IMES L1 When gnssId is 5 (QZSS) 0x01 = QZSS L1C/A 0x04 = QZSS L1S 0x10 = QZSS L2C 0x20 = QZSS L5 When gnssId is 6 (GLONASS) 0x01 = GLONASS L1 0x10 = GLONASS L2
 )
+
+func (v CfgGnssFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Enable")
+	}
+	v &^= 0x1
+	if v&0xff0000 != 0 {
+		b = append(b, fmt.Sprintf("SigCfgMask<%b>", (v&0xff0000)>>16))
+	}
+	v &^= 0xff0000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-cfg-hnr
 
@@ -605,14 +978,16 @@ func (CfgHnr) classID() uint16 { return 0x5c06 }
 // Class/Id 0x06 0x02 (0 + N*10 bytes)
 // The value of infMsgMask[x] below is formed so that each bit represents one of the INF class messages (bit 0 for ERROR, bit 1 for WARNING and so on). For a complete list, see the Message class INF. Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length. Output messages from the module contain only one configuration unit. Note that:  I/O ports 1 and 2 correspond to serial ports 1 and 2.  I/O port 0 is I2C (DDC).  I/O port 3 is USB.  I/O port 4 is SPI.  I/O port 5 is reserved for future use.
 type CfgInf struct {
-	Items []*struct {
-		ProtocolID byte                // Protocol identifier, identifying for which protocol the configuration is set/get. The following are valid protocol identifiers: 0: UBX protocol 1: NMEA protocol 2-255: Reserved
-		Reserved1  [3]byte             // Reserved
-		InfMsgMask [6]CfgInfInfMsgMask // A bit mask, saying which information messages are enabled on each I/O port
-	} // len: N
+	Items []*CfgInfItemsType // len: N
 }
 
 func (CfgInf) classID() uint16 { return 0x0206 }
+
+type CfgInfItemsType struct {
+	ProtocolID byte                // Protocol identifier, identifying for which protocol the configuration is set/get. The following are valid protocol identifiers: 0: UBX protocol 1: NMEA protocol 2-255: Reserved
+	Reserved1  [3]byte             // Reserved
+	InfMsgMask [6]CfgInfInfMsgMask // A bit mask, saying which information messages are enabled on each I/O port
+}
 
 type CfgInfInfMsgMask byte
 
@@ -623,6 +998,34 @@ const (
 	CfgInfTEST    CfgInfInfMsgMask = 0x8  // enable TEST
 	CfgInfDEBUG   CfgInfInfMsgMask = 0x10 // enable DEBUG
 )
+
+func (v CfgInfInfMsgMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "ERROR")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "WARNING")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "NOTICE")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "TEST")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "DEBUG")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // CfgInf1 (Poll Request) Poll configuration for one protocol
 // Class/Id 0x06 0x02 (1 bytes)
@@ -662,6 +1065,50 @@ const (
 	CfgItfmEnable2     CfgItfmConfig2 = 0x4000 // Set to 1 to scan auxiliary bands (u-blox 8 / u-blox M8 only, otherwise ignored)
 )
 
+func (v CfgItfmConfig) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("BbThreshold<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v&0x1f0 != 0 {
+		b = append(b, fmt.Sprintf("CwThreshold<%b>", (v&0x1f0)>>4))
+	}
+	v &^= 0x1f0
+	if v&0x7ffffe00 != 0 {
+		b = append(b, fmt.Sprintf("AlgorithmBits<%b>", (v&0x7ffffe00)>>9))
+	}
+	v &^= 0x7ffffe00
+	if v&0x80000000 != 0 {
+		b = append(b, "Enable")
+	}
+	v &^= 0x80000000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgItfmConfig2) String() string {
+	var b []string
+	if v&0xfff != 0 {
+		b = append(b, fmt.Sprintf("GeneralBits<%b>", (v&0xfff)>>0))
+	}
+	v &^= 0xfff
+	if v&0x3000 != 0 {
+		b = append(b, fmt.Sprintf("AntSetting<%b>", (v&0x3000)>>12))
+	}
+	v &^= 0x3000
+	if v&0x4000 != 0 {
+		b = append(b, "Enable2")
+	}
+	v &^= 0x4000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-logfilter
 
 // CfgLogfilter (Get/set) Data logger configuration
@@ -685,6 +1132,26 @@ const (
 	CfgLogfilterPsmOncePerWakupEnabled CfgLogfilterFlags = 0x2 // 1 = enable recording only one single position per PSM on/off mode wake-up period, 0 = disable once per wake-up
 	CfgLogfilterApplyAllFilterSettings CfgLogfilterFlags = 0x4 // 1 = apply all filter settings, 0 = only apply recordEnabled
 )
+
+func (v CfgLogfilterFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "RecordEnabled")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "PsmOncePerWakupEnabled")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "ApplyAllFilterSettings")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-cfg-msg (3 versions)
 
@@ -764,6 +1231,54 @@ const (
 	CfgNav5Utc            CfgNav5Mask = 0x400 // Apply UTC settings (not supported in protocol versions less than 16).
 )
 
+func (v CfgNav5Mask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Dyn")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "MinEl")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "PosFixMode")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "DrLim")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "PosMask")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "TimeMask")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "StaticHoldMask")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "DgpsMask")
+	}
+	v &^= 0x80
+	if v&0x100 != 0 {
+		b = append(b, "CnoThreshold")
+	}
+	v &^= 0x100
+	if v&0x400 != 0 {
+		b = append(b, "Utc")
+	}
+	v &^= 0x400
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-navx5 (2 versions)
 
 // CfgNavx5 (Get/set) Navigation engine expert settings
@@ -821,6 +1336,70 @@ type CfgNavx5AopCfg byte
 const (
 	CfgNavx5UseAOP CfgNavx5AopCfg = 0x1 // 1 = enable AssistNow Autonomous
 )
+
+func (v CfgNavx5Mask1) String() string {
+	var b []string
+	if v&0x4 != 0 {
+		b = append(b, "MinMax")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "MinCno")
+	}
+	v &^= 0x8
+	if v&0x40 != 0 {
+		b = append(b, "Initial3dfix")
+	}
+	v &^= 0x40
+	if v&0x200 != 0 {
+		b = append(b, "WknRoll")
+	}
+	v &^= 0x200
+	if v&0x400 != 0 {
+		b = append(b, "AckAid")
+	}
+	v &^= 0x400
+	if v&0x2000 != 0 {
+		b = append(b, "Ppp")
+	}
+	v &^= 0x2000
+	if v&0x4000 != 0 {
+		b = append(b, "Aop")
+	}
+	v &^= 0x4000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgNavx5Mask2) String() string {
+	var b []string
+	if v&0x40 != 0 {
+		b = append(b, "Adr")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "SigAttenComp")
+	}
+	v &^= 0x80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgNavx5AopCfg) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "UseAOP")
+	}
+	v &^= 0x1
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // CfgNavx51 (Get/set) Navigation engine expert settings
 // Class/Id 0x06 0x23 (44 bytes)
@@ -880,6 +1459,70 @@ const (
 	CfgNavx51UseAOP CfgNavx51AopCfg = 0x1 // 1 = enable AssistNow Autonomous
 )
 
+func (v CfgNavx51Mask1) String() string {
+	var b []string
+	if v&0x4 != 0 {
+		b = append(b, "MinMax")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "MinCno")
+	}
+	v &^= 0x8
+	if v&0x40 != 0 {
+		b = append(b, "Initial3dfix")
+	}
+	v &^= 0x40
+	if v&0x200 != 0 {
+		b = append(b, "WknRoll")
+	}
+	v &^= 0x200
+	if v&0x400 != 0 {
+		b = append(b, "AckAid")
+	}
+	v &^= 0x400
+	if v&0x2000 != 0 {
+		b = append(b, "Ppp")
+	}
+	v &^= 0x2000
+	if v&0x4000 != 0 {
+		b = append(b, "Aop")
+	}
+	v &^= 0x4000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgNavx51Mask2) String() string {
+	var b []string
+	if v&0x40 != 0 {
+		b = append(b, "Adr")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "SigAttenComp")
+	}
+	v &^= 0x80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgNavx51AopCfg) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "UseAOP")
+	}
+	v &^= 0x1
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-nmea (3 versions)
 
 // CfgNmea (Get/set) NMEA protocol configuration (deprecated)
@@ -911,6 +1554,54 @@ const (
 	CfgNmeaCompat   CfgNmeaFlags = 0x1 // enable compatibility mode. This might be needed for certain applications when customer's NMEA parser expects a fixed number of digits in position coordinates.
 	CfgNmeaConsider CfgNmeaFlags = 0x2 // enable considering mode.
 )
+
+func (v CfgNmeaFilter) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "PosFilt")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "MskPosFilt")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "TimeFilt")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "DateFilt")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "GpsOnlyFilter")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "TrackFilt")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgNmeaFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Compat")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Consider")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // CfgNmea1 (Get/set) NMEA protocol configuration V0 (deprecated)
 // Class/Id 0x06 0x17 (12 bytes)
@@ -957,6 +1648,86 @@ const (
 	CfgNmea1Glonass CfgNmea1GnssToFilter = 0x20 // Disable reporting of GLONASS satellites
 	CfgNmea1Beidou  CfgNmea1GnssToFilter = 0x40 // Disable reporting of BeiDou satellites
 )
+
+func (v CfgNmea1Filter) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "PosFilt")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "MskPosFilt")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "TimeFilt")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "DateFilt")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "GpsOnlyFilter")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "TrackFilt")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgNmea1Flags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Compat")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Consider")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgNmea1GnssToFilter) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Gps")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Sbas")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "Galileo")
+	}
+	v &^= 0x4
+	if v&0x10 != 0 {
+		b = append(b, "Qzss")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "Glonass")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "Beidou")
+	}
+	v &^= 0x40
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // CfgNmea2 (Get/set) Extended NMEA protocol configuration V1
 // Class/Id 0x06 0x17 (20 bytes)
@@ -1008,6 +1779,94 @@ const (
 	CfgNmea2Beidou  CfgNmea2GnssToFilter = 0x40 // Disable reporting of BeiDou satellites
 )
 
+func (v CfgNmea2Filter) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "PosFilt")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "MskPosFilt")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "TimeFilt")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "DateFilt")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "GpsOnlyFilter")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "TrackFilt")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgNmea2Flags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Compat")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Consider")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "Limit82")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "HighPrec")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgNmea2GnssToFilter) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Gps")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Sbas")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "Galileo")
+	}
+	v &^= 0x4
+	if v&0x10 != 0 {
+		b = append(b, "Qzss")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "Glonass")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "Beidou")
+	}
+	v &^= 0x40
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-odo
 
 // CfgOdo (Get/set) Odometer, low-speed COG engine settings
@@ -1044,6 +1903,42 @@ const (
 	CfgOdoProfile CfgOdoOdoCfg = 0x7 // Profile type (0=running, 1=cycling, 2=swimming, 3=car, 4=custom)
 )
 
+func (v CfgOdoFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "UseODO")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "UseCOG")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "OutLPVel")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "OutLPCog")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgOdoOdoCfg) String() string {
+	var b []string
+	if v&0x7 != 0 {
+		b = append(b, fmt.Sprintf("Profile<%b>", (v&0x7)>>0))
+	}
+	v &^= 0x7
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-pm2 (2 versions)
 
 // CfgPm2 (Get/set) Extended power management configuration
@@ -1078,6 +1973,50 @@ const (
 	CfgPm2DoNotEnterOff CfgPm2Flags = 0x10000 // Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead
 	CfgPm2Mode          CfgPm2Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
 )
+
+func (v CfgPm2Flags) String() string {
+	var b []string
+	if v&0x10 != 0 {
+		b = append(b, "ExtintSel")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "ExtintWake")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "ExtintBackup")
+	}
+	v &^= 0x40
+	if v&0x300 != 0 {
+		b = append(b, fmt.Sprintf("LimitPeakCurr<%b>", (v&0x300)>>8))
+	}
+	v &^= 0x300
+	if v&0x400 != 0 {
+		b = append(b, "WaitTimeFix")
+	}
+	v &^= 0x400
+	if v&0x800 != 0 {
+		b = append(b, "UpdateRTC")
+	}
+	v &^= 0x800
+	if v&0x1000 != 0 {
+		b = append(b, "UpdateEPH")
+	}
+	v &^= 0x1000
+	if v&0x10000 != 0 {
+		b = append(b, "DoNotEnterOff")
+	}
+	v &^= 0x10000
+	if v&0x60000 != 0 {
+		b = append(b, fmt.Sprintf("Mode<%b>", (v&0x60000)>>17))
+	}
+	v &^= 0x60000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // CfgPm21 (Get/set) Extended power management configuration
 // Class/Id 0x06 0x3b (48 bytes)
@@ -1114,6 +2053,58 @@ const (
 	CfgPm21DoNotEnterOff  CfgPm21Flags = 0x10000 // Behavior of receiver in case of no fix Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters (Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead (not supported in protocol versions 23 to 23.01).
 	CfgPm21Mode           CfgPm21Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) (not supported in protocol versions 23 to 23.01) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
 )
+
+func (v CfgPm21Flags) String() string {
+	var b []string
+	if v&0xe != 0 {
+		b = append(b, fmt.Sprintf("OptTarget<%b>", (v&0xe)>>1))
+	}
+	v &^= 0xe
+	if v&0x10 != 0 {
+		b = append(b, "ExtintSel")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "ExtintWake")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "ExtintBackup")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "ExtintInactive")
+	}
+	v &^= 0x80
+	if v&0x300 != 0 {
+		b = append(b, fmt.Sprintf("LimitPeakCurr<%b>", (v&0x300)>>8))
+	}
+	v &^= 0x300
+	if v&0x400 != 0 {
+		b = append(b, "WaitTimeFix")
+	}
+	v &^= 0x400
+	if v&0x800 != 0 {
+		b = append(b, "UpdateRTC")
+	}
+	v &^= 0x800
+	if v&0x1000 != 0 {
+		b = append(b, "UpdateEPH")
+	}
+	v &^= 0x1000
+	if v&0x10000 != 0 {
+		b = append(b, "DoNotEnterOff")
+	}
+	v &^= 0x10000
+	if v&0x60000 != 0 {
+		b = append(b, fmt.Sprintf("Mode<%b>", (v&0x60000)>>17))
+	}
+	v &^= 0x60000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-cfg-pms
 
@@ -1198,6 +2189,106 @@ const (
 	CfgPrt1ExtendedTxTimeout CfgPrt1Flags = 0x2 // Extended TX timeout: if set, the port will time out if allocated TX memory >=4 kB and no activity for 1. 5 s. If not set the port will time out if no activity for 1.5 s regardless on the amount of allocated TX memory .
 )
 
+func (v CfgPrt1TxReady) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "En")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Pol")
+	}
+	v &^= 0x2
+	if v&0x7c != 0 {
+		b = append(b, fmt.Sprintf("Pin<%b>", (v&0x7c)>>2))
+	}
+	v &^= 0x7c
+	if v&0xff80 != 0 {
+		b = append(b, fmt.Sprintf("Thres<%b>", (v&0xff80)>>7))
+	}
+	v &^= 0xff80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt1Mode) String() string {
+	var b []string
+	if v&0xc0 != 0 {
+		b = append(b, fmt.Sprintf("CharLen<%b>", (v&0xc0)>>6))
+	}
+	v &^= 0xc0
+	if v&0xe00 != 0 {
+		b = append(b, fmt.Sprintf("Parity<%b>", (v&0xe00)>>9))
+	}
+	v &^= 0xe00
+	if v&0x3000 != 0 {
+		b = append(b, fmt.Sprintf("NStopBits<%b>", (v&0x3000)>>12))
+	}
+	v &^= 0x3000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt1InProtoMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "InUbx")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "InNmea")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "InRtcm")
+	}
+	v &^= 0x4
+	if v&0x20 != 0 {
+		b = append(b, "InRtcm3")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt1OutProtoMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "OutUbx")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "OutNmea")
+	}
+	v &^= 0x2
+	if v&0x20 != 0 {
+		b = append(b, "OutRtcm3")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt1Flags) String() string {
+	var b []string
+	if v&0x2 != 0 {
+		b = append(b, "ExtendedTxTimeout")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // CfgPrt2 (Get/set) Port configuration for USB port
 // Class/Id 0x06 0x00 (20 bytes)
 // Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit.
@@ -1239,6 +2330,74 @@ const (
 	CfgPrt2OutNmea  CfgPrt2OutProtoMask = 0x2  // NMEA protocol
 	CfgPrt2OutRtcm3 CfgPrt2OutProtoMask = 0x20 // RTCM3 protocol (not supported in protocol versions less than 20)
 )
+
+func (v CfgPrt2TxReady) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "En")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Pol")
+	}
+	v &^= 0x2
+	if v&0x7c != 0 {
+		b = append(b, fmt.Sprintf("Pin<%b>", (v&0x7c)>>2))
+	}
+	v &^= 0x7c
+	if v&0xff80 != 0 {
+		b = append(b, fmt.Sprintf("Thres<%b>", (v&0xff80)>>7))
+	}
+	v &^= 0xff80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt2InProtoMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "InUbx")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "InNmea")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "InRtcm")
+	}
+	v &^= 0x4
+	if v&0x20 != 0 {
+		b = append(b, "InRtcm3")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt2OutProtoMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "OutUbx")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "OutNmea")
+	}
+	v &^= 0x2
+	if v&0x20 != 0 {
+		b = append(b, "OutRtcm3")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // CfgPrt3 (Get/set) Port configuration for SPI port
 // Class/Id 0x06 0x00 (20 bytes)
@@ -1296,6 +2455,102 @@ const (
 	CfgPrt3ExtendedTxTimeout CfgPrt3Flags = 0x2 // Extended TX timeout: if set, the port will time out if allocated TX memory >=4 kB and no activity for 1. 5 s.
 )
 
+func (v CfgPrt3TxReady) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "En")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Pol")
+	}
+	v &^= 0x2
+	if v&0x7c != 0 {
+		b = append(b, fmt.Sprintf("Pin<%b>", (v&0x7c)>>2))
+	}
+	v &^= 0x7c
+	if v&0xff80 != 0 {
+		b = append(b, fmt.Sprintf("Thres<%b>", (v&0xff80)>>7))
+	}
+	v &^= 0xff80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt3Mode) String() string {
+	var b []string
+	if v&0x6 != 0 {
+		b = append(b, fmt.Sprintf("SpiMode<%b>", (v&0x6)>>1))
+	}
+	v &^= 0x6
+	if v&0x3f00 != 0 {
+		b = append(b, fmt.Sprintf("FfCnt<%b>", (v&0x3f00)>>8))
+	}
+	v &^= 0x3f00
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt3InProtoMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "InUbx")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "InNmea")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "InRtcm")
+	}
+	v &^= 0x4
+	if v&0x20 != 0 {
+		b = append(b, "InRtcm3")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt3OutProtoMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "OutUbx")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "OutNmea")
+	}
+	v &^= 0x2
+	if v&0x20 != 0 {
+		b = append(b, "OutRtcm3")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt3Flags) String() string {
+	var b []string
+	if v&0x2 != 0 {
+		b = append(b, "ExtendedTxTimeout")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // CfgPrt4 (Get/set) Port configuration for I2C (DDC) port
 // Class/Id 0x06 0x00 (20 bytes)
 // Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit.
@@ -1351,6 +2606,98 @@ const (
 	CfgPrt4ExtendedTxTimeout CfgPrt4Flags = 0x2 // Extended TX timeout: if set, the port will time out if allocated TX memory >=4 kB and no activity for 1. 5s.
 )
 
+func (v CfgPrt4TxReady) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "En")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Pol")
+	}
+	v &^= 0x2
+	if v&0x7c != 0 {
+		b = append(b, fmt.Sprintf("Pin<%b>", (v&0x7c)>>2))
+	}
+	v &^= 0x7c
+	if v&0xff80 != 0 {
+		b = append(b, fmt.Sprintf("Thres<%b>", (v&0xff80)>>7))
+	}
+	v &^= 0xff80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt4Mode) String() string {
+	var b []string
+	if v&0xfe != 0 {
+		b = append(b, fmt.Sprintf("SlaveAddr<%b>", (v&0xfe)>>1))
+	}
+	v &^= 0xfe
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt4InProtoMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "InUbx")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "InNmea")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "InRtcm")
+	}
+	v &^= 0x4
+	if v&0x20 != 0 {
+		b = append(b, "InRtcm3")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt4OutProtoMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "OutUbx")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "OutNmea")
+	}
+	v &^= 0x2
+	if v&0x20 != 0 {
+		b = append(b, "OutRtcm3")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgPrt4Flags) String() string {
+	var b []string
+	if v&0x2 != 0 {
+		b = append(b, "ExtendedTxTimeout")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-pwr
 
 // CfgPwr (Set) Put receiver in a defined power state
@@ -1396,6 +2743,22 @@ const (
 	CfgRinvBinary CfgRinvFlags = 0x2 // Data is binary.
 )
 
+func (v CfgRinvFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Dump")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Binary")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-rst
 
 // CfgRst (Command) Reset receiver / Clear backup data structures
@@ -1423,6 +2786,54 @@ const (
 	CfgRstRtc    CfgRstNavBbrMask = 0x100  // RTC
 	CfgRstAop    CfgRstNavBbrMask = 0x8000 // Autonomous orbit parameters
 )
+
+func (v CfgRstNavBbrMask) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Eph")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Alm")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "Health")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "Klob")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "Pos")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "Clkd")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "Osc")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "Utc")
+	}
+	v &^= 0x80
+	if v&0x100 != 0 {
+		b = append(b, "Rtc")
+	}
+	v &^= 0x100
+	if v&0x8000 != 0 {
+		b = append(b, "Aop")
+	}
+	v &^= 0x8000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-cfg-rxm
 
@@ -1466,6 +2877,42 @@ const (
 	CfgSbasIntegrity CfgSbasUsage = 0x4 // Use SBAS integrity information. If enabled, the receiver will only use GPS satellites for which integrity information is available.
 )
 
+func (v CfgSbasMode) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Enabled")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Test")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgSbasUsage) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Range")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DiffCorr")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "Integrity")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-senif
 
 // CfgSenif (Get/set) I2C sensor interface configuration
@@ -1493,6 +2940,34 @@ const (
 	CfgSenifI2cSclPio CfgSenifPioConf = 0x3e0 // PIO of the I2C SCL line Supported options:
 )
 
+func (v CfgSenifFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "SenConn")
+	}
+	v &^= 0x1
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgSenifPioConf) String() string {
+	var b []string
+	if v&0x1f != 0 {
+		b = append(b, fmt.Sprintf("I2cSdaPio<%b>", (v&0x1f)>>0))
+	}
+	v &^= 0x1f
+	if v&0x3e0 != 0 {
+		b = append(b, fmt.Sprintf("I2cSclPio<%b>", (v&0x3e0)>>5))
+	}
+	v &^= 0x3e0
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-slas
 
 // CfgSlas (Get/set) SLAS configuration
@@ -1512,6 +2987,26 @@ const (
 	CfgSlasTest    CfgSlasMode = 0x2 // Use QZSS SLAS data when in test mode (SLAS msg 0): Use data anyhow (1) / Ignore data when in Test Mode (0)
 	CfgSlasRaim    CfgSlasMode = 0x4 // Raim out measurements that are not corrected by QZSS SLAS, if at least 5 measurements are corrected: Enabled (1) / Disabled (0)
 )
+
+func (v CfgSlasMode) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Enabled")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Test")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "Raim")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-cfg-smgr
 
@@ -1561,6 +3056,94 @@ const (
 	CfgSmgrDisableOffset      CfgSmgrFlags = 0x10000 // 1 = disable automatic storage of oscillator offset
 )
 
+func (v CfgSmgrMessageCfg) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "MeasInternal")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "MeasGNSS")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "MeasEXTINT0")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "MeasEXTINT1")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v CfgSmgrFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "DisableInternal")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DisableExternal")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "PreferenceMode")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "EnableGNSS")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "EnableEXTINT0")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "EnableEXTINT1")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "EnableHostMeasInt")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "EnableHostMeasExt")
+	}
+	v &^= 0x80
+	if v&0x400 != 0 {
+		b = append(b, "UseAnyFix")
+	}
+	v &^= 0x400
+	if v&0x800 != 0 {
+		b = append(b, "DisableMaxSlewRate")
+	}
+	v &^= 0x800
+	if v&0x1000 != 0 {
+		b = append(b, "IssueFreqWarning")
+	}
+	v &^= 0x1000
+	if v&0x2000 != 0 {
+		b = append(b, "IssueTimeWarning")
+	}
+	v &^= 0x2000
+	if v&0xc000 != 0 {
+		b = append(b, fmt.Sprintf("TPCoherent<%b>", (v&0xc000)>>14))
+	}
+	v &^= 0xc000
+	if v&0x10000 != 0 {
+		b = append(b, "DisableOffset")
+	}
+	v &^= 0x10000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-spt
 
 // CfgSpt (Get/set) Configure and start a sensor production test
@@ -1601,6 +3184,22 @@ const (
 	CfgTmode2AltInv CfgTmode2Flags = 0x2 // Altitude is not valid, in case lla was set
 )
 
+func (v CfgTmode2Flags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Lla")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "AltInv")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-tmode3
 
 // CfgTmode3 (Get/set) Time mode settings 3
@@ -1631,6 +3230,22 @@ const (
 	CfgTmode3Mode CfgTmode3Flags = 0xff  // Receiver Mode: 0 Disabled 1 Survey In 2 Fixed Mode (true ARP position information required) 3-255 Reserved
 	CfgTmode3Lla  CfgTmode3Flags = 0x100 // Position is given in LAT/LON/ALT (default is ECEF)
 )
+
+func (v CfgTmode3Flags) String() string {
+	var b []string
+	if v&0xff != 0 {
+		b = append(b, fmt.Sprintf("Mode<%b>", (v&0xff)>>0))
+	}
+	v &^= 0xff
+	if v&0x100 != 0 {
+		b = append(b, "Lla")
+	}
+	v &^= 0x100
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-cfg-tp5 (3 versions)
 
@@ -1684,6 +3299,50 @@ const (
 	CfgTp52SyncMode       CfgTp52Flags = 0x3800 // Sync Manager lock mode to use: 0: switch to 'freqPeriodLock' and 'pulseLenRatioLock' as soon as Sync Manager has an accurate time, never switch back to 'freqPeriod' and 'pulseLenRatio' 1: switch to 'freqPeriodLock' and 'pulseLenRatioLock' as soon as Sync Manager has an accurate time, and switch back to 'freqPeriod' and 'pulseLenRatio' as soon as time gets inaccurate This field is only relevant for the FTS product variant. This field is only relevant if the flag 'lockedOtherSet' is set.
 )
 
+func (v CfgTp52Flags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Active")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "LockGnssFreq")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "LockedOtherSet")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "IsFreq")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "IsLength")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "AlignToTow")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "Polarity")
+	}
+	v &^= 0x40
+	if v&0x780 != 0 {
+		b = append(b, fmt.Sprintf("GridUtcGnss<%b>", (v&0x780)>>7))
+	}
+	v &^= 0x780
+	if v&0x3800 != 0 {
+		b = append(b, fmt.Sprintf("SyncMode<%b>", (v&0x3800)>>11))
+	}
+	v &^= 0x3800
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-txslot
 
 // CfgTxslot (Set) TX buffer time slots configuration
@@ -1711,6 +3370,34 @@ const (
 	CfgTxslotSPI   CfgTxslotEnable = 0x10 // SPI
 )
 
+func (v CfgTxslotEnable) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "DDC")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "UART1")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "UART2")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "USB")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "SPI")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-cfg-usb
 
 // CfgUsb (Get/set) USB configuration
@@ -1736,6 +3423,22 @@ const (
 	CfgUsbReEnum    CfgUsbFlags = 0x1 // force re-enumeration
 	CfgUsbPowerMode CfgUsbFlags = 0x2 // self-powered (1), bus-powered (0)
 )
+
+func (v CfgUsbFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "ReEnum")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "PowerMode")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-esf-alg
 
@@ -1770,6 +3473,42 @@ const (
 	EsfAlgAngleError   EsfAlgError = 0x4 // IMU-mount misalignment Euler angle singularity error (0: no error, 1: error). If this error bit is set, the IMU-mount roll and IMU-mount yaw angles cannot uniquely be defined due to the singularity issue happening with installations mounted with a +/- 90 degrees misalignment around pitch axis. This is also known as the 'gimbal-lock' problem affecting rotations described by Euler angles.
 )
 
+func (v EsfAlgFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "AutoMntAlgOn")
+	}
+	v &^= 0x1
+	if v&0xe != 0 {
+		b = append(b, fmt.Sprintf("Status<%b>", (v&0xe)>>1))
+	}
+	v &^= 0xe
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v EsfAlgError) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "TiltAlgError")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "YawAlgError")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "AngleError")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-esf-ins
 
 // EsfIns (Periodic/Polled) Vehicle dynamics information
@@ -1801,23 +3540,61 @@ const (
 	EsfInsZAccelValid   EsfInsBitfield0 = 0x2000 // Compensated z-axis acceleration data validity flag (0: not valid, 1: valid).
 )
 
+func (v EsfInsBitfield0) String() string {
+	var b []string
+	if v&0xff != 0 {
+		b = append(b, fmt.Sprintf("Version<%b>", (v&0xff)>>0))
+	}
+	v &^= 0xff
+	if v&0x100 != 0 {
+		b = append(b, "XAngRateValid")
+	}
+	v &^= 0x100
+	if v&0x200 != 0 {
+		b = append(b, "YAngRateValid")
+	}
+	v &^= 0x200
+	if v&0x400 != 0 {
+		b = append(b, "ZAngRateValid")
+	}
+	v &^= 0x400
+	if v&0x800 != 0 {
+		b = append(b, "XAccelValid")
+	}
+	v &^= 0x800
+	if v&0x1000 != 0 {
+		b = append(b, "YAccelValid")
+	}
+	v &^= 0x1000
+	if v&0x2000 != 0 {
+		b = append(b, "ZAccelValid")
+	}
+	v &^= 0x2000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-esf-meas
 
 // EsfMeas (Input/Output) External sensor fusion measurements
 // Class/Id 0x10 0x02 (8 or 12 + N*4 bytes)
 // Possible data types for the data field are described in the ESF Measurement Data section.
 type EsfMeas struct {
-	TimeTag uint32       // Time tag of measurement generated by external sensor
-	Flags   EsfMeasFlags // Flags. Set all unused bits to zero.
-	Id      uint16       // Identification number of data provider
-	Meas    []*struct {
-		Data EsfMeasData // data
-	} // len: NumMeas
+	TimeTag uint32             // Time tag of measurement generated by external sensor
+	Flags   EsfMeasFlags       // Flags. Set all unused bits to zero.
+	Id      uint16             // Identification number of data provider
+	Meas    []*EsfMeasMeasType // len: NumMeas
 	// Optional
 	CalibTtag_ms uint32 // [ms] Receiver local time calibrated. This field must not be supplied when calibTtagValid is set to 0.
 }
 
 func (EsfMeas) classID() uint16 { return 0x0210 }
+
+type EsfMeasMeasType struct {
+	Data EsfMeasData // data
+}
 
 type EsfMeasFlags uint16
 
@@ -1835,20 +3612,62 @@ const (
 	EsfMeasDataType  EsfMeasData = 0x3f000000 // Type of data (0 = no data; 1..63 = data type)
 )
 
+func (v EsfMeasFlags) String() string {
+	var b []string
+	if v&0x3 != 0 {
+		b = append(b, fmt.Sprintf("TimeMarkSent<%b>", (v&0x3)>>0))
+	}
+	v &^= 0x3
+	if v&0x4 != 0 {
+		b = append(b, "TimeMarkEdge")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "CalibTtagValid")
+	}
+	v &^= 0x8
+	if v&0xf800 != 0 {
+		b = append(b, fmt.Sprintf("NumMeas<%b>", (v&0xf800)>>11))
+	}
+	v &^= 0xf800
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v EsfMeasData) String() string {
+	var b []string
+	if v&0xffffff != 0 {
+		b = append(b, fmt.Sprintf("DataField<%b>", (v&0xffffff)>>0))
+	}
+	v &^= 0xffffff
+	if v&0x3f000000 != 0 {
+		b = append(b, fmt.Sprintf("DataType<%b>", (v&0x3f000000)>>24))
+	}
+	v &^= 0x3f000000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-esf-raw
 
 // EsfRaw (Output) Raw sensor measurements
 // Class/Id 0x10 0x03 (4 + N*8 bytes)
 // The message contains measurements from the active inertial sensors connected to the GNSS chip. Possible data types for the data field are accelerometer, gyroscope and temperature readings as described in the ESF Measurement Data section. Note that the rate selected in UBX-CFG-MSG is not respected. If a positive rate is selected then all raw measurements will be output. See also Raw Sensor Measurement Data.
 type EsfRaw struct {
-	Reserved1 [4]byte // Reserved
-	Items     []*struct {
-		Data  EsfRawData // data Same as in UBX-ESF-MEAS
-		STtag uint32     // sensor time tag
-	} // len: N
+	Reserved1 [4]byte            // Reserved
+	Items     []*EsfRawItemsType // len: N
 }
 
 func (EsfRaw) classID() uint16 { return 0x0310 }
+
+type EsfRawItemsType struct {
+	Data  EsfRawData // data Same as in UBX-ESF-MEAS
+	STtag uint32     // sensor time tag
+}
 
 type EsfRawData uint32
 
@@ -1857,27 +3676,45 @@ const (
 	EsfRawDataType  EsfRawData = 0xff000000 // type of data (0 = no data; 1..255 = data type)
 )
 
+func (v EsfRawData) String() string {
+	var b []string
+	if v&0xffffff != 0 {
+		b = append(b, fmt.Sprintf("DataField<%b>", (v&0xffffff)>>0))
+	}
+	v &^= 0xffffff
+	if v&0xff000000 != 0 {
+		b = append(b, fmt.Sprintf("DataType<%b>", (v&0xff000000)>>24))
+	}
+	v &^= 0xff000000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-esf-status
 
 // EsfStatus (Periodic/Polled) External sensor fusion status
 // Class/Id 0x10 0x10 (16 + N*4 bytes)
 // -
 type EsfStatus struct {
-	ITOW_ms    uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Version    byte    // Message version (0x02 for this version)
-	Reserved1  [7]byte // Reserved
-	FusionMode byte    // Fusion mode: 0: Initialization mode: receiver is initializing some unknown values required for doing sensor fusion 1: Fusion mode: GNSS and sensor data are used for navigation solution computation 2: Suspended fusion mode: sensor fusion is temporarily disabled due to e.g. invalid sensor data or detected ferry 3: Disabled fusion mode: sensor fusion is permanently disabled until receiver reset due e.g. to sensor error More details can be found in the Fusion Modes section.
-	Reserved2  [2]byte // Reserved
-	NumSens    byte    `len:"Sens"` // Number of sensors
-	Sens       []*struct {
-		SensStatus1 EsfStatusSensStatus1 // Sensor status, part 1
-		SensStatus2 EsfStatusSensStatus2 // Sensor status, part 2
-		Freq_hz     byte                 // [Hz] Observation frequency
-		Faults      EsfStatusFaults      // Sensor faults
-	} // len: NumSens
+	ITOW_ms    uint32               // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Version    byte                 // Message version (0x02 for this version)
+	Reserved1  [7]byte              // Reserved
+	FusionMode byte                 // Fusion mode: 0: Initialization mode: receiver is initializing some unknown values required for doing sensor fusion 1: Fusion mode: GNSS and sensor data are used for navigation solution computation 2: Suspended fusion mode: sensor fusion is temporarily disabled due to e.g. invalid sensor data or detected ferry 3: Disabled fusion mode: sensor fusion is permanently disabled until receiver reset due e.g. to sensor error More details can be found in the Fusion Modes section.
+	Reserved2  [2]byte              // Reserved
+	NumSens    byte                 `len:"Sens"` // Number of sensors
+	Sens       []*EsfStatusSensType // len: NumSens
 }
 
 func (EsfStatus) classID() uint16 { return 0x1010 }
+
+type EsfStatusSensType struct {
+	SensStatus1 EsfStatusSensStatus1 // Sensor status, part 1
+	SensStatus2 EsfStatusSensStatus2 // Sensor status, part 2
+	Freq_hz     byte                 // [Hz] Observation frequency
+	Faults      EsfStatusFaults      // Sensor faults
+}
 
 type EsfStatusSensStatus1 byte
 
@@ -1902,6 +3739,66 @@ const (
 	EsfStatusMissingMeas EsfStatusFaults = 0x4 // Missing or time-misaligned measurements detected
 	EsfStatusNoisyMeas   EsfStatusFaults = 0x8 // High measurement noise-level detected
 )
+
+func (v EsfStatusSensStatus1) String() string {
+	var b []string
+	if v&0x3f != 0 {
+		b = append(b, fmt.Sprintf("Type<%b>", (v&0x3f)>>0))
+	}
+	v &^= 0x3f
+	if v&0x40 != 0 {
+		b = append(b, "Used")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "Ready")
+	}
+	v &^= 0x80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v EsfStatusSensStatus2) String() string {
+	var b []string
+	if v&0x3 != 0 {
+		b = append(b, fmt.Sprintf("CalibStatus<%b>", (v&0x3)>>0))
+	}
+	v &^= 0x3
+	if v&0xc != 0 {
+		b = append(b, fmt.Sprintf("TimeStatus<%b>", (v&0xc)>>2))
+	}
+	v &^= 0xc
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v EsfStatusFaults) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "BadMeas")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "BadTTag")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "MissingMeas")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "NoisyMeas")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-hnr-att
 
@@ -1952,6 +3849,42 @@ const (
 	HnrInsYAccelValid   HnrInsBitfield0 = 0x1000 // Compensated y-axis acceleration data validity flag (0: not valid, 1: valid).
 	HnrInsZAccelValid   HnrInsBitfield0 = 0x2000 // Compensated z-axis acceleration data validity flag (0: not valid, 1: valid).
 )
+
+func (v HnrInsBitfield0) String() string {
+	var b []string
+	if v&0xff != 0 {
+		b = append(b, fmt.Sprintf("Version<%b>", (v&0xff)>>0))
+	}
+	v &^= 0xff
+	if v&0x100 != 0 {
+		b = append(b, "XAngRateValid")
+	}
+	v &^= 0x100
+	if v&0x200 != 0 {
+		b = append(b, "YAngRateValid")
+	}
+	v &^= 0x200
+	if v&0x400 != 0 {
+		b = append(b, "ZAngRateValid")
+	}
+	v &^= 0x400
+	if v&0x800 != 0 {
+		b = append(b, "XAccelValid")
+	}
+	v &^= 0x800
+	if v&0x1000 != 0 {
+		b = append(b, "YAccelValid")
+	}
+	v &^= 0x1000
+	if v&0x2000 != 0 {
+		b = append(b, "ZAccelValid")
+	}
+	v &^= 0x2000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-hnr-pvt
 
@@ -2005,6 +3938,54 @@ const (
 	HnrPvtTOWSET       HnrPvtFlags = 0x8  // 1 = Valid GPS time of week (iTOW & fTOW)
 	HnrPvtHeadVehValid HnrPvtFlags = 0x10 // 1= Heading of vehicle is valid
 )
+
+func (v HnrPvtValid) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "ValidDate")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "ValidTime")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "FullyResolved")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v HnrPvtFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GPSfixOK")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DiffSoln")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "WKNSET")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "TOWSET")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "HeadVehValid")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-inf-debug
 
@@ -2119,6 +4100,58 @@ const (
 	LogBatchPsmState  LogBatchFlags = 0x1c // Power save mode state (see Power Management) 0: PSM is not active 1: Enabled (an intermediate state before Acquisition state) 2: Acquisition 3: Tracking 4: Power optimized tracking 5: Inactive
 )
 
+func (v LogBatchContentValid) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "ExtraPvt")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "ExtraOdo")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v LogBatchValid) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "ValidDate")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "ValidTime")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v LogBatchFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GnssFixOK")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DiffSoln")
+	}
+	v &^= 0x2
+	if v&0x1c != 0 {
+		b = append(b, fmt.Sprintf("PsmState<%b>", (v&0x1c)>>2))
+	}
+	v &^= 0x1c
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-log-create
 
 // LogCreate (Command) Create log file
@@ -2139,6 +4172,18 @@ type LogCreateLogCfg byte
 const (
 	LogCreateCircular LogCreateLogCfg = 0x1 // Log is circular (new entries overwrite old ones in a full log) if this bit set
 )
+
+func (v LogCreateLogCfg) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Circular")
+	}
+	v &^= 0x1
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-log-erase
 
@@ -2231,6 +4276,26 @@ const (
 	LogInfo1Circular  LogInfo1Status = 0x20 // The current log is circular
 )
 
+func (v LogInfo1Status) String() string {
+	var b []string
+	if v&0x8 != 0 {
+		b = append(b, "Recording")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "Inactive")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "Circular")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-log-retrieve
 
 // LogRetrieve (Command) Request log data
@@ -2263,6 +4328,18 @@ type LogRetrievebatchFlags byte
 const (
 	LogRetrievebatchSendMonFirst LogRetrievebatchFlags = 0x1 // Send UBX-MON-BATCH message before sending the UBX-LOG-BATCH message(s).
 )
+
+func (v LogRetrievebatchFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "SendMonFirst")
+	}
+	v &^= 0x1
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-log-retrievepos
 
@@ -2909,6 +4986,22 @@ const (
 	MgaIniFreq2Fall   MgaIniFreq2Flags = 0x10 // use falling edge of EXTINT pulse (default rising)
 )
 
+func (v MgaIniFreq2Flags) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("Source<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v&0x10 != 0 {
+		b = append(b, "Fall")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // MgaIniPos_llh3 (Input) Initial position assistance
 // Class/Id 0x13 0x40 (20 bytes)
 // Supplying position assistance that is inaccurate by more than the specified position accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of initial position assistance to a receiver in WGS84 lat/long/alt coordinates. This message is equivalent to the UBX-MGA- INI-POS_XYZ message, except for the coordinate system. See the description of AssistNow Online for details.
@@ -2966,6 +5059,26 @@ const (
 	MgaIniTime_gnss5Last   MgaIniTime_gnss5Ref = 0x20 // use last EXTINT pulse (default next pulse) - only if source is EXTINT
 )
 
+func (v MgaIniTime_gnss5Ref) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("Source<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v&0x10 != 0 {
+		b = append(b, "Fall")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "Last")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // MgaIniTime_utc6 (Input) Initial time assistance
 // Class/Id 0x13 0x40 (24 bytes)
 // Supplying time assistance that is inaccurate by more than the specified time accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of UTC time assistance to a receiver. This message is equivalent to the UBX-MGA-INI-TIME_GNSS message, except for the time base. See the description of AssistNow Online for details.
@@ -2996,6 +5109,26 @@ const (
 	MgaIniTime_utc6Fall   MgaIniTime_utc6Ref = 0x10 // use falling edge of EXTINT pulse (default rising) - only if source is EXTINT
 	MgaIniTime_utc6Last   MgaIniTime_utc6Ref = 0x20 // use last EXTINT pulse (default next pulse) - only if source is EXTINT
 )
+
+func (v MgaIniTime_utc6Ref) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("Source<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v&0x10 != 0 {
+		b = append(b, "Fall")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "Last")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-mga-qzss (3 versions)
 
@@ -3134,6 +5267,78 @@ const (
 	MonGnssGalileoEna MonGnssEnabled = 0x8 // Galileo is enabled
 )
 
+func (v MonGnssSupported) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GPSSup")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "GlonassSup")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "BeidouSup")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "GalileoSup")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v MonGnssDefaultGnss) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GPSDef")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "GlonassDef")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "BeidouDef")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "GalileoDef")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v MonGnssEnabled) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GPSEna")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "GlonassEna")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "BeidouEna")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "GalileoEna")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-mon-hw
 
 // MonHw (Periodic/polled) Hardware status
@@ -3170,6 +5375,30 @@ const (
 	MonHwXtalAbsent   MonHwFlags = 0x10 // RTC xtal has been determined to be absent (not supported in protocol versions less than 18)
 )
 
+func (v MonHwFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "RtcCalib")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "SafeBoot")
+	}
+	v &^= 0x2
+	if v&0xc != 0 {
+		b = append(b, fmt.Sprintf("JammingState<%b>", (v&0xc)>>2))
+	}
+	v &^= 0xc
+	if v&0x10 != 0 {
+		b = append(b, "XtalAbsent")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-mon-hw2
 
 // MonHw2 (Periodic/Polled) Extended hardware status
@@ -3196,18 +5425,20 @@ func (MonHw2) classID() uint16 { return 0x0b0a }
 // Class/Id 0x0a 0x02 (0 + N*20 bytes)
 // The size of the message is determined by the number of ports 'N' the receiver supports, i.e. on u-blox 5 the number of ports is 6.
 type MonIo struct {
-	Items []*struct {
-		RxBytes_bytes uint32  // [bytes] Number of bytes ever received
-		TxBytes_bytes uint32  // [bytes] Number of bytes ever sent
-		ParityErrs    uint16  // Number of 100 ms timeslots with parity errors
-		FramingErrs   uint16  // Number of 100 ms timeslots with framing errors
-		OverrunErrs   uint16  // Number of 100 ms timeslots with overrun errors
-		BreakCond     uint16  // Number of 100 ms timeslots with break conditions
-		Reserved1     [4]byte // Reserved
-	} // len: N
+	Items []*MonIoItemsType // len: N
 }
 
 func (MonIo) classID() uint16 { return 0x020a }
+
+type MonIoItemsType struct {
+	RxBytes_bytes uint32  // [bytes] Number of bytes ever received
+	TxBytes_bytes uint32  // [bytes] Number of bytes ever sent
+	ParityErrs    uint16  // Number of 100 ms timeslots with parity errors
+	FramingErrs   uint16  // Number of 100 ms timeslots with framing errors
+	OverrunErrs   uint16  // Number of 100 ms timeslots with overrun errors
+	BreakCond     uint16  // Number of 100 ms timeslots with break conditions
+	Reserved1     [4]byte // Reserved
+}
 
 // Message ubx-mon-msgpp
 
@@ -3240,17 +5471,19 @@ func (MonPatch) classID() uint16 { return 0x270a }
 // Class/Id 0x0a 0x27 (4 + N*16 bytes)
 // This message reports information about patches installed and currently enabled on the receiver. It does not report on patches installed and then disabled. An enabled patch is considered active when the receiver executes from the code space where the patch resides on. For example, a ROM patch is reported active only when the system runs from ROM.
 type MonPatch1 struct {
-	Version  uint16 // Message version (0x0001 for this version)
-	NEntries uint16 `len:"Items"` // Total number of reported patches
-	Items    []*struct {
-		PatchInfo        MonPatch1PatchInfo // Status information about the reported patch
-		ComparatorNumber uint32             // The number of the comparator
-		PatchAddress     uint32             // The address that is targeted by the patch
-		PatchData        uint32             // The data that is inserted at the patchAddress
-	} // len: NEntries
+	Version  uint16                // Message version (0x0001 for this version)
+	NEntries uint16                `len:"Items"` // Total number of reported patches
+	Items    []*MonPatch1ItemsType // len: NEntries
 }
 
 func (MonPatch1) classID() uint16 { return 0x270a }
+
+type MonPatch1ItemsType struct {
+	PatchInfo        MonPatch1PatchInfo // Status information about the reported patch
+	ComparatorNumber uint32             // The number of the comparator
+	PatchAddress     uint32             // The address that is targeted by the patch
+	PatchData        uint32             // The data that is inserted at the patchAddress
+}
 
 type MonPatch1PatchInfo uint32
 
@@ -3258,6 +5491,22 @@ const (
 	MonPatch1Activated MonPatch1PatchInfo = 0x1 // 1: the patch is active, 0: otherwise
 	MonPatch1Location  MonPatch1PatchInfo = 0x6 // Indicates where the patch is stored. 0: eFuse, 1: ROM, 2: BBR, 3: file system
 )
+
+func (v MonPatch1PatchInfo) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Activated")
+	}
+	v &^= 0x1
+	if v&0x6 != 0 {
+		b = append(b, fmt.Sprintf("Location<%b>", (v&0x6)>>1))
+	}
+	v &^= 0x6
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-mon-rxbuf
 
@@ -3288,6 +5537,18 @@ type MonRxrFlags byte
 const (
 	MonRxrAwake MonRxrFlags = 0x1 // not in backup mode
 )
+
+func (v MonRxrFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Awake")
+	}
+	v &^= 0x1
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-mon-smgr
 
@@ -3346,32 +5607,128 @@ const (
 	MonSmgrExtInt1FeedBack MonSmgrExtInt1 = 0x4 // This source is used as feedback of the external oscillator
 )
 
+func (v MonSmgrIntOsc) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("IntOscState<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v&0x10 != 0 {
+		b = append(b, "IntOscCalib")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "IntOscDisc")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v MonSmgrExtOsc) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("ExtOscState<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v&0x10 != 0 {
+		b = append(b, "ExtOscCalib")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "ExtOscDisc")
+	}
+	v &^= 0x20
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v MonSmgrGnss) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GnssAvail")
+	}
+	v &^= 0x1
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v MonSmgrExtInt0) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "ExtInt0Avail")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "ExtInt0Type")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "ExtInt0FeedBack")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v MonSmgrExtInt1) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "ExtInt1Avail")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "ExtInt1Type")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "ExtInt1FeedBack")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-mon-spt
 
 // MonSpt (Polled) Sensor production test
 // Class/Id 0x0a 0x2f (4 + N*16 bytes)
 // This message reports the state of, and measurements made during, sensor self- tests. This message can also be used to retrieve information about detected sensor(s) and driver(s) used. This message is only supported if a sensor is directly connected to the u-blox chip. This includes modules that contain IMUs. Note that this message shows the status of the last self-test since sensor startup. The self-test results are not stored in non-volatile memory.
 type MonSpt struct {
-	Version   byte // Message version (0x01 for this version)
-	NumSensor byte `len:"Sensor"` // number of sensors reported in this message
-	NumRes    byte `len:"Res"`    // number of result items reported in this message
-	Reserved1 byte // Reserved
-	Sensor    []*struct {
-		SensorId    byte         // Sensor ID The following IDs are defined, others are reserved: 1: ST LSM6DS0 6-axis IMU with temperature sensor 2: Invensense MPU6500 6-axis IMU with temperature sensor 3: Bosch BMI160 6-axis IMU with temperature sensor 7: ST LSM6DS3 6-axis IMU with temperature sensor 9: Bosch SMI130 6-axis IMU with temperature sensor 12: MPU6515, 6-axis inertial sensor from Invensense 13: ST LSM6DSL 6-axis IMU with temperature sensor 14: SMG130, 3-axis gyroscope with temperature sensor from Bosch 15: SMI230, 6-axis IMU with temperature sensor from Bosch 16: BMI260, 6-axis IMU with temperature sensor from Bosch 17: ICM330DLC, 6-axis IMU with temperature sensor from ST 18: ICM330DHCX, 6-axis IMU with 105 deg temperature sensor from ST Not all sensors are supported in any released firmware. Refer to the release notes to find out which sensor is supported by a certain firmware.
-		DrvVer      MonSptDrvVer // Version information
-		TestState   byte         // State of one sensor's test, it can be 0: test not yet started 1: test started but not yet finished 2: test did not finish due to error during execution 3: test finished normally, test data is available
-		DrvFileName byte         // 0 if the active driver is loaded from image, last character of the file name if it is loaded from separate file.
-	} // len: NumSensor
-	Res []*struct {
-		SensorIdRes uint16  // Sensor ID; eligible values are the same as in sensorIdState field
-		SensorType  uint16  // Sensor type and axis (if applicable) to which the result refers The following values are defined, others are reserved: 5: Gyroscope z axis 12: Gyroscope temperature 13: Gyroscope y axis 14: Gyroscope x axis 16: Accelerometer x axis 17: Accelerometer y axis 18: Accelerometer z axis 19: Barometer 22: Magnetometer x axis 23: Magnetometer y axis 24: Magnetometer z axis 25: Barometer temperature
-		ResType     uint16  // The type of result stored in the value field 1: Measurement without self-test offset (raw and unscaled digital value) 2: Measurement with positive self-test offset (raw and unscaled digital value) 3: Measurement with negative self-test offset (raw and unscaled digital value) 4: Minimum off-to-positive to pass self- test, as deduced from on-chip trimming information 5: Maximum off-to-positive to pass self- test, as deduced from on-chip trimming information 6: Minimum negative-to-positive to pass self-test, as deduced from on-chip trimming information 7: Maximum negative-to-positive to pass self-test, as deduced from on-chip trimming information 8: Self-test passed; test passed if value = 1 and failed if 0. Used if the decision is read out from the sensor itself.
-		Reserved2   [2]byte // Reserved
-		Value       int32   // value of the specific test result
-	} // len: NumRes
+	Version   byte                // Message version (0x01 for this version)
+	NumSensor byte                `len:"Sensor"` // number of sensors reported in this message
+	NumRes    byte                `len:"Res"`    // number of result items reported in this message
+	Reserved1 byte                // Reserved
+	Sensor    []*MonSptSensorType // len: NumSensor
+	Res       []*MonSptResType    // len: NumRes
 }
 
 func (MonSpt) classID() uint16 { return 0x2f0a }
+
+type MonSptSensorType struct {
+	SensorId    byte         // Sensor ID The following IDs are defined, others are reserved: 1: ST LSM6DS0 6-axis IMU with temperature sensor 2: Invensense MPU6500 6-axis IMU with temperature sensor 3: Bosch BMI160 6-axis IMU with temperature sensor 7: ST LSM6DS3 6-axis IMU with temperature sensor 9: Bosch SMI130 6-axis IMU with temperature sensor 12: MPU6515, 6-axis inertial sensor from Invensense 13: ST LSM6DSL 6-axis IMU with temperature sensor 14: SMG130, 3-axis gyroscope with temperature sensor from Bosch 15: SMI230, 6-axis IMU with temperature sensor from Bosch 16: BMI260, 6-axis IMU with temperature sensor from Bosch 17: ICM330DLC, 6-axis IMU with temperature sensor from ST 18: ICM330DHCX, 6-axis IMU with 105 deg temperature sensor from ST Not all sensors are supported in any released firmware. Refer to the release notes to find out which sensor is supported by a certain firmware.
+	DrvVer      MonSptDrvVer // Version information
+	TestState   byte         // State of one sensor's test, it can be 0: test not yet started 1: test started but not yet finished 2: test did not finish due to error during execution 3: test finished normally, test data is available
+	DrvFileName byte         // 0 if the active driver is loaded from image, last character of the file name if it is loaded from separate file.
+}
+
+type MonSptResType struct {
+	SensorIdRes uint16  // Sensor ID; eligible values are the same as in sensorIdState field
+	SensorType  uint16  // Sensor type and axis (if applicable) to which the result refers The following values are defined, others are reserved: 5: Gyroscope z axis 12: Gyroscope temperature 13: Gyroscope y axis 14: Gyroscope x axis 16: Accelerometer x axis 17: Accelerometer y axis 18: Accelerometer z axis 19: Barometer 22: Magnetometer x axis 23: Magnetometer y axis 24: Magnetometer z axis 25: Barometer temperature
+	ResType     uint16  // The type of result stored in the value field 1: Measurement without self-test offset (raw and unscaled digital value) 2: Measurement with positive self-test offset (raw and unscaled digital value) 3: Measurement with negative self-test offset (raw and unscaled digital value) 4: Minimum off-to-positive to pass self- test, as deduced from on-chip trimming information 5: Maximum off-to-positive to pass self- test, as deduced from on-chip trimming information 6: Minimum negative-to-positive to pass self-test, as deduced from on-chip trimming information 7: Maximum negative-to-positive to pass self-test, as deduced from on-chip trimming information 8: Self-test passed; test passed if value = 1 and failed if 0. Used if the decision is read out from the sensor itself.
+	Reserved2   [2]byte // Reserved
+	Value       int32   // value of the specific test result
+}
 
 type MonSptDrvVer byte
 
@@ -3379,6 +5736,22 @@ const (
 	MonSptDrvVerMaj MonSptDrvVer = 0xf  // Driver major version
 	MonSptDrvVerMin MonSptDrvVer = 0xf0 // Driver minor version
 )
+
+func (v MonSptDrvVer) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("DrvVerMaj<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v&0xf0 != 0 {
+		b = append(b, fmt.Sprintf("DrvVerMin<%b>", (v&0xf0)>>4))
+	}
+	v &^= 0xf0
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-mon-txbuf
 
@@ -3405,6 +5778,26 @@ const (
 	MonTxbufAlloc MonTxbufErrors = 0x80 // Allocation error (TX buffer full)
 )
 
+func (v MonTxbufErrors) String() string {
+	var b []string
+	if v&0x3f != 0 {
+		b = append(b, fmt.Sprintf("Limit<%b>", (v&0x3f)>>0))
+	}
+	v &^= 0x3f
+	if v&0x40 != 0 {
+		b = append(b, "Mem")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "Alloc")
+	}
+	v &^= 0x80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-mon-ver (2 versions)
 
 // MonVer (Poll Request) Poll receiver and software version
@@ -3419,14 +5812,16 @@ func (MonVer) classID() uint16 { return 0x040a }
 // Class/Id 0x0a 0x04 (40 + N*30 bytes)
 // -
 type MonVer1 struct {
-	SwVersion [30]byte // Nul-terminated software version string.
-	HwVersion [10]byte // Nul-terminated hardware version string
-	Items     []*struct {
-		Extension [30]byte // Extended software information strings. A series of nul-terminated strings. Each extension field is 30 characters long and contains varying software information. Not all extension fields may appear. Examples of reported information: the software version string of the underlying ROM (when the receiver's firmware is running from flash), the firmware version, the supported protocol version, the module identifier, the flash information structure (FIS) file information, the supported major GNSS, the supported augmentation systems. See Firmware and protocol versions for details.
-	} // len: N
+	SwVersion [30]byte            // Nul-terminated software version string.
+	HwVersion [10]byte            // Nul-terminated hardware version string
+	Items     []*MonVer1ItemsType // len: N
 }
 
 func (MonVer1) classID() uint16 { return 0x040a }
+
+type MonVer1ItemsType struct {
+	Extension [30]byte // Extended software information strings. A series of nul-terminated strings. Each extension field is 30 characters long and contains varying software information. Not all extension fields may appear. Examples of reported information: the software version string of the underlying ROM (when the receiver's firmware is running from flash), the firmware version, the supported protocol version, the module identifier, the flash information structure (FIS) file information, the supported major GNSS, the supported augmentation systems. See Firmware and protocol versions for details.
+}
 
 // Message ubx-nav-aopstatus
 
@@ -3447,6 +5842,18 @@ type NavAopstatusAopCfg byte
 const (
 	NavAopstatusUseAOP NavAopstatusAopCfg = 0x1 // AOP enabled flag
 )
+
+func (v NavAopstatusAopCfg) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "UseAOP")
+	}
+	v &^= 0x1
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-nav-att
 
@@ -3515,23 +5922,25 @@ func (NavCov) classID() uint16 { return 0x3601 }
 // Class/Id 0x01 0x31 (16 + N*12 bytes)
 // This message outputs the DGPS correction data that has been applied to the current NAV Solution. See also the notes on the RTCM protocol.
 type NavDgps struct {
-	ITOW_ms    uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Age_ms     int32   // [ms] Age of newest correction data
-	BaseId     int16   // DGPS base station identifier
-	BaseHealth int16   // DGPS base station health status
-	NumCh      byte    `len:"Ch"` // Number of channels for which correction data is following
-	Status     byte    // DGPS correction type status: 0x00:   none 0x01:  PR+PRR correction
-	Reserved1  [2]byte // Reserved
-	Ch         []*struct {
-		Svid     byte         // Satellite ID
-		Flags    NavDgpsFlags // Channel number and usage
-		AgeC_ms  uint16       // [ms] Age of latest correction data
-		Prc_m    float32      // [m] Pseudorange correction
-		Prrc_m_s float32      // [m/s] Pseudorange rate correction
-	} // len: NumCh
+	ITOW_ms    uint32           // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Age_ms     int32            // [ms] Age of newest correction data
+	BaseId     int16            // DGPS base station identifier
+	BaseHealth int16            // DGPS base station health status
+	NumCh      byte             `len:"Ch"` // Number of channels for which correction data is following
+	Status     byte             // DGPS correction type status: 0x00:   none 0x01:  PR+PRR correction
+	Reserved1  [2]byte          // Reserved
+	Ch         []*NavDgpsChType // len: NumCh
 }
 
 func (NavDgps) classID() uint16 { return 0x3101 }
+
+type NavDgpsChType struct {
+	Svid     byte         // Satellite ID
+	Flags    NavDgpsFlags // Channel number and usage
+	AgeC_ms  uint16       // [ms] Age of latest correction data
+	Prc_m    float32      // [m] Pseudorange correction
+	Prrc_m_s float32      // [m/s] Pseudorange rate correction
+}
 
 type NavDgpsFlags byte
 
@@ -3539,6 +5948,22 @@ const (
 	NavDgpsChannel  NavDgpsFlags = 0xf  // GPS channel number this SV is on. Channel numbers in the firmware greater than 15 are displayed as having channel number 15
 	NavDgpsDgpsUsed NavDgpsFlags = 0x10 // 1 = DGPS used for this SV
 )
+
+func (v NavDgpsFlags) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("Channel<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v&0x10 != 0 {
+		b = append(b, "DgpsUsed")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-nav-dop
 
@@ -3591,18 +6016,20 @@ func (NavEoe) classID() uint16 { return 0x6101 }
 // Class/Id 0x01 0x39 (8 + N*2 bytes)
 // This message outputs the evaluated states of all configured geofences for the current epoch's position. See the Geofencing description for feature details.
 type NavGeofence struct {
-	ITOW_ms   uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Version   byte   // Message version (0x00 for this version)
-	Status    byte   // Geofencing status 0 - Geofencing not available or not reliable 1 - Geofencing active
-	NumFences byte   `len:"Fences"` // Number of geofences
-	CombState byte   // Combined (logical OR) state of all geofences 0 - Unknown 1 - Inside 2 - Outside
-	Fences    []*struct {
-		State byte // Geofence state 0 - Unknown 1 - Inside 2 - Outside
-		Id    byte // Geofence ID (0 = not available)
-	} // len: NumFences
+	ITOW_ms   uint32                   // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Version   byte                     // Message version (0x00 for this version)
+	Status    byte                     // Geofencing status 0 - Geofencing not available or not reliable 1 - Geofencing active
+	NumFences byte                     `len:"Fences"` // Number of geofences
+	CombState byte                     // Combined (logical OR) state of all geofences 0 - Unknown 1 - Inside 2 - Outside
+	Fences    []*NavGeofenceFencesType // len: NumFences
 }
 
 func (NavGeofence) classID() uint16 { return 0x3901 }
+
+type NavGeofenceFencesType struct {
+	State byte // Geofence state 0 - Unknown 1 - Inside 2 - Outside
+	Id    byte // Geofence ID (0 = not available)
+}
 
 // Message ubx-nav-hpposecef
 
@@ -3630,6 +6057,18 @@ type NavHpposecefFlags byte
 const (
 	NavHpposecefInvalidEcef NavHpposecefFlags = 0x1 // 1 = Invalid ecefX, ecefY, ecefZ, ecefXHp, ecefYHp and ecefZHp
 )
+
+func (v NavHpposecefFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "InvalidEcef")
+	}
+	v &^= 0x1
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-nav-hpposllh
 
@@ -3660,6 +6099,18 @@ type NavHpposllhFlags byte
 const (
 	NavHpposllhInvalidLlh NavHpposllhFlags = 0x1 // 1 = Invalid lon, lat, height, hMSL, lonHp, latHp, heightHp and hMSLHp
 )
+
+func (v NavHpposllhFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "InvalidLlh")
+	}
+	v &^= 0x1
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-nav-nmi
 
@@ -3739,6 +6190,154 @@ const (
 	NavNmiWnoInvalidGLO NavNmiGloNmiFlags = 0x2 // 1 = week number invalid.
 )
 
+func (v NavNmiGpsNmiFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "WnoCheckedGPS")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "WnoInvalidGPS")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavNmiGpsLsFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "LsValGPS")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DnRangeGPS")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "TotRangeGPS")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "LsEventGPS")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "RecNowGPS")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavNmiGalNmiFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "WnoCheckedGAL")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "WnoInvalidGAL")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavNmiGalLsFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "LsValGAL")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DnRangeGAL")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "TotRangeGAL")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "LsEventGAL")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "RecNowGAL")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavNmiBdsNmiFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "WnoCheckedBDS")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "WnoInvalidBDS")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavNmiBdsLsFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "LsValBDS")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DnRangeBDS")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "TotRangeBDS")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "LsEventBDS")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "RecNowBDS")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavNmiGloNmiFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "WnoCheckedGLO")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "WnoInvalidGLO")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-nav-odo
 
 // NavOdo (Periodic/Polled) Odometer solution
@@ -3761,21 +6360,23 @@ func (NavOdo) classID() uint16 { return 0x0901 }
 // Class/Id 0x01 0x34 (8 + N*6 bytes)
 // Status of the GNSS orbit database knowledge.
 type NavOrb struct {
-	ITOW_ms   uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Version   byte    // Message version (0x01 for this version)
-	NumSv     byte    `len:"Sv"` // Number of SVs in the database
-	Reserved1 [2]byte // Reserved
-	Sv        []*struct {
-		GnssId   byte           // GNSS ID
-		SvId     byte           // Satellite ID
-		SvFlag   NavOrbSvFlag   // Information Flags
-		Eph      NavOrbEph      // Ephemeris data
-		Alm      NavOrbAlm      // Almanac data
-		OtherOrb NavOrbOtherOrb // Other orbit data available
-	} // len: NumSv
+	ITOW_ms   uint32          // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Version   byte            // Message version (0x01 for this version)
+	NumSv     byte            `len:"Sv"` // Number of SVs in the database
+	Reserved1 [2]byte         // Reserved
+	Sv        []*NavOrbSvType // len: NumSv
 }
 
 func (NavOrb) classID() uint16 { return 0x3401 }
+
+type NavOrbSvType struct {
+	GnssId   byte           // GNSS ID
+	SvId     byte           // Satellite ID
+	SvFlag   NavOrbSvFlag   // Information Flags
+	Eph      NavOrbEph      // Ephemeris data
+	Alm      NavOrbAlm      // Almanac data
+	OtherOrb NavOrbOtherOrb // Other orbit data available
+}
 
 type NavOrbSvFlag byte
 
@@ -3804,6 +6405,70 @@ const (
 	NavOrbAnoAopUsability NavOrbOtherOrb = 0x1f // How long the receiver will be able to use the orbit data from now on: 31: The usability period is unknown 30: The usability period is more than 30 days 30 > n > 0: The usability period is between n-1 and n days 0: Data can no longer be used
 	NavOrbType            NavOrbOtherOrb = 0xe0 // Type of orbit data: 0: No orbit data available 1: AssistNow Offline data 2: AssistNow Autonomous data 3-7: Other orbit data
 )
+
+func (v NavOrbSvFlag) String() string {
+	var b []string
+	if v&0x3 != 0 {
+		b = append(b, fmt.Sprintf("Health<%b>", (v&0x3)>>0))
+	}
+	v &^= 0x3
+	if v&0xc != 0 {
+		b = append(b, fmt.Sprintf("Visibility<%b>", (v&0xc)>>2))
+	}
+	v &^= 0xc
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavOrbEph) String() string {
+	var b []string
+	if v&0x1f != 0 {
+		b = append(b, fmt.Sprintf("EphUsability<%b>", (v&0x1f)>>0))
+	}
+	v &^= 0x1f
+	if v&0xe0 != 0 {
+		b = append(b, fmt.Sprintf("EphSource<%b>", (v&0xe0)>>5))
+	}
+	v &^= 0xe0
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavOrbAlm) String() string {
+	var b []string
+	if v&0x1f != 0 {
+		b = append(b, fmt.Sprintf("AlmUsability<%b>", (v&0x1f)>>0))
+	}
+	v &^= 0x1f
+	if v&0xe0 != 0 {
+		b = append(b, fmt.Sprintf("AlmSource<%b>", (v&0xe0)>>5))
+	}
+	v &^= 0xe0
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavOrbOtherOrb) String() string {
+	var b []string
+	if v&0x1f != 0 {
+		b = append(b, fmt.Sprintf("AnoAopUsability<%b>", (v&0x1f)>>0))
+	}
+	v &^= 0x1f
+	if v&0xe0 != 0 {
+		b = append(b, fmt.Sprintf("Type<%b>", (v&0xe0)>>5))
+	}
+	v &^= 0xe0
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-nav-posecef
 
@@ -3912,6 +6577,86 @@ const (
 	NavPvtInvalidLlh NavPvtFlags3 = 0x1 // 1 = Invalid lon, lat, height and hMSL
 )
 
+func (v NavPvtValid) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "ValidDate")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "ValidTime")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "FullyResolved")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "ValidMag")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavPvtFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GnssFixOK")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DiffSoln")
+	}
+	v &^= 0x2
+	if v&0x20 != 0 {
+		b = append(b, "HeadVehValid")
+	}
+	v &^= 0x20
+	if v&0xc0 != 0 {
+		b = append(b, fmt.Sprintf("CarrSoln<%b>", (v&0xc0)>>6))
+	}
+	v &^= 0xc0
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavPvtFlags2) String() string {
+	var b []string
+	if v&0x20 != 0 {
+		b = append(b, "ConfirmedAvai")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "ConfirmedDate")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "ConfirmedTime")
+	}
+	v &^= 0x80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavPvtFlags3) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "InvalidLlh")
+	}
+	v &^= 0x1
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-nav-relposned
 
 // NavRelposned (Periodic/Polled) Relative positioning information in NED frame
@@ -3949,6 +6694,42 @@ const (
 	NavRelposnedRefObsMiss  NavRelposnedFlags = 0x80 // 1 if extrapolated reference observations were used to compute moving baseline solution this epoch (not supported in protocol versions less than 20.3)
 )
 
+func (v NavRelposnedFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GnssFixOK")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DiffSoln")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "RelPosValid")
+	}
+	v &^= 0x4
+	if v&0x18 != 0 {
+		b = append(b, fmt.Sprintf("CarrSoln<%b>", (v&0x18)>>3))
+	}
+	v &^= 0x18
+	if v&0x20 != 0 {
+		b = append(b, "IsMoving")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "RefPosMiss")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "RefObsMiss")
+	}
+	v &^= 0x80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-nav-resetodo
 
 // NavResetodo (Command) Reset odometer
@@ -3965,22 +6746,24 @@ func (NavResetodo) classID() uint16 { return 0x1001 }
 // Class/Id 0x01 0x35 (8 + N*12 bytes)
 // This message displays information about SVs that are either known to be visible or currently tracked by the receiver. All signal related information corresponds to the subset of signals specified in Signal Identifiers.
 type NavSat struct {
-	ITOW_ms   uint32  // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Version   byte    // Message version (0x01 for this version)
-	NumSvs    byte    `len:"Svs"` // Number of satellites
-	Reserved1 [2]byte // Reserved
-	Svs       []*struct {
-		GnssId    byte        // GNSS identifier (see Satellite Numbering) for assignment
-		SvId      byte        // Satellite identifier (see Satellite Numbering) for assignment
-		Cno_dbhz  byte        // [dBHz] Carrier to noise ratio (signal strength)
-		Elev_deg  int8        // [deg] Elevation (range: +/-90), unknown if out of range
-		Azim_deg  int16       // [deg] Azimuth (range 0-360), unknown if elevation is out of range
-		PrRes_me1 int16       // [1e-1 m] Pseudorange residual
-		Flags     NavSatFlags // Bitmask
-	} // len: NumSvs
+	ITOW_ms   uint32           // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Version   byte             // Message version (0x01 for this version)
+	NumSvs    byte             `len:"Svs"` // Number of satellites
+	Reserved1 [2]byte          // Reserved
+	Svs       []*NavSatSvsType // len: NumSvs
 }
 
 func (NavSat) classID() uint16 { return 0x3501 }
+
+type NavSatSvsType struct {
+	GnssId    byte        // GNSS identifier (see Satellite Numbering) for assignment
+	SvId      byte        // Satellite identifier (see Satellite Numbering) for assignment
+	Cno_dbhz  byte        // [dBHz] Carrier to noise ratio (signal strength)
+	Elev_deg  int8        // [deg] Elevation (range: +/-90), unknown if out of range
+	Azim_deg  int16       // [deg] Azimuth (range 0-360), unknown if elevation is out of range
+	PrRes_me1 int16       // [1e-1 m] Pseudorange residual
+	Flags     NavSatFlags // Bitmask
+}
 
 type NavSatFlags uint32
 
@@ -4003,33 +6786,107 @@ const (
 	NavSatDoCorrUsed   NavSatFlags = 0x400000 // 1 = Range rate (Doppler) corrections have been used for a signal in the subset specified in Signal Identifiers
 )
 
+func (v NavSatFlags) String() string {
+	var b []string
+	if v&0x7 != 0 {
+		b = append(b, fmt.Sprintf("QualityInd<%b>", (v&0x7)>>0))
+	}
+	v &^= 0x7
+	if v&0x8 != 0 {
+		b = append(b, "SvUsed")
+	}
+	v &^= 0x8
+	if v&0x30 != 0 {
+		b = append(b, fmt.Sprintf("Health<%b>", (v&0x30)>>4))
+	}
+	v &^= 0x30
+	if v&0x40 != 0 {
+		b = append(b, "DiffCorr")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "Smoothed")
+	}
+	v &^= 0x80
+	if v&0x700 != 0 {
+		b = append(b, fmt.Sprintf("OrbitSource<%b>", (v&0x700)>>8))
+	}
+	v &^= 0x700
+	if v&0x800 != 0 {
+		b = append(b, "EphAvail")
+	}
+	v &^= 0x800
+	if v&0x1000 != 0 {
+		b = append(b, "AlmAvail")
+	}
+	v &^= 0x1000
+	if v&0x2000 != 0 {
+		b = append(b, "AnoAvail")
+	}
+	v &^= 0x2000
+	if v&0x4000 != 0 {
+		b = append(b, "AopAvail")
+	}
+	v &^= 0x4000
+	if v&0x10000 != 0 {
+		b = append(b, "SbasCorrUsed")
+	}
+	v &^= 0x10000
+	if v&0x20000 != 0 {
+		b = append(b, "RtcmCorrUsed")
+	}
+	v &^= 0x20000
+	if v&0x40000 != 0 {
+		b = append(b, "SlasCorrUsed")
+	}
+	v &^= 0x40000
+	if v&0x100000 != 0 {
+		b = append(b, "PrCorrUsed")
+	}
+	v &^= 0x100000
+	if v&0x200000 != 0 {
+		b = append(b, "CrCorrUsed")
+	}
+	v &^= 0x200000
+	if v&0x400000 != 0 {
+		b = append(b, "DoCorrUsed")
+	}
+	v &^= 0x400000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-nav-sbas
 
 // NavSbas (Periodic/Polled) SBAS status data
 // Class/Id 0x01 0x32 (12 + N*12 bytes)
 // This message outputs the status of the SBAS sub system
 type NavSbas struct {
-	ITOW_ms   uint32         // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Geo       byte           // PRN Number of the GEO where correction and integrity data is used from
-	Mode      byte           // SBAS Mode 0 Disabled 1 Enabled integrity 3 Enabled test mode
-	Sys       int8           // SBAS System (WAAS/EGNOS/...) -1 Unknown 0 WAAS 1 EGNOS 2 MSAS 3 GAGAN 16 GPS
-	Service   NavSbasService // SBAS Services available
-	Cnt       byte           `len:"Items"` // Number of SV data following
-	Reserved1 [3]byte        // Reserved
-	Items     []*struct {
-		Svid      byte    // SV ID
-		Flags     byte    // Flags for this SV
-		Udre      byte    // Monitoring status
-		SvSys     byte    // System (WAAS/EGNOS/...) same as SYS
-		SvService byte    // Services available same as SERVICE
-		Reserved2 byte    // Reserved
-		Prc_cm    int16   // [cm] Pseudo Range correction in [cm]
-		Reserved3 [2]byte // Reserved
-		Ic_cm     int16   // [cm] Ionosphere correction in [cm]
-	} // len: Cnt
+	ITOW_ms   uint32              // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Geo       byte                // PRN Number of the GEO where correction and integrity data is used from
+	Mode      byte                // SBAS Mode 0 Disabled 1 Enabled integrity 3 Enabled test mode
+	Sys       int8                // SBAS System (WAAS/EGNOS/...) -1 Unknown 0 WAAS 1 EGNOS 2 MSAS 3 GAGAN 16 GPS
+	Service   NavSbasService      // SBAS Services available
+	Cnt       byte                `len:"Items"` // Number of SV data following
+	Reserved1 [3]byte             // Reserved
+	Items     []*NavSbasItemsType // len: Cnt
 }
 
 func (NavSbas) classID() uint16 { return 0x3201 }
+
+type NavSbasItemsType struct {
+	Svid      byte    // SV ID
+	Flags     byte    // Flags for this SV
+	Udre      byte    // Monitoring status
+	SvSys     byte    // System (WAAS/EGNOS/...) same as SYS
+	SvService byte    // Services available same as SERVICE
+	Reserved2 byte    // Reserved
+	Prc_cm    int16   // [cm] Pseudo Range correction in [cm]
+	Reserved3 [2]byte // Reserved
+	Ic_cm     int16   // [cm] Ionosphere correction in [cm]
+}
 
 type NavSbasService byte
 
@@ -4040,6 +6897,34 @@ const (
 	NavSbasTestmode    NavSbasService = 0x8  // GEO is in test mode
 	NavSbasBad         NavSbasService = 0x10 // Problem with signal or broadcast data indicated
 )
+
+func (v NavSbasService) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Ranging")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Corrections")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "Integrity")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "Testmode")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "Bad")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-nav-slas
 
@@ -4056,16 +6941,18 @@ type NavSlas struct {
 	QzssSvId     byte                // Satellite identifier of the QZS/GEO whose correction data is used (see Satellite Numbering)
 	ServiceFlags NavSlasServiceFlags // Flags regarding SLAS service
 	Cnt          byte                `len:"Items"` // Number of pseudorange corrections following
-	Items        []*struct {
-		GnssId    byte    // GNSS identifier (see Satellite Numbering)
-		SvId      byte    // Satellite identifier (see Satellite Numbering)
-		Reserved2 byte    // Reserved
-		Reserved3 [3]byte // Reserved
-		Prc_cm    int16   // [cm] Pseudorange correction
-	} // len: Cnt
+	Items        []*NavSlasItemsType // len: Cnt
 }
 
 func (NavSlas) classID() uint16 { return 0x4201 }
+
+type NavSlasItemsType struct {
+	GnssId    byte    // GNSS identifier (see Satellite Numbering)
+	SvId      byte    // Satellite identifier (see Satellite Numbering)
+	Reserved2 byte    // Reserved
+	Reserved3 [3]byte // Reserved
+	Prc_cm    int16   // [cm] Pseudorange correction
+}
 
 type NavSlasServiceFlags byte
 
@@ -4074,6 +6961,26 @@ const (
 	NavSlasQzssSvAvailable NavSlasServiceFlags = 0x2 // 1 = Correction providing QZSS SV available
 	NavSlasTestMode        NavSlasServiceFlags = 0x4 // 1 = Currently used QZSS SV in test mode
 )
+
+func (v NavSlasServiceFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GmsAvailable")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "QzssSvAvailable")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "TestMode")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-nav-sol
 
@@ -4110,6 +7017,30 @@ const (
 	NavSolWKNSET   NavSolFlags = 0x4 // 1 = Valid GPS week number (see Time Validity section for details)
 	NavSolTOWSET   NavSolFlags = 0x8 // 1 = Valid GPS time of week (iTOW & fTOW, see Time Validity section for details)
 )
+
+func (v NavSolFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GPSfixOK")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DiffSoln")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "WKNSET")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "TOWSET")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-nav-status
 
@@ -4153,6 +7084,70 @@ const (
 	NavStatusCarrSoln      NavStatusFlags2 = 0xc0 // Carrier phase range solution status: 0: no carrier phase range solution 1: carrier phase range solution with floating ambiguities 2: carrier phase range solution with fixed ambiguities
 )
 
+func (v NavStatusFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GpsFixOk")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DiffSoln")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "WknSet")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "TowSet")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavStatusFixStat) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "DiffCorr")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "CarrSolnValid")
+	}
+	v &^= 0x2
+	if v&0xc0 != 0 {
+		b = append(b, fmt.Sprintf("MapMatching<%b>", (v&0xc0)>>6))
+	}
+	v &^= 0xc0
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavStatusFlags2) String() string {
+	var b []string
+	if v&0x3 != 0 {
+		b = append(b, fmt.Sprintf("PsmState<%b>", (v&0x3)>>0))
+	}
+	v &^= 0x3
+	if v&0x18 != 0 {
+		b = append(b, fmt.Sprintf("SpoofDetState<%b>", (v&0x18)>>3))
+	}
+	v &^= 0x18
+	if v&0xc0 != 0 {
+		b = append(b, fmt.Sprintf("CarrSoln<%b>", (v&0xc0)>>6))
+	}
+	v &^= 0xc0
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-nav-svin
 
 // NavSvin (Periodic/Polled) Survey-in data
@@ -4189,19 +7184,21 @@ type NavSvinfo struct {
 	NumCh       byte                 `len:"Ch"` // Number of channels
 	GlobalFlags NavSvinfoGlobalFlags // Bitmask
 	Reserved1   [2]byte              // Reserved
-	Ch          []*struct {
-		Chn      byte             // Channel number, 255 for SVs not assigned to a channel
-		Svid     byte             // Satellite ID, see Satellite Numbering for assignment
-		Flags    NavSvinfoFlags   // Bitmask
-		Quality  NavSvinfoQuality // Bitfield
-		Cno_dbhz byte             // [dBHz] Carrier to Noise Ratio (Signal Strength)
-		Elev_deg int8             // [deg] Elevation in integer degrees
-		Azim_deg int16            // [deg] Azimuth in integer degrees
-		PrRes_cm int32            // [cm] Pseudo range residual in centimeters
-	} // len: NumCh
+	Ch          []*NavSvinfoChType   // len: NumCh
 }
 
 func (NavSvinfo) classID() uint16 { return 0x3001 }
+
+type NavSvinfoChType struct {
+	Chn      byte             // Channel number, 255 for SVs not assigned to a channel
+	Svid     byte             // Satellite ID, see Satellite Numbering for assignment
+	Flags    NavSvinfoFlags   // Bitmask
+	Quality  NavSvinfoQuality // Bitfield
+	Cno_dbhz byte             // [dBHz] Carrier to Noise Ratio (Signal Strength)
+	Elev_deg int8             // [deg] Elevation in integer degrees
+	Azim_deg int16            // [deg] Azimuth in integer degrees
+	PrRes_cm int32            // [cm] Pseudo range residual in centimeters
+}
 
 type NavSvinfoGlobalFlags byte
 
@@ -4228,6 +7225,70 @@ const (
 	NavSvinfoQualityInd NavSvinfoQuality = 0xf // Signal Quality indicator (range 0..7). The following list shows the meaning of the different QI values: 0: no signal 1: searching signal 2: signal acquired 3: signal detected but unusable 4: code locked and time synchronized 5, 6, 7: code and carrier locked and time synchronized Note: Since IMES signals are not time synchronized, a channel tracking an IMES signal can never reach a quality indicator value of higher than 3.
 )
 
+func (v NavSvinfoGlobalFlags) String() string {
+	var b []string
+	if v&0x7 != 0 {
+		b = append(b, fmt.Sprintf("ChipGen<%b>", (v&0x7)>>0))
+	}
+	v &^= 0x7
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavSvinfoFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "SvUsed")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DiffCorr")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "OrbitAvail")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "OrbitEph")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "Unhealthy")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "OrbitAlm")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "OrbitAop")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "Smoothed")
+	}
+	v &^= 0x80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v NavSvinfoQuality) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("QualityInd<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-nav-timebds
 
 // NavTimebds (Periodic/Polled) BeiDou time solution
@@ -4252,6 +7313,26 @@ const (
 	NavTimebdsWeekValid  NavTimebdsValid = 0x2 // 1 = Valid week (see Time Validity section for details)
 	NavTimebdsLeapSValid NavTimebdsValid = 0x4 // 1 = Valid leap second
 )
+
+func (v NavTimebdsValid) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "SowValid")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "WeekValid")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "LeapSValid")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-nav-timegal
 
@@ -4278,6 +7359,26 @@ const (
 	NavTimegalLeapSValid  NavTimegalValid = 0x4 // 1 = Valid leapS
 )
 
+func (v NavTimegalValid) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "GalTowValid")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "GalWnoValid")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "LeapSValid")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-nav-timeglo
 
 // NavTimeglo (Periodic/Polled) GLONASS time solution
@@ -4302,6 +7403,22 @@ const (
 	NavTimegloDateValid NavTimegloValid = 0x2 // 1 = Valid N4 and Nt (see Time Validity section for details)
 )
 
+func (v NavTimegloValid) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "TodValid")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "DateValid")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-nav-timegps
 
 // NavTimegps (Periodic/Polled) GPS time solution
@@ -4325,6 +7442,26 @@ const (
 	NavTimegpsWeekValid  NavTimegpsValid = 0x2 // 1 = Valid GPS week number (see Time Validity section for details)
 	NavTimegpsLeapSValid NavTimegpsValid = 0x4 // 1 = Valid GPS leap seconds
 )
+
+func (v NavTimegpsValid) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "TowValid")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "WeekValid")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "LeapSValid")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-nav-timels
 
@@ -4355,6 +7492,22 @@ const (
 	NavTimelsValidTimeToLsEvent NavTimelsValid = 0x2 // 1 = Valid time to next leap second event or from the last leap second event if no future event scheduled.
 )
 
+func (v NavTimelsValid) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "ValidCurrLs")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "ValidTimeToLsEvent")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-nav-timeutc
 
 // NavTimeutc (Periodic/Polled) UTC time solution
@@ -4383,6 +7536,30 @@ const (
 	NavTimeutcValidUTC    NavTimeutcValid = 0x4  // 1 = Valid UTC Time
 	NavTimeutcUtcStandard NavTimeutcValid = 0xf0 // UTC standard identifier. 0: Information not available 1: Communications Research Labratory (CRL), Tokyo, Japan 2: National Institute of Standards and Technology (NIST) 3: U.S. Naval Observatory (USNO) 4: International Bureau of Weights and Measures (BIPM) 5: European laboratories 6: Former Soviet Union (SU) 7: National Time Service Center (NTSC), China 15: Unknown
 )
+
+func (v NavTimeutcValid) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "ValidTOW")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "ValidWKN")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "ValidUTC")
+	}
+	v &^= 0x4
+	if v&0xf0 != 0 {
+		b = append(b, fmt.Sprintf("UtcStandard<%b>", (v&0xf0)>>4))
+	}
+	v &^= 0xf0
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-nav-velecef
 
@@ -4424,28 +7601,30 @@ func (NavVelned) classID() uint16 { return 0x1201 }
 // Class/Id 0x02 0x61 (4 + N*44 bytes)
 // This message shows the IMES stations the receiver is currently tracking, their data rate, the signal level, the Doppler (with respect to 1575.4282MHz) and what data (without protocol specific overhead) it has received from these stations so far. This message is sent out at the navigation rate the receiver is currently set to. Therefore it allows users to get an overview on the receiver's current state from the IMES perspective.
 type RxmImes struct {
-	NumTx     byte    `len:"Tx"` // Number of transmitters contained in the message
-	Version   byte    // Message version (0x01 for this version)
-	Reserved1 [2]byte // Reserved
-	Tx        []*struct {
-		Reserved2     byte                // Reserved
-		TxId          byte                // Transmitter identifier
-		Reserved3     [3]byte             // Reserved
-		Cno_dbhz      byte                // [dBHz] Carrier to Noise Ratio (Signal Strength)
-		Reserved4     [2]byte             // Reserved
-		Doppler_hzl12 int32               // [2^-12 Hz] Doppler frequency with respect to 1575. 4282MHz [IIIII.FFF Hz]
-		Position1_1   RxmImesPosition1_1  // Position 1 Frame (part 1/2)
-		Position1_2   RxmImesPosition1_2  // Position 1 Frame (part 2/2)
-		Position2_1   RxmImesPosition2_1  // Position 2 Frame (part 1/3)
-		Lat_deg       int32               // [180*2^-24 deg] Latitude, Position 2 Frame (part 2/3)
-		Lon_deg       int32               // [360*2^-25 deg] Longitude, Position 2 Frame (part 3/3)
-		ShortIdFrame  RxmImesShortIdFrame // Short ID Frame
-		MediumIdLSB   uint32              // Medium ID LSB, Medium ID Frame (part 1/2)
-		MediumId_2    RxmImesMediumId_2   // Medium ID Frame (part 2/2)
-	} // len: NumTx
+	NumTx     byte             `len:"Tx"` // Number of transmitters contained in the message
+	Version   byte             // Message version (0x01 for this version)
+	Reserved1 [2]byte          // Reserved
+	Tx        []*RxmImesTxType // len: NumTx
 }
 
 func (RxmImes) classID() uint16 { return 0x6102 }
+
+type RxmImesTxType struct {
+	Reserved2     byte                // Reserved
+	TxId          byte                // Transmitter identifier
+	Reserved3     [3]byte             // Reserved
+	Cno_dbhz      byte                // [dBHz] Carrier to Noise Ratio (Signal Strength)
+	Reserved4     [2]byte             // Reserved
+	Doppler_hzl12 int32               // [2^-12 Hz] Doppler frequency with respect to 1575. 4282MHz [IIIII.FFF Hz]
+	Position1_1   RxmImesPosition1_1  // Position 1 Frame (part 1/2)
+	Position1_2   RxmImesPosition1_2  // Position 1 Frame (part 2/2)
+	Position2_1   RxmImesPosition2_1  // Position 2 Frame (part 1/3)
+	Lat_deg       int32               // [180*2^-24 deg] Latitude, Position 2 Frame (part 2/3)
+	Lon_deg       int32               // [360*2^-25 deg] Longitude, Position 2 Frame (part 3/3)
+	ShortIdFrame  RxmImesShortIdFrame // Short ID Frame
+	MediumIdLSB   uint32              // Medium ID LSB, Medium ID Frame (part 1/2)
+	MediumId_2    RxmImesMediumId_2   // Medium ID Frame (part 2/2)
+}
 
 type RxmImesPosition1_1 uint32
 
@@ -4486,50 +7665,160 @@ const (
 	RxmImesMediumboundary RxmImesMediumId_2 = 0x4 // Boundary Bit
 )
 
+func (v RxmImesPosition1_1) String() string {
+	var b []string
+	if v&0xff != 0 {
+		b = append(b, fmt.Sprintf("Pos1Floor<%b>", (v&0xff)>>0))
+	}
+	v &^= 0xff
+	if v&0x7fffff00 != 0 {
+		b = append(b, fmt.Sprintf("Pos1Lat<%b>", (v&0x7fffff00)>>8))
+	}
+	v &^= 0x7fffff00
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v RxmImesPosition1_2) String() string {
+	var b []string
+	if v&0xffffff != 0 {
+		b = append(b, fmt.Sprintf("Pos1Lon<%b>", (v&0xffffff)>>0))
+	}
+	v &^= 0xffffff
+	if v&0x1000000 != 0 {
+		b = append(b, "Pos1Valid")
+	}
+	v &^= 0x1000000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v RxmImesPosition2_1) String() string {
+	var b []string
+	if v&0x1ff != 0 {
+		b = append(b, fmt.Sprintf("Pos2Floor<%b>", (v&0x1ff)>>0))
+	}
+	v &^= 0x1ff
+	if v&0x1ffe00 != 0 {
+		b = append(b, fmt.Sprintf("Pos2Alt<%b>", (v&0x1ffe00)>>9))
+	}
+	v &^= 0x1ffe00
+	if v&0x600000 != 0 {
+		b = append(b, fmt.Sprintf("Pos2Acc<%b>", (v&0x600000)>>21))
+	}
+	v &^= 0x600000
+	if v&0x800000 != 0 {
+		b = append(b, "Pos2Valid")
+	}
+	v &^= 0x800000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v RxmImesShortIdFrame) String() string {
+	var b []string
+	if v&0xfff != 0 {
+		b = append(b, fmt.Sprintf("ShortId<%b>", (v&0xfff)>>0))
+	}
+	v &^= 0xfff
+	if v&0x1000 != 0 {
+		b = append(b, "ShortValid")
+	}
+	v &^= 0x1000
+	if v&0x2000 != 0 {
+		b = append(b, "ShortBoundary")
+	}
+	v &^= 0x2000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v RxmImesMediumId_2) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "MediumIdMSB")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "MediumValid")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "Mediumboundary")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-rxm-measx
 
 // RxmMeasx (Periodic/Polled) Satellite measurements for RRLP
 // Class/Id 0x02 0x14 (44 + N*24 bytes)
 // The message payload data is, where possible and appropriate, according to the Radio Resource LCS (Location Services) Protocol (RRLP) [1]. One exception is the satellite and GNSS IDs, which here are given according to the Satellite Numbering scheme. The correct satellites have to be selected and their satellite ID translated accordingly [1, tab. A.10.14] for use in a RRLP Measure Position Response Component. Similarly, the measurement reference time of week has to be forwarded correctly (modulo 14400000 for the 24 LSB GPS measurements variant, modulo 3600000 for the 22 LSB Galileo and Additional Navigation Satelllite Systems (GANSS) measurements variant) of the RRLP measure position response to the SMLC. Reference: [1] ETSI TS 144 031 V11.0.0 (2012-10), Digital cellular telecommunications system (Phase 2+), Location Services (LCS), Mobile Station (MS) - Serving Mobile Location Centre (SMLC), Radio Resource LCS Protocol (RRLP), (3GPP TS 44.031 version 11.0.0 Release 11).
 type RxmMeasx struct {
-	Version         byte          // Message version, currently 0x01
-	Reserved1       [3]byte       // Reserved
-	GpsTOW_ms       uint32        // [ms] GPS measurement reference time
-	GloTOW_ms       uint32        // [ms] GLONASS measurement reference time
-	BdsTOW_ms       uint32        // [ms] BeiDou measurement reference time
-	Reserved2       [4]byte       // Reserved
-	QzssTOW_ms      uint32        // [ms] QZSS measurement reference time
-	GpsTOWacc_msl4  uint16        // [2^-4 ms] GPS measurement reference time accuracy (0xffff = > 4s)
-	GloTOWacc_msl4  uint16        // [2^-4 ms] GLONASS measurement reference time accuracy (0xffff = > 4s)
-	BdsTOWacc_msl4  uint16        // [2^-4 ms] BeiDou measurement reference time accuracy (0xffff = > 4s)
-	Reserved3       [2]byte       // Reserved
-	QzssTOWacc_msl4 uint16        // [2^-4 ms] QZSS measurement reference time accuracy (0xffff = > 4s)
-	NumSV           byte          `len:"SV"` // Number of satellites in repeated block
-	Flags           RxmMeasxFlags // Flags
-	Reserved4       [8]byte       // Reserved
-	SV              []*struct {
-		GnssId          byte    // GNSS ID (see Satellite Numbering)
-		SvId            byte    // Satellite ID (see Satellite Numbering)
-		CNo             byte    // carrier noise ratio (0..63)
-		MpathIndic      byte    // multipath index (according to [1]) (0 = not measured, 1 = low, 2 = medium, 3 = high)
-		DopplerMS_m_s   int32   // [0.04 m/s] Doppler measurement
-		DopplerHz_hz    int32   // [0.2 Hz] Doppler measurement
-		WholeChips      uint16  // whole value of the code phase measurement (0..1022 for GPS)
-		FracChips       uint16  // fractional value of the code phase measurement (0..1023)
-		CodePhase_msl21 uint32  // [2^-21 ms] Code phase
-		IntCodePhase_ms byte    // [ms] Integer (part of the) code phase
-		PseuRangeRMSErr byte    // pseudorange RMS error index (according to [1]) (0..63)
-		Reserved5       [2]byte // Reserved
-	} // len: NumSV
+	Version         byte              // Message version, currently 0x01
+	Reserved1       [3]byte           // Reserved
+	GpsTOW_ms       uint32            // [ms] GPS measurement reference time
+	GloTOW_ms       uint32            // [ms] GLONASS measurement reference time
+	BdsTOW_ms       uint32            // [ms] BeiDou measurement reference time
+	Reserved2       [4]byte           // Reserved
+	QzssTOW_ms      uint32            // [ms] QZSS measurement reference time
+	GpsTOWacc_msl4  uint16            // [2^-4 ms] GPS measurement reference time accuracy (0xffff = > 4s)
+	GloTOWacc_msl4  uint16            // [2^-4 ms] GLONASS measurement reference time accuracy (0xffff = > 4s)
+	BdsTOWacc_msl4  uint16            // [2^-4 ms] BeiDou measurement reference time accuracy (0xffff = > 4s)
+	Reserved3       [2]byte           // Reserved
+	QzssTOWacc_msl4 uint16            // [2^-4 ms] QZSS measurement reference time accuracy (0xffff = > 4s)
+	NumSV           byte              `len:"SV"` // Number of satellites in repeated block
+	Flags           RxmMeasxFlags     // Flags
+	Reserved4       [8]byte           // Reserved
+	SV              []*RxmMeasxSVType // len: NumSV
 }
 
 func (RxmMeasx) classID() uint16 { return 0x1402 }
+
+type RxmMeasxSVType struct {
+	GnssId          byte    // GNSS ID (see Satellite Numbering)
+	SvId            byte    // Satellite ID (see Satellite Numbering)
+	CNo             byte    // carrier noise ratio (0..63)
+	MpathIndic      byte    // multipath index (according to [1]) (0 = not measured, 1 = low, 2 = medium, 3 = high)
+	DopplerMS_m_s   int32   // [0.04 m/s] Doppler measurement
+	DopplerHz_hz    int32   // [0.2 Hz] Doppler measurement
+	WholeChips      uint16  // whole value of the code phase measurement (0..1022 for GPS)
+	FracChips       uint16  // fractional value of the code phase measurement (0..1023)
+	CodePhase_msl21 uint32  // [2^-21 ms] Code phase
+	IntCodePhase_ms byte    // [ms] Integer (part of the) code phase
+	PseuRangeRMSErr byte    // pseudorange RMS error index (according to [1]) (0..63)
+	Reserved5       [2]byte // Reserved
+}
 
 type RxmMeasxFlags byte
 
 const (
 	RxmMeasxTowSet RxmMeasxFlags = 0x3 // TOW set (0 = no, 1 or 2 = yes)
 )
+
+func (v RxmMeasxFlags) String() string {
+	var b []string
+	if v&0x3 != 0 {
+		b = append(b, fmt.Sprintf("TowSet<%b>", (v&0x3)>>0))
+	}
+	v &^= 0x3
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-rxm-pmreq (2 versions)
 
@@ -4548,6 +7837,18 @@ type RxmPmreqFlags uint32
 const (
 	RxmPmreqBackup RxmPmreqFlags = 0x2 // The receiver goes into backup mode for a time period defined by duration, provided that it is not connected to USB
 )
+
+func (v RxmPmreqFlags) String() string {
+	var b []string
+	if v&0x2 != 0 {
+		b = append(b, "Backup")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // RxmPmreq1 (Command) Power management request
 // Class/Id 0x02 0x41 (16 bytes)
@@ -4578,38 +7879,80 @@ const (
 	RxmPmreq1Spics   RxmPmreq1WakeupSources = 0x80 // Wake up the receiver if there is an edge on the SPI CS pin
 )
 
+func (v RxmPmreq1Flags) String() string {
+	var b []string
+	if v&0x2 != 0 {
+		b = append(b, "Backup")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "Force")
+	}
+	v &^= 0x4
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v RxmPmreq1WakeupSources) String() string {
+	var b []string
+	if v&0x8 != 0 {
+		b = append(b, "Uartrx")
+	}
+	v &^= 0x8
+	if v&0x20 != 0 {
+		b = append(b, "Extint0")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "Extint1")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "Spics")
+	}
+	v &^= 0x80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-rxm-rawx
 
 // RxmRawx (Periodic/Polled) Multi-GNSS raw measurements
 // Class/Id 0x02 0x15 (16 + N*32 bytes)
 // This message contains the information needed to be able to generate a RINEX 3 multi-GNSS observation file (see ftp://ftp.igs.org/pub/data/format/). This message contains pseudorange, Doppler, carrier phase, phase lock and signal quality information for GNSS satellites once signals have been synchronized. This message supports all active GNSS. The only difference between this version of the message and the previous version (UBX-RXM-RAWX-DATA0) is the addition of the version field.
 type RxmRawx struct {
-	RcvTow_s   float64        // [s] Measurement time of week in receiver local time approximately aligned to the GPS time system. The receiver local time of week, week number and leap second information can be used to translate the time to other time systems. More information about the difference in time systems can be found in the RINEX 3 format documentation. For a receiver operating in GLONASS only mode, UTC time can be determined by subtracting the leapS field from GPS time regardless of whether the GPS leap seconds are valid.
-	Week_weeks uint16         // [weeks] GPS week number in receiver local time.
-	LeapS_s    int8           // [s] GPS leap seconds (GPS-UTC). This field represents the receiver's best knowledge of the leap seconds offset. A flag is given in the recStat bitfield to indicate if the leap seconds are known.
-	NumMeas    byte           `len:"Meas"` // Number of measurements to follow
-	RecStat    RxmRawxRecStat // Receiver tracking status bitfield
-	Version    byte           // Message version (0x01 for this version)
-	Reserved1  [2]byte        // Reserved
-	Meas       []*struct {
-		PrMes_m        float64        // [m] Pseudorange measurement [m]. GLONASS inter frequency channel delays are compensated with an internal calibration table.
-		CpMes_cycles   float64        // [cycles] Carrier phase measurement [cycles]. The carrier phase initial ambiguity is initialized using an approximate value to make the magnitude of the phase close to the pseudorange measurement. Clock resets are applied to both phase and code measurements in accordance with the RINEX specification.
-		DoMes_hz       float32        // [Hz] Doppler measurement (positive sign for approaching satellites) [Hz]
-		GnssId         byte           // GNSS identifier (see Satellite Numbering for a list of identifiers)
-		SvId           byte           // Satellite identifier (see Satellite Numbering)
-		SigId          byte           // New style signal identifier (see Signal Identifiers).(not supported in protocol versions less than 27)
-		FreqId         byte           // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
-		Locktime_ms    uint16         // [ms] Carrier phase locktime counter (maximum 64500ms)
-		Cno_dbhz       byte           // [dBHz] Carrier-to-noise density ratio (signal strength) [dB-Hz]
-		PrStdev_m      RxmRawxPrStdev // [0.01*2^n m] Estimated pseudorange measurement standard deviation
-		CpStdev_cycles RxmRawxCpStdev // [0.004 cycles] Estimated carrier phase measurement standard deviation (note a raw value of 0x0F indicates the value is invalid)
-		DoStdev_hz     RxmRawxDoStdev // [0.002*2^n Hz] Estimated Doppler measurement standard deviation.
-		TrkStat        RxmRawxTrkStat // Tracking status bitfield (see graphic below )
-		Reserved2      byte           // Reserved
-	} // len: NumMeas
+	RcvTow_s   float64            // [s] Measurement time of week in receiver local time approximately aligned to the GPS time system. The receiver local time of week, week number and leap second information can be used to translate the time to other time systems. More information about the difference in time systems can be found in the RINEX 3 format documentation. For a receiver operating in GLONASS only mode, UTC time can be determined by subtracting the leapS field from GPS time regardless of whether the GPS leap seconds are valid.
+	Week_weeks uint16             // [weeks] GPS week number in receiver local time.
+	LeapS_s    int8               // [s] GPS leap seconds (GPS-UTC). This field represents the receiver's best knowledge of the leap seconds offset. A flag is given in the recStat bitfield to indicate if the leap seconds are known.
+	NumMeas    byte               `len:"Meas"` // Number of measurements to follow
+	RecStat    RxmRawxRecStat     // Receiver tracking status bitfield
+	Version    byte               // Message version (0x01 for this version)
+	Reserved1  [2]byte            // Reserved
+	Meas       []*RxmRawxMeasType // len: NumMeas
 }
 
 func (RxmRawx) classID() uint16 { return 0x1502 }
+
+type RxmRawxMeasType struct {
+	PrMes_m        float64        // [m] Pseudorange measurement [m]. GLONASS inter frequency channel delays are compensated with an internal calibration table.
+	CpMes_cycles   float64        // [cycles] Carrier phase measurement [cycles]. The carrier phase initial ambiguity is initialized using an approximate value to make the magnitude of the phase close to the pseudorange measurement. Clock resets are applied to both phase and code measurements in accordance with the RINEX specification.
+	DoMes_hz       float32        // [Hz] Doppler measurement (positive sign for approaching satellites) [Hz]
+	GnssId         byte           // GNSS identifier (see Satellite Numbering for a list of identifiers)
+	SvId           byte           // Satellite identifier (see Satellite Numbering)
+	SigId          byte           // New style signal identifier (see Signal Identifiers).(not supported in protocol versions less than 27)
+	FreqId         byte           // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
+	Locktime_ms    uint16         // [ms] Carrier phase locktime counter (maximum 64500ms)
+	Cno_dbhz       byte           // [dBHz] Carrier-to-noise density ratio (signal strength) [dB-Hz]
+	PrStdev_m      RxmRawxPrStdev // [0.01*2^n m] Estimated pseudorange measurement standard deviation
+	CpStdev_cycles RxmRawxCpStdev // [0.004 cycles] Estimated carrier phase measurement standard deviation (note a raw value of 0x0F indicates the value is invalid)
+	DoStdev_hz     RxmRawxDoStdev // [0.002*2^n Hz] Estimated Doppler measurement standard deviation.
+	TrkStat        RxmRawxTrkStat // Tracking status bitfield (see graphic below )
+	Reserved2      byte           // Reserved
+}
 
 type RxmRawxRecStat byte
 
@@ -4644,6 +7987,82 @@ const (
 	RxmRawxHalfCyc    RxmRawxTrkStat = 0x4 // Half cycle valid
 	RxmRawxSubHalfCyc RxmRawxTrkStat = 0x8 // Half cycle subtracted from phase
 )
+
+func (v RxmRawxRecStat) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "LeapSec")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "ClkReset")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v RxmRawxPrStdev) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("PrStd<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v RxmRawxCpStdev) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("CpStd<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v RxmRawxDoStdev) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("DoStd<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v RxmRawxTrkStat) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "PrValid")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "CpValid")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "HalfCyc")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "SubHalfCyc")
+	}
+	v &^= 0x8
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-rxm-rlm (2 versions)
 
@@ -4701,26 +8120,44 @@ const (
 	RxmRtcmMsgUsed   RxmRtcmFlags = 0x6 // 2 = RTCM message used successfully by the receiver, 1 = not used, 0 = do not know
 )
 
+func (v RxmRtcmFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "CrcFailed")
+	}
+	v &^= 0x1
+	if v&0x6 != 0 {
+		b = append(b, fmt.Sprintf("MsgUsed<%b>", (v&0x6)>>1))
+	}
+	v &^= 0x6
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-rxm-sfrbx
 
 // RxmSfrbx (Output) Broadcast navigation data subframe
 // Class/Id 0x02 0x13 (8 + N*4 bytes)
 // This message reports a complete subframe of broadcast navigation data decoded from a single signal. The number of data words reported in each message depends on the nature of the signal. See the section on Broadcast Navigation Data for further details.
 type RxmSfrbx struct {
-	GnssId    byte // GNSS identifier (see Satellite Numbering)
-	SvId      byte // Satellite identifier (see Satellite Numbering)
-	Reserved1 byte // Reserved
-	FreqId    byte // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
-	NumWords  byte `len:"Words"` // The number of data words contained in this message (up to 10, for currently supported signals)
-	Chn       byte // The tracking channel number the message was received on
-	Version   byte // Message version, (0x02 for this version)
-	Reserved2 byte // Reserved
-	Words     []*struct {
-		Dwrd uint32 // The data words
-	} // len: NumWords
+	GnssId    byte                 // GNSS identifier (see Satellite Numbering)
+	SvId      byte                 // Satellite identifier (see Satellite Numbering)
+	Reserved1 byte                 // Reserved
+	FreqId    byte                 // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
+	NumWords  byte                 `len:"Words"` // The number of data words contained in this message (up to 10, for currently supported signals)
+	Chn       byte                 // The tracking channel number the message was received on
+	Version   byte                 // Message version, (0x02 for this version)
+	Reserved2 byte                 // Reserved
+	Words     []*RxmSfrbxWordsType // len: NumWords
 }
 
 func (RxmSfrbx) classID() uint16 { return 0x1302 }
+
+type RxmSfrbxWordsType struct {
+	Dwrd uint32 // The data words
+}
 
 // Message ubx-rxm-svsi
 
@@ -4728,20 +8165,22 @@ func (RxmSfrbx) classID() uint16 { return 0x1302 }
 // Class/Id 0x02 0x20 (8 + N*6 bytes)
 // Status of the receiver manager knowledge about GPS Orbit Validity This message has only been retained for backwards compatibility; users are recommended to use the UBX-NAV-ORB message in preference.
 type RxmSvsi struct {
-	ITOW_ms    uint32 // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
-	Week_weeks int16  // [weeks] GPS week number of the navigation epoch
-	NumVis     byte   // Number of visible satellites
-	NumSV      byte   `len:"SV"` // Number of per-SV data blocks following
-	SV         []*struct {
-		Svid   byte          // Satellite ID
-		SvFlag RxmSvsiSvFlag // Information Flags
-		Azim   int16         // Azimuth
-		Elev   int8          // Elevation
-		Age    RxmSvsiAge    // Age of Almanac and Ephemeris:
-	} // len: NumSV
+	ITOW_ms    uint32           // [ms] GPS time of week of the navigation epoch. See the description of iTOW for details.
+	Week_weeks int16            // [weeks] GPS week number of the navigation epoch
+	NumVis     byte             // Number of visible satellites
+	NumSV      byte             `len:"SV"` // Number of per-SV data blocks following
+	SV         []*RxmSvsiSVType // len: NumSV
 }
 
 func (RxmSvsi) classID() uint16 { return 0x2002 }
+
+type RxmSvsiSVType struct {
+	Svid   byte          // Satellite ID
+	SvFlag RxmSvsiSvFlag // Information Flags
+	Azim   int16         // Azimuth
+	Elev   int8          // Elevation
+	Age    RxmSvsiAge    // Age of Almanac and Ephemeris:
+}
 
 type RxmSvsiSvFlag byte
 
@@ -4759,6 +8198,50 @@ const (
 	RxmSvsiAlmAge RxmSvsiAge = 0xf  // Age of ALM in days offset by 4 i.e. the reference time may be in the future: ageOfAlm = (age & 0x0f) - 4
 	RxmSvsiEphAge RxmSvsiAge = 0xf0 // Age of EPH in hours offset by 4. i.e. the reference time may be in the future: ageOfEph = ((age & 0xf0) >> 4) - 4
 )
+
+func (v RxmSvsiSvFlag) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("Ura<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v&0x10 != 0 {
+		b = append(b, "Healthy")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "EphVal")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "AlmVal")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "NotAvail")
+	}
+	v &^= 0x80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v RxmSvsiAge) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("AlmAge<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v&0xf0 != 0 {
+		b = append(b, fmt.Sprintf("EphAge<%b>", (v&0xf0)>>4))
+	}
+	v &^= 0xf0
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-sec-uniqid
 
@@ -4827,31 +8310,49 @@ const (
 	TimHocDifference TimHocFlags = 0x2 // Nature of value: 0: absolute (i.e. relative to 0) 1: relative to current setting
 )
 
+func (v TimHocFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Raw")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Difference")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-tim-smeas
 
 // TimSmeas (Input/Output) Source measurement
 // Class/Id 0x0d 0x13 (12 + N*24 bytes)
 // Frequency and/or phase measurement of synchronization sources. The measurements are relative to the nominal frequency and nominal phase. The receiver reports the measurements on its sync sources using this message. Which measurements are reported can be configured using UBX-CFG-SMGR. The host may report offset of the receiver's outputs with this message as well. The receiver has to be configured using UBX-CFG-SMGR to enable the use of the external measurement messages. Otherwise the receiver will ignore them.
 type TimSmeas struct {
-	Version   byte    // Message version (0x00 for this version)
-	NumMeas   byte    `len:"Meas"` // Number of measurements in repeated block
-	Reserved1 [2]byte // Reserved
-	ITOW_ms   uint32  // [ms] Time of the week
-	Reserved2 [4]byte // Reserved
-	Meas      []*struct {
-		SourceId             byte          // Index of source. SMEAS can provide six measurement sources. The first four sourceId values represent measurements made by the receiver and sent to the host. The first of these with a sourceId value of 0 is a measurement of the internal oscillator against the current receiver time-and-frequency estimate. The internal oscillator is being disciplined against that estimate and this result represents the current offset between the actual and desired internal oscillator states. The next three sourceId values represent frequency and time measurements made by the receiver against the internal oscillator. sourceId 1 represents the GNSS-derived frequency and time compared with the internal oscillator frequency and time. sourceId2 give measurements of a signal coming in on EXTINT0. sourceId 3 corresponds to a similar measurement on EXTINT1. The remaining two of these measurements (sourceId 4 and 5) are made by the host and sent to the receiver. A measurement with sourceId 4 is a measurement by the host of the internal oscillator and sourceId 5 indicates a host measurement of the external oscillator.
-		Flags                TimSmeasFlags // Flags
-		PhaseOffsetFrac_nsl8 int8          // [2^-8 ns] Sub-nanosecond phase offset; the total offset is the sum of phaseOffset and phaseOffsetFrac
-		PhaseUncFrac_nsl8    byte          // [2^-8 ns] Sub-nanosecond phase uncertainty
-		PhaseOffset_ns       int32         // [ns] Phase offset, positive if the source lags accurate phase and negative if the source is early
-		PhaseUnc_ns          uint32        // [ns] Phase uncertainty (one standard deviation)
-		Reserved3            [4]byte       // Reserved
-		FreqOffset_ppbl8     int32         // [2^-8 ppb] Frequency offset, positive if the source frequency is too high, negative if the frequency is too low.
-		FreqUnc_ppbl8        uint32        // [2^-8 ppb] Frequency uncertainty (one standard deviation)
-	} // len: NumMeas
+	Version   byte                // Message version (0x00 for this version)
+	NumMeas   byte                `len:"Meas"` // Number of measurements in repeated block
+	Reserved1 [2]byte             // Reserved
+	ITOW_ms   uint32              // [ms] Time of the week
+	Reserved2 [4]byte             // Reserved
+	Meas      []*TimSmeasMeasType // len: NumMeas
 }
 
 func (TimSmeas) classID() uint16 { return 0x130d }
+
+type TimSmeasMeasType struct {
+	SourceId             byte          // Index of source. SMEAS can provide six measurement sources. The first four sourceId values represent measurements made by the receiver and sent to the host. The first of these with a sourceId value of 0 is a measurement of the internal oscillator against the current receiver time-and-frequency estimate. The internal oscillator is being disciplined against that estimate and this result represents the current offset between the actual and desired internal oscillator states. The next three sourceId values represent frequency and time measurements made by the receiver against the internal oscillator. sourceId 1 represents the GNSS-derived frequency and time compared with the internal oscillator frequency and time. sourceId2 give measurements of a signal coming in on EXTINT0. sourceId 3 corresponds to a similar measurement on EXTINT1. The remaining two of these measurements (sourceId 4 and 5) are made by the host and sent to the receiver. A measurement with sourceId 4 is a measurement by the host of the internal oscillator and sourceId 5 indicates a host measurement of the external oscillator.
+	Flags                TimSmeasFlags // Flags
+	PhaseOffsetFrac_nsl8 int8          // [2^-8 ns] Sub-nanosecond phase offset; the total offset is the sum of phaseOffset and phaseOffsetFrac
+	PhaseUncFrac_nsl8    byte          // [2^-8 ns] Sub-nanosecond phase uncertainty
+	PhaseOffset_ns       int32         // [ns] Phase offset, positive if the source lags accurate phase and negative if the source is early
+	PhaseUnc_ns          uint32        // [ns] Phase uncertainty (one standard deviation)
+	Reserved3            [4]byte       // Reserved
+	FreqOffset_ppbl8     int32         // [2^-8 ppb] Frequency offset, positive if the source frequency is too high, negative if the frequency is too low.
+	FreqUnc_ppbl8        uint32        // [2^-8 ppb] Frequency uncertainty (one standard deviation)
+}
 
 type TimSmeasFlags byte
 
@@ -4859,6 +8360,22 @@ const (
 	TimSmeasFreqValid  TimSmeasFlags = 0x1 // 1 = frequency measurement is valid
 	TimSmeasPhaseValid TimSmeasFlags = 0x2 // 1 = phase measurement is valid
 )
+
+func (v TimSmeasFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "FreqValid")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "PhaseValid")
+	}
+	v &^= 0x2
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-tim-svin
 
@@ -4911,6 +8428,42 @@ const (
 	TimTm2NewRisingEdge  TimTm2Flags = 0x80 // New rising edge detected
 )
 
+func (v TimTm2Flags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "Mode")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Run")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "NewFallingEdge")
+	}
+	v &^= 0x4
+	if v&0x18 != 0 {
+		b = append(b, fmt.Sprintf("TimeBase<%b>", (v&0x18)>>3))
+	}
+	v &^= 0x18
+	if v&0x20 != 0 {
+		b = append(b, "Utc")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "Time")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "NewRisingEdge")
+	}
+	v &^= 0x80
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-tim-tos
 
 // TimTos (Periodic) Time pulse time and frequency data
@@ -4959,6 +8512,62 @@ const (
 	TimTosLockedPulse   TimTosFlags = 0x2000 // 1 = time pulse is locked
 )
 
+func (v TimTosFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "LeapNow")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "LeapSoon")
+	}
+	v &^= 0x2
+	if v&0x4 != 0 {
+		b = append(b, "LeapPositive")
+	}
+	v &^= 0x4
+	if v&0x8 != 0 {
+		b = append(b, "TimeInLimit")
+	}
+	v &^= 0x8
+	if v&0x10 != 0 {
+		b = append(b, "IntOscInLimit")
+	}
+	v &^= 0x10
+	if v&0x20 != 0 {
+		b = append(b, "ExtOscInLimit")
+	}
+	v &^= 0x20
+	if v&0x40 != 0 {
+		b = append(b, "GnssTimeValid")
+	}
+	v &^= 0x40
+	if v&0x80 != 0 {
+		b = append(b, "UTCTimeValid")
+	}
+	v &^= 0x80
+	if v&0x700 != 0 {
+		b = append(b, fmt.Sprintf("DiscSrc<%b>", (v&0x700)>>8))
+	}
+	v &^= 0x700
+	if v&0x800 != 0 {
+		b = append(b, "Raim")
+	}
+	v &^= 0x800
+	if v&0x1000 != 0 {
+		b = append(b, "CohPulse")
+	}
+	v &^= 0x1000
+	if v&0x2000 != 0 {
+		b = append(b, "LockedPulse")
+	}
+	v &^= 0x2000
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
 // Message ubx-tim-tp
 
 // TimTp (Periodic/Polled) Time pulse time data
@@ -4990,6 +8599,46 @@ const (
 	TimTpTimeRefGnss TimTpRefInfo = 0xf  // GNSS reference information. Only valid if time base is GNSS (timeBase=0). 0 = GPS 1 = GLONASS 2 = BeiDou 3 = Galileo 15 = Unknown
 	TimTpUtcStandard TimTpRefInfo = 0xf0 // UTC standard identifier. Only valid if time base is UTC (timeBase=1). 0 = Information not available 1 = Communications Research Laboratory (CRL), Tokyo, Japan 2 = National Institute of Standards and Technology (NIST) 3 = U.S. Naval Observatory (USNO) 4 = International Bureau of Weights and Measures (BIPM) 5 = European laboratories 6 = Former Soviet Union (SU) 7 = National Time Service Center (NTSC), China 15 = Unknown
 )
+
+func (v TimTpFlags) String() string {
+	var b []string
+	if v&0x1 != 0 {
+		b = append(b, "TimeBase")
+	}
+	v &^= 0x1
+	if v&0x2 != 0 {
+		b = append(b, "Utc")
+	}
+	v &^= 0x2
+	if v&0xc != 0 {
+		b = append(b, fmt.Sprintf("Raim<%b>", (v&0xc)>>2))
+	}
+	v &^= 0xc
+	if v&0x10 != 0 {
+		b = append(b, "QErrInvalid")
+	}
+	v &^= 0x10
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
+
+func (v TimTpRefInfo) String() string {
+	var b []string
+	if v&0xf != 0 {
+		b = append(b, fmt.Sprintf("TimeRefGnss<%b>", (v&0xf)>>0))
+	}
+	v &^= 0xf
+	if v&0xf0 != 0 {
+		b = append(b, fmt.Sprintf("UtcStandard<%b>", (v&0xf0)>>4))
+	}
+	v &^= 0xf0
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-tim-vcocal (3 versions)
 
@@ -5054,6 +8703,18 @@ type TimVrfyFlags byte
 const (
 	TimVrfySrc TimVrfyFlags = 0x7 // Aiding time source 0 = no time aiding done 2 = source was RTC 3 = source was assistance data
 )
+
+func (v TimVrfyFlags) String() string {
+	var b []string
+	if v&0x7 != 0 {
+		b = append(b, fmt.Sprintf("Src<%b>", (v&0x7)>>0))
+	}
+	v &^= 0x7
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b, ",")
+}
 
 // Message ubx-upd-sos (5 versions)
 

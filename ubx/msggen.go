@@ -83,6 +83,9 @@ func (b *BitDef) Mask() string {
 	return fmt.Sprintf("0x%x", 1<<i)
 }
 
+func (b *BitDef) Shift() string { return strings.Split(b.Index, ":")[0] }
+func (b *BitDef) OneBit() bool  { return len(strings.Split(b.Index, ":")) == 1 }
+
 type byNameAndLength []*Message
 
 func (v byNameAndLength) Len() int      { return len(v) }

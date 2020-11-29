@@ -1,5 +1,10 @@
 package ubx
 
+import (
+	"fmt"
+	"strings"
+)
+
 {{range $k, $v :=  .}}
 // Message {{$k}} {{if gt (len $v) 1 }}({{len $v}} versions){{end}}
 
@@ -27,11 +32,7 @@ type {{.TypeName}} struct {
 		{{- if .IsString}}
 		{{.FieldName}} string
 		{{- else}}
-		{{.FieldName}} []*struct{
-		{{- range .Nested}}
-			{{template "field" .}}
-		{{- end}}
-		} // len: {{.LenField|title}}
+		{{.FieldName}} []*{{.Message.TypeName}}{{.FieldName}}Type // len: {{.LenField|title}}
 		{{- end}}
 	{{- end}}
 {{- end}}
@@ -41,9 +42,24 @@ type {{.TypeName}} struct {
 func ({{.TypeName}}) classID() uint16 { return {{printf "0x%02x%02x" .Id .Class }} }
 
 {{- range .Blocks}}
+{{- if eq .Cardinality "repeated"}}
+		{{- if .IsString}}
+		{{- else}}
+
+type {{.Message.TypeName}}{{.FieldName}}Type struct {
+		{{- range .Nested}}
+			{{template "field" .}}
+		{{- end}}
+}
+		{{- end}}
+	{{- end}}
+{{- end}}
+
+{{- range .Blocks}}
 	{{- if eq .Cardinality ""}}
 		{{- block "enums" .}}
 			{{- if .Bitfield}}
+
 type {{.Message.TypeName}}{{.Name | title}} {{.FieldType}}
 const (
 {{- range .Bitfield}}
@@ -64,6 +80,45 @@ const (
 		{{- end}}
 	{{- end}}
 {{- end}}
+
+{{- range .Blocks}}
+	{{- if eq .Cardinality ""}}
+		{{- block "strings" .}}
+			{{- if .Bitfield}}
+
+func (v {{.Message.TypeName}}{{.Name | title}}) String() string {
+	var b []string
+{{- range .Bitfield}}
+{{- if .Name}}
+	if (v & {{.Mask}} != 0 ) {
+		{{- if .OneBit}}
+		b = append(b, "{{.Name | title}}")
+		{{- else}}
+		b = append(b, fmt.Sprintf("{{.Name | title}}<%b>", (v & {{.Mask}})>>{{.Shift}}))
+		{{- end}}
+	}
+	v &^= {{.Mask}}
+{{- end}}
+{{- end}}
+	if v != 0 {
+		b = append(b, fmt.Sprintf("%x", v))
+	}
+	return strings.Join(b,",")
+}
+			{{- end}}
+		{{- end}}
+	{{- else if eq .Cardinality "optional"}}
+		{{- range .Nested}}
+		{{- template "strings" .}}
+		{{- end}}
+	{{- else if eq .Cardinality "repeated"}}
+		{{- range .Nested}}
+		{{- template "strings" .}}
+		{{- end}}
+	{{- end}}
+{{- end}}
+
+
 {{- end}}
 {{- end}}
 
