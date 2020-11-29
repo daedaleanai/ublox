@@ -55,7 +55,7 @@ func Decode(frame []byte) (msg Message, err error) {
 		return nil, errInvalidChkSum
 	}
 
-	msg = mkMsg(header.ClassID, header.Length)
+	msg = mkMsg(header.ClassID, header.Length, frame[6:len(frame)-2])
 
 	if msg != nil {
 		err = decode(bytes.NewReader(frame[6:len(frame)-2]), msg)

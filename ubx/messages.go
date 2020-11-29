@@ -764,32 +764,35 @@ const (
 	CfgNav5Utc            CfgNav5Mask = 0x400 // Apply UTC settings (not supported in protocol versions less than 16).
 )
 
-// Message ubx-cfg-navx5 (3 versions)
+// Message ubx-cfg-navx5 (2 versions)
 
 // CfgNavx5 (Get/set) Navigation engine expert settings
 // Class/Id 0x06 0x23 40 (40 + N*0) bytes
-// -
+// (Polling will send back a version 3 message in protocol versions 19.2).
 type CfgNavx5 struct {
-	Version        uint16         // Message version (0x0000 for this version)
-	Mask1          CfgNavx5Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Mask2          CfgNavx5Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Reserved1      [2]byte        // Reserved
-	MinSVs         byte           // [#SVs] Minimum number of satellites for navigation
-	MaxSVs         byte           // [#SVs] Maximum number of satellites for navigation
-	MinCNO_dbhz    byte           // [dBHz] Minimum satellite signal level for navigation
-	Reserved2      byte           // Reserved
-	IniFix3D       byte           // 1 = initial fix must be 3D
-	Reserved3      [2]byte        // Reserved
-	AckAiding      byte           // 1 = issue acknowledgements for assistance message input
-	WknRollover    uint16         // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
-	Reserved4      [6]byte        // Reserved
-	UsePPP         byte           // 1 = use Precise Point Positioning (only available with the PPP product variant)
-	AopCfg         CfgNavx5AopCfg // AssistNow Autonomous configuration
-	Reserved5      [2]byte        // Reserved
-	AopOrbMaxErr_m uint16         // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
-	Reserved6      [4]byte        // Reserved
-	Reserved7      [3]byte        // Reserved
-	UseAdr         byte           // Only supported on certain products Enable/disable ADR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
+	Version               uint16         // Message version (0x0002 for this version)
+	Mask1                 CfgNavx5Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Mask2                 CfgNavx5Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
+	Reserved1             [2]byte        // Reserved
+	MinSVs                byte           // [#SVs] Minimum number of satellites for navigation
+	MaxSVs                byte           // [#SVs] Maximum number of satellites for navigation
+	MinCNO_dbhz           byte           // [dBHz] Minimum satellite signal level for navigation
+	Reserved2             byte           // Reserved
+	IniFix3D              byte           // 1 = initial fix must be 3D
+	Reserved3             [2]byte        // Reserved
+	AckAiding             byte           // 1 = issue acknowledgements for assistance message input
+	WknRollover           uint16         // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
+	SigAttenCompMode_dbhz byte           // [dBHz] Only supported on certain products Permanently attenuated signal compensation (0 = disabled, 255 = automatic, 1..63 = maximum expected C/N0 value)
+	Reserved4             byte           // Reserved
+	Reserved5             [2]byte        // Reserved
+	Reserved6             [2]byte        // Reserved
+	UsePPP                byte           // 1 = use Precise Point Positioning (only available with the PPP product variant)
+	AopCfg                CfgNavx5AopCfg // AssistNow Autonomous configuration
+	Reserved7             [2]byte        // Reserved
+	AopOrbMaxErr_m        uint16         // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
+	Reserved8             [4]byte        // Reserved
+	Reserved9             [3]byte        // Reserved
+	UseAdr                byte           // Only supported on certain products Enable/disable ADR/UDR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
 }
 
 func (CfgNavx5) classID() uint16 { return 0x2306 }
@@ -809,7 +812,8 @@ const (
 type CfgNavx5Mask2 uint32
 
 const (
-	CfgNavx5Adr CfgNavx5Mask2 = 0x40 // Apply ADR sensor fusion on/off setting (useAdr flag)
+	CfgNavx5Adr          CfgNavx5Mask2 = 0x40 // Apply ADR/UDR sensor fusion on/off setting (useAdr flag)
+	CfgNavx5SigAttenComp CfgNavx5Mask2 = 0x80 // Only supported on certain products Apply signal attenuation compensation feature settings
 )
 
 type CfgNavx5AopCfg byte
@@ -819,10 +823,10 @@ const (
 )
 
 // CfgNavx51 (Get/set) Navigation engine expert settings
-// Class/Id 0x06 0x23 40 (40 + N*0) bytes
-// (Polling will send back a version 3 message in protocol versions 19.2).
+// Class/Id 0x06 0x23 44 (44 + N*0) bytes
+// -
 type CfgNavx51 struct {
-	Version               uint16          // Message version (0x0002 for this version)
+	Version               uint16          // Message version (0x0003 for this version)
 	Mask1                 CfgNavx51Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
 	Mask2                 CfgNavx51Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
 	Reserved1             [2]byte         // Reserved
@@ -845,6 +849,8 @@ type CfgNavx51 struct {
 	Reserved8             [4]byte         // Reserved
 	Reserved9             [3]byte         // Reserved
 	UseAdr                byte            // Only supported on certain products Enable/disable ADR/UDR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
+	Reserved10            [2]byte         // Reserved
+	Reserved11            [2]byte         // Reserved
 }
 
 func (CfgNavx51) classID() uint16 { return 0x2306 }
@@ -872,64 +878,6 @@ type CfgNavx51AopCfg byte
 
 const (
 	CfgNavx51UseAOP CfgNavx51AopCfg = 0x1 // 1 = enable AssistNow Autonomous
-)
-
-// CfgNavx52 (Get/set) Navigation engine expert settings
-// Class/Id 0x06 0x23 44 (44 + N*0) bytes
-// -
-type CfgNavx52 struct {
-	Version               uint16          // Message version (0x0003 for this version)
-	Mask1                 CfgNavx52Mask1  // First parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Mask2                 CfgNavx52Mask2  // Second parameters bitmask. Only the flagged parameters will be applied, unused bits must be set to 0.
-	Reserved1             [2]byte         // Reserved
-	MinSVs                byte            // [#SVs] Minimum number of satellites for navigation
-	MaxSVs                byte            // [#SVs] Maximum number of satellites for navigation
-	MinCNO_dbhz           byte            // [dBHz] Minimum satellite signal level for navigation
-	Reserved2             byte            // Reserved
-	IniFix3D              byte            // 1 = initial fix must be 3D
-	Reserved3             [2]byte         // Reserved
-	AckAiding             byte            // 1 = issue acknowledgements for assistance message input
-	WknRollover           uint16          // GPS week rollover number; GPS week numbers will be set correctly from this week up to 1024 weeks after this week. Setting this to 0 reverts to firmware default.
-	SigAttenCompMode_dbhz byte            // [dBHz] Only supported on certain products Permanently attenuated signal compensation (0 = disabled, 255 = automatic, 1..63 = maximum expected C/N0 value)
-	Reserved4             byte            // Reserved
-	Reserved5             [2]byte         // Reserved
-	Reserved6             [2]byte         // Reserved
-	UsePPP                byte            // 1 = use Precise Point Positioning (only available with the PPP product variant)
-	AopCfg                CfgNavx52AopCfg // AssistNow Autonomous configuration
-	Reserved7             [2]byte         // Reserved
-	AopOrbMaxErr_m        uint16          // [m] Maximum acceptable (modeled) AssistNow Autonomous orbit error (valid range = 5..1000, or 0 = reset to firmware default)
-	Reserved8             [4]byte         // Reserved
-	Reserved9             [3]byte         // Reserved
-	UseAdr                byte            // Only supported on certain products Enable/disable ADR/UDR sensor fusion (if 0: sensor fusion is disabled - if 1: sensor fusion is enabled).
-	Reserved10            [2]byte         // Reserved
-	Reserved11            [2]byte         // Reserved
-}
-
-func (CfgNavx52) classID() uint16 { return 0x2306 }
-
-type CfgNavx52Mask1 uint16
-
-const (
-	CfgNavx52MinMax       CfgNavx52Mask1 = 0x4    // 1 = apply min/max SVs settings
-	CfgNavx52MinCno       CfgNavx52Mask1 = 0x8    // 1 = apply minimum C/N0 setting
-	CfgNavx52Initial3dfix CfgNavx52Mask1 = 0x40   // 1 = apply initial 3D fix settings
-	CfgNavx52WknRoll      CfgNavx52Mask1 = 0x200  // 1 = apply GPS weeknumber rollover settings
-	CfgNavx52AckAid       CfgNavx52Mask1 = 0x400  // 1 = apply assistance acknowledgement settings
-	CfgNavx52Ppp          CfgNavx52Mask1 = 0x2000 // 1 = apply usePPP flag
-	CfgNavx52Aop          CfgNavx52Mask1 = 0x4000 // 1 = apply aopCfg (useAOP flag) and aopOrbMaxErr settings (AssistNow Autonomous)
-)
-
-type CfgNavx52Mask2 uint32
-
-const (
-	CfgNavx52Adr          CfgNavx52Mask2 = 0x40 // Apply ADR/UDR sensor fusion on/off setting (useAdr flag)
-	CfgNavx52SigAttenComp CfgNavx52Mask2 = 0x80 // Only supported on certain products Apply signal attenuation compensation feature settings
-)
-
-type CfgNavx52AopCfg byte
-
-const (
-	CfgNavx52UseAOP CfgNavx52AopCfg = 0x1 // 1 = enable AssistNow Autonomous
 )
 
 // Message ubx-cfg-nmea (3 versions)
@@ -1096,7 +1044,7 @@ const (
 	CfgOdoProfile CfgOdoOdoCfg = 0x7 // Profile type (0=running, 1=cycling, 2=swimming, 3=car, 4=custom)
 )
 
-// Message ubx-cfg-pm2 (3 versions)
+// Message ubx-cfg-pm2 (2 versions)
 
 // CfgPm2 (Get/set) Extended power management configuration
 // Class/Id 0x06 0x3b 44 (44 + N*0) bytes
@@ -1135,46 +1083,11 @@ const (
 // Class/Id 0x06 0x3b 48 (48 + N*0) bytes
 // This feature is not supported for either the ADR or FTS products. -
 type CfgPm21 struct {
-	Version               byte         // Message version (0x02 for this version) Note: the message version number is the same as for protocol version 23.01; please select correct message version based on the protocol version supported by your firmware.
-	Reserved1             byte         // Reserved
-	MaxStartupStateDur_s  byte         // [s] Maximum time to spend in Acquisition state. If 0: bound disabled (see maxStartupStateDur) (not supported in protocol versions less than 17).
-	Reserved2             byte         // Reserved
-	Flags                 CfgPm21Flags // PSM configuration flags
-	UpdatePeriod_ms       uint32       // [ms] Position update period. If set to 0, the receiver will never retry a fix and it will wait for external events
-	SearchPeriod_ms       uint32       // [ms] Acquisition retry period if previously failed. If set to 0, the receiver will never retry a startup
-	GridOffset_ms         uint32       // [ms] Grid offset relative to GPS start of week
-	OnTime_s              uint16       // [s] Time to stay in Tracking state
-	MinAcqTime_s          uint16       // [s] minimal search time
-	Reserved3             [20]byte     // Reserved
-	ExtintInactivityMs_ms uint32       // [ms] inactivity time out on EXTINT pin if enabled
-}
-
-func (CfgPm21) classID() uint16 { return 0x3b06 }
-
-type CfgPm21Flags uint32
-
-const (
-	CfgPm21ExtintSel      CfgPm21Flags = 0x10    // EXTINT pin select 0 EXTINT0 1 EXTINT1
-	CfgPm21ExtintWake     CfgPm21Flags = 0x20    // EXTINT Pin Control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
-	CfgPm21ExtintBackup   CfgPm21Flags = 0x40    // EXTINT Pin Control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
-	CfgPm21ExtintInactive CfgPm21Flags = 0x80    // EXTINT Pin Control 0 disabled 1 enabled, force backup in case EXTINT pin is inactive for time longer than extintIncactivityMs
-	CfgPm21LimitPeakCurr  CfgPm21Flags = 0x300   // Limit Peak Current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
-	CfgPm21WaitTimeFix    CfgPm21Flags = 0x400   // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time
-	CfgPm21UpdateRTC      CfgPm21Flags = 0x800   // Update Real Time Clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC.
-	CfgPm21UpdateEPH      CfgPm21Flags = 0x1000  // Update Ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data
-	CfgPm21DoNotEnterOff  CfgPm21Flags = 0x10000 // Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters (Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead
-	CfgPm21Mode           CfgPm21Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
-)
-
-// CfgPm22 (Get/set) Extended power management configuration
-// Class/Id 0x06 0x3b 48 (48 + N*0) bytes
-// This feature is not supported for either the ADR or FTS products. -
-type CfgPm22 struct {
 	Version               byte         // Message version (0x02 for this version) Note: the message version number is the same as for protocol versions 18 up to 22; please select correct message version based on the protocol version supported by your firmware.
 	Reserved1             byte         // Reserved
 	MaxStartupStateDur_s  byte         // [s] Maximum time to spend in Acquisition state. If 0: bound disabled. (see maxStartupStateDur) (not supported in protocol versions 23 to 23.01).
 	Reserved2             byte         // Reserved
-	Flags                 CfgPm22Flags // PSM configuration flags
+	Flags                 CfgPm21Flags // PSM configuration flags
 	UpdatePeriod_ms       uint32       // [ms] Position update period. If set to 0, the receiver will never retry a fix and it will wait for external events .
 	SearchPeriod_ms       uint32       // [ms] Acquisition retry period if previously failed. If set to 0, the receiver will never retry a startup. (not supported in protocol versions 23 to 23.01).
 	GridOffset_ms         uint32       // [ms] Grid offset relative to GPS start of week (not supported in protocol versions 23 to 23.01).
@@ -1184,22 +1097,22 @@ type CfgPm22 struct {
 	ExtintInactivityMs_ms uint32       // [ms] inactivity time out on EXTINT pin if enabled
 }
 
-func (CfgPm22) classID() uint16 { return 0x3b06 }
+func (CfgPm21) classID() uint16 { return 0x3b06 }
 
-type CfgPm22Flags uint32
+type CfgPm21Flags uint32
 
 const (
-	CfgPm22OptTarget      CfgPm22Flags = 0xe     // Optimization target 000 performance (default) 001 power save 010 reserved 011 reserved 100 reserved 101 reserved 110 reserved 111 reserved
-	CfgPm22ExtintSel      CfgPm22Flags = 0x10    // EXTINT pin select 0 EXTINT0 1 EXTINT1
-	CfgPm22ExtintWake     CfgPm22Flags = 0x20    // EXTINT pin control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
-	CfgPm22ExtintBackup   CfgPm22Flags = 0x40    // EXTINT pin control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
-	CfgPm22ExtintInactive CfgPm22Flags = 0x80    // EXTINT pin control 0 disabled 1 enabled, force backup in case EXTINT pin is inactive for time longer than extintIncactivityMs
-	CfgPm22LimitPeakCurr  CfgPm22Flags = 0x300   // Limit peak current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
-	CfgPm22WaitTimeFix    CfgPm22Flags = 0x400   // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time (not supported in protocol versions 23 to 23.01).
-	CfgPm22UpdateRTC      CfgPm22Flags = 0x800   // Update real time clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC. (not supported in protocol versions 23 to 23.01, and 32+).
-	CfgPm22UpdateEPH      CfgPm22Flags = 0x1000  // Update ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data.
-	CfgPm22DoNotEnterOff  CfgPm22Flags = 0x10000 // Behavior of receiver in case of no fix Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters (Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead (not supported in protocol versions 23 to 23.01).
-	CfgPm22Mode           CfgPm22Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) (not supported in protocol versions 23 to 23.01) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
+	CfgPm21OptTarget      CfgPm21Flags = 0xe     // Optimization target 000 performance (default) 001 power save 010 reserved 011 reserved 100 reserved 101 reserved 110 reserved 111 reserved
+	CfgPm21ExtintSel      CfgPm21Flags = 0x10    // EXTINT pin select 0 EXTINT0 1 EXTINT1
+	CfgPm21ExtintWake     CfgPm21Flags = 0x20    // EXTINT pin control 0 disabled 1 enabled, keep receiver awake as long as selected EXTINT pin is 'high'
+	CfgPm21ExtintBackup   CfgPm21Flags = 0x40    // EXTINT pin control 0 disabled 1 enabled, force receiver into BACKUP mode when selected EXTINT pin is 'low'
+	CfgPm21ExtintInactive CfgPm21Flags = 0x80    // EXTINT pin control 0 disabled 1 enabled, force backup in case EXTINT pin is inactive for time longer than extintIncactivityMs
+	CfgPm21LimitPeakCurr  CfgPm21Flags = 0x300   // Limit peak current 00 disabled 01 enabled, peak current is limited 10 reserved 11 reserved
+	CfgPm21WaitTimeFix    CfgPm21Flags = 0x400   // Wait for Timefix (see waitTimeFix) 0 wait for normal fix OK before starting on time 1 wait for time fix OK before starting on time (not supported in protocol versions 23 to 23.01).
+	CfgPm21UpdateRTC      CfgPm21Flags = 0x800   // Update real time clock (see updateRTC) 0 do not wake up to update RTC. RTC is updated during normal on-time. 1 update RTC. The receiver adds extra wake-up cycles to update the RTC. (not supported in protocol versions 23 to 23.01, and 32+).
+	CfgPm21UpdateEPH      CfgPm21Flags = 0x1000  // Update ephemeris (see updateEPH) 0 do not wake up to update Ephemeris data 1 update Ephemeris. The receiver adds extra wake-up cycles to update the Ephemeris data.
+	CfgPm21DoNotEnterOff  CfgPm21Flags = 0x10000 // Behavior of receiver in case of no fix Behavior of receiver in case of no fix (see doNotEnterOff) 0 receiver enters (Inactive) Awaiting next search state 1 receiver does not enter (Inactive) Awaiting next search state but keeps trying to acquire a fix instead (not supported in protocol versions 23 to 23.01).
+	CfgPm21Mode           CfgPm21Flags = 0x60000 // Mode of operation (see mode) 00 ON/OFF operation (PSMOO) (not supported in protocol versions 23 to 23.01) 01 cyclic tracking operation (PSMCT) 10 reserved 11 reserved
 )
 
 // Message ubx-cfg-pms
@@ -1511,27 +1424,17 @@ const (
 	CfgRstAop    CfgRstNavBbrMask = 0x8000 // Autonomous orbit parameters
 )
 
-// Message ubx-cfg-rxm (2 versions)
+// Message ubx-cfg-rxm
 
 // CfgRxm (Get/set) RXM configuration
 // Class/Id 0x06 0x11 2 (2 + N*0) bytes
-// For a detailed description see section Power management in Integration manual Note that Power save mode cannot be selected when the receiver is configured to process GLONASS signals (using UBX-CFG-GNSS).
-type CfgRxm struct {
-	Reserved1 byte // Reserved
-	LpMode    byte // Low power mode 0: Continuous mode 1: Power save mode 4: Continuous mode Note that for receivers with protocol versions larger or equal to 14, both Low power mode settings 0 and 4 configure the receiver to Continuous mode.
-}
-
-func (CfgRxm) classID() uint16 { return 0x1106 }
-
-// CfgRxm1 (Get/set) RXM configuration
-// Class/Id 0x06 0x11 2 (2 + N*0) bytes
 // For a detailed description see section Power Management.
-type CfgRxm1 struct {
+type CfgRxm struct {
 	Reserved1 byte // Reserved
 	LpMode    byte // Low power mode 0: Continuous mode 1: Power save mode 4: Continuous mode
 }
 
-func (CfgRxm1) classID() uint16 { return 0x1106 }
+func (CfgRxm) classID() uint16 { return 0x1106 }
 
 // Message ubx-cfg-sbas
 
@@ -4675,25 +4578,26 @@ const (
 	RxmPmreq1Spics   RxmPmreq1WakeupSources = 0x80 // Wake up the receiver if there is an edge on the SPI CS pin
 )
 
-// Message ubx-rxm-rawx (2 versions)
+// Message ubx-rxm-rawx
 
-// RxmRawx (Periodic/Polled) Multi-GNSS raw measurement data
+// RxmRawx (Periodic/Polled) Multi-GNSS raw measurements
 // Class/Id 0x02 0x15 16 + 32*numMeas (16 + N*32) bytes
-// This message contains the information needed to be able to generate a RINEX 3 multi-GNSS observation file (see ftp://ftp.igs.org/pub/data/format/). This message contains pseudorange, Doppler, carrier phase, phase lock and signal quality information for GNSS satellites once signals have been synchronized. This message supports all active GNSS.
+// This message contains the information needed to be able to generate a RINEX 3 multi-GNSS observation file (see ftp://ftp.igs.org/pub/data/format/). This message contains pseudorange, Doppler, carrier phase, phase lock and signal quality information for GNSS satellites once signals have been synchronized. This message supports all active GNSS. The only difference between this version of the message and the previous version (UBX-RXM-RAWX-DATA0) is the addition of the version field.
 type RxmRawx struct {
 	RcvTow_s   float64        // [s] Measurement time of week in receiver local time approximately aligned to the GPS time system. The receiver local time of week, week number and leap second information can be used to translate the time to other time systems. More information about the difference in time systems can be found in the RINEX 3 format documentation. For a receiver operating in GLONASS only mode, UTC time can be determined by subtracting the leapS field from GPS time regardless of whether the GPS leap seconds are valid.
 	Week_weeks uint16         // [weeks] GPS week number in receiver local time.
 	LeapS_s    int8           // [s] GPS leap seconds (GPS-UTC). This field represents the receiver's best knowledge of the leap seconds offset. A flag is given in the recStat bitfield to indicate if the leap seconds are known.
 	NumMeas    byte           `len:"Meas"` // Number of measurements to follow
 	RecStat    RxmRawxRecStat // Receiver tracking status bitfield
-	Reserved1  [3]byte        // Reserved
+	Version    byte           // Message version (0x01 for this version)
+	Reserved1  [2]byte        // Reserved
 	Meas       []*struct {
 		PrMes_m        float64        // [m] Pseudorange measurement [m]. GLONASS inter frequency channel delays are compensated with an internal calibration table.
 		CpMes_cycles   float64        // [cycles] Carrier phase measurement [cycles]. The carrier phase initial ambiguity is initialized using an approximate value to make the magnitude of the phase close to the pseudorange measurement. Clock resets are applied to both phase and code measurements in accordance with the RINEX specification.
 		DoMes_hz       float32        // [Hz] Doppler measurement (positive sign for approaching satellites) [Hz]
 		GnssId         byte           // GNSS identifier (see Satellite Numbering for a list of identifiers)
 		SvId           byte           // Satellite identifier (see Satellite Numbering)
-		Reserved2      byte           // Reserved
+		SigId          byte           // New style signal identifier (see Signal Identifiers).(not supported in protocol versions less than 27)
 		FreqId         byte           // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
 		Locktime_ms    uint16         // [ms] Carrier phase locktime counter (maximum 64500ms)
 		Cno_dbhz       byte           // [dBHz] Carrier-to-noise density ratio (signal strength) [dB-Hz]
@@ -4701,7 +4605,7 @@ type RxmRawx struct {
 		CpStdev_cycles RxmRawxCpStdev // [0.004 cycles] Estimated carrier phase measurement standard deviation (note a raw value of 0x0F indicates the value is invalid)
 		DoStdev_hz     RxmRawxDoStdev // [0.002*2^n Hz] Estimated Doppler measurement standard deviation.
 		TrkStat        RxmRawxTrkStat // Tracking status bitfield (see graphic below )
-		Reserved3      byte           // Reserved
+		Reserved2      byte           // Reserved
 	} // len: NumMeas
 }
 
@@ -4739,71 +4643,6 @@ const (
 	RxmRawxCpValid    RxmRawxTrkStat = 0x2 // Carrier phase valid
 	RxmRawxHalfCyc    RxmRawxTrkStat = 0x4 // Half cycle valid
 	RxmRawxSubHalfCyc RxmRawxTrkStat = 0x8 // Half cycle subtracted from phase
-)
-
-// RxmRawx1 (Periodic/Polled) Multi-GNSS raw measurements
-// Class/Id 0x02 0x15 16 + 32*numMeas (16 + N*32) bytes
-// This message contains the information needed to be able to generate a RINEX 3 multi-GNSS observation file (see ftp://ftp.igs.org/pub/data/format/). This message contains pseudorange, Doppler, carrier phase, phase lock and signal quality information for GNSS satellites once signals have been synchronized. This message supports all active GNSS. The only difference between this version of the message and the previous version (UBX-RXM-RAWX-DATA0) is the addition of the version field.
-type RxmRawx1 struct {
-	RcvTow_s   float64         // [s] Measurement time of week in receiver local time approximately aligned to the GPS time system. The receiver local time of week, week number and leap second information can be used to translate the time to other time systems. More information about the difference in time systems can be found in the RINEX 3 format documentation. For a receiver operating in GLONASS only mode, UTC time can be determined by subtracting the leapS field from GPS time regardless of whether the GPS leap seconds are valid.
-	Week_weeks uint16          // [weeks] GPS week number in receiver local time.
-	LeapS_s    int8            // [s] GPS leap seconds (GPS-UTC). This field represents the receiver's best knowledge of the leap seconds offset. A flag is given in the recStat bitfield to indicate if the leap seconds are known.
-	NumMeas    byte            `len:"Meas"` // Number of measurements to follow
-	RecStat    RxmRawx1RecStat // Receiver tracking status bitfield
-	Version    byte            // Message version (0x01 for this version)
-	Reserved1  [2]byte         // Reserved
-	Meas       []*struct {
-		PrMes_m        float64         // [m] Pseudorange measurement [m]. GLONASS inter frequency channel delays are compensated with an internal calibration table.
-		CpMes_cycles   float64         // [cycles] Carrier phase measurement [cycles]. The carrier phase initial ambiguity is initialized using an approximate value to make the magnitude of the phase close to the pseudorange measurement. Clock resets are applied to both phase and code measurements in accordance with the RINEX specification.
-		DoMes_hz       float32         // [Hz] Doppler measurement (positive sign for approaching satellites) [Hz]
-		GnssId         byte            // GNSS identifier (see Satellite Numbering for a list of identifiers)
-		SvId           byte            // Satellite identifier (see Satellite Numbering)
-		SigId          byte            // New style signal identifier (see Signal Identifiers).(not supported in protocol versions less than 27)
-		FreqId         byte            // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
-		Locktime_ms    uint16          // [ms] Carrier phase locktime counter (maximum 64500ms)
-		Cno_dbhz       byte            // [dBHz] Carrier-to-noise density ratio (signal strength) [dB-Hz]
-		PrStdev_m      RxmRawx1PrStdev // [0.01*2^n m] Estimated pseudorange measurement standard deviation
-		CpStdev_cycles RxmRawx1CpStdev // [0.004 cycles] Estimated carrier phase measurement standard deviation (note a raw value of 0x0F indicates the value is invalid)
-		DoStdev_hz     RxmRawx1DoStdev // [0.002*2^n Hz] Estimated Doppler measurement standard deviation.
-		TrkStat        RxmRawx1TrkStat // Tracking status bitfield (see graphic below )
-		Reserved2      byte            // Reserved
-	} // len: NumMeas
-}
-
-func (RxmRawx1) classID() uint16 { return 0x1502 }
-
-type RxmRawx1RecStat byte
-
-const (
-	RxmRawx1LeapSec  RxmRawx1RecStat = 0x1 // Leap seconds have been determined
-	RxmRawx1ClkReset RxmRawx1RecStat = 0x2 // Clock reset applied. Typically the receiver clock is changed in increments of integer milliseconds.
-)
-
-type RxmRawx1PrStdev byte
-
-const (
-	RxmRawx1PrStd RxmRawx1PrStdev = 0xf // Estimated pseudorange standard deviation
-)
-
-type RxmRawx1CpStdev byte
-
-const (
-	RxmRawx1CpStd RxmRawx1CpStdev = 0xf // Estimated carrier phase standard deviation
-)
-
-type RxmRawx1DoStdev byte
-
-const (
-	RxmRawx1DoStd RxmRawx1DoStdev = 0xf // Estimated Doppler standard deviation
-)
-
-type RxmRawx1TrkStat byte
-
-const (
-	RxmRawx1PrValid    RxmRawx1TrkStat = 0x1 // Pseudorange valid
-	RxmRawx1CpValid    RxmRawx1TrkStat = 0x2 // Carrier phase valid
-	RxmRawx1HalfCyc    RxmRawx1TrkStat = 0x4 // Half cycle valid
-	RxmRawx1SubHalfCyc RxmRawx1TrkStat = 0x8 // Half cycle subtracted from phase
 )
 
 // Message ubx-rxm-rlm (2 versions)
@@ -4862,31 +4701,12 @@ const (
 	RxmRtcmMsgUsed   RxmRtcmFlags = 0x6 // 2 = RTCM message used successfully by the receiver, 1 = not used, 0 = do not know
 )
 
-// Message ubx-rxm-sfrbx (2 versions)
+// Message ubx-rxm-sfrbx
 
 // RxmSfrbx (Output) Broadcast navigation data subframe
 // Class/Id 0x02 0x13 8 + 4*numWords (8 + N*4) bytes
 // This message reports a complete subframe of broadcast navigation data decoded from a single signal. The number of data words reported in each message depends on the nature of the signal. See the section on Broadcast Navigation Data for further details.
 type RxmSfrbx struct {
-	GnssId    byte // GNSS identifier (see Satellite Numbering)
-	SvId      byte // Satellite identifier (see Satellite Numbering)
-	Reserved1 byte // Reserved
-	FreqId    byte // Only used for GLONASS: This is the frequency slot + 7 (range from 0 to 13)
-	NumWords  byte `len:"Words"` // The number of data words contained in this message (0..16)
-	Reserved2 byte // Reserved
-	Version   byte // Message version (0x01 for this version)
-	Reserved3 byte // Reserved
-	Words     []*struct {
-		Dwrd uint32 // The data words
-	} // len: NumWords
-}
-
-func (RxmSfrbx) classID() uint16 { return 0x1302 }
-
-// RxmSfrbx1 (Output) Broadcast navigation data subframe
-// Class/Id 0x02 0x13 8 + 4*numWords (8 + N*4) bytes
-// This message reports a complete subframe of broadcast navigation data decoded from a single signal. The number of data words reported in each message depends on the nature of the signal. See the section on Broadcast Navigation Data for further details.
-type RxmSfrbx1 struct {
 	GnssId    byte // GNSS identifier (see Satellite Numbering)
 	SvId      byte // Satellite identifier (see Satellite Numbering)
 	Reserved1 byte // Reserved
@@ -4900,7 +4720,7 @@ type RxmSfrbx1 struct {
 	} // len: NumWords
 }
 
-func (RxmSfrbx1) classID() uint16 { return 0x1302 }
+func (RxmSfrbx) classID() uint16 { return 0x1302 }
 
 // Message ubx-rxm-svsi
 
@@ -5293,479 +5113,621 @@ func mkMsg(classId, sz uint16, frame []byte) Message {
 	switch classId {
 
 	case 0x0105:
-		return &AckAck{} // 2 .. 2   [0]
+		return new(AckAck)
 
 	case 0x0005:
-		return &AckNak{} // 2 .. 2   [0]
+		return new(AckNak)
 
 	case 0x300b:
-		return &AidAlm{}  // 0 .. 0   [0]
-		return &AidAlm1{} // 1 .. 1   [0]
-		return &AidAlm2{} // 8 .. 40   [0]
+
+		switch sz {
+		case 0:
+			return new(AidAlm) // 0 0 [0]
+		case 1:
+			return new(AidAlm1) // 1 1 [0]
+		case 8, 40:
+			return new(AidAlm2) // 8 40 [0]
+		}
 
 	case 0x330b:
-		return &AidAop{}  // 0 .. 0   [0]
-		return &AidAop1{} // 1 .. 1   [0]
-		return &AidAop2{} // 68 .. 68   [0]
+
+		switch sz {
+		case 0:
+			return new(AidAop) // 0 0 [0]
+		case 1:
+			return new(AidAop1) // 1 1 [0]
+		case 68:
+			return new(AidAop2) // 68 68 [0]
+		}
 
 	case 0x310b:
-		return &AidEph{}  // 0 .. 0   [0]
-		return &AidEph1{} // 1 .. 1   [0]
-		return &AidEph2{} // 8 .. 104   [0]
+
+		switch sz {
+		case 0:
+			return new(AidEph) // 0 0 [0]
+		case 1:
+			return new(AidEph1) // 1 1 [0]
+		case 8, 104:
+			return new(AidEph2) // 8 104 [0]
+		}
 
 	case 0x020b:
-		return &AidHui{}  // 0 .. 0   [0]
-		return &AidHui1{} // 72 .. 72   [0]
+
+		switch sz {
+		case 0:
+			return new(AidHui) // 0 0 [0]
+		case 72:
+			return new(AidHui1) // 72 72 [0]
+		}
 
 	case 0x010b:
-		return &AidIni{}  // 0 .. 0   [0]
-		return &AidIni1{} // 48 .. 48   [0]
+
+		switch sz {
+		case 0:
+			return new(AidIni) // 0 0 [0]
+		case 48:
+			return new(AidIni1) // 48 48 [0]
+		}
 
 	case 0x1306:
-		return &CfgAnt{} // 4 .. 4   [0]
+		return new(CfgAnt)
 
 	case 0x9306:
-		return &CfgBatch{} // 8 .. 8   [0]
+		return new(CfgBatch)
 
 	case 0x0906:
-		return &CfgCfg{} // 12 .. 13   [0]
+		return new(CfgCfg)
 
 	case 0x0606:
-		return &CfgDat{}  // 44 .. 44   [0]
-		return &CfgDat1{} // 52 .. 52   [0]
+
+		switch sz {
+		case 44:
+			return new(CfgDat) // 44 44 [0]
+		case 52:
+			return new(CfgDat1) // 52 52 [0]
+		}
 
 	case 0x7006:
-		return &CfgDgnss{} // 4 .. 4   [0]
+		return new(CfgDgnss)
 
 	case 0x6106:
-		return &CfgDosc{} // 4 .. 4   [32]
+		return new(CfgDosc)
 
 	case 0x4c06:
-		return &CfgEsfa{} // 20 .. 20   [0]
+		return new(CfgEsfa)
 
 	case 0x5606:
-		return &CfgEsfalg{} // 12 .. 12   [0]
+		return new(CfgEsfalg)
 
 	case 0x4d06:
-		return &CfgEsfg{} // 20 .. 20   [0]
+		return new(CfgEsfg)
 
 	case 0x8206:
-		return &CfgEsfwt{} // 32 .. 32   [0]
+		return new(CfgEsfwt)
 
 	case 0x6006:
-		return &CfgEsrc{} // 4 .. 4   [36]
+		return new(CfgEsrc)
 
 	case 0x6906:
-		return &CfgGeofence{} // 8 .. 8   [12]
+		return new(CfgGeofence)
 
 	case 0x3e06:
-		return &CfgGnss{} // 4 .. 4   [8]
+		return new(CfgGnss)
 
 	case 0x5c06:
-		return &CfgHnr{} // 4 .. 4   [0]
+		return new(CfgHnr)
 
 	case 0x0206:
-		return mkCfgInf(sz, frame)
+
+		switch sz {
+		case 1:
+			return new(CfgInf1) // 1 1 [0]
+		default:
+			return new(CfgInf) // 0 [10]
+		}
 
 	case 0x3906:
-		return &CfgItfm{} // 8 .. 8   [0]
+		return new(CfgItfm)
 
 	case 0x4706:
-		return &CfgLogfilter{} // 12 .. 12   [0]
+		return new(CfgLogfilter)
 
 	case 0x0106:
-		return &CfgMsg{}  // 2 .. 2   [0]
-		return &CfgMsg1{} // 3 .. 3   [0]
-		return &CfgMsg2{} // 8 .. 8   [0]
+
+		switch sz {
+		case 2:
+			return new(CfgMsg) // 2 2 [0]
+		case 3:
+			return new(CfgMsg1) // 3 3 [0]
+		case 8:
+			return new(CfgMsg2) // 8 8 [0]
+		}
 
 	case 0x2406:
-		return &CfgNav5{} // 36 .. 36   [0]
+		return new(CfgNav5)
 
 	case 0x2306:
-		return mkCfgNavx5(sz, frame)
+
+		switch sz {
+		case 40:
+			return new(CfgNavx5) // 40 40 [0]
+		case 44:
+			return new(CfgNavx51) // 44 44 [0]
+		}
 
 	case 0x1706:
-		return &CfgNmea{}  // 4 .. 4   [0]
-		return &CfgNmea1{} // 12 .. 12   [0]
-		return &CfgNmea2{} // 20 .. 20   [0]
+
+		switch sz {
+		case 4:
+			return new(CfgNmea) // 4 4 [0]
+		case 12:
+			return new(CfgNmea1) // 12 12 [0]
+		case 20:
+			return new(CfgNmea2) // 20 20 [0]
+		}
 
 	case 0x1e06:
-		return &CfgOdo{} // 20 .. 20   [0]
+		return new(CfgOdo)
 
 	case 0x3b06:
-		return mkCfgPm2(sz, frame)
+
+		switch sz {
+		case 44:
+			return new(CfgPm2) // 44 44 [0]
+		case 48:
+			return new(CfgPm21) // 48 48 [0]
+		}
 
 	case 0x8606:
-		return &CfgPms{} // 8 .. 8   [0]
+		return new(CfgPms)
 
 	case 0x0006:
 		return mkCfgPrt(sz, frame)
 
 	case 0x5706:
-		return &CfgPwr{} // 8 .. 8   [0]
+		return new(CfgPwr)
 
 	case 0x0806:
-		return &CfgRate{} // 6 .. 6   [0]
+		return new(CfgRate)
 
 	case 0x3406:
-		return &CfgRinv{} // 1 .. 1   [1]
+		return new(CfgRinv)
 
 	case 0x0406:
-		return &CfgRst{} // 4 .. 4   [0]
+		return new(CfgRst)
 
 	case 0x1106:
-		return mkCfgRxm(sz, frame)
+		return new(CfgRxm)
 
 	case 0x1606:
-		return &CfgSbas{} // 8 .. 8   [0]
+		return new(CfgSbas)
 
 	case 0x8806:
-		return &CfgSenif{} // 6 .. 6   [0]
+		return new(CfgSenif)
 
 	case 0x8d06:
-		return &CfgSlas{} // 4 .. 4   [0]
+		return new(CfgSlas)
 
 	case 0x6206:
-		return &CfgSmgr{} // 20 .. 20   [0]
+		return new(CfgSmgr)
 
 	case 0x6406:
-		return &CfgSpt{} // 12 .. 12   [0]
+		return new(CfgSpt)
 
 	case 0x3d06:
-		return &CfgTmode2{} // 28 .. 28   [0]
+		return new(CfgTmode2)
 
 	case 0x7106:
-		return &CfgTmode3{} // 40 .. 40   [0]
+		return new(CfgTmode3)
 
 	case 0x3106:
-		return &CfgTp5{}  // 0 .. 0   [0]
-		return &CfgTp51{} // 1 .. 1   [0]
-		return &CfgTp52{} // 32 .. 32   [0]
+
+		switch sz {
+		case 0:
+			return new(CfgTp5) // 0 0 [0]
+		case 1:
+			return new(CfgTp51) // 1 1 [0]
+		case 32:
+			return new(CfgTp52) // 32 32 [0]
+		}
 
 	case 0x5306:
-		return &CfgTxslot{} // 16 .. 16   [0]
+		return new(CfgTxslot)
 
 	case 0x1b06:
-		return &CfgUsb{} // 108 .. 108   [0]
+		return new(CfgUsb)
 
 	case 0x1410:
-		return &EsfAlg{} // 16 .. 16   [0]
+		return new(EsfAlg)
 
 	case 0x1510:
-		return &EsfIns{} // 36 .. 36   [0]
+		return new(EsfIns)
 
 	case 0x0210:
-		return &EsfMeas{} // 8 .. 12   [4]
+		return new(EsfMeas)
 
 	case 0x0310:
-		return &EsfRaw{} // 4 .. 4   [8]
+		return new(EsfRaw)
 
 	case 0x1010:
-		return &EsfStatus{} // 16 .. 16   [4]
+		return new(EsfStatus)
 
 	case 0x0128:
-		return &HnrAtt{} // 32 .. 32   [0]
+		return new(HnrAtt)
 
 	case 0x0228:
-		return &HnrIns{} // 36 .. 36   [0]
+		return new(HnrIns)
 
 	case 0x0028:
-		return &HnrPvt{} // 72 .. 72   [0]
+		return new(HnrPvt)
 
 	case 0x0404:
-		return &InfDebug{} // 0 .. 0   [1]
+		return new(InfDebug)
 
 	case 0x0004:
-		return &InfError{} // 0 .. 0   [1]
+		return new(InfError)
 
 	case 0x0204:
-		return &InfNotice{} // 0 .. 0   [1]
+		return new(InfNotice)
 
 	case 0x0304:
-		return &InfTest{} // 0 .. 0   [1]
+		return new(InfTest)
 
 	case 0x0104:
-		return &InfWarning{} // 0 .. 0   [1]
+		return new(InfWarning)
 
 	case 0x1121:
-		return &LogBatch{} // 100 .. 100   [0]
+		return new(LogBatch)
 
 	case 0x0721:
-		return &LogCreate{} // 8 .. 8   [0]
+		return new(LogCreate)
 
 	case 0x0321:
-		return &LogErase{} // 0 .. 0   [0]
+		return new(LogErase)
 
 	case 0x0e21:
-		return &LogFindtime{}  // 8 .. 8   [0]
-		return &LogFindtime1{} // 12 .. 12   [0]
+
+		switch sz {
+		case 8:
+			return new(LogFindtime) // 8 8 [0]
+		case 12:
+			return new(LogFindtime1) // 12 12 [0]
+		}
 
 	case 0x0821:
-		return &LogInfo{}  // 0 .. 0   [0]
-		return &LogInfo1{} // 48 .. 48   [0]
+
+		switch sz {
+		case 0:
+			return new(LogInfo) // 0 0 [0]
+		case 48:
+			return new(LogInfo1) // 48 48 [0]
+		}
 
 	case 0x0921:
-		return &LogRetrieve{} // 12 .. 12   [0]
+		return new(LogRetrieve)
 
 	case 0x1021:
-		return &LogRetrievebatch{} // 4 .. 4   [0]
+		return new(LogRetrievebatch)
 
 	case 0x0b21:
-		return &LogRetrievepos{} // 40 .. 40   [0]
+		return new(LogRetrievepos)
 
 	case 0x0f21:
-		return &LogRetrieveposextra{} // 32 .. 32   [0]
+		return new(LogRetrieveposextra)
 
 	case 0x0d21:
-		return &LogRetrievestring{} // 16 .. 16   [1]
+		return new(LogRetrievestring)
 
 	case 0x0421:
-		return &LogString{} // 0 .. 0   [1]
+		return new(LogString)
 
 	case 0x6013:
-		return &MgaAckData0{} // 8 .. 8   [0]
+		return new(MgaAckData0)
 
 	case 0x2013:
-		return &MgaAno{} // 76 .. 76   [0]
+		return new(MgaAno)
 
 	case 0x0313:
-		return &MgaBdsAlm{}     // 40 .. 40   [0]
-		return &MgaBdsEph1{}    // 88 .. 88   [0]
-		return &MgaBdsHealth2{} // 68 .. 68   [0]
-		return &MgaBdsIono3{}   // 16 .. 16   [0]
-		return &MgaBdsUtc4{}    // 20 .. 20   [0]
+
+		switch sz {
+		case 40:
+			return new(MgaBdsAlm) // 40 40 [0]
+		case 88:
+			return new(MgaBdsEph1) // 88 88 [0]
+		case 68:
+			return new(MgaBdsHealth2) // 68 68 [0]
+		case 16:
+			return new(MgaBdsIono3) // 16 16 [0]
+		case 20:
+			return new(MgaBdsUtc4) // 20 20 [0]
+		}
 
 	case 0x8013:
-		return mkMgaDbd(sz, frame)
+
+		switch sz {
+		case 0:
+			return new(MgaDbd) // 0 0 [0]
+		default:
+			return new(MgaDbd1) // 12 [1]
+		}
 
 	case 0x2113:
 		return mkMgaFlashAck(sz, frame)
 
 	case 0x0213:
-		return &MgaGalAlm{}         // 32 .. 32   [0]
-		return &MgaGalEph1{}        // 76 .. 76   [0]
-		return &MgaGalTimeoffset2{} // 12 .. 12   [0]
-		return &MgaGalUtc3{}        // 20 .. 20   [0]
+
+		switch sz {
+		case 32:
+			return new(MgaGalAlm) // 32 32 [0]
+		case 76:
+			return new(MgaGalEph1) // 76 76 [0]
+		case 12:
+			return new(MgaGalTimeoffset2) // 12 12 [0]
+		case 20:
+			return new(MgaGalUtc3) // 20 20 [0]
+		}
 
 	case 0x0613:
-		return &MgaGloAlm{}         // 36 .. 36   [0]
-		return &MgaGloEph1{}        // 48 .. 48   [0]
-		return &MgaGloTimeoffset2{} // 20 .. 20   [0]
+
+		switch sz {
+		case 36:
+			return new(MgaGloAlm) // 36 36 [0]
+		case 48:
+			return new(MgaGloEph1) // 48 48 [0]
+		case 20:
+			return new(MgaGloTimeoffset2) // 20 20 [0]
+		}
 
 	case 0x0013:
-		return &MgaGpsAlm{}     // 36 .. 36   [0]
-		return &MgaGpsEph1{}    // 68 .. 68   [0]
-		return &MgaGpsHealth2{} // 40 .. 40   [0]
-		return &MgaGpsIono3{}   // 16 .. 16   [0]
-		return &MgaGpsUtc4{}    // 20 .. 20   [0]
+
+		switch sz {
+		case 36:
+			return new(MgaGpsAlm) // 36 36 [0]
+		case 68:
+			return new(MgaGpsEph1) // 68 68 [0]
+		case 40:
+			return new(MgaGpsHealth2) // 40 40 [0]
+		case 16:
+			return new(MgaGpsIono3) // 16 16 [0]
+		case 20:
+			return new(MgaGpsUtc4) // 20 20 [0]
+		}
 
 	case 0x4013:
 		return mkMgaIniClkd(sz, frame)
 
 	case 0x0513:
-		return &MgaQzssAlm{}     // 36 .. 36   [0]
-		return &MgaQzssEph1{}    // 68 .. 68   [0]
-		return &MgaQzssHealth2{} // 12 .. 12   [0]
+
+		switch sz {
+		case 36:
+			return new(MgaQzssAlm) // 36 36 [0]
+		case 68:
+			return new(MgaQzssEph1) // 68 68 [0]
+		case 12:
+			return new(MgaQzssHealth2) // 12 12 [0]
+		}
 
 	case 0x320a:
-		return &MonBatch{} // 12 .. 12   [0]
+		return new(MonBatch)
 
 	case 0x280a:
-		return &MonGnss{} // 8 .. 8   [0]
+		return new(MonGnss)
 
 	case 0x090a:
-		return &MonHw{} // 60 .. 60   [0]
+		return new(MonHw)
 
 	case 0x0b0a:
-		return &MonHw2{} // 28 .. 28   [0]
+		return new(MonHw2)
 
 	case 0x020a:
-		return &MonIo{} // 0 .. 0   [20]
+		return new(MonIo)
 
 	case 0x060a:
-		return &MonMsgpp{} // 120 .. 120   [0]
+		return new(MonMsgpp)
 
 	case 0x270a:
-		return mkMonPatch(sz, frame)
+
+		switch sz {
+		case 0:
+			return new(MonPatch) // 0 0 [0]
+		default:
+			return new(MonPatch1) // 4 [16]
+		}
 
 	case 0x070a:
-		return &MonRxbuf{} // 24 .. 24   [0]
+		return new(MonRxbuf)
 
 	case 0x210a:
-		return &MonRxr{} // 1 .. 1   [0]
+		return new(MonRxr)
 
 	case 0x2e0a:
-		return &MonSmgr{} // 16 .. 16   [0]
+		return new(MonSmgr)
 
 	case 0x2f0a:
-		return &MonSpt{} // 4 .. 4   [16]
+		return new(MonSpt)
 
 	case 0x080a:
-		return &MonTxbuf{} // 28 .. 28   [0]
+		return new(MonTxbuf)
 
 	case 0x040a:
-		return mkMonVer(sz, frame)
+
+		switch sz {
+		case 0:
+			return new(MonVer) // 0 0 [0]
+		default:
+			return new(MonVer1) // 40 [30]
+		}
 
 	case 0x6001:
-		return &NavAopstatus{} // 16 .. 16   [0]
+		return new(NavAopstatus)
 
 	case 0x0501:
-		return &NavAtt{} // 32 .. 32   [0]
+		return new(NavAtt)
 
 	case 0x2201:
-		return &NavClock{} // 20 .. 20   [0]
+		return new(NavClock)
 
 	case 0x3601:
-		return &NavCov{} // 64 .. 64   [0]
+		return new(NavCov)
 
 	case 0x3101:
-		return &NavDgps{} // 16 .. 16   [12]
+		return new(NavDgps)
 
 	case 0x0401:
-		return &NavDop{} // 18 .. 18   [0]
+		return new(NavDop)
 
 	case 0x3d01:
-		return &NavEell{} // 16 .. 16   [0]
+		return new(NavEell)
 
 	case 0x6101:
-		return &NavEoe{} // 4 .. 4   [0]
+		return new(NavEoe)
 
 	case 0x3901:
-		return &NavGeofence{} // 8 .. 8   [2]
+		return new(NavGeofence)
 
 	case 0x1301:
-		return &NavHpposecef{} // 28 .. 28   [0]
+		return new(NavHpposecef)
 
 	case 0x1401:
-		return &NavHpposllh{} // 36 .. 36   [0]
+		return new(NavHpposllh)
 
 	case 0x2801:
-		return &NavNmi{} // 16 .. 16   [0]
+		return new(NavNmi)
 
 	case 0x0901:
-		return &NavOdo{} // 20 .. 20   [0]
+		return new(NavOdo)
 
 	case 0x3401:
-		return &NavOrb{} // 8 .. 8   [6]
+		return new(NavOrb)
 
 	case 0x0101:
-		return &NavPosecef{} // 20 .. 20   [0]
+		return new(NavPosecef)
 
 	case 0x0201:
-		return &NavPosllh{} // 28 .. 28   [0]
+		return new(NavPosllh)
 
 	case 0x0701:
-		return &NavPvt{} // 92 .. 92   [0]
+		return new(NavPvt)
 
 	case 0x3c01:
-		return &NavRelposned{} // 40 .. 40   [0]
+		return new(NavRelposned)
 
 	case 0x1001:
-		return &NavResetodo{} // 0 .. 0   [0]
+		return new(NavResetodo)
 
 	case 0x3501:
-		return &NavSat{} // 8 .. 8   [12]
+		return new(NavSat)
 
 	case 0x3201:
-		return &NavSbas{} // 12 .. 12   [12]
+		return new(NavSbas)
 
 	case 0x4201:
-		return &NavSlas{} // 20 .. 20   [8]
+		return new(NavSlas)
 
 	case 0x0601:
-		return &NavSol{} // 52 .. 52   [0]
+		return new(NavSol)
 
 	case 0x0301:
-		return &NavStatus{} // 16 .. 16   [0]
+		return new(NavStatus)
 
 	case 0x3b01:
-		return &NavSvin{} // 40 .. 40   [0]
+		return new(NavSvin)
 
 	case 0x3001:
-		return &NavSvinfo{} // 8 .. 8   [12]
+		return new(NavSvinfo)
 
 	case 0x2401:
-		return &NavTimebds{} // 20 .. 20   [0]
+		return new(NavTimebds)
 
 	case 0x2501:
-		return &NavTimegal{} // 20 .. 20   [0]
+		return new(NavTimegal)
 
 	case 0x2301:
-		return &NavTimeglo{} // 20 .. 20   [0]
+		return new(NavTimeglo)
 
 	case 0x2001:
-		return &NavTimegps{} // 16 .. 16   [0]
+		return new(NavTimegps)
 
 	case 0x2601:
-		return &NavTimels{} // 24 .. 24   [0]
+		return new(NavTimels)
 
 	case 0x2101:
-		return &NavTimeutc{} // 20 .. 20   [0]
+		return new(NavTimeutc)
 
 	case 0x1101:
-		return &NavVelecef{} // 20 .. 20   [0]
+		return new(NavVelecef)
 
 	case 0x1201:
-		return &NavVelned{} // 36 .. 36   [0]
+		return new(NavVelned)
 
 	case 0x6102:
-		return &RxmImes{} // 4 .. 4   [44]
+		return new(RxmImes)
 
 	case 0x1402:
-		return &RxmMeasx{} // 44 .. 44   [24]
+		return new(RxmMeasx)
 
 	case 0x4102:
-		return &RxmPmreq{}  // 8 .. 8   [0]
-		return &RxmPmreq1{} // 16 .. 16   [0]
+
+		switch sz {
+		case 8:
+			return new(RxmPmreq) // 8 8 [0]
+		case 16:
+			return new(RxmPmreq1) // 16 16 [0]
+		}
 
 	case 0x1502:
-		return mkRxmRawx(sz, frame)
+		return new(RxmRawx)
 
 	case 0x5902:
-		return &RxmRlm{}  // 16 .. 16   [0]
-		return &RxmRlm1{} // 28 .. 28   [0]
+
+		switch sz {
+		case 16:
+			return new(RxmRlm) // 16 16 [0]
+		case 28:
+			return new(RxmRlm1) // 28 28 [0]
+		}
 
 	case 0x3202:
-		return &RxmRtcm{} // 8 .. 8   [0]
+		return new(RxmRtcm)
 
 	case 0x1302:
-		return mkRxmSfrbx(sz, frame)
+		return new(RxmSfrbx)
 
 	case 0x2002:
-		return &RxmSvsi{} // 8 .. 8   [6]
+		return new(RxmSvsi)
 
 	case 0x0327:
-		return &SecUniqid{} // 9 .. 9   [0]
+		return new(SecUniqid)
 
 	case 0x110d:
-		return &TimDosc{} // 8 .. 8   [0]
+		return new(TimDosc)
 
 	case 0x160d:
-		return &TimFchg{} // 32 .. 32   [0]
+		return new(TimFchg)
 
 	case 0x170d:
-		return &TimHoc{} // 8 .. 8   [0]
+		return new(TimHoc)
 
 	case 0x130d:
-		return &TimSmeas{} // 12 .. 12   [24]
+		return new(TimSmeas)
 
 	case 0x040d:
-		return &TimSvin{} // 28 .. 28   [0]
+		return new(TimSvin)
 
 	case 0x030d:
-		return &TimTm2{} // 28 .. 28   [0]
+		return new(TimTm2)
 
 	case 0x120d:
-		return &TimTos{} // 56 .. 56   [0]
+		return new(TimTos)
 
 	case 0x010d:
-		return &TimTp{} // 16 .. 16   [0]
+		return new(TimTp)
 
 	case 0x150d:
 		return mkTimVcocal(sz, frame)
 
 	case 0x060d:
-		return &TimVrfy{} // 20 .. 20   [0]
+		return new(TimVrfy)
 
 	case 0x1409:
 		return mkUpdSos(sz, frame)
@@ -5774,74 +5736,41 @@ func mkMsg(classId, sz uint16, frame []byte) Message {
 	return nil
 }
 
-func mkCfgInf(sz uint16, frame []byte) {
-	return &CfgInf{}  // 0 .. 0   [10]
-	return &CfgInf1{} // 1 .. 1   [0]
+/** Please Provide implementations of the following functions to disambiguate
+
+
+func mkCfgPrt(sz uint16, frame []byte) Message {
+            return new(CfgPrt) // 1
+            return new(CfgPrt1) // 20
+            return new(CfgPrt2) // 20
+            return new(CfgPrt3) // 20
+            return new(CfgPrt4) // 20
 }
-func mkCfgNavx5(sz uint16, frame []byte) {
-	return &CfgNavx5{}  // 40 .. 40   [0]
-	return &CfgNavx51{} // 40 .. 40   [0]
-	return &CfgNavx52{} // 44 .. 44   [0]
+func mkMgaFlashAck(sz uint16, frame []byte) Message {
+            return new(MgaFlashAck) // 6
+            return new(MgaFlashData1) // 6 [1]
+            return new(MgaFlashStop2) // 2
 }
-func mkCfgPm2(sz uint16, frame []byte) {
-	return &CfgPm2{}  // 44 .. 44   [0]
-	return &CfgPm21{} // 48 .. 48   [0]
-	return &CfgPm22{} // 48 .. 48   [0]
+func mkMgaIniClkd(sz uint16, frame []byte) Message {
+            return new(MgaIniClkd) // 12
+            return new(MgaIniEop1) // 72
+            return new(MgaIniFreq2) // 12
+            return new(MgaIniPos_llh3) // 20
+            return new(MgaIniPos_xyz4) // 20
+            return new(MgaIniTime_gnss5) // 24
+            return new(MgaIniTime_utc6) // 24
 }
-func mkCfgPrt(sz uint16, frame []byte) {
-	return &CfgPrt{}  // 1 .. 1   [0]
-	return &CfgPrt1{} // 20 .. 20   [0]
-	return &CfgPrt2{} // 20 .. 20   [0]
-	return &CfgPrt3{} // 20 .. 20   [0]
-	return &CfgPrt4{} // 20 .. 20   [0]
+func mkTimVcocal(sz uint16, frame []byte) Message {
+            return new(TimVcocal) // 1
+            return new(TimVcocal1) // 12
+            return new(TimVcocal2) // 12
 }
-func mkCfgRxm(sz uint16, frame []byte) {
-	return &CfgRxm{}  // 2 .. 2   [0]
-	return &CfgRxm1{} // 2 .. 2   [0]
+func mkUpdSos(sz uint16, frame []byte) Message {
+            return new(UpdSos) // 0
+            return new(UpdSos1) // 4
+            return new(UpdSos2) // 4
+            return new(UpdSos3) // 8
+            return new(UpdSos4) // 8
 }
-func mkMgaDbd(sz uint16, frame []byte) {
-	return &MgaDbd{}  // 0 .. 0   [0]
-	return &MgaDbd1{} // 12 .. 12   [1]
-}
-func mkMgaFlashAck(sz uint16, frame []byte) {
-	return &MgaFlashAck{}   // 6 .. 6   [0]
-	return &MgaFlashData1{} // 6 .. 6   [1]
-	return &MgaFlashStop2{} // 2 .. 2   [0]
-}
-func mkMgaIniClkd(sz uint16, frame []byte) {
-	return &MgaIniClkd{}       // 12 .. 12   [0]
-	return &MgaIniEop1{}       // 72 .. 72   [0]
-	return &MgaIniFreq2{}      // 12 .. 12   [0]
-	return &MgaIniPos_llh3{}   // 20 .. 20   [0]
-	return &MgaIniPos_xyz4{}   // 20 .. 20   [0]
-	return &MgaIniTime_gnss5{} // 24 .. 24   [0]
-	return &MgaIniTime_utc6{}  // 24 .. 24   [0]
-}
-func mkMonPatch(sz uint16, frame []byte) {
-	return &MonPatch{}  // 0 .. 0   [0]
-	return &MonPatch1{} // 4 .. 4   [16]
-}
-func mkMonVer(sz uint16, frame []byte) {
-	return &MonVer{}  // 0 .. 0   [0]
-	return &MonVer1{} // 40 .. 40   [30]
-}
-func mkRxmRawx(sz uint16, frame []byte) {
-	return &RxmRawx{}  // 16 .. 16   [32]
-	return &RxmRawx1{} // 16 .. 16   [32]
-}
-func mkRxmSfrbx(sz uint16, frame []byte) {
-	return &RxmSfrbx{}  // 8 .. 8   [4]
-	return &RxmSfrbx1{} // 8 .. 8   [4]
-}
-func mkTimVcocal(sz uint16, frame []byte) {
-	return &TimVcocal{}  // 1 .. 1   [0]
-	return &TimVcocal1{} // 12 .. 12   [0]
-	return &TimVcocal2{} // 12 .. 12   [0]
-}
-func mkUpdSos(sz uint16, frame []byte) {
-	return &UpdSos{}  // 0 .. 0   [0]
-	return &UpdSos1{} // 4 .. 4   [0]
-	return &UpdSos2{} // 4 .. 4   [0]
-	return &UpdSos3{} // 8 .. 8   [0]
-	return &UpdSos4{} // 8 .. 8   [0]
-}
+
+*/

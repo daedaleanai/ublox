@@ -70,28 +70,50 @@ const (
 
 
 func mkMsg(classId, sz uint16, frame []byte) Message {
-       switch classId {
+	switch classId {
 {{range $k, $v :=  .}}
-       case {{with (index $v 0)}}{{printf "0x%02x%02x" .Id .Class }}{{end}}:
+	case {{with (index $v 0)}}{{printf "0x%02x%02x" .Id .Class }}{{end}}:
        {{- if isambiguous (index $v 0).ClassIDName}}
        		return mk{{(index $v 0).TypeName}}(sz, frame)
        {{- else}}
-       {{- range $v}}
-            return &{{.TypeName}}{}   // {{.MinSize}} .. {{.MaxFixSize}}   [{{.VarSize}}]
-       {{- end}}
+	       	{{- if eq 1 (len $v)}}
+       		return new({{(index $v 0).TypeName}})
+    	   	{{- else}}
+    
+       		switch sz {
+	       		{{- range $v}}
+	       			{{- if eq .VarSize 0}}
+	       	case {{.MinSize}}{{if ne .MinSize .MaxFixSize}}, {{.MaxFixSize}}{{end}}:
+           		return new({{.TypeName}})   // {{.MinSize}} {{.MaxFixSize}} [{{.VarSize}}]
+    	   			{{- end}}
+    	   		{{- end}}
+	       		{{- range $v}}
+	       			{{- if ne .VarSize 0}}
+	       default:
+           		return new({{.TypeName}})   // {{.MinSize}}{{if ne .MinSize .MaxFixSize}} .. {{.MaxFixSize}}{{end}}{{if ne 0 .VarSize}} [{{.VarSize}}]{{end}}
+    	   			{{- end}}
+    	   		{{- end}}
+    	   }
+ 
+    	   {{- end}}
        {{- end}}
 {{end}}
+
        }
        return nil
 }
 
+/** Please Provide implementations of the following functions to disambiguate
+
 {{range $k, $v :=  .}}
 {{- if isambiguous (index $v 0).ClassIDName}}
-func mk{{(index $v 0).TypeName}}(sz uint16, frame []byte) {
+func mk{{(index $v 0).TypeName}}(sz uint16, frame []byte) Message {
        {{- range $v}}
-            return &{{.TypeName}}{}   // {{.MinSize}} .. {{.MaxFixSize}}   [{{.VarSize}}]
+            return new({{.TypeName}}) // {{.MinSize}}{{if ne .MinSize .MaxFixSize}} .. {{.MaxFixSize}}{{end}}{{if ne 0 .VarSize}} [{{.VarSize}}]{{end}}  
        {{- end}}	
 }
 {{- end}}
 {{- end}}
+
+*/
 

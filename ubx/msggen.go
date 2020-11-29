@@ -1,5 +1,4 @@
 // This program generates messages.go from messages.xml
-// TODO generate encoder/decoder depending on fixed, optional and variable size
 // TODO generate string methods for all bitfield types
 
 // +build ignore
@@ -359,16 +358,20 @@ func main() {
 	// figure out if we can figure out the type from just class, id and size
 	for k, v := range msgs {
 		m := map[int]int{}
+		// first count all minimum and minimum+opt sizes
 		for _, vv := range v {
-			m[vv.MinSize()]++
-			if vv.MaxFixSize() != vv.MinSize() {
-				m[vv.MaxFixSize()]++
+			if sz := vv.VarSize(); sz == 0 {
+				m[vv.MinSize()]++
+				if vv.MaxFixSize() != vv.MinSize() {
+					m[vv.MaxFixSize()]++
+				}
 			}
 		}
+		// now mark all variable sizes that could alias the existing ones
 		for _, vv := range v {
 			if sz := vv.VarSize(); sz != 0 {
 				for kk, _ := range m {
-					if (kk-vv.MinSize())%sz == 0 {
+					if (kk >= vv.MinSize()) && (kk-vv.MinSize())%sz == 0 {
 						m[vv.MinSize()]++
 					}
 				}

@@ -3301,7 +3301,7 @@ than 16).</Comment>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
   </Message>
-  <Message>
+  <!-- Message>
     <Name>UBX-CFG-NAVX5</Name>
     <Type>Get/set</Type>
     <Description>Navigation engine expert settings</Description>
@@ -3603,7 +3603,7 @@ fusion is enabled).</Comment>
       </Payload>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
-  </Message>
+  </Message -->
   <Message>
     <Name>UBX-CFG-NAVX5</Name>
     <Type>Get/set</Type>
@@ -5118,10 +5118,7 @@ m/s), range 0..255</Comment>
           <Offset>2</Offset>
           <Name>maxStartupStateDur</Name>
           <Type>U1</Type>
-          <Comment>Maximum time to spend in Acquisition
-state. If 0: bound disabled (see
-maxStartupStateDur) (not supported in
-protocol versions less than 17).</Comment>
+          <Comment>Maximum time to spend in Acquisition state. If 0: bound disabled (see maxStartupStateDur) (not supported in protocol versions less than 17).</Comment>
           <Scale>-</Scale>
           <Unit>s</Unit>
         </Block>
@@ -5300,7 +5297,7 @@ startup</Comment>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
   </Message>
-  <Message>
+  <!-- Message>
     <Name>UBX-CFG-PM2</Name>
     <Type>Get/set</Type>
     <Description>Extended power management configuration</Description>
@@ -5528,7 +5525,7 @@ enabled</Comment>
       </Payload>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
-  </Message>
+  </Message -->
   <Message>
     <Name>UBX-CFG-PM2</Name>
     <Type>Get/set</Type>
@@ -7145,7 +7142,7 @@ shutdown
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
   </Message>
-  <Message>
+  <!-- Message>
     <Name>UBX-CFG-RXM</Name>
     <Type>Get/set</Type>
     <Description>RXM configuration</Description>
@@ -7183,7 +7180,7 @@ the receiver to Continuous mode.</Comment>
       </Payload>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
-  </Message>
+  </Message -->
   <Message>
     <Name>UBX-CFG-RXM</Name>
     <Type>Get/set</Type>
@@ -22366,7 +22363,7 @@ configured pins.</Comment>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
   </Message>
-  <Message>
+  <!--  Message>
     <Name>UBX-RXM-RAWX</Name>
     <Type>Periodic/Polled</Type>
     <Description>Multi-GNSS raw measurement data</Description>
@@ -22674,7 +22671,7 @@ standard deviation.</Comment>
       </Payload>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
-  </Message>
+  </Message -->
   <Message>
     <Name>UBX-RXM-RAWX</Name>
     <Type>Periodic/Polled</Type>
@@ -23256,7 +23253,7 @@ For all other messages, reports 0xFFFF.</Comment>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
   </Message>
-  <Message>
+  <!-- Message>
     <Name>UBX-RXM-SFRBX</Name>
     <Type>Output</Type>
     <Description>Broadcast navigation data subframe</Description>
@@ -23348,7 +23345,7 @@ this message (0..16)</Comment>
       </Payload>
       <Checksum>CK_A CK_B</Checksum>
     </Structure>
-  </Message>
+  </Message -->
   <Message>
     <Name>UBX-RXM-SFRBX</Name>
     <Type>Output</Type>
