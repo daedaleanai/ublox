@@ -76,6 +76,7 @@ func encode(w io.Writer, msg interface{}) error {
 	}
 
 	v := reflect.Indirect(reflect.ValueOf(msg))
+	// fields that are type Xn are handled here as uint<8*n>
 	switch v.Kind() {
 	case reflect.Uint8:
 		encode(w, uint8(v.Uint()))
@@ -101,9 +102,9 @@ func encode(w io.Writer, msg interface{}) error {
 		for i := 0; i < l; i++ {
 			// if the field is a NumXXX for the XXX []... bit, set it to the lenght here
 			if s := t.Field(i).Tag.Get("len"); s != "" {
-				for ii := l - 1; ii > i; i-- {
+				for ii := l - 1; ii > i; ii-- {
 					if t.Field(ii).Name == s {
-						v.Field(i).SetInt(int64(v.Field(ii).Len()))
+						v.Field(i).SetUint(uint64(v.Field(ii).Len()))
 						break
 					}
 				}

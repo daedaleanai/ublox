@@ -1,0 +1,13 @@
+package ubx
+
+import "testing"
+
+{{- range $k, $v :=  .}}
+{{- range $v}}
+{{- if .IsString}}
+func Test{{.TypeName}}(t *testing.T) { testType(t, new({{.TypeName}})) }
+{{- else}}
+func Test{{.TypeName}}(t *testing.T) { testType(t, &{{.TypeName}}{}) }
+{{- end}}
+{{- end}}
+{{- end}}

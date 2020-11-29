@@ -4,7 +4,11 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"io"
+	"io/ioutil"
+	"math"
+	"reflect"
 )
 
 var (
@@ -67,4 +71,113 @@ func Decode(frame []byte) (msg Message, err error) {
 
 }
 
-func decode(r io.Reader, v interface{}) error { return nil }
+func decode(r io.Reader, msg interface{}) (err error) {
+	//	log.Printf("Decoding %T %#v", msg, msg)
+
+	defer func() {
+		if x, _ := recover().(error); x != nil {
+			err = x
+		}
+	}()
+
+	readN := func(n int) (v uint64) {
+		var buf [8]byte
+		if _, err := io.ReadFull(r, buf[:n]); err != nil {
+			panic(err)
+		}
+		for i := 0; i < n; i++ {
+			v |= uint64(buf[i]) << uint(8*i)
+		}
+		return
+	}
+
+	switch v := msg.(type) {
+	case *byte:
+		*v = byte(readN(1))
+	case *int8:
+		*v = int8(readN(1))
+	case *uint16:
+		*v = uint16(readN(2))
+	case *int16:
+		*v = int16(readN(2))
+	case *uint32:
+		*v = uint32(readN(4))
+	case *int32:
+		*v = int32(readN(4))
+	case *uint64:
+		*v = uint64(readN(8))
+	case *int64:
+		*v = int64(readN(8))
+	case *float32:
+		*v = math.Float32frombits(uint32(readN(4)))
+	case *float64:
+		*v = math.Float64frombits(uint64(readN(8)))
+
+	case []byte:
+		_, err := io.ReadFull(r, v) // msg must already have size
+		return err
+	case *string: // read rest of r
+		b, err := ioutil.ReadAll(r)
+		*v = string(b)
+		return err
+	}
+
+	v := reflect.Indirect(reflect.ValueOf(msg))
+	// fields that are type Xn are handled here as uint<8*n>
+	switch v.Kind() {
+	case reflect.Uint8:
+		var vv uint8
+		if err := decode(r, &vv); err != nil {
+			return err
+		}
+		v.SetUint(uint64(vv))
+	case reflect.Uint16:
+		var vv uint16
+		if err := decode(r, &vv); err != nil {
+			return err
+		}
+		v.SetUint(uint64(vv))
+	case reflect.Uint32:
+		var vv uint32
+		if err := decode(r, &vv); err != nil {
+			return err
+		}
+		v.SetUint(uint64(vv))
+	case reflect.Uint64:
+		var vv uint64
+		if err := decode(r, &vv); err != nil {
+			return err
+		}
+		v.SetUint(uint64(vv))
+
+	case reflect.Array, reflect.Slice:
+		l := v.Len()
+		for i := 0; i < l; i++ {
+			if err := decode(r, v.Index(i).Interface()); err != nil {
+				return err
+			}
+		}
+		return nil
+
+	case reflect.Struct:
+		t := v.Type()
+		l := v.NumField()
+		for i := 0; i < l; i++ {
+			if err := decode(r, v.Field(i).Interface()); err != nil {
+				return err
+			}
+			// if the field is a NumXXX for the XXX []... bit, set it to the lenght here
+			if s := t.Field(i).Tag.Get("len"); s != "" {
+				for ii := l - 1; ii > i; ii-- {
+					if t.Field(ii).Name == s {
+						v.Field(ii).Set(reflect.MakeSlice(t.Field(ii).Type, int(v.Field(i).Int()), int(v.Field(i).Int())))
+						break
+					}
+				}
+			}
+		}
+		return nil
+	}
+
+	return fmt.Errorf("Cannot decode field of type %T", msg)
+}
