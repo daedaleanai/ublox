@@ -79,13 +79,15 @@ func encode(w io.Writer, msg interface{}) error {
 	// fields that are type Xn are handled here as uint<8*n>
 	switch v.Kind() {
 	case reflect.Uint8:
-		encode(w, uint8(v.Uint()))
+		return encode(w, uint8(v.Uint()))
 	case reflect.Uint16:
-		encode(w, uint16(v.Uint()))
+		return encode(w, uint16(v.Uint()))
 	case reflect.Uint32:
-		encode(w, uint32(v.Uint()))
+		return encode(w, uint32(v.Uint()))
 	case reflect.Uint64:
-		encode(w, v.Uint())
+		return encode(w, v.Uint())
+	case reflect.String:
+		return encode(w, v.String())
 
 	case reflect.Array, reflect.Slice:
 		l := v.Len()
@@ -116,5 +118,5 @@ func encode(w io.Writer, msg interface{}) error {
 		return nil
 	}
 
-	return fmt.Errorf("Cannot encode field of type %T", msg)
+	return fmt.Errorf("Cannot encode field of type %T (%v)", msg, v.Kind())
 }

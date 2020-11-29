@@ -94,24 +94,34 @@ func decode(r io.Reader, msg interface{}) (err error) {
 	switch v := msg.(type) {
 	case *byte:
 		*v = byte(readN(1))
+		return nil
 	case *int8:
 		*v = int8(readN(1))
+		return nil
 	case *uint16:
 		*v = uint16(readN(2))
+		return nil
 	case *int16:
 		*v = int16(readN(2))
+		return nil
 	case *uint32:
 		*v = uint32(readN(4))
+		return nil
 	case *int32:
 		*v = int32(readN(4))
+		return nil
 	case *uint64:
 		*v = uint64(readN(8))
+		return nil
 	case *int64:
 		*v = int64(readN(8))
+		return nil
 	case *float32:
 		*v = math.Float32frombits(uint32(readN(4)))
+		return nil
 	case *float64:
 		*v = math.Float64frombits(uint64(readN(8)))
+		return nil
 
 	case []byte:
 		_, err := io.ReadFull(r, v) // msg must already have size
@@ -127,33 +137,33 @@ func decode(r io.Reader, msg interface{}) (err error) {
 	switch v.Kind() {
 	case reflect.Uint8:
 		var vv uint8
-		if err := decode(r, &vv); err != nil {
-			return err
-		}
+		err := decode(r, &vv)
 		v.SetUint(uint64(vv))
+		return err
 	case reflect.Uint16:
 		var vv uint16
-		if err := decode(r, &vv); err != nil {
-			return err
-		}
+		err := decode(r, &vv)
 		v.SetUint(uint64(vv))
+		return err
 	case reflect.Uint32:
 		var vv uint32
-		if err := decode(r, &vv); err != nil {
-			return err
-		}
+		err := decode(r, &vv)
 		v.SetUint(uint64(vv))
+		return err
 	case reflect.Uint64:
 		var vv uint64
-		if err := decode(r, &vv); err != nil {
-			return err
-		}
+		err := decode(r, &vv)
 		v.SetUint(uint64(vv))
+		return err
+	case reflect.String:
+		b, err := ioutil.ReadAll(r)
+		v.SetString(string(b))
+		return err
 
 	case reflect.Array, reflect.Slice:
 		l := v.Len()
 		for i := 0; i < l; i++ {
-			if err := decode(r, v.Index(i).Interface()); err != nil {
+			if err := decode(r, v.Index(i).Addr().Interface()); err != nil {
 				return err
 			}
 		}
@@ -163,14 +173,17 @@ func decode(r io.Reader, msg interface{}) (err error) {
 		t := v.Type()
 		l := v.NumField()
 		for i := 0; i < l; i++ {
-			if err := decode(r, v.Field(i).Interface()); err != nil {
+			if err := decode(r, v.Field(i).Addr().Interface()); err != nil {
 				return err
 			}
-			// if the field is a NumXXX for the XXX []... bit, set it to the lenght here
+			// if the field is a NumXXX for the XXX []... bit, set it to the length here
 			if s := t.Field(i).Tag.Get("len"); s != "" {
 				for ii := l - 1; ii > i; ii-- {
 					if t.Field(ii).Name == s {
-						v.Field(ii).Set(reflect.MakeSlice(t.Field(ii).Type, int(v.Field(i).Int()), int(v.Field(i).Int())))
+						sz := int(v.Field(i).Uint())
+						if sz != 0 {
+							v.Field(ii).Set(reflect.MakeSlice(t.Field(ii).Type, sz, sz))
+						}
 						break
 					}
 				}
@@ -179,5 +192,5 @@ func decode(r io.Reader, msg interface{}) (err error) {
 		return nil
 	}
 
-	return fmt.Errorf("Cannot decode field of type %T", msg)
+	return fmt.Errorf("Cannot decode field of type %T (%v)", msg, v.Kind())
 }

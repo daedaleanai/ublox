@@ -18,8 +18,8 @@ func testType(t *testing.T, tc Message) {
 		return
 	}
 	if !reflect.DeepEqual(tc, t1) {
-		t.Logf("Encoded %T: %v", tc, tc)
-		t.Logf("Decoded %T: %v", t1, t1)
+		t.Logf("Encoded %T: %#v", tc, tc)
+		t.Logf("Decoded %T: %#v", t1, t1)
 		t.Errorf("Endoding/Decoding failure for %T", tc)
 	}
 }
