@@ -101,7 +101,7 @@ func (v {{.Message.TypeName}}{{.Name | title}}) String() string {
 {{- end}}
 {{- end}}
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b,",")
 }

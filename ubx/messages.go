@@ -187,7 +187,7 @@ func (v AidHui1Flags) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -260,7 +260,7 @@ func (v AidIni1TmCfg) String() string {
 	}
 	v &^= 0x40
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -304,7 +304,7 @@ func (v AidIni1Flags) String() string {
 	}
 	v &^= 0x400
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -363,7 +363,7 @@ func (v CfgAntFlags) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -387,7 +387,7 @@ func (v CfgAntPins) String() string {
 	}
 	v &^= 0x8000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -441,7 +441,7 @@ func (v CfgBatchFlags) String() string {
 	}
 	v &^= 0x40
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -528,7 +528,7 @@ func (v CfgCfgClearMask) String() string {
 	}
 	v &^= 0x1000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -552,7 +552,7 @@ func (v CfgCfgDeviceMask) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -654,7 +654,7 @@ func (v CfgDoscFlags) String() string {
 	}
 	v &^= 0x1e
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -708,7 +708,7 @@ func (v CfgEsfalgBitfield) String() string {
 	}
 	v &^= 0x100
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -796,7 +796,7 @@ func (v CfgEsfwtFlags1) String() string {
 	}
 	v &^= 0x40
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -820,7 +820,7 @@ func (v CfgEsfwtFlags2) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -832,7 +832,7 @@ func (v CfgEsfwtFlags3) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -884,7 +884,7 @@ func (v CfgEsrcFlags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -955,7 +955,7 @@ func (v CfgGnssFlags) String() string {
 	}
 	v &^= 0xff0000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1022,7 +1022,7 @@ func (v CfgInfInfMsgMask) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1084,7 +1084,7 @@ func (v CfgItfmConfig) String() string {
 	}
 	v &^= 0x80000000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1104,7 +1104,7 @@ func (v CfgItfmConfig2) String() string {
 	}
 	v &^= 0x4000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1148,7 +1148,7 @@ func (v CfgLogfilterFlags) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1274,7 +1274,7 @@ func (v CfgNav5Mask) String() string {
 	}
 	v &^= 0x400
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1368,7 +1368,7 @@ func (v CfgNavx5Mask1) String() string {
 	}
 	v &^= 0x4000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1384,7 +1384,7 @@ func (v CfgNavx5Mask2) String() string {
 	}
 	v &^= 0x80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1396,7 +1396,7 @@ func (v CfgNavx5AopCfg) String() string {
 	}
 	v &^= 0x1
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1490,7 +1490,7 @@ func (v CfgNavx51Mask1) String() string {
 	}
 	v &^= 0x4000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1506,7 +1506,7 @@ func (v CfgNavx51Mask2) String() string {
 	}
 	v &^= 0x80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1518,7 +1518,7 @@ func (v CfgNavx51AopCfg) String() string {
 	}
 	v &^= 0x1
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1582,7 +1582,7 @@ func (v CfgNmeaFilter) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1598,7 +1598,7 @@ func (v CfgNmeaFlags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1676,7 +1676,7 @@ func (v CfgNmea1Filter) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1692,7 +1692,7 @@ func (v CfgNmea1Flags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1724,7 +1724,7 @@ func (v CfgNmea1GnssToFilter) String() string {
 	}
 	v &^= 0x40
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1806,7 +1806,7 @@ func (v CfgNmea2Filter) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1830,7 +1830,7 @@ func (v CfgNmea2Flags) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1862,7 +1862,7 @@ func (v CfgNmea2GnssToFilter) String() string {
 	}
 	v &^= 0x40
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1922,7 +1922,7 @@ func (v CfgOdoFlags) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -1934,7 +1934,7 @@ func (v CfgOdoOdoCfg) String() string {
 	}
 	v &^= 0x7
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2013,7 +2013,7 @@ func (v CfgPm2Flags) String() string {
 	}
 	v &^= 0x60000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2101,7 +2101,7 @@ func (v CfgPm21Flags) String() string {
 	}
 	v &^= 0x60000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2208,7 +2208,7 @@ func (v CfgPrt1TxReady) String() string {
 	}
 	v &^= 0xff80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2228,7 +2228,7 @@ func (v CfgPrt1Mode) String() string {
 	}
 	v &^= 0x3000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2252,7 +2252,7 @@ func (v CfgPrt1InProtoMask) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2272,7 +2272,7 @@ func (v CfgPrt1OutProtoMask) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2284,7 +2284,7 @@ func (v CfgPrt1Flags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2350,7 +2350,7 @@ func (v CfgPrt2TxReady) String() string {
 	}
 	v &^= 0xff80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2374,7 +2374,7 @@ func (v CfgPrt2InProtoMask) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2394,7 +2394,7 @@ func (v CfgPrt2OutProtoMask) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2474,7 +2474,7 @@ func (v CfgPrt3TxReady) String() string {
 	}
 	v &^= 0xff80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2490,7 +2490,7 @@ func (v CfgPrt3Mode) String() string {
 	}
 	v &^= 0x3f00
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2514,7 +2514,7 @@ func (v CfgPrt3InProtoMask) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2534,7 +2534,7 @@ func (v CfgPrt3OutProtoMask) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2546,7 +2546,7 @@ func (v CfgPrt3Flags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2625,7 +2625,7 @@ func (v CfgPrt4TxReady) String() string {
 	}
 	v &^= 0xff80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2637,7 +2637,7 @@ func (v CfgPrt4Mode) String() string {
 	}
 	v &^= 0xfe
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2661,7 +2661,7 @@ func (v CfgPrt4InProtoMask) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2681,7 +2681,7 @@ func (v CfgPrt4OutProtoMask) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2693,7 +2693,7 @@ func (v CfgPrt4Flags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2754,7 +2754,7 @@ func (v CfgRinvFlags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2830,7 +2830,7 @@ func (v CfgRstNavBbrMask) String() string {
 	}
 	v &^= 0x8000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2888,7 +2888,7 @@ func (v CfgSbasMode) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2908,7 +2908,7 @@ func (v CfgSbasUsage) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2947,7 +2947,7 @@ func (v CfgSenifFlags) String() string {
 	}
 	v &^= 0x1
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -2963,7 +2963,7 @@ func (v CfgSenifPioConf) String() string {
 	}
 	v &^= 0x3e0
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3003,7 +3003,7 @@ func (v CfgSlasMode) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3075,7 +3075,7 @@ func (v CfgSmgrMessageCfg) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3139,7 +3139,7 @@ func (v CfgSmgrFlags) String() string {
 	}
 	v &^= 0x10000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3195,7 +3195,7 @@ func (v CfgTmode2Flags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3242,7 +3242,7 @@ func (v CfgTmode3Flags) String() string {
 	}
 	v &^= 0x100
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3338,7 +3338,7 @@ func (v CfgTp52Flags) String() string {
 	}
 	v &^= 0x3800
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3393,7 +3393,7 @@ func (v CfgTxslotEnable) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3435,7 +3435,7 @@ func (v CfgUsbFlags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3484,7 +3484,7 @@ func (v EsfAlgFlags) String() string {
 	}
 	v &^= 0xe
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3504,7 +3504,7 @@ func (v EsfAlgError) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3571,7 +3571,7 @@ func (v EsfInsBitfield0) String() string {
 	}
 	v &^= 0x2000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3631,7 +3631,7 @@ func (v EsfMeasFlags) String() string {
 	}
 	v &^= 0xf800
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3647,7 +3647,7 @@ func (v EsfMeasData) String() string {
 	}
 	v &^= 0x3f000000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3687,7 +3687,7 @@ func (v EsfRawData) String() string {
 	}
 	v &^= 0xff000000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3755,7 +3755,7 @@ func (v EsfStatusSensStatus1) String() string {
 	}
 	v &^= 0x80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3771,7 +3771,7 @@ func (v EsfStatusSensStatus2) String() string {
 	}
 	v &^= 0xc
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3795,7 +3795,7 @@ func (v EsfStatusFaults) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3881,7 +3881,7 @@ func (v HnrInsBitfield0) String() string {
 	}
 	v &^= 0x2000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3954,7 +3954,7 @@ func (v HnrPvtValid) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -3982,7 +3982,7 @@ func (v HnrPvtFlags) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -4111,7 +4111,7 @@ func (v LogBatchContentValid) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -4127,7 +4127,7 @@ func (v LogBatchValid) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -4147,7 +4147,7 @@ func (v LogBatchFlags) String() string {
 	}
 	v &^= 0x1c
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -4180,7 +4180,7 @@ func (v LogCreateLogCfg) String() string {
 	}
 	v &^= 0x1
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -4291,7 +4291,7 @@ func (v LogInfo1Status) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -4336,7 +4336,7 @@ func (v LogRetrievebatchFlags) String() string {
 	}
 	v &^= 0x1
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -4997,7 +4997,7 @@ func (v MgaIniFreq2Flags) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5074,7 +5074,7 @@ func (v MgaIniTime_gnss5Ref) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5125,7 +5125,7 @@ func (v MgaIniTime_utc6Ref) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5286,7 +5286,7 @@ func (v MonGnssSupported) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5310,7 +5310,7 @@ func (v MonGnssDefaultGnss) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5334,7 +5334,7 @@ func (v MonGnssEnabled) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5394,7 +5394,7 @@ func (v MonHwFlags) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5503,7 +5503,7 @@ func (v MonPatch1PatchInfo) String() string {
 	}
 	v &^= 0x6
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5545,7 +5545,7 @@ func (v MonRxrFlags) String() string {
 	}
 	v &^= 0x1
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5622,7 +5622,7 @@ func (v MonSmgrIntOsc) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5642,7 +5642,7 @@ func (v MonSmgrExtOsc) String() string {
 	}
 	v &^= 0x20
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5654,7 +5654,7 @@ func (v MonSmgrGnss) String() string {
 	}
 	v &^= 0x1
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5674,7 +5674,7 @@ func (v MonSmgrExtInt0) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5694,7 +5694,7 @@ func (v MonSmgrExtInt1) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5748,7 +5748,7 @@ func (v MonSptDrvVer) String() string {
 	}
 	v &^= 0xf0
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5793,7 +5793,7 @@ func (v MonTxbufErrors) String() string {
 	}
 	v &^= 0x80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5850,7 +5850,7 @@ func (v NavAopstatusAopCfg) String() string {
 	}
 	v &^= 0x1
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -5960,7 +5960,7 @@ func (v NavDgpsFlags) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6065,7 +6065,7 @@ func (v NavHpposecefFlags) String() string {
 	}
 	v &^= 0x1
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6107,7 +6107,7 @@ func (v NavHpposllhFlags) String() string {
 	}
 	v &^= 0x1
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6201,7 +6201,7 @@ func (v NavNmiGpsNmiFlags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6229,7 +6229,7 @@ func (v NavNmiGpsLsFlags) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6245,7 +6245,7 @@ func (v NavNmiGalNmiFlags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6273,7 +6273,7 @@ func (v NavNmiGalLsFlags) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6289,7 +6289,7 @@ func (v NavNmiBdsNmiFlags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6317,7 +6317,7 @@ func (v NavNmiBdsLsFlags) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6333,7 +6333,7 @@ func (v NavNmiGloNmiFlags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6417,7 +6417,7 @@ func (v NavOrbSvFlag) String() string {
 	}
 	v &^= 0xc
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6433,7 +6433,7 @@ func (v NavOrbEph) String() string {
 	}
 	v &^= 0xe0
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6449,7 +6449,7 @@ func (v NavOrbAlm) String() string {
 	}
 	v &^= 0xe0
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6465,7 +6465,7 @@ func (v NavOrbOtherOrb) String() string {
 	}
 	v &^= 0xe0
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6596,7 +6596,7 @@ func (v NavPvtValid) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6620,7 +6620,7 @@ func (v NavPvtFlags) String() string {
 	}
 	v &^= 0xc0
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6640,7 +6640,7 @@ func (v NavPvtFlags2) String() string {
 	}
 	v &^= 0x80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6652,7 +6652,7 @@ func (v NavPvtFlags3) String() string {
 	}
 	v &^= 0x1
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6725,7 +6725,7 @@ func (v NavRelposnedFlags) String() string {
 	}
 	v &^= 0x80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6853,7 +6853,7 @@ func (v NavSatFlags) String() string {
 	}
 	v &^= 0x400000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6921,7 +6921,7 @@ func (v NavSbasService) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -6977,7 +6977,7 @@ func (v NavSlasServiceFlags) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7037,7 +7037,7 @@ func (v NavSolFlags) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7103,7 +7103,7 @@ func (v NavStatusFlags) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7123,7 +7123,7 @@ func (v NavStatusFixStat) String() string {
 	}
 	v &^= 0xc0
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7143,7 +7143,7 @@ func (v NavStatusFlags2) String() string {
 	}
 	v &^= 0xc0
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7232,7 +7232,7 @@ func (v NavSvinfoGlobalFlags) String() string {
 	}
 	v &^= 0x7
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7272,7 +7272,7 @@ func (v NavSvinfoFlags) String() string {
 	}
 	v &^= 0x80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7284,7 +7284,7 @@ func (v NavSvinfoQuality) String() string {
 	}
 	v &^= 0xf
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7329,7 +7329,7 @@ func (v NavTimebdsValid) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7374,7 +7374,7 @@ func (v NavTimegalValid) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7414,7 +7414,7 @@ func (v NavTimegloValid) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7458,7 +7458,7 @@ func (v NavTimegpsValid) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7503,7 +7503,7 @@ func (v NavTimelsValid) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7556,7 +7556,7 @@ func (v NavTimeutcValid) String() string {
 	}
 	v &^= 0xf0
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7676,7 +7676,7 @@ func (v RxmImesPosition1_1) String() string {
 	}
 	v &^= 0x7fffff00
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7692,7 +7692,7 @@ func (v RxmImesPosition1_2) String() string {
 	}
 	v &^= 0x1000000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7716,7 +7716,7 @@ func (v RxmImesPosition2_1) String() string {
 	}
 	v &^= 0x800000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7736,7 +7736,7 @@ func (v RxmImesShortIdFrame) String() string {
 	}
 	v &^= 0x2000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7756,7 +7756,7 @@ func (v RxmImesMediumId_2) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7815,7 +7815,7 @@ func (v RxmMeasxFlags) String() string {
 	}
 	v &^= 0x3
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7845,7 +7845,7 @@ func (v RxmPmreqFlags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7890,7 +7890,7 @@ func (v RxmPmreq1Flags) String() string {
 	}
 	v &^= 0x4
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7914,7 +7914,7 @@ func (v RxmPmreq1WakeupSources) String() string {
 	}
 	v &^= 0x80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -7999,7 +7999,7 @@ func (v RxmRawxRecStat) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8011,7 +8011,7 @@ func (v RxmRawxPrStdev) String() string {
 	}
 	v &^= 0xf
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8023,7 +8023,7 @@ func (v RxmRawxCpStdev) String() string {
 	}
 	v &^= 0xf
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8035,7 +8035,7 @@ func (v RxmRawxDoStdev) String() string {
 	}
 	v &^= 0xf
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8059,7 +8059,7 @@ func (v RxmRawxTrkStat) String() string {
 	}
 	v &^= 0x8
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8131,7 +8131,7 @@ func (v RxmRtcmFlags) String() string {
 	}
 	v &^= 0x6
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8222,7 +8222,7 @@ func (v RxmSvsiSvFlag) String() string {
 	}
 	v &^= 0x80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8238,7 +8238,7 @@ func (v RxmSvsiAge) String() string {
 	}
 	v &^= 0xf0
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8321,7 +8321,7 @@ func (v TimHocFlags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8372,7 +8372,7 @@ func (v TimSmeasFlags) String() string {
 	}
 	v &^= 0x2
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8459,7 +8459,7 @@ func (v TimTm2Flags) String() string {
 	}
 	v &^= 0x80
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8563,7 +8563,7 @@ func (v TimTosFlags) String() string {
 	}
 	v &^= 0x2000
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8619,7 +8619,7 @@ func (v TimTpFlags) String() string {
 	}
 	v &^= 0x10
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8635,7 +8635,7 @@ func (v TimTpRefInfo) String() string {
 	}
 	v &^= 0xf0
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
@@ -8711,7 +8711,7 @@ func (v TimVrfyFlags) String() string {
 	}
 	v &^= 0x7
 	if v != 0 {
-		b = append(b, fmt.Sprintf("%x", v))
+		b = append(b, fmt.Sprintf("%x", uint(v)))
 	}
 	return strings.Join(b, ",")
 }
