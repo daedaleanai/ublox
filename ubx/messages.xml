@@ -5870,8 +5870,7 @@ Interval, otherwise must be set to '0'.</Comment>
           <Offset>0</Offset>
           <Name>PortID</Name>
           <Type>U1</Type>
-          <Comment>Port identifier number (see the other
-versions of CFG-PRT for valid values)</Comment>
+          <Comment>Port identifier number (see the other versions of CFG-PRT for valid values)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
         </Block>
@@ -5895,10 +5894,10 @@ versions of CFG-PRT for valid values)</Comment>
           <Offset>0</Offset>
           <Name>portID</Name>
           <Type>U1</Type>
-          <Comment>Port identifier number (see Integration
-manual for valid UART port IDs)</Comment>
+          <Comment>Port identifier number (see Integration manual for valid UART port IDs)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>default</Subtype>
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -6172,6 +6171,7 @@ memory .</Description>
           <Comment>Port identifier number (= 3 for USB port)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>3</Subtype>
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -6367,6 +6367,7 @@ can be defined on a single port.</Comment>
           <Comment>Port identifier number (= 4 for SPI port)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>4</Subtype>          
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -6627,10 +6628,10 @@ protocol versions less than 20)</Comment>
           <Offset>0</Offset>
           <Name>portID</Name>
           <Type>U1</Type>
-          <Comment>Port identifier number (= 0 for I2C (DDC)
-port)</Comment>
+          <Comment>Port identifier number (= 0 for I2C (DDC) port)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>0</Subtype>          
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -12400,6 +12401,7 @@ new leap second effective</Comment>
           <Comment>Message type (0x01 for this type)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>1</Subtype>                    
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -12460,6 +12462,7 @@ FLASH-DATA message sent.</Comment>
           <Comment>Message type (0x02 for this type)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>2</Subtype>                    
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -12492,6 +12495,7 @@ FLASH-DATA message sent.</Comment>
           <Comment>Message type (0x03 for this type)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>3</Subtype>          
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -14390,6 +14394,7 @@ circle^3]</Comment>
           <Comment>Message type (0x00 for this type)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>0</Subtype>
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -14462,6 +14467,7 @@ circle^3]</Comment>
           <Comment>Message type (0x01 for this type)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>1</Subtype>          
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -14534,6 +14540,7 @@ circle^3]</Comment>
           <Comment>Message type (0x10 for this type)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>0x10</Subtype>          
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -14701,6 +14708,7 @@ circle^3]</Comment>
           <Comment>Message type (0x11 for this type)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>0x11</Subtype>
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -14843,6 +14851,7 @@ supported:
           <Comment>Message type (0x20 for this type)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>0x20</Subtype>          
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -14899,6 +14908,7 @@ supported:
           <Comment>Message type (0x21 for this type)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>0x21</Subtype>
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -14985,6 +14995,7 @@ supported:
           <Comment>Message type (0x30 for this type)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>0x30</Subtype>                    
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -24713,6 +24724,7 @@ time base</Comment>
           <Comment>Message type (0 for this message)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>0</Subtype>                    
         </Block>
       </Payload>
       <Checksum>CK_A CK_B</Checksum>
@@ -24737,6 +24749,7 @@ time base</Comment>
           <Comment>Message type (2 for this message)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>2</Subtype>                              
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -24827,6 +24840,7 @@ oscillator.</Comment>
           <Comment>Message type (3 for this message)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>3</Subtype>          
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -24999,6 +25013,7 @@ time minus sourced time)</Comment>
           <Comment>Command (must be 0)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>0</Subtype>          
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -25031,6 +25046,7 @@ time minus sourced time)</Comment>
           <Comment>Command (must be 1)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>1</Subtype>          
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -25063,6 +25079,7 @@ time minus sourced time)</Comment>
           <Comment>Command (must be 2)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>2</Subtype>                    
         </Block>
         <Block>
           <Offset>1</Offset>
@@ -25112,6 +25129,7 @@ time minus sourced time)</Comment>
           <Comment>Command (must be 3)</Comment>
           <Scale>-</Scale>
           <Unit>-</Unit>
+          <Subtype>3</Subtype>                    
         </Block>
         <Block>
           <Offset>1</Offset>
