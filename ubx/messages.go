@@ -1,15 +1,15 @@
 package ubx
 
 type Message interface {
-	classID() uint16
+	ClassID() uint16
 }
 
 type RawMessage struct {
-	ClassID uint16
-	Data    []byte
+	CID  uint16
+	Data []byte
 }
 
-func (msg *RawMessage) classID() uint16 { return msg.ClassID }
+func (msg *RawMessage) ClassID() uint16 { return msg.CID }
 
 // 32.8.1 UBX-ACK-ACK (0x05 0x01)
 
@@ -22,7 +22,7 @@ type AckAck struct {
 	MsgID byte // Message ID of the Acknowledged Message
 }
 
-func (AckAck) classID() uint16 { return 0x0105 }
+func (AckAck) ClassID() uint16 { return 0x0105 }
 
 // 32.8.2 UBX-ACK-NAK (0x05 0x00)
 
@@ -35,7 +35,7 @@ type AckNak struct {
 	MsgID byte // Message ID of the Acknowledged Message
 }
 
-func (AckNak) classID() uint16 { return 0x0005 }
+func (AckNak) ClassID() uint16 { return 0x0005 }
 
 // 32.10.3 UBX-CFG-CFG (0x06 0x09)
 
@@ -55,7 +55,7 @@ type CfgCfg1 struct {
 	LoadMask  CfgCfgClearMask // Mask with configuration sub-sections to load (i.e. load permanent configurations from non-volatile memory to currentconfigurations), see ID description of clearMask
 }
 
-func (CfgCfg1) classID() uint16 { return 0x0906 }
+func (CfgCfg1) ClassID() uint16 { return 0x0906 }
 
 type CfgCfg2 struct {
 	ClearMask  CfgCfgClearMask  // Mask with configuration sub-sections to clear (i.e. load default configurations to permanent configurations in non-volatile memory) (see graphic below)
@@ -64,7 +64,7 @@ type CfgCfg2 struct {
 	DeviceMask CfgCfgDeviceMask // Mask which selects the memory devices for this command. (see graphic below)
 }
 
-func (CfgCfg2) classID() uint16 { return 0x0906 }
+func (CfgCfg2) ClassID() uint16 { return 0x0906 }
 
 //go:generate stringer -output=strings_cfgcfg.go  -trimprefix CfgCfg -type=CfgCfgClearMask,CfgCfgDeviceMask
 
@@ -109,7 +109,7 @@ type CfgHnr struct {
 	Reserved1   [3]byte // -         Reserved
 }
 
-func (CfgHnr) classID() uint16 { return 0x5C06 }
+func (CfgHnr) ClassID() uint16 { return 0x5C06 }
 
 // 32.10.14 UBX-CFG-MSG (0x06 0x01)
 
@@ -121,7 +121,7 @@ type CfgMsg1 struct {
 	MsgID    byte // Message identifier
 }
 
-func (CfgMsg1) classID() uint16 { return 0x0106 }
+func (CfgMsg1) ClassID() uint16 { return 0x0106 }
 
 // 32.10.14.2 Set message rate(s)
 // Description          Set message rate(s)
@@ -138,7 +138,7 @@ type CfgMsg2 struct {
 	Rate     [6]byte // Send rate on I/O port (6 ports)
 }
 
-func (CfgMsg2) classID() uint16 { return 0x0106 }
+func (CfgMsg2) ClassID() uint16 { return 0x0106 }
 
 // 32.10.14.3 Set message rate
 // Description          Set message rate
@@ -151,7 +151,7 @@ type CfgMsg3 struct {
 	Rate     byte // Send rate on current portSend rate on I/O port (6 ports)
 }
 
-func (CfgMsg3) classID() uint16 { return 0x0106 }
+func (CfgMsg3) ClassID() uint16 { return 0x0106 }
 
 // 32.10.23 UBX-CFG-RATE (0x06 0x08)
 
@@ -176,7 +176,7 @@ type CfgRate struct {
 	TimeRef  CfgRateTimeRef //     -         The time system to which measurements are aligned
 }
 
-func (CfgRate) classID() uint16 { return 0x0806 }
+func (CfgRate) ClassID() uint16 { return 0x0806 }
 
 //go:generate stringer -output=strings_cfgrate.go  -trimprefix CfgRate -type=CfgRateTimeRef
 
@@ -210,11 +210,11 @@ type InfNotice string
 type InfTest string
 type InfWarning string
 
-func (InfDebug) classID() uint16   { return 0x0404 }
-func (InfError) classID() uint16   { return 0x0004 }
-func (InfNotice) classID() uint16  { return 0x0204 }
-func (InfTest) classID() uint16    { return 0x0304 }
-func (InfWarning) classID() uint16 { return 0x0104 }
+func (InfDebug) ClassID() uint16   { return 0x0404 }
+func (InfError) ClassID() uint16   { return 0x0004 }
+func (InfNotice) ClassID() uint16  { return 0x0204 }
+func (InfTest) ClassID() uint16    { return 0x0304 }
+func (InfWarning) ClassID() uint16 { return 0x0104 }
 
 func (msg InfDebug) encode() string   { return string(msg) }
 func (msg InfError) encode() string   { return string(msg) }
@@ -266,7 +266,7 @@ type NavPvt struct {
 	MagAcc_deg2e  uint16        //   1e-2      Magnetic declination accuracy. Only supported in ADR 4.10 and later.
 }
 
-func (NavPvt) classID() uint16 { return 0x0701 }
+func (NavPvt) ClassID() uint16 { return 0x0701 }
 
 //go:generate stringer -output=strings_navpvt.go  -trimprefix NavPVT -type=NavPVTFixType,NavPVTValid,NavPVTFlags,NavPVTFlags2,NavPVTFlags3
 

@@ -45,32 +45,34 @@ func Decode(frame []byte) (msg Message, err error) {
 	}
 
 	switch header.ClassID {
-	case (AckAck{}).classID():
+	case (AckAck{}).ClassID():
 		msg = &AckAck{}
-	case (AckNak{}).classID():
+	case (AckNak{}).ClassID():
 		msg = &AckNak{}
-	case (CfgCfg1{}).classID():
+	case (CfgCfg1{}).ClassID():
 		msg = &CfgCfg1{}
-	case (CfgCfg2{}).classID():
+	case (CfgCfg2{}).ClassID():
 		msg = &CfgCfg2{}
-	case (CfgHnr{}).classID():
+	case (CfgHnr{}).ClassID():
 		msg = &CfgHnr{}
-	case (CfgMsg1{}).classID():
+	case (CfgMsg1{}).ClassID():
 		msg = &CfgMsg1{}
-	case (CfgMsg2{}).classID():
+	case (CfgMsg2{}).ClassID():
 		msg = &CfgMsg2{}
-	case (CfgMsg3{}).classID():
+	case (CfgMsg3{}).ClassID():
 		msg = &CfgMsg3{}
-	case (CfgRate{}).classID():
+	case (CfgRate{}).ClassID():
 		msg = &CfgRate{}
-	case (NavPvt{}).classID():
+	case (CfgPrt1{}).ClassID():
+		msg = &CfgPrt1{}
+	case (NavPvt{}).ClassID():
 		msg = &NavPvt{}
 	default:
 	}
 	if msg != nil {
 		err = binary.Read(buf, binary.LittleEndian, msg)
 	} else {
-		msg = &RawMessage{ClassID: header.ClassID, Data: append([]byte(nil), frame[6:len(frame)-2]...)}
+		msg = &RawMessage{CID: header.ClassID, Data: append([]byte(nil), frame[6:len(frame)-2]...)}
 	}
 
 	return msg, err

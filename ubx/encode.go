@@ -8,7 +8,7 @@ import (
 
 func Encode(w io.Writer, payload Message) error {
 	var buf bytes.Buffer
-	buf.Write([]byte{0xb5, 0x62, byte(payload.classID()), byte(payload.classID() >> 8), 0, 0})
+	buf.Write([]byte{0xb5, 0x62, byte(payload.ClassID()), byte(payload.ClassID() >> 8), 0, 0})
 	var err error
 	if s, ok := payload.(interface {
 		encode() string
