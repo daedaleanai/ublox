@@ -128,5 +128,5 @@ func encode(w io.Writer, msg interface{}) error {
 		return nil
 	}
 
-	return fmt.Errorf("Cannot encode field of type %T (%v)", msg, v.Kind())
+	return fmt.Errorf("Cannot encode field of type %T (%v) %v", msg, v.Kind(), msg)
 }

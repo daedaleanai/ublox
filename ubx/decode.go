@@ -160,6 +160,10 @@ func decode(r io.Reader, msg interface{}) (err error) {
 		v.SetString(string(b))
 		return err
 
+	case reflect.Ptr:
+		v.Set(reflect.New(v.Type().Elem()))
+		return decode(r, v.Interface())
+
 	case reflect.Array, reflect.Slice:
 		l := v.Len()
 		for i := 0; i < l; i++ {
@@ -179,7 +183,7 @@ func decode(r io.Reader, msg interface{}) (err error) {
 			// if the field is a NumXXX for the XXX []... bit, set it to the length here
 			if s := t.Field(i).Tag.Get("len"); s != "" {
 				for ii := l - 1; ii > i; ii-- {
-					if t.Field(ii).Name == s {
+					if t.Field(ii).Name == s && t.Field(ii).Type.Kind() == reflect.Slice {
 						sz := int(v.Field(i).Uint())
 						if sz != 0 {
 							v.Field(ii).Set(reflect.MakeSlice(t.Field(ii).Type, sz, sz))
@@ -192,5 +196,5 @@ func decode(r io.Reader, msg interface{}) (err error) {
 		return nil
 	}
 
-	return fmt.Errorf("Cannot decode field of type %T (%v)", msg, v.Kind())
+	panic(fmt.Errorf("Cannot decode field of type %T (%v)", msg, v.Kind()))
 }
