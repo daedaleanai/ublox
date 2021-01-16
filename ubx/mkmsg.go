@@ -1,7 +1,7 @@
 package ubx
 
 // implementations of mkMsg for ambiguous types that need to look inside the frame
-// TODO generate as part of messages.go
+// TODO generate as part of messages.go, now that we have the Subtype annotation in the xml
 
 func mkCfgPrt(sz uint16, frame []byte) Message {
 	if len(frame) < 2 {
