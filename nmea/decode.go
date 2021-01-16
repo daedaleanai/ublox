@@ -1,3 +1,4 @@
+// Package NMEA defines structures that can decode and encode the standard and proprietary NMEA messages emitted by μ-Blox devices.
 package nmea
 
 import (
