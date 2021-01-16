@@ -52,6 +52,7 @@ type Block struct {
 	Unit        string
 	BitfieldRef string    `xml:"Bitfield>Reference"`
 	Bitfield    []*BitDef `xml:"Bitfield>Type"`
+	Subtype     string    // in some messages, the first field has an additional type-switch function.  valid values are 'default' or a number
 
 	Nested []*Block `xml:"Block"` // for repeated or optional blocks, this contains the subfields
 
@@ -214,6 +215,10 @@ func (b *Block) FieldSize() int {
 	}
 	return 0 // probably invalid
 }
+
+func (b *Block) IsSubtypeField() bool   { return b.Subtype != "" }
+func (b *Block) IsSubtypeDefault() bool { return b.Subtype == "default" }
+func (b *Block) SubtypeValue() int      { v, _ := strconv.ParseUint(b.Subtype, 0, 8); return int(v) }
 
 // the non optional non repeated fields at the begining
 func (m *Message) MinSize() int {

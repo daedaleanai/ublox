@@ -2136,7 +2136,7 @@ func (CfgPrt) classID() uint16 { return 0x0006 }
 // Class/Id 0x06 0x00 (20 bytes)
 // Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit. Note that this message can affect baud rate and other transmission parameters. Because there may be messages queued for transmission there may be uncertainty about which protocol applies to such messages. In addition a message currently in transmission may be corrupted by a protocol change. Host data reception parameters may have to be changed to be able to receive future messages, including the acknowledge message resulting from the CFG-PRT message.
 type CfgPrt1 struct {
-	PortID          byte                // Port identifier number (see Integration manual for valid UART port IDs)
+	PortID          byte                `stf:"default"` // Port identifier number (see Integration manual for valid UART port IDs)
 	Reserved1       byte                // Reserved
 	TxReady         CfgPrt1TxReady      // TX ready PIN configuration
 	Mode            CfgPrt1Mode         // A bit mask describing the UART mode
@@ -2293,7 +2293,7 @@ func (v CfgPrt1Flags) String() string {
 // Class/Id 0x06 0x00 (20 bytes)
 // Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit.
 type CfgPrt2 struct {
-	PortID       byte                // Port identifier number (= 3 for USB port)
+	PortID       byte                `stf:"3"` // Port identifier number (= 3 for USB port)
 	Reserved1    byte                // Reserved
 	TxReady      CfgPrt2TxReady      // TX ready PIN configuration
 	Reserved2    [8]byte             // Reserved
@@ -2403,7 +2403,7 @@ func (v CfgPrt2OutProtoMask) String() string {
 // Class/Id 0x06 0x00 (20 bytes)
 // Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length. Output messages from the module contain only one configuration unit.
 type CfgPrt3 struct {
-	PortID       byte                // Port identifier number (= 4 for SPI port)
+	PortID       byte                `stf:"4"` // Port identifier number (= 4 for SPI port)
 	Reserved1    byte                // Reserved
 	TxReady      CfgPrt3TxReady      // TX ready PIN configuration
 	Mode         CfgPrt3Mode         // SPI Mode Flags
@@ -2555,7 +2555,7 @@ func (v CfgPrt3Flags) String() string {
 // Class/Id 0x06 0x00 (20 bytes)
 // Several configurations can be concatenated to one input message. In this case the payload length can be a multiple of the normal length (see the other versions of CFG-PRT). Output messages from the module contain only one configuration unit.
 type CfgPrt4 struct {
-	PortID       byte                // Port identifier number (= 0 for I2C (DDC) port)
+	PortID       byte                `stf:"0"` // Port identifier number (= 0 for I2C (DDC) port)
 	Reserved1    byte                // Reserved
 	TxReady      CfgPrt4TxReady      // TX ready PIN configuration
 	Mode         CfgPrt4Mode         // I2C (DDC) Mode Flags
@@ -4600,7 +4600,7 @@ func (MgaDbd1) classID() uint16 { return 0x8013 }
 // Class/Id 0x13 0x21 (6 bytes)
 // This message reports an ACK/NACK to the host for the last MGA-FLASH type 1 or type 2 message message received. See Flash-based AssistNow Offline for details.
 type MgaFlashAck struct {
-	Type      byte   // Message type (0x03 for this type)
+	Type      byte   `stf:"3"` // Message type (0x03 for this type)
 	Version   byte   // Message version (0x00 for this version)
 	Ack       byte   // Acknowledgment type. 0 - ACK: Message received and written to flash. 1 - NACK: Problem with last message, re- transmission required (this only happens while acknowledging a UBX-MGA_FLASH_ DATA message). 2 - NACK: problem with last message, give up.
 	Reserved1 byte   // Reserved
@@ -4613,7 +4613,7 @@ func (MgaFlashAck) classID() uint16 { return 0x2113 }
 // Class/Id 0x13 0x21 (6 + N*1 bytes)
 // This message is used to transfer a block of MGA-ANO data from host to the receiver. Upon reception of this message, the receiver will write the payload data to its internal non-volatile memory (flash). Also, on reception of the first MGA- FLASH-DATA message, the receiver will erase the flash allocated to storing any existing MGA-ANO data. The payload can be up to 512 bytes. Payloads larger than this would exceed the receiver's internal buffering capabilities. The receiver will ACK/NACK this message using the message alternatives given below. The host shall wait for an acknowledge message before sending the next data block. See Flash-based AssistNow Offline for details.
 type MgaFlashData1 struct {
-	Type     byte   // Message type (0x01 for this type)
+	Type     byte   `stf:"1"` // Message type (0x01 for this type)
 	Version  byte   // Message version (0x00 for this version)
 	Sequence uint16 // Message sequence number, starting at 0 and increamenting by 1 for each MGA- FLASH-DATA message sent.
 	Size     uint16 `len:"Items"` // Payload size in bytes.
@@ -4626,7 +4626,7 @@ func (MgaFlashData1) classID() uint16 { return 0x2113 }
 // Class/Id 0x13 0x21 (2 bytes)
 // This message is used to tell the receiver that there are no more MGA-FLASH type 1 messages coming, and that it can do any final internal operations needed to commit the data to flash as a background activity. A UBX-MGA-ACK message will be sent at the end of this process. Note that there may be a delay of several seconds before the UBX-MGA-ACK for this message is sent because of the time taken for this processing. See Flash-based AssistNow Offline for details.
 type MgaFlashStop2 struct {
-	Type    byte // Message type (0x02 for this type)
+	Type    byte `stf:"2"` // Message type (0x02 for this type)
 	Version byte // Message version (0x00 for this version)
 }
 
@@ -4936,7 +4936,7 @@ func (MgaGpsUtc4) classID() uint16 { return 0x0013 }
 // Class/Id 0x13 0x40 (12 bytes)
 // Supplying clock drift assistance that is inaccurate by more than the specified accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of clock drift assistance to a receiver. See the description of AssistNow Online for details.
 type MgaIniClkd struct {
-	Type         byte    // Message type (0x20 for this type)
+	Type         byte    `stf:"0x20"` // Message type (0x20 for this type)
 	Version      byte    // Message version (0x00 for this version)
 	Reserved1    [2]byte // Reserved
 	ClkD_ns_s    int32   // [ns/s] Clock drift
@@ -4949,7 +4949,7 @@ func (MgaIniClkd) classID() uint16 { return 0x4013 }
 // Class/Id 0x13 0x40 (72 bytes)
 // This message allows the delivery of new earth orientation parameters (EOP) to a receiver to improve AssistNow Autonomous operation.
 type MgaIniEop1 struct {
-	Type             byte     // Message type (0x30 for this type)
+	Type             byte     `stf:"0x30"` // Message type (0x30 for this type)
 	Version          byte     // Message version (0x00 for this version)
 	Reserved1        [2]byte  // Reserved
 	D2kRef_d         uint16   // [d] reference time (days since 1.1.2000 12.00h UTC)
@@ -4969,7 +4969,7 @@ func (MgaIniEop1) classID() uint16 { return 0x4013 }
 // Class/Id 0x13 0x40 (12 bytes)
 // Supplying external frequency assistance that is inaccurate by more than the specified accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of external frequency assistance to a receiver. See the description of AssistNow Online for details.
 type MgaIniFreq2 struct {
-	Type        byte             // Message type (0x21 for this type)
+	Type        byte             `stf:"0x21"` // Message type (0x21 for this type)
 	Version     byte             // Message version (0x00 for this version)
 	Reserved1   byte             // Reserved
 	Flags       MgaIniFreq2Flags // Frequency reference
@@ -5006,7 +5006,7 @@ func (v MgaIniFreq2Flags) String() string {
 // Class/Id 0x13 0x40 (20 bytes)
 // Supplying position assistance that is inaccurate by more than the specified position accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of initial position assistance to a receiver in WGS84 lat/long/alt coordinates. This message is equivalent to the UBX-MGA- INI-POS_XYZ message, except for the coordinate system. See the description of AssistNow Online for details.
 type MgaIniPos_llh3 struct {
-	Type      byte    // Message type (0x01 for this type)
+	Type      byte    `stf:"1"` // Message type (0x01 for this type)
 	Version   byte    // Message version (0x00 for this version)
 	Reserved1 [2]byte // Reserved
 	Lat_dege7 int32   // [1e-7 deg] WGS84 Latitude
@@ -5021,7 +5021,7 @@ func (MgaIniPos_llh3) classID() uint16 { return 0x4013 }
 // Class/Id 0x13 0x40 (20 bytes)
 // Supplying position assistance that is inaccurate by more than the specified position accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of initial position assistance to a receiver in cartesian ECEF coordinates. This message is equivalent to the UBX-MGA-INI- POS_LLH message, except for the coordinate system. See the description of AssistNow Online for details.
 type MgaIniPos_xyz4 struct {
-	Type      byte    // Message type (0x00 for this type)
+	Type      byte    `stf:"0"` // Message type (0x00 for this type)
 	Version   byte    // Message version (0x00 for this version)
 	Reserved1 [2]byte // Reserved
 	EcefX_cm  int32   // [cm] WGS84 ECEF X coordinate
@@ -5036,7 +5036,7 @@ func (MgaIniPos_xyz4) classID() uint16 { return 0x4013 }
 // Class/Id 0x13 0x40 (24 bytes)
 // Supplying time assistance that is inaccurate by more than the specified time accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of time assistance to a receiver in a chosen GNSS timebase. This message is equivalent to the UBX-MGA-INI-TIME_UTC message, except for the time base. See the description of AssistNow Online for details.
 type MgaIniTime_gnss5 struct {
-	Type      byte                // Message type (0x11 for this type)
+	Type      byte                `stf:"0x11"` // Message type (0x11 for this type)
 	Version   byte                // Message version (0x00 for this version)
 	Ref       MgaIniTime_gnss5Ref // Reference to be used to set time
 	GnssId    byte                // Source of time information. Currently supported: 0: GPS time 2: Galileo time 3: BeiDou time 6: GLONASS time: week = 834 + ((N4- 1)*1461 + Nt)/7, tow = (((N4-1)*1461 + Nt) % 7) * 86400 + tod
@@ -5083,7 +5083,7 @@ func (v MgaIniTime_gnss5Ref) String() string {
 // Class/Id 0x13 0x40 (24 bytes)
 // Supplying time assistance that is inaccurate by more than the specified time accuracy, may lead to substantially degraded receiver performance. This message allows the delivery of UTC time assistance to a receiver. This message is equivalent to the UBX-MGA-INI-TIME_GNSS message, except for the time base. See the description of AssistNow Online for details.
 type MgaIniTime_utc6 struct {
-	Type       byte               // Message type (0x10 for this type)
+	Type       byte               `stf:"0x10"` // Message type (0x10 for this type)
 	Version    byte               // Message version (0x00 for this version)
 	Ref        MgaIniTime_utc6Ref // Reference to be used to set time
 	LeapSecs_s int8               // [s] Number of leap seconds since 1980 (or 0x80 = -128 if unknown)
@@ -8646,7 +8646,7 @@ func (v TimTpRefInfo) String() string {
 // Class/Id 0x0d 0x15 (1 bytes)
 // Stop all ongoing calibration (both oscillators are affected)
 type TimVcocal struct {
-	Type byte // Message type (0 for this message)
+	Type byte `stf:"0"` // Message type (0 for this message)
 }
 
 func (TimVcocal) classID() uint16 { return 0x150d }
@@ -8655,7 +8655,7 @@ func (TimVcocal) classID() uint16 { return 0x150d }
 // Class/Id 0x0d 0x15 (12 bytes)
 // Calibrate (measure) gain of the voltage controlled oscillator. The calibration is performed by varying the raw oscillator control values between the limits specified in raw0 and raw1. maxStepSize is the largest step change that can be used during the calibration process. The "raw values" are either PWM duty cycle values or DAC values depending on how the VCTCXO is connected to the system. The measured gain is the transfer function dRelativeFrequencyChange/dRaw (not dFrequency/dVoltage). The calibration process works as follows: Starting from the current raw output the control value is changed in the direction of raw0 in steps of size at most maxStepSize. Then the frequency is measured and the control value is changed towards raw1, again in steps of maxStepSize. When raw1 is reached, the frequency is again measured and the message version DATA0 is output containing the measured result. Normal operation then resumes. If the control value movement is less than maxStepSize then the transition will happen in one step - this will give fast calibration. Care must be taken when calibrating the internal oscillator against the GNSS source. In that case the changes applied to the oscillator frequency could be severe enough to lose satellite signal tracking, especially when signals are weak. If too many signals are lost, the GNSS system will lose its fix and be unable to measure the oscillator frequency - the calibration will then fail. In this case maxStepSize must be reasonably small. It is also important that only the chosen frequency source is enabled during the calibration process and that it remains stable throughout the calibration period; otherwise incorrect oscillator measurements will be made and this will lead to miscalibration and poor subsequent operation of the receiver.
 type TimVcocal1 struct {
-	Type                   byte    // Message type (2 for this message)
+	Type                   byte    `stf:"2"` // Message type (2 for this message)
 	Version                byte    // Message version (0x00 for this version)
 	OscId                  byte    // Oscillator to be calibrated: 0: internal oscillator 1: external oscillator
 	SrcId                  byte    // Reference source: 0: internal oscillator 1: GNSS 2: EXTINT0 3: EXTINT1 Option 0 should be used when calibrating the external oscillator. Options 1-3 should be used when calibrating the internal oscillator.
@@ -8671,7 +8671,7 @@ func (TimVcocal1) classID() uint16 { return 0x150d }
 // Class/Id 0x0d 0x15 (12 bytes)
 // This message is sent when the oscillator gain calibration process is finished (successful or unsuccessful). It notifies the user of the calibrated oscillator gain. If the oscillator gain calibration process was successful, this message will contain the measured gain (field gainVco) and its uncertainty (field gainUncertainty). The calibration process can however fail. In that case the two fields gainVco and gainUncertainty are set to zero.
 type TimVcocal2 struct {
-	Type            byte    // Message type (3 for this message)
+	Type            byte    `stf:"3"` // Message type (3 for this message)
 	Version         byte    // Message version (0x00 for this version)
 	OscId           byte    // Id of oscillator: 0: internal oscillator 1: external oscillator
 	Reserved1       [3]byte // Reserved
@@ -8730,7 +8730,7 @@ func (UpdSos) classID() uint16 { return 0x1409 }
 // Class/Id 0x09 0x14 (4 bytes)
 // The host can send this message in order to save part of the battery-backed memory (BBR) in a file in the flash file system. The feature is designed in order to emulate the presence of the backup battery even if it is not present; the host can issue the save on shutdown command before switching off the device supply. It is recommended to issue a GNSS stop command using UBX-CFG-RST before in order to keep the BBR memory content consistent.
 type UpdSos1 struct {
-	Cmd       byte    // Command (must be 0)
+	Cmd       byte    `stf:"0"` // Command (must be 0)
 	Reserved1 [3]byte // Reserved
 }
 
@@ -8740,7 +8740,7 @@ func (UpdSos1) classID() uint16 { return 0x1409 }
 // Class/Id 0x09 0x14 (4 bytes)
 // The host can send this message in order to erase the backup file present in flash. It is recommended that the clear operation is issued after the host has received the notification that the memory has been restored after a reset. Alternatively the host can parse the startup string Restored data saved on shutdown or poll the UBX-UPD-SOS message for obtaining the status.
 type UpdSos2 struct {
-	Cmd       byte    // Command (must be 1)
+	Cmd       byte    `stf:"1"` // Command (must be 1)
 	Reserved1 [3]byte // Reserved
 }
 
@@ -8750,7 +8750,7 @@ func (UpdSos2) classID() uint16 { return 0x1409 }
 // Class/Id 0x09 0x14 (8 bytes)
 // The message is sent from the device as confirmation of creation of a backup file in flash. The host can safely shut down the device after having received this message.
 type UpdSos3 struct {
-	Cmd       byte    // Command (must be 2)
+	Cmd       byte    `stf:"2"` // Command (must be 2)
 	Reserved1 [3]byte // Reserved
 	Response  byte    // 0 = Not acknowledged 1 = Acknowledged
 	Reserved2 [3]byte // Reserved
@@ -8762,7 +8762,7 @@ func (UpdSos3) classID() uint16 { return 0x1409 }
 // Class/Id 0x09 0x14 (8 bytes)
 // The message is sent from the device to notify the host the BBR has been restored from a backup file in the flash file sysetem. The host should clear the backup file after receiving this message. If the UBX-UPD-SOS message is polled, this message will be resent.
 type UpdSos4 struct {
-	Cmd       byte    // Command (must be 3)
+	Cmd       byte    `stf:"3"` // Command (must be 3)
 	Reserved1 [3]byte // Reserved
 	Response  byte    // 0 = Unknown 1 = Failed restoring from backup 2 = Restored from backup 3 = Not restored (no backup)
 	Reserved2 [3]byte // Reserved

@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log"
 	"math"
 	"reflect"
+	"strconv"
 )
 
 // Encode can serialize a message into a buffer
@@ -111,6 +113,14 @@ func encode(w io.Writer, msg interface{}) error {
 					}
 				}
 			}
+			if s := t.Field(i).Tag.Get("stf"); s != "" && s != "default" {
+				n, err := strconv.ParseUint(s, 0, 8)
+				if err != nil {
+					log.Fatalf("invalid stf tag %v %v", t.Field(i).Tag, err)
+				}
+				v.Field(i).SetUint(n)
+			}
+
 			if err := encode(w, v.Field(i).Interface()); err != nil {
 				return err
 			}

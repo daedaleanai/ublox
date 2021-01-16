@@ -21,7 +21,7 @@ type {{.TypeName}} struct {
 		{{block "field" .}}{{.FieldName}} {{.ArraySpec}}
 			{{- if .BitfieldRef}}{{.Message.TypeName}}{{.BitfieldRef|title}}
 			{{- else if .Bitfield}}{{.Message.TypeName}}{{.Name | title}}
-			{{- else}}{{.FieldType}} {{- if .LenFor}} `len:"{{.LenFor|title}}"`{{end}}
+			{{- else}}{{.FieldType}} {{- if .LenFor}} `len:"{{.LenFor|title}}"`{{end}}{{if .IsSubtypeField}} `stf:"{{.Subtype}}"`{{end}}
 			{{- end}} // {{if ne .Unit "-"}}[{{if ne .Scale "-"}}{{.Scale}} {{end}}{{.Unit}}] {{end}}{{.Comment |notabs -}}{{end}}
 	{{- else if eq .Cardinality "optional"}}
 		// Optional
