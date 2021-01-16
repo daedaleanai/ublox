@@ -9401,37 +9401,37 @@ func mkMsg(classId, sz uint16, frame []byte) Message {
 
 
 func mkCfgPrt(sz uint16, frame []byte) Message {
-            return new(CfgPrt) // 1
-            return new(CfgPrt1) // 20
-            return new(CfgPrt2) // 20
-            return new(CfgPrt3) // 20
-            return new(CfgPrt4) // 20
+            return new(CfgPrt) // length: 1
+            return new(CfgPrt1) // length: 20 subtype byte: default
+            return new(CfgPrt2) // length: 20 subtype byte: 3
+            return new(CfgPrt3) // length: 20 subtype byte: 4
+            return new(CfgPrt4) // length: 20 subtype byte: 0
 }
 func mkMgaFlashAck(sz uint16, frame []byte) Message {
-            return new(MgaFlashAck) // 6
-            return new(MgaFlashData1) // 6 [1]
-            return new(MgaFlashStop2) // 2
+            return new(MgaFlashAck) // length: 6 subtype byte: 3
+            return new(MgaFlashData1) // length: 6 [1] subtype byte: 1
+            return new(MgaFlashStop2) // length: 2 subtype byte: 2
 }
 func mkMgaIniClkd(sz uint16, frame []byte) Message {
-            return new(MgaIniClkd) // 12
-            return new(MgaIniEop1) // 72
-            return new(MgaIniFreq2) // 12
-            return new(MgaIniPos_llh3) // 20
-            return new(MgaIniPos_xyz4) // 20
-            return new(MgaIniTime_gnss5) // 24
-            return new(MgaIniTime_utc6) // 24
+            return new(MgaIniClkd) // length: 12 subtype byte: 0x20
+            return new(MgaIniEop1) // length: 72 subtype byte: 0x30
+            return new(MgaIniFreq2) // length: 12 subtype byte: 0x21
+            return new(MgaIniPos_llh3) // length: 20 subtype byte: 1
+            return new(MgaIniPos_xyz4) // length: 20 subtype byte: 0
+            return new(MgaIniTime_gnss5) // length: 24 subtype byte: 0x11
+            return new(MgaIniTime_utc6) // length: 24 subtype byte: 0x10
 }
 func mkTimVcocal(sz uint16, frame []byte) Message {
-            return new(TimVcocal) // 1
-            return new(TimVcocal1) // 12
-            return new(TimVcocal2) // 12
+            return new(TimVcocal) // length: 1 subtype byte: 0
+            return new(TimVcocal1) // length: 12 subtype byte: 2
+            return new(TimVcocal2) // length: 12 subtype byte: 3
 }
 func mkUpdSos(sz uint16, frame []byte) Message {
-            return new(UpdSos) // 0
-            return new(UpdSos1) // 4
-            return new(UpdSos2) // 4
-            return new(UpdSos3) // 8
-            return new(UpdSos4) // 8
+            return new(UpdSos) // length: 0
+            return new(UpdSos1) // length: 4 subtype byte: 0
+            return new(UpdSos2) // length: 4 subtype byte: 1
+            return new(UpdSos3) // length: 8 subtype byte: 2
+            return new(UpdSos4) // length: 8 subtype byte: 3
 }
 
 */

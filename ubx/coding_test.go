@@ -6,7 +6,12 @@ import (
 )
 
 func testType(t *testing.T, tc Message) {
-	randomFill(tc)
+
+	// hack.  CfgPrt1 is default, but the PortID subtype field zero is CfgPrt4
+	if m, ok := tc.(*CfgPrt1); ok {
+		m.PortID = 0xff
+	}
+
 	buf, err := Encode(tc)
 	if err != nil {
 		t.Errorf("Encoding %T: %v", tc, err)
@@ -22,8 +27,4 @@ func testType(t *testing.T, tc Message) {
 		t.Logf("Decoded %T: %#v", t1, t1)
 		t.Errorf("Endoding/Decoding failure for %T", tc)
 	}
-}
-
-func randomFill(msg Message) {
-
 }

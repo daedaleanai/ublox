@@ -164,7 +164,8 @@ func mkMsg(classId, sz uint16, frame []byte) Message {
 {{- if isambiguous (index $v 0).ClassIDName}}
 func mk{{(index $v 0).TypeName}}(sz uint16, frame []byte) Message {
        {{- range $v}}
-            return new({{.TypeName}}) // {{.MinSize}}{{if ne .MinSize .MaxFixSize}} .. {{.MaxFixSize}}{{end}}{{if ne 0 .VarSize}} [{{.VarSize}}]{{end}}  
+            return new({{.TypeName}}) // length: {{.MinSize}}{{if ne .MinSize .MaxFixSize}} .. {{.MaxFixSize}}{{end}}{{if ne 0 .VarSize}} [{{.VarSize}}]{{end}}
+            {{- range .Blocks}}{{if .IsSubtypeField}} subtype byte: {{.Subtype}}{{end}}{{end}}
        {{- end}}	
 }
 {{- end}}

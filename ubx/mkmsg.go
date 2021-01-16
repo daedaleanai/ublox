@@ -1,6 +1,7 @@
 package ubx
 
 // implementations of mkMsg for ambiguous types that need to look inside the frame
+// TODO generate as part of messages.go
 
 func mkCfgPrt(sz uint16, frame []byte) Message {
 	if len(frame) < 2 {
