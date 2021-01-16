@@ -15,11 +15,11 @@
 // variable parts, some contain a field that says how many elements of the variable part there are but
 // some don't. One contains 2 variable parts, one has a variable and an optional part which may add up
 // to the same number, and some messages have some sort of further subtype encoded in the first field
-// of the message. These messages have a further 'version' field but thankfully that seems to be unused
+// of the message. Some messages have a further 'version' field but thankfully that seems to be unused
 // as of yet. The file mkmsg.go contains handcrafted functions called by decode to construct a handful of edge cases.
 //
 // At Daedalean we have the convention to suffix numeric variable names with an encoding of the units.
-// This package follows that convention even if go lint may whine.  (When go lint whines about repeated
+// This package follows that convention even if go lint may whinge.  (When go lint whinges about repeated
 // string literals that havent been defined as a constant somewhere it is also misguided.  "default" is
 // a much better string constant than having const DEFAULT = "default" somewhere. I don't care if it's
 // the official idiom, it is wrong.)
