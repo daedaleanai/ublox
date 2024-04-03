@@ -118,8 +118,9 @@ func encode(w io.Writer, msg interface{}) error {
 				if err != nil {
 					log.Fatalf("invalid stf tag %v %v", t.Field(i).Tag, err)
 				}
-				encode(w, n)
-			} else if err := encode(w, v.Field(i).Interface()); err != nil {
+				v.Field(i).SetUint(n)
+			}
+			if err := encode(w, v.Field(i).Interface()); err != nil {
 				return err
 			}
 		}
